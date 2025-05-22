@@ -1,0 +1,40 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title>
+        <asp:ContentPlaceHolder ID="tab" runat="server"></asp:ContentPlaceHolder>
+    </title>
+    <link rel="icon" type="image/x-icon" href="Images/Notification%20Happy.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+  <link href="Styles/StyleSheet.css" rel="stylesheet">
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div id="page">
+            <header>
+                <asp:ContentPlaceHolder ID="headerContentPlaceHolder" runat="server"></asp:ContentPlaceHolder>
+            </header>
+
+            <div id="mainContentDiv">
+                <asp:ContentPlaceHolder ID="mainContentPlaceHolder" runat="server"></asp:ContentPlaceHolder>
+                <nav>
+                    <asp:ContentPlaceHolder ID="navContent" runat="server"></asp:ContentPlaceHolder>
+                </nav>
+            </div>
+
+            <footer>
+                <asp:ContentPlaceHolder ID="footerContentPlaceHolder" runat="server"></asp:ContentPlaceHolder>
+                <p>Created by Lea, Tammy and Zadie</p>
+            </footer>
+            <div class="wave-section">
+                <div class="wave-layer"></div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
