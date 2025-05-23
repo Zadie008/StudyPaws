@@ -3,24 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Cluedo", ".", "{617F73D1-EC1F-48CD-832E-94D813FDC82A}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "StudyPaws", ".", "{617F73D1-EC1F-48CD-832E-94D813FDC82A}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8.1"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_60920"
-		Debug.AspNetCompiler.PhysicalPath = "..\..\..\..\..\Home\University\2nd Year Modules\WRWV\WRWV201\Capstone Project\Cluedo\"
+		Debug.AspNetCompiler.PhysicalPath = "..\StudyPaws\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_60920\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/localhost_60920"
-		Release.AspNetCompiler.PhysicalPath = "..\..\..\..\..\Home\University\2nd Year Modules\WRWV\WRWV201\Capstone Project\Cluedo\"
+		Release.AspNetCompiler.PhysicalPath = "..\StudyPaws\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_60920\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "60920"
+		SlnRelativePath = "..\StudyPaws\"
 	EndProjectSection
 EndProject
 Global
