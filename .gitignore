@@ -1,0 +1,17 @@
+﻿#Ignore Visual Studio folder
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.VC.db
+
+#Ignore build output
+bin/
+obj/
+
+#Ignore user-specific files
+*.swp
+*.bak
+*.tmp
+*.log
