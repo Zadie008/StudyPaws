@@ -5,14 +5,25 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-    <h1>StudyPaws</h1>
-    <h2>purrfectly productive</h2>
-    <img src="Images/Notification%20Happy.png" id="logo" width="470" />
-    <img src="Icons/icons8-cursor-white-96.png" class="icon" width="30" />
+        <div class="curved-header">
+        <svg viewBox="0 0 700 150" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+      <path id="curve" d="M50,120 Q350,20 650,120" />
+    </defs>
+    <text>
+      <textPath href="#curve" startOffset="50%" text-anchor="middle">
+        StudyPaws
+      </textPath>
+    </text>
+  </svg>
+
+  <h2 class="subtitle">purrfectly productive</h2>
+</div>
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-
+     <img src="Images/Notification%20Happy.png" id="logo" width="470" />
+     <img src="Icons/icons8-cursor-white-96.png" class="icon" width="30" />
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="navContent" Runat="Server">
