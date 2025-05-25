@@ -17,9 +17,9 @@
       </textPath>
     </text>
   </svg>
-
-  <h2 class="subtitle">purrfectly productive</h2>
-</div>
+        <div style="height: 50px;"></div>
+                <h2 class="subtitle">purrfectly productive</h2>
+        </div>
 </asp:Content>
 <%--above is the header of studypaws--%>
 

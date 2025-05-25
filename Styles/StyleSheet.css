@@ -101,43 +101,50 @@ h2 {
 }
 .curved-header {
     text-align: center;
-    margin-bottom: 0em; /* spacing below header */
+    margin-bottom: 1em;
 }
 
     .curved-header svg {
         display: block;
         margin: 0 auto;
         width: 700px;
-        height: 130px;
+        height: 120px; 
     }
 
-        .curved-header svg text {
-            font-family: 'Lilita One', cursive, sans-serif;
-            font-size: 90px;
-            fill: white;
-            letter-spacing: 2px;
-        }
+    .curved-header text {
+        font-family: 'Lilita One', cursive, sans-serif;
+        font-size: 90px;
+        fill: white;
+        letter-spacing: 2px;
+    }
 
     .curved-header .subtitle {
+        display: block;
         font-family: 'The Seasons', serif;
         font-weight: 400;
         font-size: 36px;
         color: white;
         letter-spacing: normal;
-        margin-top: -100px; /* Adjust this value as needed */
-
+        margin-top: 20px;
         width: 700px;
         margin-left: auto;
         margin-right: auto;
-        line-height: 1;
+        line-height: 1.2;
     }
+
 /* ---------------------- NAVIGATION ---------------------- */
 
 
 
 /* ---------------------- HOME PAGE ---------------------- */
 
-
+.center-content {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100%; /* Ensure it takes full height */
+    text-align: center; /* Center text */
+}
 
 /* ---------------------- Small Container for messages ---------------------- */
 .container {
@@ -201,14 +208,18 @@ table {
     margin-left: auto;
     margin-right: auto;
     border-collapse: separate;
-    border-spacing: 0 40px; /* vertical space between rows */
+    border-spacing: 0; /* vertical space between rows */
     width: 100%;
     max-width: 600px; /* optional: limit width */
+    background-color: lightyellow;
+    border: 2px solid orange;
 }
 
     table td {
         vertical-align: middle;
-        padding: 0 20px;
+        padding: 0;
+        background-color: lightyellow;
+        border: 2px solid orange;
     }
 
         /* Labels: left-aligned, right-aligned in the cell */

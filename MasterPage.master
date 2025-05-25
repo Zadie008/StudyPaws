@@ -20,7 +20,7 @@
                 <asp:ContentPlaceHolder ID="headerContentPlaceHolder" runat="server"></asp:ContentPlaceHolder>
             </header>
 
-            <div id="mainContentDiv">
+            <div id="mainContentDiv" class="center-content">
                 <asp:ContentPlaceHolder ID="mainContentPlaceHolder" runat="server"></asp:ContentPlaceHolder>
                 <nav>
                     <asp:ContentPlaceHolder ID="navContent" runat="server"></asp:ContentPlaceHolder>
