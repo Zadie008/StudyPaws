@@ -192,7 +192,7 @@ button a {
 
 /* ---------------------- Textboxes ---------------------- */
 .textbox {
-    border-radius: 25px; 
+    border-radius: 25px;
     border: 2px solid white;
     background-color: transparent;
     color: white;
@@ -201,37 +201,39 @@ button a {
     font-family: 'The Seasons', serif;
     outline: none;
     box-sizing: border-box;
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
+    text-align: right;
 }
 /* ---------------------- Tables ---------------------- */
 table {
     margin-left: auto;
     margin-right: auto;
     border-collapse: separate;
-    border-spacing: 0; /* vertical space between rows */
-    width: 100%;
-    max-width: 600px; /* optional: limit width */
+    border-spacing: 0;
+    width: auto;
+    max-width: 600px;
     background-color: lightyellow;
     border: 2px solid orange;
 }
 
+    table tr {
+        height: 30px;
+    }
+
     table td {
         vertical-align: middle;
-        padding: 0;
+        padding: 2px 4px;
+        font-size: 14px;
         background-color: lightyellow;
         border: 2px solid orange;
     }
 
-        /* Labels: left-aligned, right-aligned in the cell */
         table td:first-child {
             text-align: left;
-            width: 50%;
         }
 
-        /* Inputs: right-aligned inside the cell */
         table td:last-child {
             text-align: right;
-            width: 50%;
         }
 /* ---------------------- ABOUT PAGE ---------------------- */
 
