@@ -76,23 +76,32 @@ p {
     z-index: -1;
 }*/
 
-/* ---------------------- HEADINGS ---------------------- */
+/* ---------------------- MASTER PAGE DIVS ---------------------- */
 
+#mainContentDiv {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100%; /* Ensure it takes full height */
+    text-align: center; /* Center text */
+}
+
+/* ---------------------- HEADINGS ---------------------- */
 header {
     padding: 25px 0 25px 0;
     text-align: center;
 }
 
-/*header h1 {
+header h1 {
     text-align: center;
     letter-spacing: 20px;
     font-family: "Lilita One", sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 90px;
-}*/
+}
 
-h2 {
+header h2 {
     text-align: center;
     font-family: 'The Seasons', serif;
     font-style: normal;
@@ -104,33 +113,33 @@ h2 {
     margin-bottom: 1em;
 }
 
-    .curved-header svg {
-        display: block;
-        margin: 0 auto;
-        width: 700px;
-        height: 120px; 
-    }
+.curved-header svg {
+    display: block;
+    margin: 0 auto;
+    width: 700px;
+    height: 120px; 
+}
 
-    .curved-header text {
-        font-family: 'Lilita One', cursive, sans-serif;
-        font-size: 90px;
-        fill: white;
-        letter-spacing: 2px;
-    }
+.curved-header text {
+    font-family: 'Lilita One', cursive, sans-serif;
+    font-size: 90px;
+    fill: white;
+    letter-spacing: 2px;
+}
 
-    .curved-header .subtitle {
-        display: block;
-        font-family: 'The Seasons', serif;
-        font-weight: 400;
-        font-size: 36px;
-        color: white;
-        letter-spacing: normal;
-        margin-top: 20px;
-        width: 700px;
-        margin-left: auto;
-        margin-right: auto;
-        line-height: 1.2;
-    }
+.curved-header .subtitle {
+    display: block;
+    font-family: 'The Seasons', serif;
+    font-weight: 400;
+    font-size: 36px;
+    color: white;
+    letter-spacing: normal;
+    margin-top: 20px;
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.2;
+}
 
 /* ---------------------- NAVIGATION ---------------------- */
 
@@ -138,15 +147,7 @@ h2 {
 
 /* ---------------------- HOME PAGE ---------------------- */
 
-.center-content {
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    height: 100%; /* Ensure it takes full height */
-    text-align: center; /* Center text */
-}
-
-/* ---------------------- Small Container for messages ---------------------- */
+/* ---------------------- SMALL CONTAINER FOR MESSAGES ---------------------- */
 .container {
     display: flex;
     justify-content: center;
@@ -154,16 +155,13 @@ h2 {
 }
 
 
-
-/* ---------------------- Labels ---------------------- */
+/* ---------------------- LABELS ---------------------- */
 
 .label {
     font-family: 'The Seasons', serif;
     font-size: 40px;
     color: white;
 }
-
-
 
 
 /* ---------------------- BUTTONS ---------------------- */
@@ -190,7 +188,7 @@ button a {
     text-decoration: none;
 }
 
-/* ---------------------- Textboxes ---------------------- */
+/* ---------------------- TEXTBOXES ---------------------- */
 .textbox {
     border-radius: 25px;
     border: 2px solid white;
@@ -204,7 +202,7 @@ button a {
     margin-bottom: 10px;
     text-align: right;
 }
-/* ---------------------- Tables ---------------------- */
+/* ---------------------- TABLES ---------------------- */
 table {
     margin-left: auto;
     margin-right: auto;
@@ -216,25 +214,26 @@ table {
     border: 2px solid orange;
 }
 
-    table tr {
-        height: 30px;
-    }
+table tr {
+    height: 30px;
+}
 
-    table td {
-        vertical-align: middle;
-        padding: 2px 4px;
-        font-size: 14px;
-        background-color: lightyellow;
-        border: 2px solid orange;
-    }
+table td {
+    vertical-align: middle;
+    padding: 2px 4px;
+    font-size: 14px;
+    background-color: lightyellow;
+    border: 2px solid orange;
+}
 
-        table td:first-child {
-            text-align: left;
-        }
+table td:first-child {
+    text-align: left;
+}
 
-        table td:last-child {
-            text-align: right;
-        }
+table td:last-child {
+    text-align: right;
+}
+
 /* ---------------------- ABOUT PAGE ---------------------- */
 
 /* PALETTE WIDGET FROM "COOLERS" IN ABOUT PAGE? */

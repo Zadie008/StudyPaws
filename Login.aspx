@@ -8,18 +8,16 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server"> 
     <div class="curved-header">
         <svg viewBox="0 0 700 150" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-      <path id="curve" d="M50,120 Q350,20 650,120" />
-    </defs>
-    <text>
-      <textPath href="#curve" startOffset="50%" text-anchor="middle">
-        StudyPaws
-      </textPath>
-    </text>
-  </svg>
+            <defs>
+                <path id="curve" d="M50,120 Q350,20 650,120" />
+            </defs>
+            <text>
+                <textPath href="#curve" startOffset="50%" text-anchor="middle">StudyPaws</textPath>
+            </text>
+        </svg>
         <div style="height: 50px;"></div>
-                <h2 class="subtitle">purrfectly productive</h2>
-        </div>
+        <h2 class="subtitle">purrfectly productive</h2>
+    </div>
 </asp:Content>
 <%--above is the header of studypaws--%>
 
@@ -52,4 +50,3 @@
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
 
 </asp:Content>
-
