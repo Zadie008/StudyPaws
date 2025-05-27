@@ -8,10 +8,10 @@
         <asp:ContentPlaceHolder ID="tab" runat="server"></asp:ContentPlaceHolder>
     </title>
     <link rel="icon" type="image/x-icon" href="Images/Notification%20Happy.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
-  <link href="Styles/StyleSheet.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+    <link href="Styles/StyleSheet.css" rel="stylesheet">
 </head>
 <body>
     <form id="form1" runat="server">
@@ -20,7 +20,7 @@
                 <asp:ContentPlaceHolder ID="headerContentPlaceHolder" runat="server"></asp:ContentPlaceHolder>
             </header>
 
-            <div id="mainContentDiv">
+            <div id="mainContentDiv" class="center-content">
                 <asp:ContentPlaceHolder ID="mainContentPlaceHolder" runat="server"></asp:ContentPlaceHolder>
                 <nav>
                     <asp:ContentPlaceHolder ID="navContent" runat="server"></asp:ContentPlaceHolder>
