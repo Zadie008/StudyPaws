@@ -5,7 +5,7 @@
 </asp:Content>
 
 <%--please copy this part if you guys want the study paws header--%>
-<asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server"> 
+<asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
     <div class="curved-header">
         <svg viewBox="0 0 700 150" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -21,20 +21,21 @@
 <%--above is the header of studypaws--%>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-    <br />
-    <table>
-        <tr>
-            <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>
-            <td><asp:TextBox ID="txtUsername" class="textbox" runat="server"></asp:TextBox></td>
-        </tr>
-        <tr>
-            <td><asp:Label ID="lblPassword" class="label" runat="server" Text="Password"></asp:Label></td>
-            <td><asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password"></asp:TextBox></td>
-        </tr>
-    </table>
-    <br />
-    <div class="buttonSection">
-        <asp:Button ID="btnLogin" class="button" runat="server" Text="Login" />
+    <div id="loginPageDiv">
+        <table>
+            <tr>
+                <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>
+                <td><asp:TextBox ID="txtUsername" class="textbox" runat="server"></asp:TextBox></td>
+            </tr>
+            <tr>
+                <td><asp:Label ID="lblPassword" class="label" runat="server" Text="Password"></asp:Label></td>
+                <td><asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password"></asp:TextBox></td>
+            </tr>
+        </table>
+        <br />
+        <div class="buttonSection">
+            <asp:Button ID="btnLogin" class="button" runat="server" Text="Login" />
+        </div>
     </div>
 </asp:Content>
 
