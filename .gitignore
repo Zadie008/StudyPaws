@@ -15,3 +15,4 @@ obj/
 *.bak
 *.tmp
 *.log
+/.vs/StudyPaws/v17/DocumentLayout.backup.json
