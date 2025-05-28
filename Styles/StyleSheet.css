@@ -152,7 +152,7 @@ h2 {
     fill: white;
 }
 
-.curved-header .subtitle {
+/*.curved-header .subtitle {
     display: block;
     font-family: 'The Seasons', serif;
     font-size: 36px;
@@ -163,7 +163,7 @@ h2 {
     margin-left: auto;
     margin-right: auto;
     line-height: 1.2;
-}
+}*/
 
 /* ---------------------- NAVIGATION ---------------------- */
 
@@ -401,16 +401,18 @@ table {
 /*<!-- Coolors Palette Widget -->
 <script src="https://coolors.co/palette-widget/widget.js" > </script >
 <script data-id="000813941576946653" > new CoolorsPaletteWidget("000813941576946653", ["446791","64A6BD","90A8C3","ADA7C9","D7B9D5","F4CAE0"]); </script >*/
+
+
 /* ---------------------- FOOTER ---------------------- */
 footer {
     text-align: center;
     position: fixed;
     bottom: 0;
     width: 100%;
-    background-color: #F4CAE0;
+    background-color: white;
 }
 
 footer p {
-    color: black;
+    color: #446791;
     font-size: 20px;
 }

@@ -74,7 +74,21 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="navContent" Runat="Server">
-
+    <asp:Menu ID="Menu1" runat="server" ForeColor="#F4CAE0" StaticHoverStyle-ForeColor="white" Orientation="Horizontal">
+        <Items>
+            <asp:MenuItem NavigateUrl="~\B__View-dashboard.aspx" Text="Dashboard" Value="Dashboard"></asp:MenuItem>
+            <asp:MenuItem NavigateUrl="~\B100_View-calendar.aspx" Text="Calendar" Value="Calendar"></asp:MenuItem>
+            <asp:MenuItem NavigateUrl="~\B900_View-to-do-list.aspx" Text="To-do List" Value="To-do List"></asp:MenuItem>
+            <asp:MenuItem NavigateUrl="~\A100_Create-timer.aspx" Text="Timer" Value="Timer"></asp:MenuItem>
+            <asp:MenuItem NavigateUrl="~\A700_Create-study-session.aspx" Text="Study Session" Value="Study Session"></asp:MenuItem>
+            <asp:MenuItem NavigateUrl="~\B1400_View-shop.aspx" Text="Pet Shop" Value="Pet Shop"></asp:MenuItem>
+            <asp:MenuItem NavigateUrl="~\A1800_View-pets.aspx" Text="Inventory" Value="Inventory"></asp:MenuItem>
+            <asp:MenuItem NavigateUrl="~\C600_View-friend-list.aspx" Text="Friends" Value="Friends"></asp:MenuItem>
+            <asp:MenuItem NavigateUrl="~\C1400_View-badges.aspx" Text="Badges" Value="Badges"></asp:MenuItem>
+            <asp:MenuItem NavigateUrl="~\About.aspx" Text="About" Value="About"></asp:MenuItem>
+        </Items>
+        <StaticMenuItemStyle HorizontalPadding="1em" VerticalPadding="1em" />
+    </asp:Menu>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

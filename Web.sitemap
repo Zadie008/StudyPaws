@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+	<siteMapNode url="~\B__View-dashboard.aspx" title="Dashboard"  description="Dashboard Page">
+		<siteMapNode url="~\B100_View-calendar.aspx" title="Calendar"  description="Calendar Page" />
+		<siteMapNode url="~\B900_View-to-do-list.aspx" title="To-do List"  description="To-do List Page" />
+		<siteMapNode url="~\A100_Create-timer.aspx" title="Timer"  description="Timer Page" />
+		<siteMapNode url="~\A700_Create-study-session.aspx" title="Study Session"  description="Study Session Page" />
+		<siteMapNode url="~\B1400_View-shop.aspx" title="Pet Shop"  description="Pet Shop Page" />
+		<siteMapNode url="~\A1800_View-pets.aspx" title="Inventory"  description="Inventory Page" />
+		<siteMapNode url="~\C600_View-friend-list.aspx" title="Friends"  description="Friends Page" />
+		<siteMapNode url="~\C1400_View-badges.aspx" title="Badges"  description="Badges Page" />
+		<siteMapNode url="~\About.aspx" title="About"  description="About Page" />
+  </siteMapNode>
+</siteMap>
