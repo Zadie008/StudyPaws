@@ -14,7 +14,6 @@
                 <textPath href="#curve" startOffset="50%" text-anchor="middle">StudyPaws</textPath>
             </text>
         </svg>
-        <div style="height: 50px;"></div>
         <h2>purrfectly productive</h2>
     </div>
 </asp:Content>

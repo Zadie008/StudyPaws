@@ -79,7 +79,6 @@ p {
 /* ---------------------- MASTER PAGE DIVS ---------------------- */
 
 #mainContentDiv {
-    display: flex;
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
     height: 100%; /* Ensure it takes full height */
@@ -98,33 +97,32 @@ header h1 {
     font-family: "Lilita One", sans-serif;
     font-style: normal;
     font-weight: 400;
-    font-size: 90px;
+    font-size: 80px;
 }
 
 header h2 {
     text-align: center;
     font-family: 'The Seasons', serif;
     font-style: normal;
-    font-weight: 400;
-    font-size: 36px;
+    font-weight: 100;
+    font-size: 25px;
 }
+
 .curved-header {
     text-align: center;
-    margin-bottom: 1em;
 }
 
 .curved-header svg {
     display: block;
-    margin: 0 auto;
+    margin: auto;
     width: 700px;
-    height: 120px; 
 }
 
 .curved-header text {
     font-family: 'Lilita One', cursive, sans-serif;
-    font-size: 90px;
+    font-size: 80px;
+    letter-spacing: 20px;
     fill: white;
-    letter-spacing: 2px;
 }
 
 .curved-header .subtitle {
@@ -154,7 +152,6 @@ header h2 {
     margin-top: 60px; /* for spacing from top */
 }
 
-
 /* ---------------------- LABELS ---------------------- */
 
 .label {
@@ -162,7 +159,6 @@ header h2 {
     font-size: 40px;
     color: white;
 }
-
 
 /* ---------------------- BUTTONS ---------------------- */
 
@@ -175,13 +171,13 @@ header h2 {
     border: none;
     border-radius: 20px;
     color: white;
-    padding: 0.5em 0.5em 0.5em 0.5em;
-    margin-bottom: 1em;
+    padding: 10px 15px 10px 15px;
     text-decoration: none;
     cursor: pointer;
     font-size: 40px;
     font-family: 'Lilita One', cursive, sans-serif;
-    }
+    letter-spacing: 2px;
+}
 
 button a {
     color: white;
@@ -193,15 +189,17 @@ button a {
     border-radius: 25px;
     border: 2px solid white;
     background-color: transparent;
+    padding: 0 15px 0 15px;
     color: white;
-    padding: 0.5em 1em;
-    font-size: 20px;
+    font-size: 35px;
     font-family: 'The Seasons', serif;
     outline: none;
     box-sizing: border-box;
-    margin-bottom: 10px;
+    margin: 10px;
     text-align: right;
+    max-width: 300px;
 }
+
 /* ---------------------- TABLES ---------------------- */
 table {
     margin-left: auto;
@@ -209,21 +207,15 @@ table {
     border-collapse: separate;
     border-spacing: 0;
     width: auto;
-    max-width: 600px;
-    background-color: lightyellow;
-    border: 2px solid orange;
 }
 
 table tr {
-    height: 30px;
+    padding: 5px;
 }
 
 table td {
     vertical-align: middle;
-    padding: 2px 4px;
-    font-size: 14px;
-    background-color: lightyellow;
-    border: 2px solid orange;
+    padding: 2px 10px;
 }
 
 table td:first-child {

@@ -15,36 +15,31 @@
                 <textPath href="#curve" startOffset="50%" text-anchor="middle">StudyPaws</textPath>
             </text>
         </svg>
-        <div style="height: 50px;"></div>
-        <h2 class="subtitle">purrfectly productive</h2>
+        <h2>purrfectly productive</h2>
     </div>
 </asp:Content>
 <%--above is the header of studypaws--%>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-    <p>lalalla</p>
-   
-<table>
-    <tr>
-        <td><asp:Label ID="lblUsername" runat="server" CssClass="label" Text="Username"></asp:Label></td>
-        <td><asp:TextBox ID="txtUsername" runat="server" CssClass="textbox"></asp:TextBox></td>
-    </tr>
-    <tr>
-        <td><asp:Label ID="lblPassword" runat="server" CssClass="label" Text="Password"></asp:Label></td>
-        <td><asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="textbox"></asp:TextBox></td>
-    </tr>
-</table>
-        
-       <div class="buttonSection">
-    <asp:Button ID="btnLogin" runat="server" Text="Login" CssClass="button" />
-
-</div>
-
+    <br />
+    <table>
+        <tr>
+            <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>
+            <td><asp:TextBox ID="txtUsername" class="textbox" runat="server"></asp:TextBox></td>
+        </tr>
+        <tr>
+            <td><asp:Label ID="lblPassword" class="label" runat="server" Text="Password"></asp:Label></td>
+            <td><asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password"></asp:TextBox></td>
+        </tr>
+    </table>
+    <br />
+    <div class="buttonSection">
+        <asp:Button ID="btnLogin" class="button" runat="server" Text="Login" />
+    </div>
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="navContent" Runat="Server">
 
-    
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
