@@ -4,6 +4,7 @@
 
 <html>
 <head runat="server">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
         <asp:ContentPlaceHolder ID="tab" runat="server"></asp:ContentPlaceHolder>
     </title>
@@ -15,26 +16,28 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <div id="page">
-            <header>
-                <asp:ContentPlaceHolder ID="headerContentPlaceHolder" runat="server"></asp:ContentPlaceHolder>
-            </header>
+    <div id="page" class="page-wrapper">
+        <header>
+            <asp:ContentPlaceHolder ID="headerContentPlaceHolder" runat="server"></asp:ContentPlaceHolder>
+        </header>
 
-            <div id="mainContentDiv">
-                <asp:ContentPlaceHolder ID="mainContentPlaceHolder" runat="server"></asp:ContentPlaceHolder>
-                <nav>
-                    <asp:ContentPlaceHolder ID="navContent" runat="server"></asp:ContentPlaceHolder>
-                </nav>
-            </div>
+        <div class="main-content" id="mainContentDiv">
+            <nav>
+                <asp:ContentPlaceHolder ID="navContent" runat="server"></asp:ContentPlaceHolder>
+            </nav>
 
-            <footer>
-                <asp:ContentPlaceHolder ID="footerContentPlaceHolder" runat="server"></asp:ContentPlaceHolder>
-                <p>Created by Lea, Tammy and Zadie</p>
-            </footer>
-            <div class="wave-section">
-                <div class="wave-layer"></div>
-            </div>
+            <asp:ContentPlaceHolder ID="mainContentPlaceHolder" runat="server"></asp:ContentPlaceHolder>
         </div>
-    </form>
+
+        <footer>
+            <asp:ContentPlaceHolder ID="footerContentPlaceHolder" runat="server"></asp:ContentPlaceHolder>
+            <p>© 2025 StudyPaws. All rights reserved.</p>
+        </footer>
+
+        <div class="wave-section">
+            <div class="wave-layer"></div>
+        </div>
+    </div>
+</form>
 </body>
 </html>

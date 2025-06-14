@@ -5,16 +5,18 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server"> 
-    <div class="curved-header">
-        <svg viewBox="0 0 700 150" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <path id="curve" d="M50,120 Q350,20 650,120" />
-            </defs>
-            <text>
-                <textPath href="#curve" startOffset="50%" text-anchor="middle">StudyPaws</textPath>
-            </text>
-        </svg>
-        <h2>purrfectly productive</h2>
+    <div class="loginRegisterCurvedHeader">
+        <div class="curved-header">
+            <svg viewBox="0 0 700 150" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <path id="curve" d="M50,120 Q350,20 650,120" />
+                </defs>
+                <text>
+                    <textPath href="#curve" startOffset="50%" text-anchor="middle">StudyPaws</textPath>
+                </text>
+            </svg>
+            <h2>purrfectly productive</h2>
+        </div>
     </div>
 </asp:Content>
 
@@ -27,11 +29,11 @@
             </tr>
             <tr>
                 <td><asp:Label ID="lblPassword" class="label" runat="server" Text="Password"></asp:Label></td>
-                <td><asp:TextBox ID="txtPassword" class="textbox" runat="server"></asp:TextBox></td>
+                <td><asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password"></asp:TextBox></td>
             </tr>
             <tr>
                 <td><asp:Label ID="lblConfirmPassword" class="label" runat="server" Text="Confirm Password"></asp:Label></td>
-                <td><asp:TextBox ID="txtConfirmPassword" class="textbox" runat="server"></asp:TextBox></td>
+                <td><asp:TextBox ID="txtConfirmPassword" class="textbox" runat="server" TextMode="Password"></asp:TextBox></td>
             </tr>
         </table>
         <br />
