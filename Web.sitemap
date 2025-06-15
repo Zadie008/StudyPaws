@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
-	<siteMapNode url="~\B__View-dashboard.aspx" title="Dashboard"  description="Dashboard Page">
+	<siteMapNode url="~\B1600_View-dashboard.aspx" title="Dashboard"  description="Dashboard Page">
 		<siteMapNode url="~\B100_View-calendar.aspx" title="Calendar"  description="Calendar Page" />
 		<siteMapNode url="~\B900_View-to-do-list.aspx" title="To-do List"  description="To-do List Page" />
 		<siteMapNode url="~\A100_Create-timer.aspx" title="Timer"  description="Timer Page" />
