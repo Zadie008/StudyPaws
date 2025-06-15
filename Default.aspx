@@ -61,6 +61,10 @@
         </svg>
         <h2>purrfectly productive</h2>
     </div>
+
+    <script>
+        document.body.classList.add('is-default');
+    </script>
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">

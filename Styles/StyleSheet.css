@@ -221,13 +221,52 @@ nav {
     font-size: 3.5em;
     letter-spacing: 0.05em;
     color: white;
-    background-color: #ADA7C9;
     border-radius: 0.65em;
 }
 
 .navbar .nav-left li,
 .navbar .nav-right li {
     margin-bottom: 1em;
+}
+
+.navbar .nav-left li {
+    transform: translateX(0);
+    transition: transform 0.3s ease-in-out;
+}
+
+.navbar .nav-left li:hover {
+    transform: translateX(1em);
+}
+
+.navbar .nav-right li {
+    transform: translateX(0);
+    transition: transform 0.3s ease-in-out;
+}
+
+.navbar .nav-right li:hover {
+    transform: translateX(-1em);
+}
+
+body.page-enter .nav-left {
+    transform: translateX(-23.5em);
+    animation: slideInLeft 0.5s ease forwards;
+}
+
+body.page-enter .nav-right {
+    transform: translateX(23.5em);
+    animation: slideInRight 0.5s ease forwards;
+}
+
+@keyframes slideInLeft {
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    to {
+        transform: translateX(0);
+    }
 }
 
 /* left children*/
@@ -281,6 +320,87 @@ nav {
 
 .nav-right li:nth-child(5) a {
     background-color: #64A6BD;
+}
+
+body.page-exit .navbar .nav-left {
+    transform: translateX(-23.5em);
+    transition: transform 0.5s ease;
+}
+
+body.page-exit .navbar .nav-right {
+    transform: translateX(23.5em);
+    transition: transform 0.5s ease;
+}
+
+/* collapsed nav*/
+.collapsedNav .nav-left,
+.nav-right {
+    position: fixed;
+    top: 20%;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+}
+
+.collapsedNav .nav-left {
+    left: 0;
+}
+
+.collapsedNav .nav-left li {
+    transform: translateX(-23.5em);
+    transition: transform 0.5s ease-in-out;
+}
+
+.collapsedNav .nav-left li:hover {
+    transform: translateX(1em);
+}
+
+.collapsedNav .nav-right {
+    right: 0;
+}
+
+.collapsedNav .nav-right li {
+    transform: translateX(23.5em);
+    transition: transform 0.5s ease-in-out;
+}
+
+.collapsedNav .nav-right li:hover {
+    transform: translateX(1em);
+}
+
+.collapsedNav .navbar a {
+    display: inline-block;
+    text-decoration: none;
+    font-family: "Lilita One", sans-serif;
+    font-size: 3.5em;
+    letter-spacing: 0.05em;
+    color: white;
+    background-color: #ADA7C9;
+    border-radius: 0.65em;
+    transition: all 0.3s ease;
+}
+
+.collapsedNav .nav-left li,
+.nav-right li {
+    list-style: none;
+    margin-bottom: 1em;
+}
+
+.collapsedNav .nav-left a,
+.nav-right a {
+    width: 8em;
+    padding: 1.5vh 0.5em;
+}
+
+body.page-exit .collapsedNav .navbar .nav-left {
+    transform: translateX(1em);
+    transition: transform 0.5s ease;
+}
+
+body.page-exit .collapsedNav .navbar .nav-right {
+    transform: translateX(1em);
+    transition: transform 0.5s ease;
 }
 
 /* ---------------------- HOME PAGE ---------------------- */
@@ -618,6 +738,32 @@ footer p {
         margin-bottom: 0.2em;
     }
 
+    /*collapsed nav*/
+    .collapsedNav .nav-left {
+        padding-top: 2%;
+    }
+
+    .collapsedNav .nav-right {
+        padding-top: 2%;
+    }
+
+    .collapsedNav .navbar a {
+        font-size: 3em;
+    }
+
+    .collapsedNav .navbar .nav-left a {
+        width: 8.5em;
+    }
+
+    .collapsedNav .navbar .nav-right a {
+        width: 8.5em;
+    }
+
+    .collapsedNav .navbar .nav-left li,
+    .navbar .nav-right li {
+        margin-bottom: 0.5em;
+    }
+
     .homePagePet {
         width: min(90vw, 300px);
     }
@@ -678,6 +824,40 @@ footer p {
     .navbar .nav-left li,
     .navbar .nav-right li {
         margin-bottom: 0.5em;
+    }
+
+    /*collapsed nav*/
+    .collapsedNav .nav-left {
+        padding-top: 2%;
+    }
+
+    .collapsedNav .nav-right {
+        padding-top: 2%;
+    }
+
+    .collapsedNav .navbar a {
+        font-size: 3em;
+    }
+
+    .collapsedNav .navbar .nav-left a {
+        width: 8.5em;
+    }
+
+    .collapsedNav .navbar .nav-right a {
+        width: 8.5em;
+    }
+
+    .collapsedNav .navbar .nav-left li,
+    .navbar .nav-right li {
+        margin-bottom: 0.5em;
+    }
+
+    .collapsedNav .nav-left li {
+        transform: translateX(-21em);
+    }
+
+    .collapsedNav .nav-right li {
+        transform: translateX(21em);
     }
 
     .homePagePet {
