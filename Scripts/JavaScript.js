@@ -50,5 +50,5 @@ function updateTimeAndDate() {
 
 window.addEventListener("DOMContentLoaded", updateTimeAndDate);
 
-// update time every minute
-setInterval(updateTimeAndDate, 60000);
+// update time every second
+setInterval(updateTimeAndDate, 6000);

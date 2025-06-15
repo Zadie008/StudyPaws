@@ -38,12 +38,12 @@
     <div class="timeDateDiv">
         <table>
             <tr>
-                <td colspan="2"><asp:Label ID="lblTime" runat="server" Text="09:52" Font-Size="65"></asp:Label></td> <!--CHANGE: has to be current time-->
+                <td colspan="2"><asp:Label ID="lblTime" runat="server" Text="--:--" Font-Size="65"></asp:Label></td>
                 <td></td>
             </tr>
             <tr>
-                <td><asp:Label ID="lblDay" runat="server" Text="Friday"></asp:Label></td> <!--CHANGE: has to be current day-->
-                <td><asp:Label ID="lblDate" runat="server" Text="18 April"></asp:Label></td> <!--CHANGE: has to be current date-->
+                <td><asp:Label ID="lblDay" runat="server" Text="Day"></asp:Label></td>
+                <td><asp:Label ID="lblDate" runat="server" Text="Date"></asp:Label></td>
             </tr>
         </table>
     </div>
