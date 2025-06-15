@@ -5,6 +5,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
+    <!--account info to copy and paste-->
     <div class="accountInfoDiv">
         <div class="profileDiv">
             <div class="profileIcon">
@@ -18,8 +19,8 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td colspan="2"><asp:Label ID="lblXP" runat="server" Text="Label">XP 65</asp:Label></td> <!--CHANGE: has to be total xp-->
-                        <td></td>
+                        <td><asp:Label ID="lblXP" runat="server" Text="Label">XP</asp:Label></td>
+                        <td><asp:Label ID="lblXPAmount" runat="server" Text="Label">65</asp:Label></td> <!--CHANGE: has to be total xp-->
                     </tr>
                     <tr>
                         <td>
@@ -48,18 +49,18 @@
         </div>
     </div>
 
+    <!--study paws header to copy and paste-->
     <div class="curved-header">
         <svg viewBox="0 0 700 150" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <path id="curve" d="M50,120 Q350,20 650,120" />
             </defs>
             <text>
-                <textPath href="#curve" startOffset="50%" text-anchor="middle">StudyPaws</textPath>
+                <textPath href="#curve" startOffset="50%" text-anchor="middle"><a href="Default.aspx">StudyPaws</a></textPath> <!--link to home page-->
             </text>
         </svg>
         <h2>purrfectly productive</h2>
     </div>
-
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
