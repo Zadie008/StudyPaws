@@ -76,16 +76,16 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="navContent" Runat="Server">
     <!--navigation to copy and paste-->
     <div class="navbar">
-        <asp:Menu ID="MenuLeft" runat="server" Orientation="Vertical" CssClass="nav-left">
+        <asp:Menu ID="MenuLeft" runat="server" Orientation="Vertical" CssClass="nav-left" StaticDisplayLevels="1" StaticMenuItemStyle-CssClass="menu-item">
             <Items>
-                <asp:MenuItem NavigateUrl="~\B__View-dashboard.aspx" Text="Dashboard" Value="Dashboard"></asp:MenuItem>
+                <asp:MenuItem NavigateUrl="~\B1600_View-dashboard.aspx" Text="Dashboard" Value="Dashboard"></asp:MenuItem>
                 <asp:MenuItem NavigateUrl="~\B100_View-calendar.aspx" Text="Calendar" Value="Calendar"></asp:MenuItem>
                 <asp:MenuItem NavigateUrl="~\B900_View-to-do-list.aspx" Text="To-do List" Value="To-do List"></asp:MenuItem>
                 <asp:MenuItem NavigateUrl="~\A100_Create-timer.aspx" Text="Timer" Value="Timer"></asp:MenuItem>
                 <asp:MenuItem NavigateUrl="~\A700_Create-study-session.aspx" Text="Study Session" Value="Study Session"></asp:MenuItem>
             </Items>
         </asp:Menu>
-        <asp:Menu ID="MenuRight" runat="server" Orientation="Vertical" CssClass="nav-right">
+        <asp:Menu ID="MenuRight" runat="server" Orientation="Vertical" CssClass="nav-right" StaticDisplayLevels="1" StaticMenuItemStyle-CssClass="menu-item">
             <Items>
                 <asp:MenuItem NavigateUrl="~\B1400_View-shop.aspx" Text="Pet Shop" Value="Pet Shop"></asp:MenuItem>
                 <asp:MenuItem NavigateUrl="~\A1800_View-pets.aspx" Text="Inventory" Value="Inventory"></asp:MenuItem>

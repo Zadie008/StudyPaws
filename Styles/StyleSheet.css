@@ -220,14 +220,62 @@ nav {
     border-radius: 0.65em;
 }
 
+.navbar .nav-left li,
+.navbar .nav-right li {
+    margin-bottom: 1em;
+}
+
+/* left children*/
 .navbar .nav-left a {
     width: 8em;
     padding: 1.5vh 0.5em 1.5vh 1em;
 }
 
+.nav-left li:nth-child(1) a {
+    background-color: #F4CAE0;
+}
+
+.nav-left li:nth-child(2) a {
+    background-color: #D7B9D5;
+}
+
+.nav-left li:nth-child(3) a {
+    background-color: #ADA7C9;
+}
+
+.nav-left li:nth-child(4) a {
+    background-color: #90A8C3;
+}
+
+.nav-left li:nth-child(5) a {
+    background-color: #64A6BD;
+}
+
+/* right children*/
+
 .navbar .nav-right a {
     width: 8em;
     padding: 1.5vh 1em 1.5vh 0.5em;
+}
+
+.nav-right li:nth-child(1) a {
+    background-color: #F4CAE0;
+}
+
+.nav-right li:nth-child(2) a {
+    background-color: #D7B9D5;
+}
+
+.nav-right li:nth-child(3) a {
+    background-color: #ADA7C9;
+}
+
+.nav-right li:nth-child(4) a {
+    background-color: #90A8C3;
+}
+
+.nav-right li:nth-child(5) a {
+    background-color: #64A6BD;
 }
 
 /* ---------------------- HOME PAGE ---------------------- */
@@ -533,6 +581,35 @@ footer p {
 /* ---------------------- MEDIA QUERIES ---------------------- */
 
 @media (max-width: 768px) {
+    .nav-left {
+        padding-top: 1%;
+    }
+
+    .nav-right {
+        padding-top: 1%;
+    }
+
+    .navbar a {
+        font-size: 2em;
+    }
+
+    .navbar .nav-left a {
+        width: 9em;
+    }
+
+    .navbar .nav-right a {
+        width: 9em;
+    }
+
+    .navbar .nav-left li,
+    .navbar .nav-right li {
+        margin-bottom: 0.2em;
+    }
+
+    .homePagePet {
+        width: min(90vw, 300px);
+    }
+
     .accountInfoDiv {
         flex-direction: column;
         align-items: flex-start;
@@ -572,6 +649,11 @@ footer p {
 
     .navbar .nav-right a {
         width: 8.5em;
+    }
+
+    .navbar .nav-left li,
+    .navbar .nav-right li {
+        margin-bottom: 0.5em;
     }
 
     .homePagePet {
