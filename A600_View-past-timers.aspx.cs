@@ -14,16 +14,6 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnBack_Click(object sender, EventArgs e)
     {
-        Response.Redirect("Default.aspx");
-    }
-
-    protected void btnCreate_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("A100_Create-timer_2.aspx");
-    }
-
-    protected void btnViewPastTimers_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("A600_View-past-timers.aspx");
+        Response.Redirect("A100_Create-timer.aspx");
     }
 }
