@@ -393,12 +393,12 @@ body.page-exit .navbar .nav-right {
 }
 
 body.page-exit .collapsedNav .navbar .nav-left {
-    transform: translateX(1em);
+    transform: translateX(0);
     transition: transform 0.5s ease;
 }
 
 body.page-exit .collapsedNav .navbar .nav-right {
-    transform: translateX(1em);
+    transform: translateX(0);
     transition: transform 0.5s ease;
 }
 
@@ -525,6 +525,11 @@ body.page-exit .collapsedNav .navbar .nav-right {
     width: 100%;
 }
 
+body.page-exit .homePagePet {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
 /* ---------------------- USER WELCOME BACK TEXT ---------------------- */
 .welcomeBackTextDiv {
     text-align: center;
@@ -537,6 +542,11 @@ body.page-exit .collapsedNav .navbar .nav-right {
 
 .welcomeBackTextDiv h1 {
     letter-spacing: 0.1em;
+}
+
+body.page-exit .welcomeBackTextDiv {
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 /* ---------------------- TIMER PAGE ---------------------- */
