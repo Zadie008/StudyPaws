@@ -566,18 +566,28 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 /* ---------------------- TIMER PAGE ---------------------- */
+.timerMainContent {
+    margin: 4em 4em 4em 4em;
+}
+
 .timerMainContent .buttonSection {
-    padding-top: 25%;
+    margin-top: 32%;
     display: flex;
 }
 
-.timerMainContent .buttonSection .backCreateSection {
-    flex: 3;
+.timerMainContent .buttonSection .leftSection {
+    z-index: 10;
+    flex: 1;
 }
 
-.timerMainContent .buttonSection .viewPastSection {
-    flex: 1;
+.timerMainContent .buttonSection .middleSection {
     z-index: 10;
+    flex: 1;
+}
+
+.timerMainContent .buttonSection .rightSection {
+    z-index: 10;
+    flex: 1;
 }
 
 /* ---------------------- OTHER ---------------------- */
@@ -918,5 +928,9 @@ footer p {
 
     #loginPageDiv {
         margin-top: 19%;
+    }
+
+    .timerMainContent .buttonSection {
+        margin-top: 28%;
     }
 }

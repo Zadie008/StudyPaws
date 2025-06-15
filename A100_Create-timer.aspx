@@ -92,11 +92,13 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div class="timerMainContent">
         <div class="buttonSection">
-            <div class="backCreateSection">
-                <asp:Button ID="btnBack" class="button" runat="server" Text="Back" />
+            <div class="leftSection">
+            </div>
+            <div class="middleSection">
+                <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" />
                 <asp:Button ID="btnCreate" class="button" runat="server" Text="Create" />
             </div>
-            <div class="viewPastSection">
+            <div class="rightSection">
                 <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past timers" />
             </div>
         </div>
