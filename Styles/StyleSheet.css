@@ -296,7 +296,6 @@ body.page-enter .nav-right {
 }
 
 /* right children*/
-
 .navbar .nav-right a {
     width: 8em;
     padding: 1.5vh 1em 1.5vh 0.5em;
@@ -332,11 +331,11 @@ body.page-exit .navbar .nav-right {
     transition: transform 0.5s ease;
 }
 
-/* collapsed nav*/
+/* collapsed nav */
 .collapsedNav .nav-left,
 .nav-right {
     position: fixed;
-    top: 20%;
+    padding-top: 4%;
     z-index: 999;
     display: flex;
     flex-direction: column;
@@ -404,6 +403,7 @@ body.page-exit .collapsedNav .navbar .nav-right {
 }
 
 /* ---------------------- HOME PAGE ---------------------- */
+
 /* ---------------------- HEADER ---------------------- */
 /* ---------------------- ACCOUNT INFO BAR ---------------------- */
 .accountInfoDiv {
@@ -424,6 +424,7 @@ body.page-exit .collapsedNav .navbar .nav-right {
     flex-wrap: wrap;
 }
 
+/* profile pic */
 .profileIcon {
     position: relative;
     width: 10vw;
@@ -452,6 +453,7 @@ body.page-exit .collapsedNav .navbar .nav-right {
     z-index: 0;
 }
 
+/* level, xp and paw currency on left side of screen */
 .profileDetails {
     text-align: left;
 }
@@ -480,6 +482,7 @@ body.page-exit .collapsedNav .navbar .nav-right {
     width: 100%;
 }
 
+/* date and time on right side of screen */
 .timeDateDiv {
     text-align: right;
     margin-top: 1rem;
@@ -536,7 +539,12 @@ body.page-exit .collapsedNav .navbar .nav-right {
     letter-spacing: 0.1em;
 }
 
+/* ---------------------- TIMER PAGE ---------------------- */
+.timerMainContent {
+    
+}
 
+/* ---------------------- OTHER ---------------------- */
 /* ---------------------- SMALL CONTAINER FOR MESSAGES ---------------------- */
 .container {
     display: flex;
