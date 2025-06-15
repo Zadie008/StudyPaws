@@ -19,3 +19,36 @@ document.querySelectorAll('.navbar a').forEach(link => {
         }, 500);
     });
 });
+
+function updateTimeAndDate() {
+    const timeLabel = document.getElementById("headerContentPlaceHolder_lblTime");
+    const dayLabel = document.getElementById("headerContentPlaceHolder_lblDay");
+    const dateLabel = document.getElementById("headerContentPlaceHolder_lblDate");
+
+    const now = new Date();
+
+    // format time as hh:mm
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
+    hours = hours < 10 ? "0" + hours : hours;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    const timeString = `${hours}:${minutes}`;
+
+    // format day and date
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    const dayString = days[now.getDay()];
+    const dateString = `${now.getDate()} ${months[now.getMonth()]}`;
+
+    if (timeLabel) timeLabel.textContent = timeString;
+    if (dayLabel) dayLabel.textContent = dayString;
+    if (dateLabel) dateLabel.textContent = dateString;
+}
+
+window.addEventListener("DOMContentLoaded", updateTimeAndDate);
+
+// update time every minute
+setInterval(updateTimeAndDate, 60000);
