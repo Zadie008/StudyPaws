@@ -173,6 +173,10 @@ h2 {
     font-size: clamp(0.5rem, 2vw, 2rem);
 }
 
+.curved-header a:visited {
+    color: white;
+}
+
 /* STUDY PAWS CURVED HEADING (ON LOGIN / REGISTER PAGES) */
 .loginRegisterCurvedHeader .curved-header {
     top: 20%;
@@ -334,7 +338,7 @@ nav {
 
 .pawIcon {
     position: relative;
-    width: 3vw;
+    width: 2.5vw;
     max-width: 50px;
     aspect-ratio: 1;
 }
