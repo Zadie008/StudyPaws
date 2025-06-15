@@ -184,9 +184,13 @@ h2 {
 
 /* ---------------------- NAVIGATION ---------------------- */
 nav {
-    z-index: 1000;
+    z-index: 1;
     width: 100%;
     position: fixed;
+}
+
+nav:hover {
+    z-index: 1000;
 }
 
 .navbar {
@@ -203,16 +207,17 @@ nav {
     text-align: right;
     margin-left: -3em;
     padding-top: 4%;
+    z-index: 1;
 }
 
 .nav-right {
     flex: 1;
-    position: fixed;
     right: 0;
     flex-direction: column;
     text-align: left;
     margin-right: -3em;
     padding-top: 4%;
+    z-index: 1;
 }
 
 .navbar a {
@@ -230,21 +235,27 @@ nav {
 }
 
 .navbar .nav-left li {
+    position: relative;
+    z-index: 1;
     transform: translateX(0);
     transition: transform 0.3s ease-in-out;
 }
 
 .navbar .nav-left li:hover {
     transform: translateX(1em);
+    z-index: 1;
 }
 
 .navbar .nav-right li {
+    position: relative;
+    z-index: 1;
     transform: translateX(0);
     transition: transform 0.3s ease-in-out;
 }
 
 .navbar .nav-right li:hover {
     transform: translateX(-1em);
+    z-index: 1;
 }
 
 body.page-enter .nav-left {
@@ -336,10 +347,10 @@ body.page-exit .navbar .nav-right {
 .nav-right {
     position: fixed;
     padding-top: 4%;
-    z-index: 999;
     display: flex;
     flex-direction: column;
     transition: transform 0.3s ease;
+    z-index: 1;
 }
 
 .collapsedNav .nav-left {
@@ -347,12 +358,14 @@ body.page-exit .navbar .nav-right {
 }
 
 .collapsedNav .nav-left li {
+    position: relative;
     transform: translateX(-23.5em);
     transition: transform 0.5s ease-in-out;
 }
 
 .collapsedNav .nav-left li:hover {
     transform: translateX(1em);
+    z-index: 1;
 }
 
 .collapsedNav .nav-right {
@@ -360,12 +373,15 @@ body.page-exit .navbar .nav-right {
 }
 
 .collapsedNav .nav-right li {
+    position: relative;
     transform: translateX(23.5em);
     transition: transform 0.5s ease-in-out;
+    z-index: 1;
 }
 
 .collapsedNav .nav-right li:hover {
     transform: translateX(1em);
+    z-index: 11;
 }
 
 .collapsedNav .navbar a {
@@ -550,8 +566,18 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 /* ---------------------- TIMER PAGE ---------------------- */
-.timerMainContent {
-    
+.timerMainContent .buttonSection {
+    padding-top: 25%;
+    display: flex;
+}
+
+.timerMainContent .buttonSection .backCreateSection {
+    flex: 3;
+}
+
+.timerMainContent .buttonSection .viewPastSection {
+    flex: 1;
+    z-index: 10;
 }
 
 /* ---------------------- OTHER ---------------------- */
@@ -574,7 +600,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 /* ---------------------- BUTTONS ---------------------- */
-
+/* normal blue button */
 .buttonSection {
     text-align: center;
     margin-top: 3vh;
@@ -603,6 +629,10 @@ body.page-exit .welcomeBackTextDiv {
     color: white;
     text-decoration: none;
 }
+
+/* pink (good) confirm button */
+
+/* blue (bad) confirm button */
 
 /* ---------------------- TEXTBOXES ---------------------- */
 
