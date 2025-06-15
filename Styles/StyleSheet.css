@@ -170,6 +170,7 @@ h2 {
 
 .curved-header h2 {
     margin-top: clamp(-3rem, -3vw, -2rem);
+    font-size: clamp(0.5rem, 2vw, 2rem);
 }
 
 /* STUDY PAWS CURVED HEADING (ON LOGIN / REGISTER PAGES) */
@@ -492,7 +493,6 @@ table {
 
 /* ---------------------- REGISTER PAGE ---------------------- */
 #registerPageDiv {
-    padding-top: clamp(0.5rem 1vh 1rem);
     margin-top: 17%;
     text-align: left;
 }
@@ -524,7 +524,6 @@ table {
 
 /* ---------------------- LOGIN PAGE ---------------------- */
 #loginPageDiv {
-    padding-top: clamp(0.5rem 1vh 1rem);
     margin-top: 17%;
     text-align: left;
 }
@@ -581,6 +580,15 @@ footer p {
 /* ---------------------- MEDIA QUERIES ---------------------- */
 
 @media (max-width: 768px) {
+    .curved-header {
+        position: relative;
+        top: 25vh;
+    }
+
+    .curved-header h2 {
+        margin-top: clamp(-5rem, -4vw, -3rem);
+    }
+
     .nav-left {
         padding-top: 1%;
     }
@@ -621,6 +629,14 @@ footer p {
         margin-top: 1rem;
     }
 
+    #registerPageDiv {
+        margin-top: 5%;
+    }
+
+    #loginPageDiv {
+        margin-top: 5%;
+    }
+
     .button {
         width: 50%;
     }
@@ -631,6 +647,10 @@ footer p {
 }
 
 @media (max-width: 1800px) {
+    .curved-header h2 {
+        margin-top: clamp(-5rem, -4vw, -3rem);
+    }
+
     .nav-left {
         padding-top: 2%;
     }
@@ -658,5 +678,13 @@ footer p {
 
     .homePagePet {
         width: min(90vw, 400px);
+    }
+
+    #registerPageDiv {
+        margin-top: 19%;
+    }
+
+    #loginPageDiv {
+        margin-top: 19%;
     }
 }
