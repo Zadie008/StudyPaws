@@ -69,6 +69,32 @@
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div class="createTimer2MainContent">
+        <div class="titleTagSection">
+            <div class="leftSection">
+            </div>
+            <div class="middleSection">
+                <table>
+                    <tr>
+                        <td><asp:Label ID="lblTitle" class="label" runat="server" Text="Title"></asp:Label></td>
+                        <td><asp:TextBox ID="txtTitle" class="textbox" runat="server"></asp:TextBox></td>
+                    </tr>
+                    <tr>
+                        <td><asp:Label ID="lblTag" class="label" runat="server" Text="Tag"></asp:Label></td>
+                        <td>
+                            <asp:DropDownList ID="dropdownTag" class="dropDownList" runat="server" BackColor="#446791">
+                            <asp:ListItem></asp:ListItem>
+                            <asp:ListItem>Studying</asp:ListItem>
+                            <asp:ListItem>Working</asp:ListItem>
+                            <asp:ListItem>Self care</asp:ListItem>
+                            <asp:ListItem>Cleaning</asp:ListItem>
+                            </asp:DropDownList>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="rightSection">
+            </div>
+        </div>
         <div class="buttonSection">
             <div class="leftSection">
             </div>
@@ -77,6 +103,7 @@
                 <asp:Button ID="btnContinue" class="button" runat="server" Text="Continue" OnClick="btnContinue_Click" />
             </div>
             <div class="rightSection">
+                <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
             </div>
         </div>
     </div>
