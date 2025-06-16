@@ -564,7 +564,8 @@ body.page-exit .welcomeBackTextDiv {
     transition: opacity 0.3s ease;
 }
 
-/* ---------------------- TIMER PAGE ---------------------- */
+/* ---------------------- TIMER PAGES A100 ---------------------- */
+/* page 1 (back, create, view past tiemrs) */
 .createTimerMainContent {
     margin: 4em 4em 4em 4em;
 }
@@ -585,6 +586,102 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .createTimerMainContent .buttonSection .rightSection {
+    z-index: 10;
+    flex: 1;
+}
+
+/* page 2 (title, tag, back, continue) */
+.createTimer2MainContent {
+    margin: 4em 4em 4em 4em;
+}
+
+.createTimer2MainContent .titleTagSection {
+    padding: 6% 0 11.5% 0;
+}
+
+.createTimer2MainContent .buttonSection {
+    display: flex;
+}
+
+.createTimer2MainContent .buttonSection .leftSection {
+    z-index: 10;
+    flex: 1;
+}
+
+.createTimer2MainContent .buttonSection .middleSection {
+    z-index: 10;
+    flex: 1;
+}
+
+.createTimer2MainContent .buttonSection .rightSection {
+    z-index: 10;
+    flex: 1;
+}
+
+.titleTagSection table {
+    width: auto;
+}
+
+.titleTagSection table tr {
+    padding: 0.1em;
+}
+
+.titleTagSection table td {
+    vertical-align: middle;
+    padding: 0.1em 1em;
+}
+
+.titleTagSection table td:first-child {
+    text-align: left;
+}
+
+.titleTagSection table td:last-child {
+    text-align: right;
+}
+
+.titleTagSection .textbox {
+    text-align: left;
+}
+
+/* page 3 (time, back, start) */
+.createTimer3MainContent {
+    margin: 4em 4em 4em 4em;
+}
+
+.createTimer3MainContent .timeSection {
+    padding: 7% 0 11% 0;
+}
+
+.createTimer3MainContent .timeSection .textbox {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    color: white;
+    font-size: clamp(4rem, 8vw, 8rem);
+    font-family: 'The Seasons', serif;
+    font-weight: 200;
+    outline: none;
+    max-width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    display: block;
+}
+
+.createTimer3MainContent .buttonSection {
+    display: flex;
+}
+
+.createTimer3MainContent .buttonSection .leftSection {
+    z-index: 10;
+    flex: 1;
+}
+
+.createTimer3MainContent .buttonSection .middleSection {
+    z-index: 10;
+    flex: 1;
+}
+
+.createTimer3MainContent .buttonSection .rightSection {
     z-index: 10;
     flex: 1;
 }
@@ -721,14 +818,14 @@ footer p {
     transition: background-color 0.3s ease;
 }
 
-    .button:hover {
-        background-color: #446791;
-    }
+.button:hover {
+    background-color: #446791;
+}
 
-    .button a {
-        color: white;
-        text-decoration: none;
-    }
+.button a {
+    color: white;
+    text-decoration: none;
+}
 
 /* pink (good) confirm button */
 
@@ -748,6 +845,31 @@ footer p {
     outline: none;
     margin: 1vh auto;
     text-align: right;
+    max-width: 300px;
+    box-sizing: border-box;
+    display: block;
+}
+
+/* ---------------------- DROP DOWN LISTS ---------------------- */
+.dropDownList {
+    border-radius: 2rem;
+    border: 2px solid white;
+    background-color: transparent;
+    -webkit-appearance: none;
+    appearance: none; /* removes default arrow */
+    background-image: url('../Icons/icons8-expand-arrow-white-96.png');
+    background-repeat: no-repeat;
+    background-position: right 0.5em center;
+    background-size: 1em;
+    padding: 0.2em 2em 0.2em 1em;
+    color: white;
+    font-size: clamp(1.2rem, 2vw, 2.5rem);
+    font-family: 'The Seasons', serif;
+    font-weight: 200;
+    outline: none;
+    margin: 1vh auto;
+    text-align: left;
+    width: 100%;
     max-width: 300px;
     box-sizing: border-box;
     display: block;
@@ -947,4 +1069,23 @@ table {
         margin-top: 28%;
     }
 
+    .createTimer2MainContent {
+        margin: 3em 3em 3em 3em;
+    }
+
+    .createTimer2MainContent .titleTagSection {
+        padding: 4% 0 8.5% 0;
+    }
+
+    .createTimer3MainContent {
+        margin: 4em 4em 4em 4em;
+    }
+
+    .createTimer3MainContent .timeSection {
+        padding: 5% 0 7% 0;
+    }
+
+    .createTimer3MainContent .timeSection p {
+        font-size: 7em;
+    }
 }
