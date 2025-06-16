@@ -99,7 +99,6 @@ p {
 }*/
 
 /* ---------------------- MASTER PAGE DIVS ---------------------- */
-
 .page-wrapper {
     min-height: 100vh;
     max-height: 100%;
@@ -505,12 +504,12 @@ body.page-exit .collapsedNav .navbar .nav-right {
 }
 
 .timeDateDiv table tr:last-child td:nth-child(1) {
-    padding-right: 10px;
+    padding-right: 0.5em;
 }
 
 .timeDateDiv table tr:last-child td:nth-child(2) {
     border-left: 2px solid white;
-    padding-left: 10px;
+    padding-left: 0.5em;
 }
 
 /* ---------------------- MAIN CONTENT ---------------------- */
@@ -590,89 +589,6 @@ body.page-exit .welcomeBackTextDiv {
     flex: 1;
 }
 
-/* ---------------------- OTHER ---------------------- */
-/* ---------------------- SMALL CONTAINER FOR MESSAGES ---------------------- */
-.container {
-    display: flex;
-    justify-content: center;
-    margin-top: 60px; /* for spacing from top */
-}
-
-/* ---------------------- LABELS ---------------------- */
-
-.label {
-    font-family: 'The Seasons', serif;
-    font-weight: 200;
-    font-size: clamp(1.2rem, 2vw, 2.5rem);
-    color: white;
-    margin-bottom: 0.5vh;
-    display: inline-block;
-}
-
-/* ---------------------- BUTTONS ---------------------- */
-/* normal blue button */
-.buttonSection {
-    text-align: center;
-    margin-top: 3vh;
-}
-
-.button {
-    background-color: #5f7fa3;
-    border: none;
-    border-radius: 1rem;
-    color: white;
-    padding: 1vh 2vw;
-    font-size: clamp(1.2rem, 2.5vw, 2.7rem);
-    font-family: 'Lilita One', cursive, sans-serif;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    text-decoration: none;
-    margin: 1vh;
-    transition: background-color 0.3s ease;
-}
-
-.button:hover {
-    background-color: #446791;
-}
-
-.button a {
-    color: white;
-    text-decoration: none;
-}
-
-/* pink (good) confirm button */
-
-/* blue (bad) confirm button */
-
-/* ---------------------- TEXTBOXES ---------------------- */
-
-.textbox {
-    border-radius: 2rem;
-    border: 2px solid white;
-    background-color: transparent;
-    padding: 0.2em 1em;
-    color: white;
-    font-size: clamp(1.2rem, 2vw, 2.5rem);
-    font-family: 'The Seasons', serif;
-    font-weight: 200;
-    outline: none;
-    margin: 1vh auto;
-    text-align: right;
-    max-width: 300px;
-    box-sizing: border-box;
-    display: block;
-}
-
-/* ---------------------- TABLES ---------------------- */
-table {
-    margin-left: auto;
-    margin-right: auto;
-    border-collapse: separate;
-    border-spacing: 0;
-    width: auto;
-    height: auto;
-}
-
 /* ---------------------- REGISTER PAGE ---------------------- */
 #registerPageDiv {
     margin-top: 17%;
@@ -740,10 +656,15 @@ table {
 /*<!-- Coolors Palette Widget -->
 <script src="https://coolors.co/palette-widget/widget.js" > </script >
 <script data-id="000813941576946653" > new CoolorsPaletteWidget("000813941576946653", ["446791","64A6BD","90A8C3","ADA7C9","D7B9D5","F4CAE0"]); </script >*/
+#aboutMainContent{
+    margin: 4em 4em 4em 4em;
+}
 
+#aboutMainContent a {
+    color: white;
+}
 
 /* ---------------------- FOOTER ---------------------- */
-
 footer {
     text-align: center;
     position: fixed;
@@ -757,6 +678,89 @@ footer {
 footer p {
     color: #446791;
     font-size: clamp(1rem, 1.5vw, 1.3rem);
+}
+
+/* ---------------------- OTHER ---------------------- */
+/* ---------------------- SMALL CONTAINER FOR MESSAGES ---------------------- */
+.container {
+    display: flex;
+    justify-content: center;
+    margin-top: 60px; /* for spacing from top */
+}
+
+/* ---------------------- LABELS ---------------------- */
+
+.label {
+    font-family: 'The Seasons', serif;
+    font-weight: 200;
+    font-size: clamp(1.2rem, 2vw, 2.5rem);
+    color: white;
+    margin-bottom: 0.5vh;
+    display: inline-block;
+}
+
+/* ---------------------- BUTTONS ---------------------- */
+/* normal blue button */
+.buttonSection {
+    text-align: center;
+    margin-top: 3vh;
+}
+
+.button {
+    background-color: #5f7fa3;
+    border: none;
+    border-radius: 1rem;
+    color: white;
+    padding: 1vh 2vw;
+    font-size: clamp(1.2rem, 2.5vw, 2.7rem);
+    font-family: 'Lilita One', cursive, sans-serif;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 1vh;
+    transition: background-color 0.3s ease;
+}
+
+    .button:hover {
+        background-color: #446791;
+    }
+
+    .button a {
+        color: white;
+        text-decoration: none;
+    }
+
+/* pink (good) confirm button */
+
+/* blue (bad) confirm button */
+
+/* ---------------------- TEXTBOXES ---------------------- */
+
+.textbox {
+    border-radius: 2rem;
+    border: 2px solid white;
+    background-color: transparent;
+    padding: 0.2em 1em;
+    color: white;
+    font-size: clamp(1.2rem, 2vw, 2.5rem);
+    font-family: 'The Seasons', serif;
+    font-weight: 200;
+    outline: none;
+    margin: 1vh auto;
+    text-align: right;
+    max-width: 300px;
+    box-sizing: border-box;
+    display: block;
+}
+
+/* ---------------------- TABLES ---------------------- */
+table {
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    width: auto;
+    height: auto;
 }
 
 /* ---------------------- MEDIA QUERIES ---------------------- */
@@ -859,6 +863,7 @@ footer p {
         margin-top: clamp(-5rem, -4vw, -3rem);
     }
 
+    /* navigation */
     .nav-left {
         padding-top: 2%;
     }
@@ -918,19 +923,28 @@ footer p {
         transform: translateX(21em);
     }
 
+    /* home page */
     .homePagePet {
         width: min(90vw, 400px);
     }
 
+    /* register page */
     #registerPageDiv {
         margin-top: 19%;
     }
 
+    /* login page */
     #loginPageDiv {
         margin-top: 19%;
+    }
+
+    /* timer pages */
+    .createTimerMainContent .buttonSection {
+        margin-top: 28%;
     }
 
     .timerMainContent .buttonSection {
         margin-top: 28%;
     }
+
 }
