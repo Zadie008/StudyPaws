@@ -564,7 +564,8 @@ body.page-exit .welcomeBackTextDiv {
     transition: opacity 0.3s ease;
 }
 
-/* ---------------------- TIMER PAGE ---------------------- */
+/* ---------------------- TIMER PAGES A100 ---------------------- */
+/* page 1 (back, create, view past tiemrs) */
 .createTimerMainContent {
     margin: 4em 4em 4em 4em;
 }
@@ -589,6 +590,7 @@ body.page-exit .welcomeBackTextDiv {
     flex: 1;
 }
 
+/* page 2 (title, tag, back, continue) */
 .createTimer2MainContent {
     margin: 4em 4em 4em 4em;
 }
@@ -639,6 +641,49 @@ body.page-exit .welcomeBackTextDiv {
 
 .titleTagSection .textbox {
     text-align: left;
+}
+
+/* page 3 (time, back, start) */
+.createTimer3MainContent {
+    margin: 4em 4em 4em 4em;
+}
+
+.createTimer3MainContent .timeSection {
+    padding: 7% 0 11% 0;
+}
+
+.createTimer3MainContent .timeSection .textbox {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    color: white;
+    font-size: clamp(4rem, 8vw, 8rem);
+    font-family: 'The Seasons', serif;
+    font-weight: 200;
+    outline: none;
+    max-width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    display: block;
+}
+
+.createTimer3MainContent .buttonSection {
+    display: flex;
+}
+
+.createTimer3MainContent .buttonSection .leftSection {
+    z-index: 10;
+    flex: 1;
+}
+
+.createTimer3MainContent .buttonSection .middleSection {
+    z-index: 10;
+    flex: 1;
+}
+
+.createTimer3MainContent .buttonSection .rightSection {
+    z-index: 10;
+    flex: 1;
 }
 
 /* ---------------------- REGISTER PAGE ---------------------- */
@@ -1030,5 +1075,17 @@ table {
 
     .createTimer2MainContent .titleTagSection {
         padding: 4% 0 8.5% 0;
+    }
+
+    .createTimer3MainContent {
+        margin: 4em 4em 4em 4em;
+    }
+
+    .createTimer3MainContent .timeSection {
+        padding: 5% 0 7% 0;
+    }
+
+    .createTimer3MainContent .timeSection p {
+        font-size: 7em;
     }
 }
