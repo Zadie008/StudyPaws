@@ -90,7 +90,36 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-
+    <div class="toDoList">
+        <div class="toDoListControls">
+            <p class="toDoListHeading">To-do List</p>
+            <div class ="toDoListFilters">
+                <span id="allTasks" class="active">All</span>
+                <span id="pendingTasks">In Progress</span>
+                <span id="completedTasks">Completed</span>
+            </div>
+        </div>
+        <ul class="taskBox">
+            <li class="task">
+                <label>
+                    <input type="checkbox" />
+                    <span class="taskText">study maths</span>
+                </label>
+                <!--<div class="taskListSettings">
+                    <i class="dotdotdot"></i>
+                    <ul class="taskEditMenu">
+                        <li><i class="editTask"></i>Edit</li>
+                        <li><i class="deleteTask"></i>Delete</li>
+                    </ul>
+                </div>-->
+            </li>
+            <li class="addTask">
+                <span class="plusBtn">+</span>
+                <input type="text" placeholder="Add a new task" class="taskInput"/>
+            </li>
+        </ul>
+    </div>
+    
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

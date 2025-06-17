@@ -563,6 +563,88 @@ body.page-exit .welcomeBackTextDiv {
     opacity: 0;
     transition: opacity 0.3s ease;
 }
+/* ---------------------- TO DO LIST PAGES ---------------------- */
+.toDoList {
+    background: #ADA7C9;
+    max-width: 405px;
+    margin: 100px auto;
+    border-radius: 20px;
+    padding: 30px 20px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+.toDoListHeading {
+    font-family: "Lilita One", sans-serif;
+    font-weight: 400;
+    font-size: 28px;
+    text-shadow: 2px 2px #5B548A;
+    margin: 0;
+    /*add shadow and letter spacing*/
+}
+.toDoListControls {
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    margin-bottom: 20px;
+    /*edit padding at top*/
+}
+.toDoListFilters{
+    display:flex;
+    gap:10px;
+}
+.toDoListFilters span{
+    cursor: pointer;
+    font-size: 14px;
+}
+    .toDoListFilters span.active {
+        color: #5B548A;
+        font-weight:bold;
+    }
+.taskBox{
+    margin: 0;
+    padding:0;
+    list-style:none;
+}
+/*.taskBox .task{
+    display:flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+}*/
+.task{
+    display: flex;
+    align-items:center;
+    margin-bottom: 15px;
+}
+.task input [type="checkbox"]{
+    transform: scale(1.2);
+    margin-right:12px;
+    accent-color:white;
+}
+.taskText{
+    font-size:17px;
+    color:white;
+}
+.addTask{
+    display:flex;
+    align-items:center;
+    margin-top:15px;
+}
+.plusBtn{
+    font-size:24px;
+    margin-right:10px;
+    cursor:pointer;
+    color:white;
+    line-height:1;
+}
+.taskInput{
+    flex:1;
+    height: 35px;
+    border-radius: 8px;
+    border:none;
+    padding: 0 10px;
+    font-size: 16px;
+}
 
 /* ---------------------- TIMER PAGES A100 ---------------------- */
 /* page 1 (back, create, view past tiemrs) */
