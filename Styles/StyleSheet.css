@@ -563,33 +563,159 @@ body.page-exit .welcomeBackTextDiv {
     opacity: 0;
     transition: opacity 0.3s ease;
 }
-/* ---------------------- TO DO LIST PAGES ---------------------- */
-.toDoList {
-    background: #ADA7C9;
-    max-width: 405px;
-    margin: 100px auto;
+/* ---------------------- DASHBOARD PAGE ---------------------- */
+.dashboardContainer{
+    display: flex;
+    gap: 30px;
+    padding: 40px;
+}
+/* ---------------------- CALENDAR PAGES ---------------------- */
+.calendarDashboard {
+    flex: 2;
+    background: #F4CAE0;
+    width: 66%;
     border-radius: 20px;
-    padding: 30px 20px;
+    padding: 25px;
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
 }
+.calendarHeader{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom:20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+.controlsCalendar .calendarFilters{
+    position: relative;
+    width: 2.5vw;
+    max-width: 30px;
+    aspect-ratio: 1;
+    border:none;
+    background:transparent;
+}
+.controlsCalendar .calendarFilters img{
+    width:2.5vw;
+    max-width:30px;
+}
+.controlsCalendar .prevMonth {
+    position: relative;
+    width: 2.5vw;
+    max-width: 30px;
+    aspect-ratio: 1;
+    border: none;
+    background: transparent;
+}
+.controlsCalendar .prevMonth img {
+    width: 2.5vw;
+    max-width: 30px;
+}
+.controlsCalendar .nextMonth {
+    position: relative;
+    width: 2.5vw;
+    max-width: 30px;
+    aspect-ratio: 1;
+    border: none;
+    background: transparent;
+}
+.controlsCalendar .nextMonth img {
+    width: 2.5vw;
+    max-width: 30px;
+}
+.calendarTitle {
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 1px 1px #bd8da2;
+}
+.dateCalendar{
+    font-size: 20px;
+}
+.calendarBox{
+    padding: 20px;
+    display:flex;
+    text-align:center;
+}
+.calendarBox ul{
+    display: flex;
+    list-style:none;
+    flex-wrap: wrap;
+}
+.calendarBox ul li{
+    width: calc(100%/7);
+}
+    .calendarBox .weeks li {
+        background: #D7B9D5;
+        color:white;
+        font-weight:bold;
+        text-align:center;
+        padding: 10px 0;
+        border: solid 2px white;
+    }
+    .calendarBox .days{
+        margin-bottom: 20px;
+    }
+        .calendarBox .days li {
+            margin-top: 30px;
+            text-align:center;
+            line-height:40px;
+            height:40px;
+            font-size:14px;
+            cursor: pointer;
+            border: solid 2px white;
+        }
+.calendarBox .days li .noncurrentMonth {
+    background: #446791;
+}
+.calendarTitle {
+            font-family: "Lilita One", sans-serif;
+            font-weight: 400;
+            font-size: 28px;
+            text-shadow: 2px 2px #5B548A;
+            margin: 0;
+        }
+.controlsCalendar {
+    height:38px;
+    width:38px;
+    line-height: 38px;
+    cursor:pointer;
+    margin: 0 1px;
+    border-radius:50%;
+}
+    .controlsCalendar span:hover {
+        background: #D7B9D5;
+    }
+    /* ---------------------- TO DO LIST PAGES ---------------------- */
+    .toDoListDashboard {
+        flex: 1;
+        background: #ADA7C9;
+        width: 33%;
+        margin: 100px auto;
+        border-radius: 20px;
+        padding: 30px 20px;
+        box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+    }
 .toDoListHeading {
     font-family: "Lilita One", sans-serif;
-    font-weight: 400;
-    font-size: 28px;
-    text-shadow: 2px 2px #5B548A;
+    font-weight: bold;
+    font-size: 20px;
+    text-shadow: 1px 1px #5B548A;
     margin: 0;
+    margin-bottom: 5px;
     /*add shadow and letter spacing*/
 }
 .toDoListControls {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items:center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     /*edit padding at top*/
 }
 .toDoListFilters{
     display:flex;
-    gap:10px;
+    gap:16px;
+    justify-content: center;
+    padding-left: 5px;
 }
 .toDoListFilters span{
     cursor: pointer;
@@ -615,35 +741,45 @@ body.page-exit .welcomeBackTextDiv {
     display: flex;
     align-items:center;
     margin-bottom: 15px;
+    padding-left: 5px;
 }
-.task input [type="checkbox"]{
-    transform: scale(1.2);
+.task input[type="checkbox"]{
+    transform: scale(1.5);
     margin-right:12px;
     accent-color:white;
 }
 .taskText{
-    font-size:17px;
+    font-size:18px;
     color:white;
+    letter-spacing:0.5px;
 }
 .addTask{
     display:flex;
     align-items:center;
-    margin-top:15px;
+    margin-top:25px;
+    background:white;
+    border-radius: 12px;
+    padding: 5px 10px;
 }
-.plusBtn{
-    font-size:24px;
-    margin-right:10px;
-    cursor:pointer;
-    color:white;
-    line-height:1;
+.plusBtn {
+    font-size: 22px;
+    margin-right: 10px;
+    cursor: pointer;
+    color: white;
+    line-height: 1;
+    color: #5B548A;
+    font-weight: bold;
 }
-.taskInput{
-    flex:1;
+.taskInput {
+    flex-grow: 1;
     height: 35px;
     border-radius: 8px;
-    border:none;
+    border: none;
+    outline: none;
     padding: 0 10px;
     font-size: 16px;
+    color: #5B548A;
+    background:transparent;
 }
 
 /* ---------------------- TIMER PAGES A100 ---------------------- */

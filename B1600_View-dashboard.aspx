@@ -90,35 +90,100 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-    <div class="toDoList">
-        <div class="toDoListControls">
-            <p class="toDoListHeading">To-do List</p>
-            <div class ="toDoListFilters">
-                <span id="allTasks" class="active">All</span>
-                <span id="pendingTasks">In Progress</span>
-                <span id="completedTasks">Completed</span>
+    <div class="dashboardContainer">
+        <div class="calendarDashboard">
+            <div class="calendarHeader">
+                <p class="calendarTitle">Calendar</p>
+                <div class="controlsCalendar">
+                    <button class="calendarFilters"><img src="Icons/icons8-filter-bars-white-96.png" /></button>
+                    <button class="prevMonth"><img src="Icons/icons8-arrow-left-white-96.png" /></button>
+                    <p class="dateCalendar">Month</p>
+                    <button class="nextMonth"><img src="Icons/icons8-arrow-right-white-96.png" /></button>
+                </div>
+            </div>
+            
+            <div class="calendarBox">
+                <ul class="weeks">
+                    <li>Mon</li>
+                    <li>Tue</li>
+                    <li>Wed</li>
+                    <li>Thu</li>
+                    <li>Fri</li>
+                    <li>Sat</li>
+                    <li>Sun</li>
+                </ul>
+                <ul class="days">
+                    <li class="noncurrentMonth">31</li>
+                    <li>1</li>
+                    <li>2</li>
+                    <li>3</li>
+                    <li>4</li>
+                    <li>5</li>
+                    <li>6</li>
+                    <li>7</li>
+                    <li>8</li>
+                    <li>9</li>
+                    <li>10</li>
+                    <li>11</li>
+                    <li>12</li>
+                    <li>13</li>
+                    <li>14</li>
+                    <li>15</li>
+                    <li>16</li>
+                    <li>17</li>
+                    <li>18</li>
+                    <li>19</li>
+                    <li>20</li>
+                    <li>21</li>
+                    <li>22</li>
+                    <li>23</li>
+                    <li>24</li>
+                    <li>25</li>
+                    <li>26</li>
+                    <li>27</li>
+                    <li>28</li>
+                    <li>29</li>
+                    <li>30</li>
+                    <li class="noncurrentMonth">1</li>
+                    <li class="noncurrentMonth">2</li>
+                    <li class="noncurrentMonth">3</li>
+                    <li class="noncurrentMonth">4</li>
+
+                </ul>
             </div>
         </div>
-        <ul class="taskBox">
-            <li class="task">
-                <label>
-                    <input type="checkbox" />
-                    <span class="taskText">study maths</span>
-                </label>
-                <!--<div class="taskListSettings">
-                    <i class="dotdotdot"></i>
-                    <ul class="taskEditMenu">
-                        <li><i class="editTask"></i>Edit</li>
-                        <li><i class="deleteTask"></i>Delete</li>
-                    </ul>
-                </div>-->
-            </li>
-            <li class="addTask">
-                <span class="plusBtn">+</span>
-                <input type="text" placeholder="Add a new task" class="taskInput"/>
-            </li>
-        </ul>
+
+        <div class="toDoListDashboard">
+            <div class="toDoListControls">
+                <p class="toDoListHeading">To-do List</p>
+                <div class ="toDoListFilters">
+                    <span id="allTasks" class="active">All</span>
+                    <span id="pendingTasks">In Progress</span>
+                    <span id="completedTasks">Completed</span>
+                </div>
+            </div>
+            <ul class="taskBox">
+                <li class="task">
+                    <label>
+                        <input type="checkbox" />
+                        <span class="taskText">study maths</span>
+                    </label>
+            <!--<div class="taskListSettings">
+                <i class="dotdotdot"></i>
+                <ul class="taskEditMenu">
+                    <li><i class="editTask"></i>Edit</li>
+                    <li><i class="deleteTask"></i>Delete</li>
+                </ul>
+            </div>-->
+                </li>
+                <li class="addTask">
+                    <span class="plusBtn">+</span>
+                    <input type="text" placeholder="Add a new task" class="taskInput"/>
+                </li>
+            </ul>
+        </div>
     </div>
+    
     
 </asp:Content>
 
