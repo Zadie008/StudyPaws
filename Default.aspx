@@ -69,7 +69,7 @@
 
 <asp:Content ID="Content3" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div class="homePagePet">
-        <img id="pet" src="Images/Cat%201%20Brown%20and%20White.gif" width="400" /> <!--CHANGE: has to be chosen home page pet-->
+        <img id="pet" src="Images/Cat%201%20Brown%20and%20White.png" width="400" /> <!--CHANGE: has to be chosen home page pet-->
         <img id="glow" src="Images/Glow(cropped).png" width="400" />
     </div>
     <div class="welcomeBackTextDiv">

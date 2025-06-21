@@ -1,11 +1,11 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="A100_Create-timer_3.aspx.cs" Inherits="Default2" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="A200_View-timer.aspx.cs" Inherits="Default2" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
-    Create timer
+    Timer
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-        <!--account info to copy and paste-->
+            <!--account info to copy and paste-->
 <div class="accountInfoDiv">
     <div class="profileDiv">
         <div class="profileIcon">
@@ -68,24 +68,32 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-    <div class="createTimer3MainContent">
+        <div class="viewTimerMainContent">
     <div class="timeSection">
         <div class="leftSection">
         </div>
         <div class="middleSection">
-            <asp:TextBox ID="txtTimeMinutes" class="textbox" runat="server">00</asp:TextBox>
+            <asp:TextBox ID="txtTimeMinutes" class="textbox" runat="server" ReadOnly="True" >00</asp:TextBox>
             <asp:Label ID="lblTimeColon" class="label" runat="server" Text=":"></asp:Label>
-            <asp:TextBox ID="txtTimeSeconds" class="textbox" runat="server">00</asp:TextBox>
+            <asp:TextBox ID="txtTimeSeconds" class="textbox" runat="server" ReadOnly="True" >00</asp:TextBox>
+            <div class="homePagePet">
+                <img id="pet" src="Images/Cat%201%20Brown%20and%20White.png" width="400" /> <!--CHANGE: has to be chosen home page pet-->
+                <img id="glow" src="Images/Glow(cropped).png" width="400" />
+            </div>
         </div>
         <div class="rightSection">
+            <div class="toDoListSection">
+                <h1>To-do List</h1>
+            </div>
         </div>
     </div>
     <div class="buttonSection">
         <div class="leftSection">
+            <asp:TextBox ID="txtSessionTitle" class="textbox" runat="server" ReadOnly="True" >Homework</asp:TextBox> <!--CHANGE: title given previously-->
         </div>
         <div class="middleSection">
-            <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" />
-            <asp:Button ID="btnStart" class="button" runat="server" Text="Start" OnClick="btnStart_Click"  />
+            <asp:Button ID="btnAdd" class="button" runat="server" Text="Add" OnClick="btnAdd_Click" />
+            <asp:Button ID="btnStop" class="button" runat="server" Text="Stop" OnClick="btnStop_Click" />
         </div>
         <div class="rightSection">
             <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
