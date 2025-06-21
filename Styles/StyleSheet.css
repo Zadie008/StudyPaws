@@ -54,9 +54,11 @@
 /* ---------------------- ALL PAGES ---------------------- */
 
 * {
-    margin: 0;
     padding: 0;
     box-sizing: border-box;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
 }
 
 html, body {
@@ -442,7 +444,7 @@ body.page-exit .collapsedNav .navbar .nav-right {
 /* profile pic */
 .profileIcon {
     position: relative;
-    width: 10vw;
+    width: 8vw;
     max-width: 147px;
     aspect-ratio: 1;
 }
@@ -452,7 +454,7 @@ body.page-exit .collapsedNav .navbar .nav-right {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80%;
+    width: 90%;
     z-index: 1;
 }
 
@@ -643,36 +645,36 @@ body.page-exit .welcomeBackTextDiv {
 .calendarBox ul li{
     width: calc(100%/7);
 }
-    .calendarBox .weeks li {
-        background: #D7B9D5;
-        color:white;
-        font-weight:bold;
-        text-align:center;
-        padding: 10px 0;
-        border: solid 2px white;
-    }
-    .calendarBox .days{
-        margin-bottom: 20px;
-    }
-        .calendarBox .days li {
-            margin-top: 30px;
-            text-align:center;
-            line-height:40px;
-            height:40px;
-            font-size:14px;
-            cursor: pointer;
-            border: solid 2px white;
-        }
+.calendarBox .weeks li {
+    background: #D7B9D5;
+    color:white;
+    font-weight:bold;
+    text-align:center;
+    padding: 10px 0;
+    border: solid 2px white;
+}
+.calendarBox .days{
+    margin-bottom: 20px;
+}
+.calendarBox .days li {
+    margin-top: 30px;
+    text-align:center;
+    line-height:40px;
+    height:40px;
+    font-size:14px;
+    cursor: pointer;
+    border: solid 2px white;
+}
 .calendarBox .days li .noncurrentMonth {
     background: #446791;
 }
 .calendarTitle {
-            font-family: "Lilita One", sans-serif;
-            font-weight: 400;
-            font-size: 28px;
-            text-shadow: 2px 2px #5B548A;
-            margin: 0;
-        }
+    font-family: "Lilita One", sans-serif;
+    font-weight: 400;
+    font-size: 28px;
+    text-shadow: 2px 2px #5B548A;
+    margin: 0;
+}
 .controlsCalendar {
     height:38px;
     width:38px;
@@ -681,19 +683,19 @@ body.page-exit .welcomeBackTextDiv {
     margin: 0 1px;
     border-radius:50%;
 }
-    .controlsCalendar span:hover {
-        background: #D7B9D5;
-    }
-    /* ---------------------- TO DO LIST PAGES ---------------------- */
-    .toDoListDashboard {
-        flex: 1;
-        background: #ADA7C9;
-        width: 33%;
-        margin: 100px auto;
-        border-radius: 20px;
-        padding: 30px 20px;
-        box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
-    }
+.controlsCalendar span:hover {
+    background: #D7B9D5;
+}
+/* ---------------------- TO DO LIST PAGES ---------------------- */
+.toDoListDashboard {
+    flex: 1;
+    background: #ADA7C9;
+    width: 33%;
+    margin: 100px auto;
+    border-radius: 20px;
+    padding: 30px 20px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
 .toDoListHeading {
     font-family: "Lilita One", sans-serif;
     font-weight: bold;
@@ -721,10 +723,10 @@ body.page-exit .welcomeBackTextDiv {
     cursor: pointer;
     font-size: 14px;
 }
-    .toDoListFilters span.active {
-        color: #5B548A;
-        font-weight:bold;
-    }
+.toDoListFilters span.active {
+    color: #5B548A;
+    font-weight:bold;
+}
 .taskBox{
     margin: 0;
     padding:0;
@@ -782,8 +784,8 @@ body.page-exit .welcomeBackTextDiv {
     background:transparent;
 }
 
-/* ---------------------- TIMER PAGES A100 ---------------------- */
-/* page 1 (back, create, view past tiemrs) */
+/* ---------------------- CREATE TIMER PAGES A100 ---------------------- */
+/* page 1 (back, create, view past timers) */
 .createTimerMainContent {
     margin: 4em 4em 4em 4em;
 }
@@ -868,9 +870,10 @@ body.page-exit .welcomeBackTextDiv {
 
 .createTimer3MainContent .timeSection {
     padding: 7% 0 11% 0;
+    text-align: center;
 }
 
-.createTimer3MainContent .timeSection .textbox {
+.createTimer3MainContent .timeSection .middleSection .textbox {
     border: none;
     background-color: transparent;
     padding: 0;
@@ -879,10 +882,15 @@ body.page-exit .welcomeBackTextDiv {
     font-family: 'The Seasons', serif;
     font-weight: 200;
     outline: none;
-    max-width: 100%;
+    max-width: 12.5%;
+    max-height: auto;
+    display: inline;
     text-align: center;
-    box-sizing: border-box;
-    display: block;
+}
+
+.createTimer3MainContent .timeSection .middleSection .label {
+    font-size: clamp(4rem, 8vw, 8rem);
+    text-align: center;
 }
 
 .createTimer3MainContent .buttonSection {
@@ -900,6 +908,85 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .createTimer3MainContent .buttonSection .rightSection {
+    z-index: 10;
+    flex: 1;
+}
+
+/* ---------------------- VIEW TIMER PAGE A200 ---------------------- */
+.viewTimerMainContent {
+    margin: 4em 4em 4em 4em;
+}
+
+.viewTimerMainContent .timeSection {
+    padding: 7% 0 11% 0;
+    text-align: center;
+}
+
+.viewTimerMainContent .timeSection .middleSection .textbox {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    color: white;
+    font-size: clamp(2rem, 4vw, 4rem);
+    font-family: 'The Seasons', serif;
+    font-weight: 200;
+    outline: none;
+    max-width: 6%;
+    max-height: auto;
+    display: inline;
+    text-align: center;
+}
+
+.viewTimerMainContent .timeSection .middleSection .label {
+    font-size: clamp(2rem, 4vw, 4rem);
+    text-align: center;
+}
+
+.viewTimerMainContent .homePagePet {
+    position: relative;
+    width: min(45vw, 250px);
+    aspect-ratio: 1;
+    margin: 0 auto;
+    margin-top: -1em;
+}
+
+.viewTimerMainContent .homePagePet img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 100%;
+    height: auto;
+}
+
+.viewTimerMainContent #pet {
+    z-index: 1;
+    width: 80%;
+}
+
+.viewTimerMainContent #glow {
+    z-index: 0;
+    width: 100%;
+}
+
+.viewTimerMainContent .buttonSection {
+    display: flex;
+}
+
+.viewTimerMainContent .buttonSection .leftSection {
+    z-index: 10;
+    flex: 1;
+}
+.viewTimerMainContent .buttonSection .leftSection .textbox {
+    text-align: center;
+}
+
+.viewTimerMainContent .buttonSection .middleSection {
+    z-index: 10;
+    flex: 1;
+}
+
+.viewTimerMainContent .buttonSection .rightSection {
     z-index: 10;
     flex: 1;
 }
@@ -992,7 +1079,7 @@ footer {
 
 footer p {
     color: #446791;
-    font-size: clamp(1rem, 1.5vw, 1.3rem);
+    font-size: clamp(1rem, 1.3vw, 1.3rem);
 }
 
 /* ---------------------- OTHER ---------------------- */
@@ -1265,7 +1352,7 @@ table {
 
     /* home page */
     .homePagePet {
-        width: min(90vw, 400px);
+        width: min(90vw, 350px);
     }
 
     /* register page */
@@ -1279,12 +1366,12 @@ table {
     }
 
     /* timer pages */
-    .createTimerMainContent .buttonSection {
-        margin-top: 28%;
+    .createTimerMainContent {
+        margin: 3em 3em 3em 3em;
     }
 
-    .timerMainContent .buttonSection {
-        margin-top: 28%;
+    .createTimerMainContent .buttonSection {
+        margin-top: 28.5%;
     }
 
     .createTimer2MainContent {
@@ -1292,7 +1379,7 @@ table {
     }
 
     .createTimer2MainContent .titleTagSection {
-        padding: 4% 0 8.5% 0;
+        padding: 4% 0 10% 0;
     }
 
     .createTimer3MainContent {
@@ -1300,10 +1387,18 @@ table {
     }
 
     .createTimer3MainContent .timeSection {
-        padding: 5% 0 7% 0;
+        padding: 3% 0 9.25% 0;
     }
 
-    .createTimer3MainContent .timeSection p {
-        font-size: 7em;
+    .viewTimerMainContent {
+        margin: 2em 3em 3em 3em;
+    }
+
+    .viewTimerMainContent .timeSection {
+        padding: 0.01% 0 2.6% 0;
+    }
+
+    footer {
+        max-height: 35px;
     }
 }
