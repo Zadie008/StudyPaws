@@ -54,21 +54,24 @@
                  <td> <asp:Button ID="btnEditEmail" class="button" runat="server" Text="Edit" /></td>
             </tr>
             <tr>
-                <td><asp:Label ID="lblMode" class="label" runat="server" Text="Light mode"></asp:Label></td>
-                <<td>
-                    <label class="switch">
-                      <input type="checkbox" id="toggleMode" runat="server" />
-                  <span class="slider"></span>
-                    </label>
-                </td>
-            </tr>
+    <td><asp:Label ID="lblMode" CssClass="label" runat="server" Text="Light mode"></asp:Label></td>
+    <td>
+        <label class="switch">
+            <input type="checkbox" id="toggleLightMode">
+            <span class="slider"></span>
+        </label>
+    </td>
+</tr>
            <tr>
     <td><asp:Label ID="lblDelete" class="label" runat="server" Text="Delete Profile"></asp:Label></td>
-    <%--<td>
+<%--   <tr>
+    <td><asp:Label ID="Label1" CssClass="label" runat="server" Text="Delete Profile"></asp:Label></td>
+    <td>
         <asp:LinkButton ID="btnDeletePfp" runat="server" CssClass="icon-button" OnClick="btnDeletePfp_Click">
-            <img src="Icons/icons8-cat-footprint-filled-white-96.png" alt="Delete" />
+            <img src="Icons/icons8-cat-footprint-filled-white-96.png" alt="Delete" class="delete-icon" />
         </asp:LinkButton>
     </td>--%>
+<%--</tr>--%>
 </tr>
         </table>
         <br/>
