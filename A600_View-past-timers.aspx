@@ -70,7 +70,15 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div class="viewPastTimersMainContent">
         <div class="pastTimerStudySessionTableSection">
-
+            <asp:GridView ID="gridViewPastTimers" runat="server" AutoGenerateColumns="False" DataKeyNames="timerID" DataSourceID="SqlDataSource1">
+                <Columns>
+                    <asp:BoundField DataField="timerID" InsertVisible="False" ReadOnly="True" SortExpression="timerID" />
+                    <asp:BoundField DataField="timerTitle" HeaderText="Title" SortExpression="timerTitle" />
+                    <asp:BoundField DataField="timerTag" HeaderText="Tag" SortExpression="timerTag" />
+                    <asp:BoundField DataField="timerDuration" HeaderText="Duration" SortExpression="timerDuration" />
+                </Columns>
+            </asp:GridView>
+            <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" ProviderName="<%$ ConnectionStrings:ConnectionString.ProviderName %>" SelectCommand="SELECT [timerTitle], [timerID], [timerTag], [timerDuration] FROM [Timer]"></asp:SqlDataSource>
         </div>
         <div class="buttonSection">
             <div class="leftSection">
