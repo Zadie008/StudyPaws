@@ -367,6 +367,8 @@ body.page-exit .navbar .nav-right {
 .collapsedNav .nav-left li:hover {
     transform: translateX(1em);
     z-index: 1;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 2em;
 }
 
 .collapsedNav .nav-right {
@@ -383,6 +385,8 @@ body.page-exit .navbar .nav-right {
 .collapsedNav .nav-right li:hover {
     transform: translateX(1em);
     z-index: 11;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 2em;
 }
 
 .collapsedNav .navbar a {
@@ -1395,7 +1399,7 @@ table {
     }
 
     .createTimerMainContent .buttonSection {
-        margin-top: 28.5%;
+        margin-top: 28.25%;
     }
 
     .createTimer2MainContent {
