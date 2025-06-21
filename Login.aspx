@@ -23,6 +23,8 @@
 <%--above is the header of studypaws--%>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
+    <br />
+    <br />
     <div id="loginPageDiv">
         <table>
             <tr>

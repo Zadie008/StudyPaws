@@ -21,6 +21,8 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
+         <br/>
+         <br/>
     <div id="registerPageDiv">
         <table>
             <tr>
@@ -34,7 +36,6 @@
             <tr>
                 <td><asp:Label ID="lblConfirmPassword" class="label" runat="server" Text="Confirm Password"></asp:Label></td>
                 <td><asp:TextBox ID="txtConfirmPassword" class="textbox" runat="server" TextMode="Password"></asp:TextBox></td>
-                <td><asp:Label ID="Label1" class="label" runat="server" Text="test"></asp:Label></td>
             </tr>
         </table>
         <br/>
