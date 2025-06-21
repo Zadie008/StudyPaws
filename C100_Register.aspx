@@ -37,7 +37,7 @@
                 <td><asp:Label ID="Label1" class="label" runat="server" Text="test"></asp:Label></td>
             </tr>
         </table>
-        <br />
+        <br/>
         <div class="buttonSection">
             <asp:Button ID="btnRegister" class="button" runat="server" Text="Register" />
         </div>
