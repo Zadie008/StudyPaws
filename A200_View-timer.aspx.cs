@@ -14,7 +14,7 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnAdd_Click(object sender, EventArgs e)
     {
-
+        Response.Redirect("A100_Create-timer_3.aspx"); //testing
     }
 
     protected void btnStop_Click(object sender, EventArgs e)

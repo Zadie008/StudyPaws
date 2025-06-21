@@ -82,6 +82,9 @@
             </div>
         </div>
         <div class="rightSection">
+            <div class="toDoListSection">
+                <h1>To-do List</h1>
+            </div>
         </div>
     </div>
     <div class="buttonSection">

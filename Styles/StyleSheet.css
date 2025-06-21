@@ -918,8 +918,25 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .viewTimerMainContent .timeSection {
-    padding: 7% 0 11% 0;
+    padding: 9% 0 9% 0;
     text-align: center;
+    display: flex;
+}
+
+.viewTimerMainContent .timeSection .leftSection {
+    flex: 1;
+    padding: 0;
+}
+
+.viewTimerMainContent h1 {
+    font-size: clamp(2rem, 4vh, 4rem);
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+.viewTimerMainContent .timeSection .middleSection {
+    flex: 1;
+    padding: 0;
 }
 
 .viewTimerMainContent .timeSection .middleSection .textbox {
@@ -927,27 +944,28 @@ body.page-exit .welcomeBackTextDiv {
     background-color: transparent;
     padding: 0;
     color: white;
-    font-size: clamp(2rem, 4vw, 4rem);
+    font-size: clamp(3rem, 6vw, 6rem);
     font-family: 'The Seasons', serif;
     font-weight: 200;
     outline: none;
-    max-width: 6%;
+    max-width: 15%;
+    min-width: 100px;
     max-height: auto;
     display: inline;
     text-align: center;
 }
 
 .viewTimerMainContent .timeSection .middleSection .label {
-    font-size: clamp(2rem, 4vw, 4rem);
+    font-size: clamp(3rem, 6vw, 6rem);
     text-align: center;
 }
 
 .viewTimerMainContent .homePagePet {
     position: relative;
-    width: min(45vw, 250px);
+    width: min(30vw, 200px);
     aspect-ratio: 1;
     margin: 0 auto;
-    margin-top: -1em;
+    margin-top: -1.8em;
 }
 
 .viewTimerMainContent .homePagePet img {
@@ -967,6 +985,12 @@ body.page-exit .welcomeBackTextDiv {
 .viewTimerMainContent #glow {
     z-index: 0;
     width: 100%;
+}
+
+.viewTimerMainContent .timeSection .rightSection {
+    flex: 1;
+    padding: 0;
+    margin-top: -1.5em;
 }
 
 .viewTimerMainContent .buttonSection {
@@ -1391,11 +1415,15 @@ table {
     }
 
     .viewTimerMainContent {
-        margin: 2em 3em 3em 3em;
+        margin: 3em 3em 3em 3em;
     }
 
     .viewTimerMainContent .timeSection {
-        padding: 0.01% 0 2.6% 0;
+        padding: 0 0 3.7% 0;
+    }
+
+    .viewTimerMainContent .timeSection .rightSection {
+        margin-top: -1.5em;
     }
 
     footer {
