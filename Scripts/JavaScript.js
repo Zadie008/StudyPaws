@@ -52,3 +52,10 @@ window.addEventListener("DOMContentLoaded", updateTimeAndDate);
 
 // update time every second
 setInterval(updateTimeAndDate, 6000);
+function showPopup() {
+    document.getElementById("popup").style.display = "flex";
+}
+
+function hidePopup() {
+    document.getElementById("popup").style.display = "hide";
+}
