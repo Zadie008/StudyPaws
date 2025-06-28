@@ -93,7 +93,7 @@
     <div id="aboutMainContent">
         <table>
             <tr>
-                <td><img src="Icons/icons8-coffee-to-go-white-96.png" width="75" /></td>
+                <td><img src="Icons/icons8-coffee-to-go-white-96.png" /></td>
                 <td><p>Buy us a coffee to keep us productive</p></td>
             </tr>
         </table>

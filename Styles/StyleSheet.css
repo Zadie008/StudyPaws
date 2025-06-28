@@ -906,7 +906,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .createTimer2MainContent .titleTagSection {
-    padding: 6% 0 11.5% 0;
+    padding: 6% 0 10.85% 0;
 }
 
 .createTimer2MainContent .buttonSection {
@@ -959,7 +959,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .createTimer3MainContent .timeSection {
-    padding: 7% 0 11% 0;
+    padding: 7% 0 10.1% 0;
     text-align: center;
 }
 
@@ -1008,7 +1008,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .viewTimerMainContent .timeSection {
-    padding: 9% 0 9% 0;
+    padding: 2% 0 7.7% 0;
     text-align: center;
     display: flex;
 }
@@ -1221,6 +1221,10 @@ input:checked + .slider:before {
 <script data-id="000813941576946653" > new CoolorsPaletteWidget("000813941576946653", ["446791","64A6BD","90A8C3","ADA7C9","D7B9D5","F4CAE0"]); </script >*/
 #aboutMainContent{
     margin: 4em 4em 4em 4em;
+}
+
+#aboutMainContent td p {
+    margin-bottom: 0em;
 }
 
 #aboutMainContent a {
@@ -1533,7 +1537,7 @@ table {
     }
 
     .createTimerMainContent .buttonSection {
-        margin-top: 28.25%;
+        margin-top: 28%;
     }
 
     .createTimer2MainContent {
@@ -1541,15 +1545,15 @@ table {
     }
 
     .createTimer2MainContent .titleTagSection {
-        padding: 4% 0 10% 0;
+        padding: 4% 0 9.25% 0;
     }
 
     .createTimer3MainContent {
-        margin: 4em 4em 4em 4em;
+        margin: 3em 3em 3em 3em;
     }
 
     .createTimer3MainContent .timeSection {
-        padding: 3% 0 9.25% 0;
+        padding: 3% 0 8.75% 0;
     }
 
     .viewTimerMainContent {
@@ -1557,7 +1561,7 @@ table {
     }
 
     .viewTimerMainContent .timeSection {
-        padding: 0 0 3.7% 0;
+        padding: 0 0 2.5% 0;
     }
 
     .viewTimerMainContent .timeSection .rightSection {
