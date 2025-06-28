@@ -76,9 +76,9 @@
             <asp:TextBox ID="txtTimeMinutes" class="textbox timerInput" runat="server" Text="00"></asp:TextBox>
             <asp:Label ID="lblTimeColon" class="label" runat="server" Text=":"></asp:Label>
             <asp:TextBox ID="txtTimeSeconds" class="textbox timerInput" runat="server" Text="00"></asp:TextBox>
-            <asp:RangeValidator ID="errorMinute" class="validationError" runat="server" ErrorMessage="Timer has to be at least 1 minute long" MinimumValue="1" MaximumValue="99" Type="Integer" ForeColor="White" Display="Static" EnableClientScript="true" ControlToValidate="txtTimeMinutes"></asp:RangeValidator>
+            <asp:RangeValidator ID="errorMinute" class="validationError" runat="server" ErrorMessage="Timer has to be at least 1 minute long" MinimumValue="1" MaximumValue="99" Type="Integer" Display="Static" EnableClientScript="true" ControlToValidate="txtTimeMinutes"></asp:RangeValidator>
             <br />
-            <asp:RangeValidator ID="errorSecond" class="validationError" runat="server" ErrorMessage="Seconds have to be between 00 and 59" MinimumValue="0" MaximumValue="59" Type="Integer" ForeColor="White" Display="Static" EnableClientScript="true" ControlToValidate="txtTimeSeconds"></asp:RangeValidator>
+            <asp:RangeValidator ID="errorSecond" class="validationError" runat="server" ErrorMessage="Seconds have to be between 00 and 59" MinimumValue="0" MaximumValue="59" Type="Integer" Display="Static" EnableClientScript="true" ControlToValidate="txtTimeSeconds"></asp:RangeValidator>
         </div>
         <div class="rightSection">
         </div>
@@ -87,7 +87,7 @@
         <div class="leftSection">
         </div>
         <div class="middleSection">
-            <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" />
+            <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="False" />
             <asp:Button ID="btnStart" class="button" runat="server" Text="Start" OnClick="btnStart_Click"  />
         </div>
         <div class="rightSection">

@@ -907,25 +907,34 @@ body.page-exit .welcomeBackTextDiv {
 
 .createTimer2MainContent .titleTagSection {
     padding: 6% 0 10.85% 0;
-}
-
-.createTimer2MainContent .buttonSection {
     display: flex;
 }
 
-.createTimer2MainContent .buttonSection .leftSection {
-    z-index: 10;
+.createTimer2MainContent .titleTagSection .leftSection {
     flex: 1;
 }
 
-.createTimer2MainContent .buttonSection .middleSection {
-    z-index: 10;
+.createTimer2MainContent .titleTagSection .middleSection {
     flex: 1;
 }
 
-.createTimer2MainContent .buttonSection .rightSection {
-    z-index: 10;
+.createTimer2MainContent .titleTagSection .rightSection {
     flex: 1;
+}
+
+.createTimer2MainContent .titleTagSection .rightSection table {
+    padding: 0;
+    margin: 0;
+    width: auto;
+}
+
+.createTimer2MainContent .titleTagSection .rightSection table td {
+    padding: 2.5vh 0;
+}
+
+.createTimer2MainContent .titleTagSection .rightSection table td .validationError {
+    text-align: left;
+    font-size: 35px;
 }
 
 .titleTagSection table {
@@ -951,6 +960,25 @@ body.page-exit .welcomeBackTextDiv {
 
 .titleTagSection .textbox {
     text-align: left;
+}
+
+.createTimer2MainContent .buttonSection {
+    display: flex;
+}
+
+.createTimer2MainContent .buttonSection .leftSection {
+    z-index: 10;
+    flex: 1;
+}
+
+.createTimer2MainContent .buttonSection .middleSection {
+    z-index: 10;
+    flex: 1;
+}
+
+.createTimer2MainContent .buttonSection .rightSection {
+    z-index: 10;
+    flex: 1;
 }
 
 /* page 3 (time, back, start) */
@@ -1008,7 +1036,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .viewTimerMainContent .timeSection {
-    padding: 2% 0 7.7% 0;
+    padding: 2% 0 7.5% 0;
     text-align: center;
     display: flex;
 }
@@ -1055,7 +1083,7 @@ body.page-exit .welcomeBackTextDiv {
     width: min(30vw, 200px);
     aspect-ratio: 1;
     margin: 0 auto;
-    margin-top: -1.8em;
+    margin-top: -1em;
 }
 
 .viewTimerMainContent .homePagePet img {
@@ -1078,9 +1106,16 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .viewTimerMainContent .timeSection .rightSection {
+    display: flex;
+    justify-content: flex-end;
     flex: 1;
     padding: 0;
-    margin-top: -1.5em;
+    margin-top: -4em;
+}
+
+.viewTimerMainContent .timeSection .rightSection .toDoListSection {
+    width: 20vw;
+    margin-left: auto;
 }
 
 .viewTimerMainContent .buttonSection {
@@ -1113,6 +1148,10 @@ body.page-exit .welcomeBackTextDiv {
 .pastTimerStudySessionTableSection {
     min-height: 51.75vh;
     border: 1px solid red; /*testing*/
+}
+
+.pastTimerStudySessionTableSection table {
+    
 }
 
 /* ---------------------- REGISTER PAGE ---------------------- */
@@ -1369,6 +1408,7 @@ table {
 }
 
 .validationError {
+    color: white;
     font-size: 40px;
     height: 40px; /*height of text*/
     text-align: center;
@@ -1575,6 +1615,10 @@ table {
 
     .createTimer2MainContent .titleTagSection {
         padding: 4% 0 9.25% 0;
+    }
+
+    .createTimer2MainContent .titleTagSection .rightSection table td .validationError {
+        font-size: 30px;
     }
 
     .createTimer3MainContent {

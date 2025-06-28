@@ -11,7 +11,10 @@ public partial class Default2 : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        if (Session["userID"] == null)
+        {
+            Session["userID"] = 1; // TESTING ONLY!!!!!!
+        }
     }
 
     protected void btnBack_Click(object sender, EventArgs e)
@@ -23,32 +26,39 @@ public partial class Default2 : System.Web.UI.Page
     {
         if (Page.IsValid)
         {
-            if (Session["userID"] != null)
-            {
-                string cs;
-                cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            /*if (Session["userID"] != null)
+            {*/
+                string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
-                OleDbConnection con = new OleDbConnection(cs);
+                using (OleDbConnection con = new OleDbConnection(cs))
+                {
+                    string command = "INSERT INTO [Timer] ([timerTitle], [timerTag], [timerDuration], [userID]) VALUES (@title, @tag, @duration, @id)";
+                    OleDbCommand cmd = new OleDbCommand(command, con);
 
-                string command = "INSERT INTO [Timer] ([timerTitle], [timerTag], [timerDuration], [userID]) VALUES (@title, @tag, @duration, @id)";
+                    int minutes = int.Parse(txtTimeMinutes.Text);
+                    int seconds = int.Parse(txtTimeSeconds.Text);
+                    int totalSeconds = (minutes * 60) + seconds;
 
-                OleDbCommand cmd = new OleDbCommand(command, con);
-                cmd.Parameters.AddWithValue("@title", Session["timerTitle"]);
-                cmd.Parameters.AddWithValue("@tag", Session["timerTag"]);
-                cmd.Parameters.AddWithValue("@duration", txtTimeMinutes.Text + "" + txtTimeSeconds.Text); /* FIX: has to fetch from 2 textboxes and concatinate*/
-                cmd.Parameters.AddWithValue("@id", Session["userID"]);
+                    cmd.Parameters.AddWithValue("@title", Session["timerTitle"]);
+                    cmd.Parameters.AddWithValue("@tag", Session["timerTag"]);
+                    cmd.Parameters.AddWithValue("@duration", totalSeconds);
+                    cmd.Parameters.AddWithValue("@id", Session["userID"]);
 
-                con.Open();
-                int code = cmd.ExecuteNonQuery();
-                con.Close();
-            }
+                    con.Open();
+                    int code = cmd.ExecuteNonQuery();
+                    con.Close();
+
+                    /*if (code > 0)
+                    {*/
+                        Session["timerDuration"] = totalSeconds;
+                        Response.Redirect("A200_View-timer.aspx");
+                    /*}*/
+                }
+            /*}
             else
             {
                 Response.Redirect("Login.aspx");
-            }
+            }*/
         }
-        
-
-        Response.Redirect("A200_View-timer.aspx");
     }
 }

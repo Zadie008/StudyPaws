@@ -93,13 +93,21 @@
                 </table>
             </div>
             <div class="rightSection">
+                <table>
+                    <tr>
+                        <td><asp:RequiredFieldValidator ID="errorTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title for your Timer" EnableClientScript="true" ControlToValidate="txtTitle"></asp:RequiredFieldValidator></td>
+                    </tr>
+                    <tr>
+                        <td><asp:RequiredFieldValidator ID="errorDropDown" class="validationError" runat="server" ErrorMessage="Please select a Tag for your Timer" EnableClientScript="true" ControlToValidate="dropdownTag"></asp:RequiredFieldValidator></td>
+                    </tr>
+                </table>
             </div>
         </div>
         <div class="buttonSection">
             <div class="leftSection">
             </div>
             <div class="middleSection">
-                <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" />
+                <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="False" />
                 <asp:Button ID="btnContinue" class="button" runat="server" Text="Continue" OnClick="btnContinue_Click" />
             </div>
             <div class="rightSection">

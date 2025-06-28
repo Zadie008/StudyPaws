@@ -12,7 +12,18 @@ public partial class Default2 : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (!IsPostBack)
+        {
+            if (Session["timerTitle"] != null)
+            {
+                txtTitle.Text = Session["timerTitle"].ToString();
+            }
 
+            if (Session["timerTag"] != null)
+            {
+                dropdownTag.SelectedValue = Session["timerTag"].ToString();
+            }
+        }
     }
 
     protected void btnBack_Click(object sender, EventArgs e)

@@ -73,9 +73,7 @@
         <div class="leftSection">
         </div>
         <div class="middleSection">
-            <asp:TextBox ID="txtTimeMinutes" class="textbox" runat="server" ReadOnly="True" >00</asp:TextBox>
-            <asp:Label ID="lblTimeColon" class="label" runat="server" Text=":"></asp:Label>
-            <asp:TextBox ID="txtTimeSeconds" class="textbox" runat="server" ReadOnly="True" >00</asp:TextBox>
+            <asp:Label ID="lblCountdown" class="label" runat="server"></asp:Label>
             <div class="homePagePet">
                 <img id="pet" src="Images/Cat%201%20Brown%20and%20White.png" width="400" /> <!--CHANGE: has to be chosen home page pet-->
                 <img id="glow" src="Images/Glow(cropped).png" width="400" />
@@ -89,7 +87,7 @@
     </div>
     <div class="buttonSection">
         <div class="leftSection">
-            <asp:TextBox ID="txtSessionTitle" class="textbox" runat="server" ReadOnly="True" >Homework</asp:TextBox> <!--CHANGE: title given previously-->
+            <asp:TextBox ID="txtSessionTitle" class="textbox" runat="server" ReadOnly="True" ></asp:TextBox>
         </div>
         <div class="middleSection">
             <asp:Button ID="btnAdd" class="button" runat="server" Text="Add" OnClick="btnAdd_Click" />
