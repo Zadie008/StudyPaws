@@ -21,34 +21,35 @@
 
 /* ---------------------- FONTS ---------------------- */
 
-.lilita-one-regular {
-    font-family: "Lilita One", sans-serif;
-    font-style: normal;
-    font-weight: 400;
-}
-
-/*@font-face {
-    font-family: 'The Seasons';
-    src: url('../Fonts/Fontspring-DEMO-theseasons-reg.otf') format('opentype');
+@font-face {
+    font-family: 'Lilita One';
+    src: url('../Fonts/LilitaOne-Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
 }
-
-.the-seasons-regular {
-    font-family: 'The Seasons', serif;
-    font-weight: 400;
-}*/
+.lilita-font {
+    font-family: 'Lilita One', sans-serif;
+}
 
 @font-face {
-    font-family: 'The Seasons';
-    src: url('../Fonts/Fontspring-DEMO-theseasons-lt.otf') format('opentype');
-    font-weight: 200;
+    font-family: 'Gilda Display';
+    src: url('../Fonts/GildaDisplay-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+.gilda-font {
+    font-family: 'Gilda Display', serif;
+}
+
+@font-face {
+    font-family: 'Cormorant';
+    src: url('../Fonts/Cormorant-Regular.ttf') format('truetype');
+    font-weight: 400;
     font-style: normal;
 }
 
-.the-seasons-light-regular {
-    font-family: 'The Seasons', serif;
-    font-weight: 200;
+.cormorant-font {
+    font-family: 'Cormorant', serif;
 }
 
 /* ---------------------- ALL PAGES ---------------------- */
@@ -79,7 +80,7 @@ body {
 p {
     font-size: 40px;
     text-align: center;
-    font-family: 'The Seasons', serif;
+    font-family: 'Gilda Display', serif;
     font-weight: 200;
 }
 
@@ -102,13 +103,13 @@ p {
 
 /*POPUP*/
 .simple-popup {
-    display: none; 
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.4); 
+    background-color: rgba(0, 0, 0, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -142,7 +143,7 @@ p {
     color: white;
     padding: 1vh 2vw;
     font-size: clamp(1.2rem, 2.5vw, 2.7rem);
-    font-family: 'Lilita One', cursive, sans-serif;
+    font-family: 'Lilita One', sans-serif;
     letter-spacing: 0.1em;
     cursor: pointer;
     text-decoration: none;
@@ -155,10 +156,6 @@ p {
      text-decoration: none;
 }
 
-
-   
-
-    
 /* ---------------------- MASTER PAGE DIVS ---------------------- */
 .page-wrapper {
     min-height: 100vh;
@@ -191,7 +188,7 @@ header {
 
 h1 {
     text-align: center;
-    font-family: "Lilita One", sans-serif;
+    font-family: 'Lilita One', sans-serif;
     font-weight: 400;
     font-size: clamp(2rem, 5vw, 5rem); /* responsive font size */
     letter-spacing: 0.5em;
@@ -199,7 +196,7 @@ h1 {
 
 h2 {
     text-align: center;
-    font-family: 'The Seasons', serif;
+    font-family: 'Gilda Display', serif;
     font-weight: 200;
     font-size: clamp(1.5rem, 2vw, 2rem);
     letter-spacing: 0.05em;
@@ -222,7 +219,7 @@ h2 {
 }
 
 .curved-header text {
-    font-family: 'Lilita One', cursive, sans-serif;
+    font-family: 'Lilita One', sans-serif;
     font-size: clamp(2rem, 5.5vw, 5.5rem); /* responsive font size */
     letter-spacing: 0.2em;
     fill: white;
@@ -282,7 +279,7 @@ nav:hover {
 
 .navbar a {
     text-decoration: none;
-    font-family: "Lilita One", sans-serif;
+    font-family: 'Lilita One', sans-serif;
     font-size: 3.5em;
     letter-spacing: 0.05em;
     color: white;
@@ -427,7 +424,7 @@ body.page-exit .navbar .nav-right {
     transform: translateX(1em);
     z-index: 1;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border-radius: 2em;
+    border-radius: 2.3em;
 }
 
 .collapsedNav .nav-right {
@@ -445,13 +442,13 @@ body.page-exit .navbar .nav-right {
     transform: translateX(1em);
     z-index: 11;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border-radius: 2em;
+    border-radius: 2.3em;
 }
 
 .collapsedNav .navbar a {
     display: inline-block;
     text-decoration: none;
-    font-family: "Lilita One", sans-serif;
+    font-family: 'Lilita One', sans-serif;
     font-size: 3.5em;
     letter-spacing: 0.05em;
     color: white;
@@ -536,6 +533,36 @@ body.page-exit .collapsedNav .navbar .nav-right {
 /* level, xp and paw currency on left side of screen */
 .profileDetails {
     text-align: left;
+}
+
+.accountInfoLabel {
+    font-family: 'Gilda Display', serif;
+    font-weight: 200;
+    font-size: clamp(1.2rem, 2vw, 2.5rem);
+    color: white;
+    margin-bottom: 0;
+    display: inline-block;
+}
+
+.accountInfoTableLabel {
+    font-family: 'Gilda Display', serif;
+    font-weight: 200;
+    font-size: clamp(1.2rem, 2vw, 2.5rem);
+    color: white;
+    margin-bottom: 0;
+    display: inline-block;
+    padding-right: 1vw;
+}
+
+.accountInfoTableLabelRight {
+    font-family: 'Gilda Display', serif;
+    font-weight: 200;
+    font-size: clamp(1.2rem, 2vw, 2.5rem);
+    color: white;
+    margin-bottom: 0;
+    display: inline-block;
+    width: 100%;
+    text-align: right;
 }
 
 .pawIcon {
@@ -732,7 +759,7 @@ body.page-exit .welcomeBackTextDiv {
     background: #446791;
 }
 .calendarTitle {
-    font-family: "Lilita One", sans-serif;
+    font-family: 'Lilita One', sans-serif;
     font-weight: 400;
     font-size: 28px;
     text-shadow: 2px 2px #5B548A;
@@ -760,7 +787,7 @@ body.page-exit .welcomeBackTextDiv {
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
 }
 .toDoListHeading {
-    font-family: "Lilita One", sans-serif;
+    font-family: 'Lilita One', sans-serif;
     font-weight: bold;
     font-size: 20px;
     text-shadow: 1px 1px #5B548A;
@@ -942,7 +969,7 @@ body.page-exit .welcomeBackTextDiv {
     padding: 0;
     color: white;
     font-size: clamp(4rem, 8vw, 8rem);
-    font-family: 'The Seasons', serif;
+    font-family: 'Gilda Display', serif;
     font-weight: 200;
     outline: none;
     max-width: 12.5%;
@@ -1008,7 +1035,7 @@ body.page-exit .welcomeBackTextDiv {
     padding: 0;
     color: white;
     font-size: clamp(3rem, 6vw, 6rem);
-    font-family: 'The Seasons', serif;
+    font-family: 'Gilda Display', serif;
     font-weight: 200;
     outline: none;
     max-width: 15%;
@@ -1140,6 +1167,53 @@ body.page-exit .welcomeBackTextDiv {
     text-align: right;
 }
 
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    vertical-align: middle;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #446791;
+    border: 2px solid white;
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #6ca0e3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
 /* ---------------------- ABOUT PAGE ---------------------- */
 /* PALETTE WIDGET FROM "COOLERS" IN ABOUT PAGE? */
 /*<!-- Coolors Palette Widget -->
@@ -1157,7 +1231,7 @@ body.page-exit .welcomeBackTextDiv {
 footer {
     text-align: center;
     position: fixed;
-    bottom: 0;
+    bottom: -1em;
     padding: 1vh 0;
     background-color: white;
     width: 100%;
@@ -1180,7 +1254,7 @@ footer p {
 /* ---------------------- LABELS ---------------------- */
 
 .label {
-    font-family: 'The Seasons', serif;
+    font-family: 'Gilda Display', serif;
     font-weight: 200;
     font-size: clamp(1.2rem, 2vw, 2.5rem);
     color: white;
@@ -1202,7 +1276,7 @@ footer p {
     color: white;
     padding: 1vh 2vw;
     font-size: clamp(1.2rem, 2.5vw, 2.7rem);
-    font-family: 'Lilita One', cursive, sans-serif;
+    font-family: 'Lilita One', sans-serif;
     letter-spacing: 0.1em;
     cursor: pointer;
     text-decoration: none;
@@ -1229,7 +1303,7 @@ footer p {
     padding: 0.2em 1em;
     color: white;
     font-size: clamp(1.2rem, 2vw, 2.5rem);
-    font-family: 'The Seasons', serif;
+    font-family: 'Gilda Display', serif;
     font-weight: 200;
     outline: none;
     margin: 1vh auto;
@@ -1253,7 +1327,7 @@ footer p {
     padding: 0.2em 2em 0.2em 1em;
     color: white;
     font-size: clamp(1.2rem, 2vw, 2.5rem);
-    font-family: 'The Seasons', serif;
+    font-family: 'Gilda Display', serif;
     font-weight: 200;
     outline: none;
     margin: 1vh auto;
@@ -1366,6 +1440,10 @@ table {
 
     .textbox {
         width: 50%;
+    }
+
+    footer {
+        bottom: 0;
     }
 }
 
@@ -1488,53 +1566,6 @@ table {
 
     footer {
         max-height: 35px;
+        bottom: 0;
     }
 }
-/*Login page styling*/
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-    vertical-align: middle;
-}
-
-    .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #446791;
-    border: 2px solid white;
-    transition: 0.4s;
-    border-radius: 34px;
-}
-
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 26px;
-        width: 26px;
-        left: 4px;
-        bottom: 3px;
-        background-color: white;
-        transition: 0.4s;
-        border-radius: 50%;
-    }
-
-input:checked + .slider {
-    background-color: #6ca0e3;
-}
-
-    input:checked + .slider:before {
-        transform: translateX(26px);
-    }
-

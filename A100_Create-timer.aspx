@@ -15,12 +15,12 @@
         <div class="profileDetails">
             <table>
                 <tr>
-                    <td colspan="2"><asp:Label ID="lblLevel" runat="server" Text="Label">Level 16</asp:Label></td> <!--CHANGE: has to be their level-->
-                    <td></td>
+                    <td><asp:Label ID="lblLevel" class="accountInfoTableLabel" runat="server" Text="Label">Level</asp:Label></td>
+                    <td><asp:Label ID="lblLevelNumber" class="accountInfoTableLabelRight" runat="server" Text="Label">16</asp:Label></td> <!--CHANGE: has to be their level-->
                 </tr>
                 <tr>
-                    <td><asp:Label ID="lblXP" runat="server" Text="Label">XP</asp:Label></td>
-                    <td><asp:Label ID="lblXPAmount" runat="server" Text="Label">65</asp:Label></td> <!--CHANGE: has to be total xp-->
+                    <td><asp:Label ID="lblXP" class="accountInfoTableLabel" runat="server" Text="Label">XP</asp:Label></td>
+                    <td><asp:Label ID="lblXPAmount" class="accountInfoTableLabelRight" runat="server" Text="Label">65</asp:Label></td> <!--CHANGE: has to be total xp-->
                 </tr>
                 <tr>
                     <td>
@@ -29,7 +29,7 @@
                             <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
                         </div>
                     </td>
-                    <td><asp:Label ID="lblPaws" runat="server" Text="Label">190</asp:Label></td> <!--CHANGE: has to be total paws currency-->
+                    <td><asp:Label ID="lblPaws" class="accountInfoTableLabelRight" runat="server" Text="Label">190</asp:Label></td> <!--CHANGE: has to be total paws currency-->
                 </tr>
             </table>
         </div>
@@ -38,12 +38,12 @@
     <div class="timeDateDiv">
         <table>
             <tr>
-                <td colspan="2"><asp:Label ID="lblTime" runat="server" Text="--:--" Font-Size="65"></asp:Label></td>
+                <td colspan="2"><asp:Label ID="lblTime" class="accountInfoLabel" runat="server" Text="--:--" Font-Size="65"></asp:Label></td>
                 <td></td>
             </tr>
             <tr>
-                <td><asp:Label ID="lblDay" runat="server" Text="Day"></asp:Label></td>
-                <td><asp:Label ID="lblDate" runat="server" Text="Date"></asp:Label></td>
+                <td><asp:Label ID="lblDay" class="accountInfoLabel" runat="server" Text="Day"></asp:Label></td>
+                <td><asp:Label ID="lblDate" class="accountInfoLabel" runat="server" Text="Date"></asp:Label></td>
             </tr>
         </table>
     </div>

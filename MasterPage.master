@@ -9,9 +9,6 @@
         <asp:ContentPlaceHolder ID="tab" runat="server"></asp:ContentPlaceHolder>
     </title>
     <link rel="icon" type="image/x-icon" href="Images/Notification%20Happy.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
     <link href="Styles/StyleSheet.css" rel="stylesheet">
     <script src="Scripts/JavaScript.js" defer></script>
 </head>
