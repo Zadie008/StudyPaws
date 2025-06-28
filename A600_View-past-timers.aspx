@@ -70,7 +70,19 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div class="viewPastTimersMainContent">
         <div class="pastTimerStudySessionTableSection">
-            <asp:GridView ID="GridView1" runat="server"></asp:GridView>
+            <h2>Past timers</h2>
+            <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="pastTimerTable" AutoGenerateColumns="False">
+                <Columns>
+                    <asp:BoundField DataField="Date Created" HeaderText="Date" DataFormatString="{0:yyyy-MM-dd HH:mm}" />
+                    <asp:BoundField DataField="Title" HeaderText="Title" />
+                    <asp:BoundField DataField="Tag" HeaderText="Tag" />
+                    <asp:TemplateField HeaderText="Duration">
+                        <ItemTemplate>
+                            <%# FormatDuration(Eval("Duration")) %>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                </Columns>
+            </asp:GridView>
         </div>
         <div class="buttonSection">
             <div class="leftSection">

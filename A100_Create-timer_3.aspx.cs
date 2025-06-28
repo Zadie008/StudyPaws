@@ -32,17 +32,18 @@ public partial class Default2 : System.Web.UI.Page
 
                 using (OleDbConnection con = new OleDbConnection(cs))
                 {
-                    string command = "INSERT INTO [Timer] ([timerTitle], [timerTag], [timerDuration], [userID]) VALUES (@title, @tag, @duration, @id)";
+                    string command = "INSERT INTO [Timer] ([timerTitle], [timerTag], [timerDuration], [userID]) VALUES (?, ?, ?, ?)";
                     OleDbCommand cmd = new OleDbCommand(command, con);
+
+                    cmd.Parameters.AddWithValue("?", Session["timerTitle"]);
+                    cmd.Parameters.AddWithValue("?", Session["timerTag"]);
 
                     int minutes = int.Parse(txtTimeMinutes.Text);
                     int seconds = int.Parse(txtTimeSeconds.Text);
-                    int totalSeconds = (minutes * 60) + seconds;
+                    int totalSeconds = minutes * 60 + seconds;
 
-                    cmd.Parameters.AddWithValue("@title", Session["timerTitle"]);
-                    cmd.Parameters.AddWithValue("@tag", Session["timerTag"]);
-                    cmd.Parameters.AddWithValue("@duration", totalSeconds);
-                    cmd.Parameters.AddWithValue("@id", Session["userID"]);
+                    cmd.Parameters.AddWithValue("?", totalSeconds);
+                    cmd.Parameters.AddWithValue("?", Convert.ToInt32(Session["userID"]));
 
                     con.Open();
                     int code = cmd.ExecuteNonQuery();

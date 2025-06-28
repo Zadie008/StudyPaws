@@ -960,6 +960,11 @@ body.page-exit .welcomeBackTextDiv {
 
 .titleTagSection .textbox {
     text-align: left;
+    max-width: 350px;
+}
+
+.titleTagSection .dropDownList {
+    max-width: 350px;
 }
 
 .createTimer2MainContent .buttonSection {
@@ -1142,16 +1147,42 @@ body.page-exit .welcomeBackTextDiv {
 
 /* ---------------------- VIEW PAST TIMERS PAGE A600 ---------------------- */
 .viewPastTimersMainContent {
-    margin: 4em 4em 4em;
+    margin: 4em 4em 4em 4em;
 }
 
 .pastTimerStudySessionTableSection {
-    min-height: 51.75vh;
-    border: 1px solid red; /*testing*/
+    min-height: 55.5vh;
+    margin-top: -2%;
 }
 
-.pastTimerStudySessionTableSection table {
-    
+.pastTimerStudySessionTableSection h2 {
+    font-size: 2.5rem;
+}
+
+.pastTimerTable {
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 2em;
+    min-width: 75%;
+    height: auto;
+    font-family: 'Gilda Display', serif;
+    font-size: 2.2rem;
+    color: white;
+    text-align: center;
+    background-color: #90A8C3;
+}
+
+.pastTimerTable th {
+    color: white;
+    padding: 0.5em 1em;
+    border-bottom: 2px solid white;
+}
+
+.pastTimerTable td {
+    padding: 0.5em 1em;
+    border-top: 1px solid white;
 }
 
 /* ---------------------- REGISTER PAGE ---------------------- */
@@ -1639,6 +1670,11 @@ table {
 
     .viewTimerMainContent .timeSection .rightSection {
         margin-top: -1.5em;
+    }
+
+    .pastTimerStudySessionTableSection {
+        min-height: 50.1vh;
+        margin-top: -4%;
     }
 
     footer {
