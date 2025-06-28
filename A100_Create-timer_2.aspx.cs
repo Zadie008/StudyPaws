@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.OleDb;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -19,6 +22,9 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnContinue_Click(object sender, EventArgs e)
     {
+        Session["timerTitle"] = txtTitle.Text;
+        Session["timerTag"] = dropdownTag.SelectedValue;
+
         Response.Redirect("A100_Create-timer_3.aspx");
     }
 }

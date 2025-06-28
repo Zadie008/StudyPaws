@@ -959,7 +959,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .createTimer3MainContent .timeSection {
-    padding: 7% 0 10.1% 0;
+    padding: 7% 0 4.25% 0;
     text-align: center;
 }
 
@@ -1103,6 +1103,16 @@ body.page-exit .welcomeBackTextDiv {
 .viewTimerMainContent .buttonSection .rightSection {
     z-index: 10;
     flex: 1;
+}
+
+/* ---------------------- VIEW PAST TIMERS PAGE A600 ---------------------- */
+.viewPastTimersMainContent {
+    margin: 4em 4em 4em;
+}
+
+.pastTimerStudySessionTableSection {
+    min-height: 51.75vh;
+    border: 1px solid red; /*testing*/
 }
 
 /* ---------------------- REGISTER PAGE ---------------------- */
@@ -1358,8 +1368,21 @@ table {
     height: auto;
 }
 
-/* ---------------------- MEDIA QUERIES ---------------------- */
+.validationError {
+    font-size: 40px;
+    height: 40px; /*height of text*/
+    text-align: center;
+    font-family: 'Gilda Display', serif;
+    font-weight: 200;
+    display: block;
+    visibility: hidden;
+}
 
+.validationError[style*="inline"] {
+    visibility: visible;
+}
+
+/* ---------------------- MEDIA QUERIES ---------------------- */
 @media (max-width: 768px) {
     .curved-header {
         position: relative;
@@ -1529,12 +1552,12 @@ table {
 
     /* register page */
     #registerPageDiv {
-        margin-top: 19%;
+        margin-top: 15%;
     }
 
     /* login page */
     #loginPageDiv {
-        margin-top: 19%;
+        margin-top: 15%;
     }
 
     /* timer pages */
@@ -1559,7 +1582,7 @@ table {
     }
 
     .createTimer3MainContent .timeSection {
-        padding: 3% 0 8.75% 0;
+        padding: 3% 0 1.75% 0;
     }
 
     .viewTimerMainContent {

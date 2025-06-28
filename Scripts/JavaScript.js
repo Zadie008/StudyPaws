@@ -20,6 +20,7 @@ document.querySelectorAll('.navbar a').forEach(link => {
     });
 });
 
+// date and time in top right corner of header
 function updateTimeAndDate() {
     const timeLabel = document.getElementById("headerContentPlaceHolder_lblTime");
     const dayLabel = document.getElementById("headerContentPlaceHolder_lblDay");
@@ -91,5 +92,25 @@ document.addEventListener('DOMContentLoaded', function () {
         isOpen = false;
         console.log("change triggered");
         dropdown.classList.remove('open');
+    });
+});
+
+// timer & study session textboxes
+document.addEventListener('DOMContentLoaded', function () {
+    const timerInputs = document.querySelectorAll('.timerInput');
+
+    timerInputs.forEach(function (input) {
+        input.addEventListener('blur', function () {
+            let value = input.value.trim();
+
+            if (value === '') {
+                input.value = '00';
+            } else if (!isNaN(value)) {
+                let num = parseInt(value, 10);
+                input.value = num < 10 ? '0' + num : num.toString();
+            } else {
+                input.value = '00';
+            }
+        });
     });
 });
