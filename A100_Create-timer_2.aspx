@@ -81,7 +81,7 @@
                     <tr>
                         <td><asp:Label ID="lblTag" class="label" runat="server" Text="Tag"></asp:Label></td>
                         <td>
-                            <asp:DropDownList ID="dropdownTag" class="dropDownList" runat="server" BackColor="#446791">
+                            <asp:DropDownList ID="dropdownTag" ClientIDMode="Static" class="dropDownList" runat="server" BackColor="#446791">
                             <asp:ListItem></asp:ListItem>
                             <asp:ListItem>Studying</asp:ListItem>
                             <asp:ListItem>Working</asp:ListItem>

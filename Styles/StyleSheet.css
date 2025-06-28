@@ -1324,7 +1324,8 @@ footer p {
     background-color: transparent;
     -webkit-appearance: none;
     appearance: none; /* removes default arrow */
-    background-image: url('../Icons/icons8-expand-arrow-white-96.png');
+    background-image: url('../Icons/icons8-expand-arrow-white-96.png'); /* down arrow */
+    transition: background-image 0.2s ease;
     background-repeat: no-repeat;
     background-position: right 0.5em center;
     background-size: 1em;
@@ -1340,6 +1341,11 @@ footer p {
     max-width: 300px;
     box-sizing: border-box;
     display: block;
+}
+
+.dropDownList.open {
+    background-image: url('../Icons/icons8-collapse-arrow-up-white-96.png'); /* up arrow */
+    transition: background-image 0.2s ease;
 }
 
 /* ---------------------- TABLES ---------------------- */

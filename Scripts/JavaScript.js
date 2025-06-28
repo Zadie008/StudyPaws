@@ -52,6 +52,8 @@ window.addEventListener("DOMContentLoaded", updateTimeAndDate);
 
 // update time every second
 setInterval(updateTimeAndDate, 6000);
+
+// pop-ups
 function showPopup() {
     document.getElementById("popup").style.display = "flex";
 }
@@ -59,3 +61,35 @@ function showPopup() {
 function hidePopup() {
     document.getElementById("popup").style.display = "hide";
 }
+
+// drop down list arrows
+document.addEventListener('DOMContentLoaded', function () {
+    const dropdown = document.getElementById('dropdownTag');
+
+    if (!dropdown) {
+        console.error("Dropdown not found");
+        return;
+    }
+
+    console.log("Dropdown found:", dropdown);
+
+    let isOpen = false;
+
+    dropdown.addEventListener('mousedown', () => {
+        isOpen = !isOpen;
+        console.log("mousedown triggered, isOpen =", isOpen);
+        dropdown.classList.toggle('open', isOpen);
+    });
+
+    dropdown.addEventListener('blur', () => {
+        isOpen = false;
+        console.log("blur triggered");
+        dropdown.classList.remove('open');
+    });
+
+    dropdown.addEventListener('change', () => {
+        isOpen = false;
+        console.log("change triggered");
+        dropdown.classList.remove('open');
+    });
+});
