@@ -1225,12 +1225,13 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .viewPastTimersHeading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    position: relative;
     margin: 0 auto;
     min-width: 75%;
     max-width: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .viewPastTimersHeading .leftSection {
@@ -1238,8 +1239,12 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .viewPastTimersHeading .middleSection {
-    flex: 1;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     text-align: center;
+    width: max-content;
+    z-index: 1;
 }
 
 .viewPastTimersHeading .rightSection {
