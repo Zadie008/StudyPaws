@@ -1159,11 +1159,71 @@ body.page-exit .welcomeBackTextDiv {
 
 .pastTimerStudySessionTableSection {
     min-height: 55.5vh;
+    max-height: 55.5vh;
     margin-top: -2%;
+}
+
+.viewPastTimersHeading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+    min-width: 75%;
+    max-width: 75%;
+}
+
+.viewPastTimersHeading .leftSection {
+    flex: 1;
+}
+
+.viewPastTimersHeading .middleSection {
+    flex: 1;
+    text-align: center;
+}
+
+.viewPastTimersHeading .rightSection {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 2.5em;
+}
+
+.pastTimerStudySessionTableSection img {
+    width: 2.5rem;
+    height: auto;
 }
 
 .pastTimerStudySessionTableSection h2 {
     font-size: 2.5rem;
+    margin-bottom: 0;
+}
+
+.scrollableTableContainer {
+    max-height: 50vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-width: 75%;
+    max-width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 3em;
+}
+
+.scrollableTableContainer::-webkit-scrollbar {
+    width: 0.7em;
+}
+
+.scrollableTableContainer::-webkit-scrollbar-track {
+    background: white;
+    border-radius: 100px; /* large value for round ends */
+}
+
+.scrollableTableContainer::-webkit-scrollbar-thumb {
+    background-color: #446791;
+    border-radius: 100px;
+    border: 2px solid white; /* creates space between thumb and track edges */
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
 }
 
 .pastTimerTable {
@@ -1172,7 +1232,7 @@ body.page-exit .welcomeBackTextDiv {
     border-collapse: separate;
     border-spacing: 0;
     border-radius: 2em;
-    min-width: 75%;
+    min-width: 99%;
     height: auto;
     font-family: 'Gilda Display', serif;
     font-size: 2.2rem;
@@ -1701,8 +1761,9 @@ table {
     }
 
     .pastTimerStudySessionTableSection {
-        min-height: 50.1vh;
-        margin-top: -4%;
+        min-height: 54.5vh;
+        max-height: 54.5vh;
+        margin-top: -5%;
     }
 
     footer {

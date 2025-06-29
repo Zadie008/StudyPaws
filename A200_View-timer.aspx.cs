@@ -10,10 +10,11 @@ public partial class Default2 : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         int totalSeconds = Convert.ToInt32(Session["timerDuration"]);
-        int minutes = totalSeconds / 60;
+        int hours = totalSeconds / 3600;
+        int minutes = (totalSeconds % 3600) / 60;
         int seconds = totalSeconds % 60;
 
-        string formattedTime = minutes.ToString("D2") + ":" + seconds.ToString("D2");
+        string formattedTime = hours.ToString("D2") + ":" + minutes.ToString("D2") + ":" + seconds.ToString("D2");
         lblCountdown.Text = formattedTime;
 
         txtSessionTitle.Text = Session["timerTitle"].ToString();

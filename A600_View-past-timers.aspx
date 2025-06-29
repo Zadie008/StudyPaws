@@ -70,19 +70,30 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div class="viewPastTimersMainContent">
         <div class="pastTimerStudySessionTableSection">
-            <h2>Past timers</h2>
-            <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="pastTimerTable" AutoGenerateColumns="False">
-                <Columns>
-                    <asp:BoundField DataField="Date Created" HeaderText="Date" DataFormatString="{0:yyyy-MM-dd HH:mm}" />
-                    <asp:BoundField DataField="Title" HeaderText="Title" />
-                    <asp:BoundField DataField="Tag" HeaderText="Tag" />
-                    <asp:TemplateField HeaderText="Duration">
-                        <ItemTemplate>
-                            <%# FormatDuration(Eval("Duration")) %>
-                        </ItemTemplate>
-                    </asp:TemplateField>
-                </Columns>
-            </asp:GridView>
+            <div class="viewPastTimersHeading">
+                <div class="leftSection">
+                </div>
+                <div class="middleSection">
+                    <h2>Past timers</h2>
+                </div>
+                <div class="rightSection">
+                    <img src="Icons/icons8-filter-bars-white-96.png" />
+                </div>
+            </div>
+            <div class="scrollableTableContainer">
+                <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="pastTimerTable" AutoGenerateColumns="False">
+                    <Columns>
+                        <asp:BoundField DataField="Date Created" HeaderText="Date" DataFormatString="{0:yyyy-MM-dd HH:mm}" />
+                        <asp:BoundField DataField="Title" HeaderText="Title" />
+                        <asp:BoundField DataField="Tag" HeaderText="Tag" />
+                        <asp:TemplateField HeaderText="Duration">
+                            <ItemTemplate>
+                                <%# FormatDuration(Eval("Duration")) %>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                    </Columns>
+                </asp:GridView>
+            </div>
         </div>
         <div class="buttonSection">
             <div class="leftSection">
