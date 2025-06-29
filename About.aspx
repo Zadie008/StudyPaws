@@ -98,13 +98,15 @@
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div id="aboutMainContent">
-        <table>
-            <tr>
-                <td><img src="Icons/icons8-coffee-to-go-white-96.png" /></td>
-                <td><p>Buy us a coffee to keep us productive</p></td>
-            </tr>
-        </table>
-        <p>Icons by <a href="https://icons8.com/">Icons8</a></p>
+        <div class="backgroundColorContainer">
+            <table>
+                <tr>
+                    <td><img src="Icons/icons8-coffee-to-go-white-96.png" /></td>
+                    <td><p>Buy us a coffee to keep us productive</p></td>
+                </tr>
+            </table>
+            <p>Icons by <a href="https://icons8.com/">Icons8</a></p>
+        </div>
     </div>
 </asp:Content>
 

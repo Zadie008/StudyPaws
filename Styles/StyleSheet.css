@@ -150,7 +150,7 @@ p {
 /* worse button option */
 .popup-button {
     background-color: transparent;
-    border: 2px solid white;
+    border: 4px solid white;
     border-radius: 1rem;
     color: white;
     padding: 1vh 2vw;
@@ -309,6 +309,141 @@ h2 {
     top: 3.1rem;
     transform: translate(5.5rem, -50%) rotate(8deg);
     width: 3rem;
+}
+
+/* ---------------------- HEADER ---------------------- */
+/* ---------------------- ACCOUNT INFO BAR ---------------------- */
+.accountInfoDiv {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1vh 2vw;
+    font-size: clamp(1.2rem, 2vw, 2rem);
+    width: 100%;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+}
+
+.profileDiv {
+    display: flex;
+    align-items: center;
+    gap: 2vw;
+    flex-wrap: wrap;
+}
+
+/* profile pic */
+.profileIcon {
+    position: relative;
+    width: 8vw;
+    max-width: 147px;
+    aspect-ratio: 1;
+}
+
+.profileIconLink {
+    display: block;
+    position: relative;
+    text-decoration: none;
+}
+.profileIconLink:focus-visible {
+    outline: 2px solid white;
+    border-radius: 50%;
+}
+.profileIconLink .profileIcon {
+    pointer-events: none;
+}
+
+.profileIcon img#profilePet {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    z-index: 1;
+}
+
+.profileIcon #profileCircle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #F4CAE0;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+/* level, xp and paw currency on left side of screen */
+.profileDetails {
+    text-align: left;
+}
+
+.accountInfoLabel {
+    font-family: 'Gilda Display', serif;
+    font-weight: 200;
+    font-size: clamp(1.2rem, 2vw, 2.5rem);
+    color: white;
+    margin-bottom: 0;
+    display: inline-block;
+}
+
+.accountInfoTableLabel {
+    font-family: 'Gilda Display', serif;
+    font-weight: 200;
+    font-size: clamp(1.2rem, 2vw, 2.5rem);
+    color: white;
+    margin-bottom: 0;
+    display: inline-block;
+    padding-right: 1vw;
+}
+
+.accountInfoTableLabelRight {
+    font-family: 'Gilda Display', serif;
+    font-weight: 200;
+    font-size: clamp(1.2rem, 2vw, 2.5rem);
+    color: white;
+    margin-bottom: 0;
+    display: inline-block;
+    width: 100%;
+    text-align: right;
+}
+
+.pawIcon {
+    position: relative;
+    width: 2.5vw;
+    max-width: 50px;
+    aspect-ratio: 1;
+}
+
+.pawIcon img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.pawIcon .paw {
+    z-index: 1;
+    width: 55%;
+}
+
+.pawIcon .circle {
+    z-index: 0;
+    width: 100%;
+}
+
+/* date and time on right side of screen */
+.timeDateDiv {
+    text-align: right;
+}
+
+.timeDateDiv table tr:last-child td:nth-child(1) {
+    padding-right: 0.5em;
+}
+
+.timeDateDiv table tr:last-child td:nth-child(2) {
+    border-left: 2px solid white;
+    padding-left: 0.5em;
 }
 
 /* ---------------------- NAVIGATION ---------------------- */
@@ -552,145 +687,7 @@ body.page-exit .collapsedNav .navbar .nav-right {
 }
 
 /* ---------------------- HOME PAGE ---------------------- */
-
-/* ---------------------- HEADER ---------------------- */
-/* ---------------------- ACCOUNT INFO BAR ---------------------- */
-.accountInfoDiv {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1vh 2vw;
-    font-size: clamp(1.2rem, 2vw, 2rem);
-    width: 100%;
-    flex-wrap: wrap;
-    box-sizing: border-box;
-}
-
-.profileDiv {
-    display: flex;
-    align-items: center;
-    gap: 2vw;
-    flex-wrap: wrap;
-}
-
-/* profile pic */
-.profileIcon {
-    position: relative;
-    width: 8vw;
-    max-width: 147px;
-    aspect-ratio: 1;
-}
-
-.profileIconLink {
-    display: block;
-    position: relative;
-    text-decoration: none;
-}
-.profileIconLink:focus-visible {
-    outline: 2px solid white;
-    border-radius: 50%;
-}
-.profileIconLink .profileIcon {
-    pointer-events: none;
-}
-
-.profileIcon img#profilePet {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    z-index: 1;
-}
-
-.profileIcon #profileCircle {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #F4CAE0;
-    border-radius: 50%;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-}
-
-/* level, xp and paw currency on left side of screen */
-.profileDetails {
-    text-align: left;
-}
-
-.accountInfoLabel {
-    font-family: 'Gilda Display', serif;
-    font-weight: 200;
-    font-size: clamp(1.2rem, 2vw, 2.5rem);
-    color: white;
-    margin-bottom: 0;
-    display: inline-block;
-}
-
-.accountInfoTableLabel {
-    font-family: 'Gilda Display', serif;
-    font-weight: 200;
-    font-size: clamp(1.2rem, 2vw, 2.5rem);
-    color: white;
-    margin-bottom: 0;
-    display: inline-block;
-    padding-right: 1vw;
-}
-
-.accountInfoTableLabelRight {
-    font-family: 'Gilda Display', serif;
-    font-weight: 200;
-    font-size: clamp(1.2rem, 2vw, 2.5rem);
-    color: white;
-    margin-bottom: 0;
-    display: inline-block;
-    width: 100%;
-    text-align: right;
-}
-
-.pawIcon {
-    position: relative;
-    width: 2.5vw;
-    max-width: 50px;
-    aspect-ratio: 1;
-}
-
-.pawIcon img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.pawIcon .paw {
-    z-index: 1;
-    width: 55%;
-}
-
-.pawIcon .circle {
-    z-index: 0;
-    width: 100%;
-}
-
-/* date and time on right side of screen */
-.timeDateDiv {
-    text-align: right;
-    margin-top: 1rem;
-}
-
-.timeDateDiv table tr:last-child td:nth-child(1) {
-    padding-right: 0.5em;
-}
-
-.timeDateDiv table tr:last-child td:nth-child(2) {
-    border-left: 2px solid white;
-    padding-left: 0.5em;
-}
-
-/* ---------------------- MAIN CONTENT ---------------------- */
-/* ---------------------- HOME PAGE PET ---------------------- */
+/* HOME PAGE PET */
 .homePagePet {
     position: relative;
     width: min(90vw, 500px);
@@ -722,7 +719,7 @@ body.page-exit .homePagePet {
     transition: opacity 0.3s ease;
 }
 
-/* ---------------------- USER WELCOME BACK TEXT ---------------------- */
+/* USER WELCOME BACK TEXT */
 .welcomeBackTextDiv {
     text-align: center;
     margin-top: -3em;
@@ -740,6 +737,7 @@ body.page-exit .welcomeBackTextDiv {
     opacity: 0;
     transition: opacity 0.3s ease;
 }
+
 /* ---------------------- DASHBOARD PAGE ---------------------- */
 .dashboardContainer{
     display: flex;
@@ -1342,6 +1340,114 @@ body.page-exit .welcomeBackTextDiv {
     border-top: 1px solid white;
 }
 
+/* ---------------------- PET SHOP PAGE ---------------------- */
+#viewShopMainContent {
+    margin: 4em 4em 4em 4em;
+}
+
+#viewShopMainContent .backgroundColorContainer {
+    align-items: center;
+    margin: auto;
+    background-color: #F4CAE0; /*pink*/
+    min-width: 85%;
+    max-width: 85%;
+    height: 63vh;
+    border-radius: 2em;
+    padding: 0.5em;
+}
+
+/* ---------------------- INVENTORY PAGE ---------------------- */
+#viewInventoryMainContent {
+    margin: 4em 4em 4em 4em;
+}
+
+#viewInventoryMainContent .backgroundColorContainer {
+    align-items: center;
+    margin: auto;
+    background-color: #D7B9D5; /*light purple*/
+    min-width: 85%;
+    max-width: 85%;
+    height: 63vh;
+    border-radius: 2em;
+    padding: 0.5em;
+}
+
+/* ---------------------- VIEW FRIEND LIST PAGE ---------------------- */
+#viewFriendListMainContent {
+    margin: 4em 4em 4em 4em;
+}
+
+#viewFriendListMainContent .backgroundColorContainer {
+    align-items: center;
+    margin: auto;
+    background-color: #ADA7C9; /*dark purple*/
+    min-width: 85%;
+    max-width: 85%;
+    height: 63vh;
+    border-radius: 2em;
+    padding: 0.5em;
+}
+
+/* ---------------------- BADGES PAGE ---------------------- */
+#badgesMainContent{
+    margin: 4em 4em 4em 4em;
+}
+
+#badgesMainContent .backgroundColorContainer {
+    align-items: center;
+    margin: auto;
+    background-color: #90A8C3; /*dusty blue*/
+    min-width: 85%;
+    max-width: 85%;
+    height: 63vh;
+    border-radius: 2em;
+    padding: 0.5em;
+}
+
+/* ---------------------- ABOUT PAGE ---------------------- */
+/* PALETTE WIDGET FROM "COOLERS" IN ABOUT PAGE? */
+/*<!-- Coolors Palette Widget -->
+<script src="https://coolors.co/palette-widget/widget.js" > </script >
+<script data-id="000813941576946653" > new CoolorsPaletteWidget("000813941576946653", ["446791","64A6BD","90A8C3","ADA7C9","D7B9D5","F4CAE0"]); </script >*/
+#aboutMainContent{
+    margin: 4em 4em 4em 4em;
+}
+
+#aboutMainContent .backgroundColorContainer {
+    align-items: center;
+    margin: auto;
+    background-color: #64A6BD; /*turquoise*/
+    min-width: 85%;
+    max-width: 85%;
+    height: 63vh;
+    border-radius: 2em;
+    padding: 0.5em;
+}
+
+#aboutMainContent td p {
+    margin-bottom: 0em;
+}
+
+#aboutMainContent a {
+    color: white;
+}
+
+/* ---------------------- FOOTER ---------------------- */
+footer {
+    text-align: center;
+    position: fixed;
+    bottom: -1em;
+    padding: 1vh 0;
+    background-color: white;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+footer p {
+    color: #446791;
+    font-size: clamp(1rem, 1.3vw, 1.3rem);
+}
+
 /* ---------------------- REGISTER PAGE ---------------------- */
 #registerPageDiv {
     margin-top: 17%;
@@ -1449,39 +1555,6 @@ input:checked + .slider {
 
 input:checked + .slider:before {
     transform: translateX(26px);
-}
-
-/* ---------------------- ABOUT PAGE ---------------------- */
-/* PALETTE WIDGET FROM "COOLERS" IN ABOUT PAGE? */
-/*<!-- Coolors Palette Widget -->
-<script src="https://coolors.co/palette-widget/widget.js" > </script >
-<script data-id="000813941576946653" > new CoolorsPaletteWidget("000813941576946653", ["446791","64A6BD","90A8C3","ADA7C9","D7B9D5","F4CAE0"]); </script >*/
-#aboutMainContent{
-    margin: 4em 4em 4em 4em;
-}
-
-#aboutMainContent td p {
-    margin-bottom: 0em;
-}
-
-#aboutMainContent a {
-    color: white;
-}
-
-/* ---------------------- FOOTER ---------------------- */
-footer {
-    text-align: center;
-    position: fixed;
-    bottom: -1em;
-    padding: 1vh 0;
-    background-color: white;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-footer p {
-    color: #446791;
-    font-size: clamp(1rem, 1.3vw, 1.3rem);
 }
 
 /* ---------------------- OTHER ---------------------- */

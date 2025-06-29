@@ -97,7 +97,11 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-
+    <div id="viewInventoryMainContent">
+        <div class="backgroundColorContainer">
+            
+        </div>
+    </div>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
