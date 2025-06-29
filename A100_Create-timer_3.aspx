@@ -73,12 +73,22 @@
         <div class="leftSection">
         </div>
         <div class="middleSection">
+            <div class="timeHeadings">
+                <asp:Label ID="lblHours" class="label" runat="server" Text="Hours"></asp:Label>
+                <asp:Label ID="lblMinutes" class="label" runat="server" Text="Minutes"></asp:Label>
+                <asp:Label ID="lblSeconds" class="label" runat="server" Text="Seconds"></asp:Label>
+            </div>
+            <asp:TextBox ID="txtTimeHours" class="textbox timerInput" runat="server" Text="00"></asp:TextBox>
+            <asp:Label ID="lblTimeColon1" class="label" runat="server" Text=":"></asp:Label>
             <asp:TextBox ID="txtTimeMinutes" class="textbox timerInput" runat="server" Text="00"></asp:TextBox>
-            <asp:Label ID="lblTimeColon" class="label" runat="server" Text=":"></asp:Label>
+            <asp:Label ID="lblTimeColon2" class="label" runat="server" Text=":"></asp:Label>
             <asp:TextBox ID="txtTimeSeconds" class="textbox timerInput" runat="server" Text="00"></asp:TextBox>
-            <asp:RangeValidator ID="errorMinute" class="validationError" runat="server" ErrorMessage="Timer has to be at least 1 minute long" MinimumValue="1" MaximumValue="99" Type="Integer" Display="Static" EnableClientScript="true" ControlToValidate="txtTimeMinutes"></asp:RangeValidator>
-            <br />
-            <asp:RangeValidator ID="errorSecond" class="validationError" runat="server" ErrorMessage="Seconds have to be between 00 and 59" MinimumValue="0" MaximumValue="59" Type="Integer" Display="Static" EnableClientScript="true" ControlToValidate="txtTimeSeconds"></asp:RangeValidator>
+            <div class="validationErrorSection">
+                <asp:RangeValidator ID="errorHour" class="validationError" runat="server" ErrorMessage="Hours have to be between 00 and 99" MinimumValue="0" MaximumValue="99" Type="Integer" Display="Dynamic" EnableClientScript="true" ControlToValidate="txtTimeHours" ValidationGroup="timerValidation"></asp:RangeValidator>
+                <asp:RangeValidator ID="errorMinute" class="validationError" runat="server" ErrorMessage="Minutes have to be between 00 and 59" MinimumValue="0" MaximumValue="59" Type="Integer" Display="Dynamic" EnableClientScript="true" ControlToValidate="txtTimeMinutes" ValidationGroup="timerValidation"></asp:RangeValidator>
+                <asp:RangeValidator ID="errorSecond" class="validationError" runat="server" ErrorMessage="Seconds have to be between 00 and 59" MinimumValue="0" MaximumValue="59" Type="Integer" Display="Dynamic" EnableClientScript="true" ControlToValidate="txtTimeSeconds" ValidationGroup="timerValidation"></asp:RangeValidator>
+                <asp:CustomValidator ID="minTotalTimeValidator" class="validationErrorCustom" runat="server" ErrorMessage="Timer must be at least 1 minute" OnServerValidate="minTotalTimeValidator_ServerValidate" ClientValidationFunction="validateMinTime" EnableClientScript="true" Display="Dynamic" ValidationGroup="timerValidation"></asp:CustomValidator>
+            </div>
         </div>
         <div class="rightSection">
         </div>
@@ -88,7 +98,7 @@
         </div>
         <div class="middleSection">
             <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="False" />
-            <asp:Button ID="btnStart" class="button" runat="server" Text="Start" OnClick="btnStart_Click"  />
+            <asp:Button ID="btnStart" class="button" runat="server" Text="Start" OnClick="btnStart_Click" CausesValidation="true" ValidationGroup="timerValidation" />
         </div>
         <div class="rightSection">
             <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->

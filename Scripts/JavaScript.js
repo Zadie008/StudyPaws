@@ -115,6 +115,15 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+function validateMinTime(source, args) {
+    const hours = parseInt(document.getElementById('<%= txtTimeHours.ClientID %>').value) || 0;
+    const minutes = parseInt(document.getElementById('<%= txtTimeMinutes.ClientID %>').value) || 0;
+    const seconds = parseInt(document.getElementById('<%= txtTimeSeconds.ClientID %>').value) || 0;
+
+    const totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+    args.IsValid = totalSeconds >= 60;
+}
+
 // timer & study session countdown
 function formatTime(totalSeconds) {
     const minutes = Math.floor(totalSeconds / 60);

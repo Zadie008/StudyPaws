@@ -929,12 +929,12 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .createTimer2MainContent .titleTagSection .rightSection table td {
-    padding: 2.5vh 0;
+    padding: 3vh 0;
 }
 
 .createTimer2MainContent .titleTagSection .rightSection table td .validationError {
     text-align: left;
-    font-size: 35px;
+    font-size: 1.5em;
 }
 
 .titleTagSection table {
@@ -992,7 +992,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .createTimer3MainContent .timeSection {
-    padding: 7% 0 4.25% 0;
+    padding: 5% 0 0.5% 0;
     text-align: center;
 }
 
@@ -1014,6 +1014,13 @@ body.page-exit .welcomeBackTextDiv {
 .createTimer3MainContent .timeSection .middleSection .label {
     font-size: clamp(4rem, 8vw, 8rem);
     text-align: center;
+}
+
+.createTimer3MainContent .timeSection .middleSection .timeHeadings .label {
+    font-size: clamp(1rem, 2vw, 2rem);
+    text-align: center;
+    padding: 0 1.5em 0 1.5em;
+    width: 14%;
 }
 
 .createTimer3MainContent .buttonSection {
@@ -1438,19 +1445,32 @@ table {
     height: auto;
 }
 
+.validationErrorSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 8em;
+}
+
 .validationError {
     color: white;
-    font-size: 40px;
-    height: 40px; /*height of text*/
+    font-size: 1.5em;
     text-align: center;
     font-family: 'Gilda Display', serif;
-    font-weight: 200;
     display: block;
-    visibility: hidden;
+    visibility: visible;
 }
 
 .validationError[style*="inline"] {
     visibility: visible;
+}
+
+.validationErrorCustom {
+    color: white;
+    font-size: 1.5em;
+    text-align: center;
+    font-family: 'Gilda Display', serif;
+    display: block;
 }
 
 /* ---------------------- MEDIA QUERIES ---------------------- */
@@ -1648,8 +1668,8 @@ table {
         padding: 4% 0 9.25% 0;
     }
 
-    .createTimer2MainContent .titleTagSection .rightSection table td .validationError {
-        font-size: 30px;
+    .createTimer2MainContent .titleTagSection .rightSection table td {
+        padding: 2.8vh 0;
     }
 
     .createTimer3MainContent {
@@ -1657,7 +1677,11 @@ table {
     }
 
     .createTimer3MainContent .timeSection {
-        padding: 3% 0 1.75% 0;
+        padding: 2% 0 1% 0;
+    }
+
+    .validationErrorSection {
+        height: 4.9em;
     }
 
     .viewTimerMainContent {

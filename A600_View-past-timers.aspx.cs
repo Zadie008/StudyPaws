@@ -50,16 +50,17 @@ public partial class Default2 : System.Web.UI.Page
     public string FormatDuration(object totalSecondsObj)
     {
         if (totalSecondsObj == null || totalSecondsObj == DBNull.Value)
-            return "00:00";
+            return "00:00:00";
 
         int totalSeconds;
         if (int.TryParse(totalSecondsObj.ToString(), out totalSeconds))
         {
-            int minutes = totalSeconds / 60;
+            int hours = totalSeconds / 3600;
+            int minutes = (totalSeconds % 3600) / 60;
             int seconds = totalSeconds % 60;
-            return string.Format("{0:D2}:{1:D2}", minutes, seconds);
+            return string.Format("{0:D2}:{1:D2}:{2:D2}", hours, minutes, seconds);
         }
 
-        return "00:00";
+        return "00:00:00";
     }
 }

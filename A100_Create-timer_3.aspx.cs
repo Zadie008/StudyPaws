@@ -38,10 +38,11 @@ public partial class Default2 : System.Web.UI.Page
                     cmd.Parameters.AddWithValue("?", Session["timerTitle"]);
                     cmd.Parameters.AddWithValue("?", Session["timerTag"]);
 
+                    int hours = int.Parse(txtTimeHours.Text);
                     int minutes = int.Parse(txtTimeMinutes.Text);
                     int seconds = int.Parse(txtTimeSeconds.Text);
-                    int totalSeconds = minutes * 60 + seconds;
-
+                    int totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+                    
                     cmd.Parameters.AddWithValue("?", totalSeconds);
                     cmd.Parameters.AddWithValue("?", Convert.ToInt32(Session["userID"]));
 
@@ -61,5 +62,16 @@ public partial class Default2 : System.Web.UI.Page
                 Response.Redirect("Login.aspx");
             }*/
         }
+    }
+
+    protected void minTotalTimeValidator_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        int hours = 0, minutes = 0, seconds = 0;
+        bool parsed = int.TryParse(txtTimeHours.Text, out hours)
+            && int.TryParse(txtTimeMinutes.Text, out minutes)
+            && int.TryParse(txtTimeSeconds.Text, out seconds);
+
+        int totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+        args.IsValid = parsed && totalSeconds >= 60;
     }
 }
