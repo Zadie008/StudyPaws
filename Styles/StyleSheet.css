@@ -1216,13 +1216,13 @@ body.page-exit .welcomeBackTextDiv {
 
 .scrollableTableContainer::-webkit-scrollbar-track {
     background: white;
-    border-radius: 100px; /* large value for round ends */
+    border-radius: 100px;
 }
 
 .scrollableTableContainer::-webkit-scrollbar-thumb {
     background-color: #446791;
     border-radius: 100px;
-    border: 2px solid white; /* creates space between thumb and track edges */
+    border: 2px solid white;
     box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
 }
 
@@ -1760,10 +1760,20 @@ table {
         margin-top: -1.5em;
     }
 
+    .viewPastTimersMainContent {
+        margin: 3em 3em 3em 3em;
+    }
+
     .pastTimerStudySessionTableSection {
-        min-height: 54.5vh;
-        max-height: 54.5vh;
-        margin-top: -5%;
+        margin-top: -4.5%;
+    }
+
+    .scrollableTableContainer {
+        max-height: 50vh;
+    }
+
+    .pastTimerTable {
+        font-size: 1.5rem;
     }
 
     footer {
