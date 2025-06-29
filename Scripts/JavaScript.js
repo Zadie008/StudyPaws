@@ -116,13 +116,27 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function validateMinTime(source, args) {
-    const hours = parseInt(document.getElementById('<%= txtTimeHours.ClientID %>').value) || 0;
-    const minutes = parseInt(document.getElementById('<%= txtTimeMinutes.ClientID %>').value) || 0;
-    const seconds = parseInt(document.getElementById('<%= txtTimeSeconds.ClientID %>').value) || 0;
+    const hours = parseInt(document.getElementById('txtTimeHours').value) || 0;
+    const minutes = parseInt(document.getElementById('txtTimeMinutes').value) || 0;
+    const seconds = parseInt(document.getElementById('txtTimeSeconds').value) || 0;
 
     const totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
     args.IsValid = totalSeconds >= 60;
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const inputs = [
+        document.getElementById('txtTimeHours'),
+        document.getElementById('txtTimeMinutes'),
+        document.getElementById('txtTimeSeconds')
+    ];
+
+    inputs.forEach(input => {
+        input.addEventListener('input', function () {
+            Page_ClientValidate('timerValidation');
+        });
+    });
+});
 
 // timer & study session countdown
 function formatTime(totalSeconds) {
