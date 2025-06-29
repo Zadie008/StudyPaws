@@ -6,18 +6,21 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server"> 
     <div class="loginRegisterCurvedHeader">
-        <div class="curved-header">
-            <svg viewBox="0 0 700 150" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <path id="curve" d="M50,120 Q350,20 650,120" />
-                </defs>
-                <text>
-                    <textPath href="#curve" startOffset="50%" text-anchor="middle">StudyPaws</textPath>
-                </text>
-            </svg>
-            <h2>purrfectly productive</h2>
-        </div>
+    <div class="curved-header">
+        <svg viewBox="0 0 700 150" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <path id="curve" d="M50,120 Q350,20 650,120" />
+            </defs>
+            <text>
+                <textPath href="#curve" startOffset="50%" text-anchor="middle">
+                    StudyP<tspan dx="0.7em">w</tspan>s
+                </textPath>
+            </text>
+        </svg>
+        <img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" />
+        <h2>purrfectly productive</h2>
     </div>
+</div>
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">

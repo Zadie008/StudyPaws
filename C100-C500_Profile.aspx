@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="C100-C500 Profile.aspx.cs" Inherits="Default2" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="C100-C500_Profile.aspx.cs" Inherits="Default2" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
     Profile
@@ -7,7 +7,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
     
    <div class="buttonSection">
-    <asp:Button ID="btnBackProfile" class="button" runat="server" Text="Back" />
+    <asp:Button ID="btnBackProfile" class="button" runat="server" Text="Back" OnClick="btnBackProfile_Click" />
    </div>
 
     <div class="timeDateDiv">

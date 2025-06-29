@@ -8,10 +8,12 @@
             <!--account info to copy and paste-->
 <div class="accountInfoDiv">
     <div class="profileDiv">
-        <div class="profileIcon">
-            <div id="profileCircle"></div> <!--CHANGE: has to be corresponding background colour-->
-            <img id="profilePet" src="Images/Farm%204%20Cow%20White%20and%20Black.png" width="120"/> <!--CHANGE: has to be chosen profile pic-->
-        </div>
+        <a href="C100-C500_Profile.aspx" class="profileIconLink">
+            <div class="profileIcon">
+                <div id="profileCircle"></div>
+                <img id="profilePet" src="Images/Farm%204%20Cow%20White%20and%20Black.png" width="120"/>
+            </div>
+        </a>
         <div class="profileDetails">
             <table>
                 <tr>
@@ -56,9 +58,14 @@
             <path id="curve" d="M50,120 Q350,20 650,120" />
         </defs>
         <text>
-            <textPath href="#curve" startOffset="50%" text-anchor="middle"><a href="Default.aspx">StudyPaws</a></textPath> <!--link to home page-->
+            <textPath href="#curve" startOffset="50%" text-anchor="middle">
+                <a href="Default.aspx" class="curvedHeaderLink">
+                    StudyP<tspan dx="0.7em">w</tspan>s
+                </a>
+            </textPath>
         </text>
     </svg>
+    <img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" />
     <h2>purrfectly productive</h2>
 </div>
 </asp:Content>

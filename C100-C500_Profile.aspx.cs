@@ -11,4 +11,9 @@ public partial class Default2 : System.Web.UI.Page
     {
 
     }
+
+    protected void btnBackProfile_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("Default.aspx");
+    }
 }

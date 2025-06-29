@@ -41,17 +41,6 @@
     font-family: 'Gilda Display', serif;
 }
 
-@font-face {
-    font-family: 'Cormorant';
-    src: url('../Fonts/Cormorant-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-}
-
-.cormorant-font {
-    font-family: 'Cormorant', serif;
-}
-
 /* ---------------------- ALL PAGES ---------------------- */
 
 * {
@@ -279,6 +268,22 @@ h2 {
     width: min(90vw, 700px); /* responsive width, max 700px */
 }
 
+.curvedHeaderLink {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.curvedHeaderPaw {
+    position: absolute;
+    top: 3.1rem;
+    left: 50%;
+    transform: translate(5.5rem, -50%) rotate(8deg);
+    width: 3rem;
+    height: auto;
+    z-index: 2;
+}
+
 .curved-header text {
     font-family: 'Lilita One', sans-serif;
     font-size: clamp(2rem, 5.5vw, 5.5rem); /* responsive font size */
@@ -287,7 +292,7 @@ h2 {
 }
 
 .curved-header h2 {
-    margin-top: clamp(-3rem, -3vw, -2rem);
+    margin-top: clamp(-3.5rem, -4vw, -3rem);
     font-size: clamp(0.5rem, 2vw, 2rem);
 }
 
@@ -298,6 +303,12 @@ h2 {
 /* STUDY PAWS CURVED HEADING (ON LOGIN / REGISTER PAGES) */
 .loginRegisterCurvedHeader .curved-header {
     top: 20%;
+}
+
+.loginRegisterCurvedHeader .curvedHeaderPaw {
+    top: 3.1rem;
+    transform: translate(5.5rem, -50%) rotate(8deg);
+    width: 3rem;
 }
 
 /* ---------------------- NAVIGATION ---------------------- */
@@ -568,6 +579,19 @@ body.page-exit .collapsedNav .navbar .nav-right {
     width: 8vw;
     max-width: 147px;
     aspect-ratio: 1;
+}
+
+.profileIconLink {
+    display: block;
+    position: relative;
+    text-decoration: none;
+}
+.profileIconLink:focus-visible {
+    outline: 2px solid white;
+    border-radius: 50%;
+}
+.profileIconLink .profileIcon {
+    pointer-events: none;
 }
 
 .profileIcon img#profilePet {
@@ -1704,6 +1728,10 @@ table {
 @media (max-width: 1800px) {
     .curved-header h2 {
         margin-top: clamp(-5rem, -4vw, -3rem);
+    }
+
+    .curvedHeaderPaw {
+        transform: translate(5.1rem, -50%) rotate(8deg);
     }
 
     /* navigation */

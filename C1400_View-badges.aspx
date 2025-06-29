@@ -8,19 +8,21 @@
             <!--account info to copy and paste-->
 <div class="accountInfoDiv">
     <div class="profileDiv">
-        <div class="profileIcon">
-            <div id="profileCircle"></div> <!--CHANGE: has to be corresponding background colour-->
-            <img id="profilePet" src="Images/Farm%204%20Cow%20White%20and%20Black.png" width="120"/> <!--CHANGE: has to be chosen profile pic-->
-        </div>
+        <a href="C100-C500_Profile.aspx" class="profileIconLink">
+            <div class="profileIcon">
+                <div id="profileCircle"></div>
+                <img id="profilePet" src="Images/Farm%204%20Cow%20White%20and%20Black.png" width="120"/>
+            </div>
+        </a>
         <div class="profileDetails">
             <table>
                 <tr>
-                    <td><asp:Label ID="lblLevel" class="accountInfoTableLabel" runat="server" Text="Label">Level</asp:Label></td>
-                    <td><asp:Label ID="lblLevelNumber" class="accountInfoTableLabelRight" runat="server" Text="Label">16</asp:Label></td> <!--CHANGE: has to be their level-->
+                    <td><asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Label">Level</asp:Label></td>
+                    <td><asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server" Text="Label">16</asp:Label></td> <!--CHANGE: has to be their level-->
                 </tr>
                 <tr>
-                    <td><asp:Label ID="lblXP" class="accountInfoTableLabel" runat="server" Text="Label">XP</asp:Label></td>
-                    <td><asp:Label ID="lblXPAmount" class="accountInfoTableLabelRight" runat="server" Text="Label">65</asp:Label></td> <!--CHANGE: has to be total xp-->
+                    <td><asp:Label ID="lblXP" CssClass="accountInfoTableLabel" runat="server" Text="Label">XP</asp:Label></td>
+                    <td><asp:Label ID="lblXPAmount" CssClass="accountInfoTableLabelRight" runat="server" Text="Label">65</asp:Label></td> <!--CHANGE: has to be total xp-->
                 </tr>
                 <tr>
                     <td>
@@ -29,7 +31,7 @@
                             <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
                         </div>
                     </td>
-                    <td><asp:Label ID="lblPaws" class="accountInfoTableLabelRight" runat="server" Text="Label">190</asp:Label></td> <!--CHANGE: has to be total paws currency-->
+                    <td><asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server" Text="Label">190</asp:Label></td> <!--CHANGE: has to be total paws currency-->
                 </tr>
             </table>
         </div>
@@ -38,12 +40,12 @@
     <div class="timeDateDiv">
         <table>
             <tr>
-                <td colspan="2"><asp:Label ID="lblTime" class="accountInfoLabel" runat="server" Text="--:--" Font-Size="65"></asp:Label></td>
+                <td colspan="2"><asp:Label ID="lblTime" CssClass="accountInfoLabel" runat="server" Text="--:--" Font-Size="65"></asp:Label></td>
                 <td></td>
             </tr>
             <tr>
-                <td><asp:Label ID="lblDay" class="accountInfoLabel" runat="server" Text="Day"></asp:Label></td>
-                <td><asp:Label ID="lblDate" class="accountInfoLabel" runat="server" Text="Date"></asp:Label></td>
+                <td><asp:Label ID="lblDay" CssClass="accountInfoLabel" runat="server" Text="Day"></asp:Label></td>
+                <td><asp:Label ID="lblDate" CssClass="accountInfoLabel" runat="server" Text="Date"></asp:Label></td>
             </tr>
         </table>
     </div>
@@ -56,9 +58,14 @@
             <path id="curve" d="M50,120 Q350,20 650,120" />
         </defs>
         <text>
-            <textPath href="#curve" startOffset="50%" text-anchor="middle"><a href="Default.aspx">StudyPaws</a></textPath> <!--link to home page-->
+            <textPath href="#curve" startOffset="50%" text-anchor="middle">
+                <a href="Default.aspx" class="curvedHeaderLink">
+                    StudyP<tspan dx="0.7em">w</tspan>s
+                </a>
+            </textPath>
         </text>
     </svg>
+    <img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" />
     <h2>purrfectly productive</h2>
 </div>
 </asp:Content>
