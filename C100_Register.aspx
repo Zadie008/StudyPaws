@@ -41,22 +41,16 @@
         <br/>
         <div class="buttonSection">
            <asp:Button ID="btnRegister" class="button" runat="server" Text="Register" OnClick="btnRegister_Click1" />
-
         </div>
      <asp:Panel ID="pnlPopup" runat="server" Visible="false">
-    
          <div id="popup" class="simple-popup">
-        <div class="popup-pinkbox">
+        <div class="popup-pink-box">
             <p>You have been registered!</p>
             <img src="Images/Notification%20Happy.png" />
             <br />
-           <%-- <button onclick="hidePopup()">Okay</button>--%>
             <div class="buttonSection">
                 <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hidePopup(); return false;" />
-
             </div>
-           
-
         </div>
     </div>
 </asp:Panel>

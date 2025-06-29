@@ -101,7 +101,7 @@ p {
     z-index: -1;
 }*/
 
-/*POPUP*/
+/* ---------------------- POP-UPS ---------------------- */
 .simple-popup {
     display: none;
     position: fixed;
@@ -116,8 +116,8 @@ p {
     z-index: 9999;
 }
 
-.popup-pinkbox {
-    background-color: #D7B9D5;
+.popup-pink-box {
+    background-color: #D7B9D5; /*pink*/
     padding: 40px;
     border-radius: 10px;
     border: 5px solid white;
@@ -127,17 +127,40 @@ p {
     text-align: center;
 }
 
-.popup-pinkbox img {
+.popup-pink-box img {
     max-width: 60%;
     width: 300px;
 }
 
-.popup-pinkbox.buttonSection{
+.popup-pink-box .buttonSection{
     text-align: center;
     margin-top: 3vh;
 }
+
+.popup-blue-box {
+    background-color: #90A8C3; /*blue*/
+    padding: 40px;
+    border-radius: 10px;
+    border: 5px solid white;
+    width: 40%;
+    max-width: 1500px;
+    min-height: 250px;
+    text-align: center;
+}
+
+.popup-blue-box img {
+    max-width: 60%;
+    width: 300px;
+}
+
+.popup-blue-box .buttonSection {
+    text-align: center;
+    margin-top: 3vh;
+}
+
+/* worse button option */
 .popup-button {
-    background-color: #D7B9D5;
+    background-color: transparent;
     border: 2px solid white;
     border-radius: 1rem;
     color: white;
@@ -148,12 +171,50 @@ p {
     cursor: pointer;
     text-decoration: none;
     margin: 1vh;
-    transition: background-color 0.3s ease;
 }
 
-.popup-button a{
+.popup-button a {
      color: white;
      text-decoration: none;
+}
+
+/* best button option */
+.popup-button-best-blue {
+    background-color: white;
+    border: 2px solid white;
+    border-radius: 1rem;
+    color: #90A8C3; /*blue*/
+    padding: 1vh 2vw;
+    font-size: clamp(1.2rem, 2.5vw, 2.7rem);
+    font-family: 'Lilita One', sans-serif;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 1vh;
+}
+
+.popup-button-best-blue a {
+    color: #90A8C3;
+    text-decoration: none;
+}
+
+.popup-button-best-pink {
+    background-color: white;
+    border: 2px solid white;
+    border-radius: 1rem;
+    color: #D7B9D5; /*pink*/
+    padding: 1vh 2vw;
+    font-size: clamp(1.2rem, 2.5vw, 2.7rem);
+    font-family: 'Lilita One', sans-serif;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 1vh;
+}
+
+.popup-button-best-pink a {
+    color: #D7B9D5;
+    text-decoration: none;
 }
 
 /* ---------------------- MASTER PAGE DIVS ---------------------- */

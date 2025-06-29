@@ -84,9 +84,9 @@
                             <asp:DropDownList ID="dropdownTag" ClientIDMode="Static" class="dropDownList" runat="server" BackColor="#446791">
                             <asp:ListItem></asp:ListItem>
                             <asp:ListItem>Studying</asp:ListItem>
-                            <asp:ListItem>Homework</asp:ListItem>
-                            <asp:ListItem>Self care</asp:ListItem>
-                            <asp:ListItem>Cleaning</asp:ListItem>
+                            <asp:ListItem>Assignments</asp:ListItem>
+                            <asp:ListItem>Reading</asp:ListItem>
+                            <asp:ListItem>Break</asp:ListItem>
                             </asp:DropDownList>
                         </td>
                     </tr>
