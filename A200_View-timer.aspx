@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="A200_View-timer.aspx.cs" Inherits="Default2" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="A200_View-timer.aspx.cs" Inherits="A200_View_timer" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
     Timer
@@ -106,15 +106,14 @@
             <asp:TextBox ID="txtSessionTitle" CssClass="textbox" runat="server" ReadOnly="True" ></asp:TextBox>
         </div>
         <div class="middleSection">
+            <div id="extraTimeButtons" class="extraTimeRow">
+    <asp:Button ID="btnPlus5" runat="server" CssClass="button" Text="+5" OnClientClick="return addExtraTime(5);" UseSubmitBehavior="false" />
+    <asp:Button ID="btnPlus10" runat="server" CssClass="button" Text="+10" OnClientClick="return addExtraTime(10);" UseSubmitBehavior="false" />
+    <asp:Button ID="btnPlus15" runat="server" CssClass="button" Text="+15" OnClientClick="return addExtraTime(15);" UseSubmitBehavior="false" />
+</div>
             <div class="buttonRow">
                 <asp:Button ID="btnToggleAddExtra" CssClass="button" runat="server" Text="Add" OnClientClick="return toggleExtraButtons();" UseSubmitBehavior="false" />
                 <asp:Button ID="btnStop" CssClass="button" runat="server" Text="Stop" OnClientClick="return stopTimer();" UseSubmitBehavior="false" />
-            </div>
-            
-            <div id="extraTimeButtons" class="extraTimeRow" style="display:none;">
-                <asp:Button ID="btnPlus5" runat="server" CssClass="button smallButton" Text="+5" OnClientClick="return addExtraTime(5);" UseSubmitBehavior="false" />
-                <asp:Button ID="btnPlus10" runat="server" CssClass="button smallButton" Text="+10" OnClientClick="return addExtraTime(10);" UseSubmitBehavior="false" />
-                <asp:Button ID="btnPlus15" runat="server" CssClass="button smallButton" Text="+15" OnClientClick="return addExtraTime(15);" UseSubmitBehavior="false" />
             </div>
             
         </div>
@@ -122,19 +121,18 @@
             <asp:Button ID="btnViewPastTimers" CssClass="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
         </div>
     </div>
-                 <asp:Panel ID="pnlPopup" runat="server" Visible="false">
-         <div id="popup" class="simple-popup">
-        <div class="popup-pink-box">
-            <p>You have been registered!</p>
-            <img src="Images/Notification%20Happy.png" />
-            <br />
-            <div class="buttonSection">
-                <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hidePopup(); return false;" />
-            </div>
+     <div id="popup" class="simple-popup" style="display: none;">
+    <div class="popup-blue-box">
+        <p>Are you sure you want to stop the timer? All XP and coins earned will be lost!</p>
+        <img src="Images/Notification%20Sad%20Hamster.png" />
+        <br />
+        <div class="buttonSection">
+            <asp:Button ID="btnYes" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClientClick="hidePopup(); return false;" />
+            <asp:Button ID="btnNo" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClientClick="hidePopup(); return false;" />
         </div>
     </div>
-</asp:Panel>
 </div>
+            </div>
     <audio id="alarmSound" src="Audio/alarm.mp3" preload="auto"></audio> <!--add real audio-->
 </asp:Content>
 

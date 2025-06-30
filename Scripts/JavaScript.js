@@ -60,7 +60,7 @@ function showPopup() {
 }
 
 function hidePopup() {
-    document.getElementById("popup").style.display = "hide";
+    document.getElementById("popup").style.display = "none";
 }
 
 // drop down list arrows
@@ -203,7 +203,9 @@ function toggleExtraButtons() {
     return false;
 }
 
-function closeExtraOutside(e) {
+// to take away the +5/+10/+15 buttons when you click somewhere else on the screen
+
+/*function closeExtraOutside(e) {
     const container = document.getElementById('extraTimeButtons');
     const btn = document.getElementById('mainContentPlaceHolder_btnToggleAddExtra');
 
@@ -213,7 +215,7 @@ function closeExtraOutside(e) {
         extraVisible = false;
         document.removeEventListener('click', closeExtraOutside);
     }
-}
+}*/
 
 function addExtraTime(mins) {
     const addedSeconds = mins * 60;
@@ -227,11 +229,15 @@ function addExtraTime(mins) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ addedSeconds: addedSeconds })
-    }).then(response => {
-        if (!response.ok) {
-            console.error("Failed to update DB");
-        }
-    });
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Update success:", data);
+        })
+        .catch(error => {
+            console.error("Update failed:", error);
+        });
+
 
     return false;
 }

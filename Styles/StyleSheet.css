@@ -1131,7 +1131,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .viewTimerMainContent .timeSection {
-    padding: 2% 0 7.5% 0;
+    padding: 2% 0 2% 0;
     text-align: center;
     display: flex;
 }
@@ -1285,23 +1285,21 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .extraTimeRow {
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
-    justify-content: center;
     gap: 0.5em;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease;
+    z-index: 1000;
 }
 
 .extraTimeRow.show {
     opacity: 1;
     pointer-events: auto;
-}
-
-.button.smallButton {
-    padding: 0.5em 1em;
-    margin: 0 0.3em;
-    font-size: 1.2rem;
 }
 
 #extraTimeButtons {
@@ -1313,6 +1311,20 @@ body.page-exit .welcomeBackTextDiv {
 .viewTimerMainContent .buttonSection .rightSection {
     z-index: 10;
     flex: 1;
+}
+
+.viewTimerMainContent #popup .buttonSection {
+    align-content: center;
+}
+
+.viewTimerMainContent #popup .buttonSection .popup-button {
+    font-size: clamp(1rem, 2vw, 2rem);
+    width: 100%;
+}
+
+.viewTimerMainContent #popup .buttonSection .popup-button-best-blue {
+    font-size: clamp(1rem, 2vw, 2rem);
+    width: 100%;
 }
 
 /* ---------------------- VIEW PAST TIMERS PAGE A600 ---------------------- */

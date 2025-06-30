@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class Default2 : System.Web.UI.Page
+public partial class A200_View_timer : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -27,11 +27,6 @@ public partial class Default2 : System.Web.UI.Page
             string.Format("document.addEventListener('DOMContentLoaded', function() {{ document.getElementById('mainContentPlaceHolder_lblCountdown').textContent = '{0}'; }});", formattedTime), true);
     }
 
-    protected void btnAdd_Click(object sender, EventArgs e)
-    {
-        //Response.Redirect("A100_Create-timer_3.aspx"); //testing
-    }
-
     [System.Web.Services.WebMethod]
     public static void UpdateTimerDuration(int addedSeconds)
     {
@@ -40,13 +35,13 @@ public partial class Default2 : System.Web.UI.Page
 
         HttpContext.Current.Session["timerDuration"] = newDuration;
 
-        string connectionString = ConfigurationManager.ConnectionStrings["YourConn"].ConnectionString;
+        string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         using (OleDbConnection conn = new OleDbConnection(connectionString))
         {
             conn.Open();
-            OleDbCommand cmd = new OleDbCommand("UPDATE Timers SET timerDuration = ? WHERE timerID = ?", conn);
+            OleDbCommand cmd = new OleDbCommand("UPDATE Timer SET timerDuration = ? WHERE timerID = ?", conn);
+            cmd.Parameters.AddWithValue("?", Convert.ToInt32(HttpContext.Current.Session["timerID"]));
             cmd.Parameters.AddWithValue("?", newDuration);
-            cmd.Parameters.AddWithValue("?", HttpContext.Current.Session["timerID"]);
             cmd.ExecuteNonQuery();
         }
     }
