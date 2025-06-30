@@ -43,7 +43,8 @@
         </table>
         <br/>
         <div class="buttonSection">
-           <asp:Button ID="btnRegister" class="button" runat="server" Text="Register" OnClick="btnRegister_Click1" />
+            <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" />
+            <asp:Button ID="btnRegister" class="button" runat="server" Text="Register" OnClick="btnRegister_Click1" />
         </div>
      <asp:Panel ID="pnlPopup" runat="server" Visible="false">
          <div id="popup" class="simple-popup">

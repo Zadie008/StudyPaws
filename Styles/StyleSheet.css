@@ -1540,6 +1540,16 @@ footer p {
     font-size: clamp(1rem, 1.3vw, 1.3rem);
 }
 
+/* ---------------------- LANDING PAGE ---------------------- */
+#landingPageDiv {
+    margin-top: 17%;
+    text-align: center;
+}
+
+#landingPageDiv img {
+    width: 250px;
+}
+
 /* ---------------------- REGISTER PAGE ---------------------- */
 #registerPageDiv {
     margin-top: 17%;
@@ -1610,6 +1620,7 @@ footer p {
     vertical-align: middle;
 }
 
+/* ---------------------- PROFILE PAGE ---------------------- */
 .switch input {
     opacity: 0;
     width: 0;

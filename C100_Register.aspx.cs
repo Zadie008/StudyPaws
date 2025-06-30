@@ -23,4 +23,9 @@ public partial class C100_Register : System.Web.UI.Page
         ScriptManager.RegisterStartupScript(this, GetType(), "popup", "showPopup();", true);
 
     }
+
+    protected void btnBack_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("Landing-page.aspx");
+    }
 }
