@@ -144,3 +144,99 @@ function formatTime(totalSeconds) {
     const seconds = totalSeconds % 60;
     return String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0');
 }
+
+let remainingTime = typeof initialTime !== 'undefined' ? initialTime : 0;
+
+function formatFullTime(seconds) {
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+}
+
+function updateCountdown() {
+    const countdownLabel = document.getElementById("mainContentPlaceHolder_lblCountdown");
+    const ring = document.querySelector(".progress-ring-fill");
+
+    if (!countdownLabel || !ring) return;
+
+    countdownLabel.textContent = formatFullTime(remainingTime);
+
+    const progress = remainingTime / initialTime;
+    const radius = 210;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference * progress;
+
+    ring.style.strokeDasharray = circumference;
+    ring.style.strokeDashoffset = offset;
+
+    if (remainingTime > 0) {
+        remainingTime--;
+    } else {
+        clearInterval(countdownInterval);
+        const alarm = document.getElementById("alarmSound");
+        if (alarm) alarm.play();
+        // trigger pop-up here
+    }
+}
+
+const countdownInterval = setInterval(updateCountdown, 1000);
+
+let extraVisible = false;
+
+function toggleExtraButtons() {
+    const container = document.getElementById('extraTimeButtons');
+    const btn = document.getElementById('mainContentPlaceHolder_btnToggleAddExtra');
+
+    extraVisible = !extraVisible;
+
+    if (extraVisible) {
+        container.classList.add('show');
+        btn.value = 'Back';
+        document.addEventListener('click', closeExtraOutside);
+    } else {
+        container.classList.remove('show');
+        btn.value = 'Add';
+        document.removeEventListener('click', closeExtraOutside);
+    }
+
+    return false;
+}
+
+function closeExtraOutside(e) {
+    const container = document.getElementById('extraTimeButtons');
+    const btn = document.getElementById('mainContentPlaceHolder_btnToggleAddExtra');
+
+    if (!container.contains(e.target) && e.target !== btn) {
+        container.style.display = 'none';
+        btn.value = 'Add';
+        extraVisible = false;
+        document.removeEventListener('click', closeExtraOutside);
+    }
+}
+
+function addExtraTime(mins) {
+    const addedSeconds = mins * 60;
+    initialTime += addedSeconds;
+    remainingTime += addedSeconds;
+    toggleExtraButtons();
+
+    fetch('A200_View-timer.aspx/UpdateTimerDuration', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ addedSeconds: addedSeconds })
+    }).then(response => {
+        if (!response.ok) {
+            console.error("Failed to update DB");
+        }
+    });
+
+    return false;
+}
+
+function stopTimer() {
+    showPopup();
+    return false;
+}

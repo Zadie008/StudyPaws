@@ -1175,10 +1175,9 @@ body.page-exit .welcomeBackTextDiv {
 
 .viewTimerMainContent .homePagePet {
     position: relative;
-    width: min(30vw, 200px);
-    aspect-ratio: 1;
+    width: 200px;
+    height: 200px;
     margin: 0 auto;
-    margin-top: -1em;
 }
 
 .viewTimerMainContent .homePagePet img {
@@ -1191,13 +1190,61 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .viewTimerMainContent #pet {
-    z-index: 1;
+    position: absolute;
     width: 80%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
 }
 
 .viewTimerMainContent #glow {
-    z-index: 0;
+    position: absolute;
     width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+}
+
+.timerCircleWrapper {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    margin: 0 auto;
+    overflow: visible;
+}
+
+.timerInnerContent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.progress-ring {
+    transform: rotate(90deg);
+    overflow: visible;
+}
+
+.progress-ring-bg {
+    stroke: #90A8C3; /*dull blue*/
+}
+
+.progress-ring-fill {
+    stroke: #F4CAE0; /*pink*/
+    transition: stroke-dashoffset 1s linear;
+    stroke-linecap: round;
+    transform: scaleX(-1);
+    transform-origin: center;
+}
+
+.timerText {
+    font-size: 5rem;
+    color: white;
+    font-family: 'Gilda Display', serif;
+    margin-bottom: 0;
 }
 
 .viewTimerMainContent .timeSection .rightSection {
@@ -1228,6 +1275,39 @@ body.page-exit .welcomeBackTextDiv {
 .viewTimerMainContent .buttonSection .middleSection {
     z-index: 10;
     flex: 1;
+}
+
+.buttonRow {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin-bottom: 1em;
+}
+
+.extraTimeRow {
+    display: flex;
+    justify-content: center;
+    gap: 0.5em;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.extraTimeRow.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.button.smallButton {
+    padding: 0.5em 1em;
+    margin: 0 0.3em;
+    font-size: 1.2rem;
+}
+
+#extraTimeButtons {
+    display: flex;
+    justify-content: center;
+    margin-top: 1em;
 }
 
 .viewTimerMainContent .buttonSection .rightSection {

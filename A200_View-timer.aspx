@@ -80,10 +80,19 @@
         <div class="leftSection">
         </div>
         <div class="middleSection">
-            <asp:Label ID="lblCountdown" CssClass="label" runat="server"></asp:Label>
-            <div class="homePagePet">
-                <img id="pet" src="Images/Cat%201%20Brown%20and%20White.png" width="400" /> <!--CHANGE: has to be chosen home page pet-->
-                <img id="glow" src="Images/Glow(cropped).png" width="400" />
+            <div class="timerCircleWrapper">
+                <svg class="progress-ring" width="350" height="350">
+                    <circle class="progress-ring-bg" stroke="#90A8C3" stroke-width="30" fill="transparent" r="210" cx="175" cy="175"/>
+                    <circle class="progress-ring-fill" stroke="#F4CAE0" stroke-width="30" fill="transparent" r="210" cx="175" cy="175" stroke-dasharray="1319" stroke-dashoffset="0"/>
+                </svg>
+
+                <div class="timerInnerContent">
+                    <div id="mainContentPlaceHolder_lblCountdown" class="timerText"></div>
+                    <div class="homePagePet">
+                        <img id="pet" src="Images/Cat%201%20Brown%20and%20White.png" /> <!--CHANGE: has to be chosen home page pet-->
+                        <img id="glow" src="Images/Glow(cropped).png" />
+                    </div>
+                </div>
             </div>
         </div>
         <div class="rightSection">
@@ -97,14 +106,36 @@
             <asp:TextBox ID="txtSessionTitle" CssClass="textbox" runat="server" ReadOnly="True" ></asp:TextBox>
         </div>
         <div class="middleSection">
-            <asp:Button ID="btnAdd" CssClass="button" runat="server" Text="Add" OnClick="btnAdd_Click" />
-            <asp:Button ID="btnStop" CssClass="button" runat="server" Text="Stop" OnClick="btnStop_Click" />
+            <div class="buttonRow">
+                <asp:Button ID="btnToggleAddExtra" CssClass="button" runat="server" Text="Add" OnClientClick="return toggleExtraButtons();" UseSubmitBehavior="false" />
+                <asp:Button ID="btnStop" CssClass="button" runat="server" Text="Stop" OnClientClick="return stopTimer();" UseSubmitBehavior="false" />
+            </div>
+            
+            <div id="extraTimeButtons" class="extraTimeRow" style="display:none;">
+                <asp:Button ID="btnPlus5" runat="server" CssClass="button smallButton" Text="+5" OnClientClick="return addExtraTime(5);" UseSubmitBehavior="false" />
+                <asp:Button ID="btnPlus10" runat="server" CssClass="button smallButton" Text="+10" OnClientClick="return addExtraTime(10);" UseSubmitBehavior="false" />
+                <asp:Button ID="btnPlus15" runat="server" CssClass="button smallButton" Text="+15" OnClientClick="return addExtraTime(15);" UseSubmitBehavior="false" />
+            </div>
+            
         </div>
         <div class="rightSection">
             <asp:Button ID="btnViewPastTimers" CssClass="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
         </div>
     </div>
+                 <asp:Panel ID="pnlPopup" runat="server" Visible="false">
+         <div id="popup" class="simple-popup">
+        <div class="popup-pink-box">
+            <p>You have been registered!</p>
+            <img src="Images/Notification%20Happy.png" />
+            <br />
+            <div class="buttonSection">
+                <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hidePopup(); return false;" />
+            </div>
+        </div>
+    </div>
+</asp:Panel>
 </div>
+    <audio id="alarmSound" src="Audio/alarm.mp3" preload="auto"></audio> <!--add real audio-->
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
