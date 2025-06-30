@@ -107,12 +107,12 @@
         </div>
         <div class="middleSection">
             <div id="extraTimeButtons" class="extraTimeRow">
-    <asp:Button ID="btnPlus5" runat="server" CssClass="button" Text="+5" OnClientClick="return addExtraTime(5);" UseSubmitBehavior="false" />
-    <asp:Button ID="btnPlus10" runat="server" CssClass="button" Text="+10" OnClientClick="return addExtraTime(10);" UseSubmitBehavior="false" />
-    <asp:Button ID="btnPlus15" runat="server" CssClass="button" Text="+15" OnClientClick="return addExtraTime(15);" UseSubmitBehavior="false" />
+    <asp:Button ID="btnPlus5" runat="server" CssClass="button" Text="+5 min" OnClientClick="return addExtraTime(5);" UseSubmitBehavior="false" />
+    <asp:Button ID="btnPlus10" runat="server" CssClass="button" Text="+10 min" OnClientClick="return addExtraTime(10);" UseSubmitBehavior="false" />
+    <asp:Button ID="btnPlus15" runat="server" CssClass="button" Text="+15 min" OnClientClick="return addExtraTime(15);" UseSubmitBehavior="false" />
 </div>
             <div class="buttonRow">
-                <asp:Button ID="btnToggleAddExtra" CssClass="button" runat="server" Text="Add minutes" OnClientClick="return toggleExtraButtons();" UseSubmitBehavior="false" />
+                <asp:Button ID="btnToggleAddExtra" CssClass="button" runat="server" Text="Add" OnClientClick="return toggleExtraButtons();" UseSubmitBehavior="false" />
                 <asp:Button ID="btnStop" CssClass="button" runat="server" Text="Stop" OnClientClick="return stopTimer();" UseSubmitBehavior="false" />
             </div>
             
