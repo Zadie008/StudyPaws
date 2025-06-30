@@ -26,8 +26,8 @@ public partial class Default2 : System.Web.UI.Page
     {
         if (Page.IsValid)
         {
-            /*if (Session["userID"] != null)
-            {*/
+            if (Session["userID"] != null)
+            {
                 string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
                 using (OleDbConnection con = new OleDbConnection(cs))
@@ -48,19 +48,29 @@ public partial class Default2 : System.Web.UI.Page
 
                     con.Open();
                     int code = cmd.ExecuteNonQuery();
-                    con.Close();
 
-                    /*if (code > 0)
-                    {*/
+                    if (code > 0)
+                    {
+                        OleDbCommand cmdID = new OleDbCommand("SELECT @@IDENTITY", con);
+                        int newTimerID = Convert.ToInt32(cmdID.ExecuteScalar());
+                        Session["timerID"] = newTimerID;
+
                         Session["timerDuration"] = totalSeconds;
+
+                        con.Close();
+
                         Response.Redirect("A200_View-timer.aspx");
-                    /*}*/
+                    }
+                    else
+                    {
+                        con.Close();
+                    }
                 }
-            /*}
+            }
             else
             {
                 Response.Redirect("Login.aspx");
-            }*/
+            }
         }
     }
 

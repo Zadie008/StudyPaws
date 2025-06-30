@@ -28,21 +28,32 @@ public partial class A200_View_timer : System.Web.UI.Page
     }
 
     [System.Web.Services.WebMethod]
-    public static void UpdateTimerDuration(int addedSeconds)
+    public static string UpdateTimerDuration(int addedSeconds)
     {
-        int oldDuration = Convert.ToInt32(HttpContext.Current.Session["timerDuration"]);
-        int newDuration = oldDuration + addedSeconds;
-
-        HttpContext.Current.Session["timerDuration"] = newDuration;
-
-        string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection conn = new OleDbConnection(connectionString))
+        try
         {
-            conn.Open();
-            OleDbCommand cmd = new OleDbCommand("UPDATE Timer SET timerDuration = ? WHERE timerID = ?", conn);
-            cmd.Parameters.AddWithValue("?", Convert.ToInt32(HttpContext.Current.Session["timerID"]));
-            cmd.Parameters.AddWithValue("?", newDuration);
-            cmd.ExecuteNonQuery();
+            int oldDuration = Convert.ToInt32(HttpContext.Current.Session["timerDuration"]);
+            int newDuration = oldDuration + addedSeconds;
+
+            HttpContext.Current.Session["timerDuration"] = newDuration;
+
+            int timerID = Convert.ToInt32(HttpContext.Current.Session["timerID"]);
+
+            string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            using (OleDbConnection conn = new OleDbConnection(connectionString))
+            {
+                conn.Open();
+                OleDbCommand cmd = new OleDbCommand("UPDATE Timer SET timerDuration = ? WHERE timerID = ?", conn);
+                cmd.Parameters.AddWithValue("?", newDuration);
+                cmd.Parameters.AddWithValue("?", timerID);
+                cmd.ExecuteNonQuery();
+            }
+
+            return "Success";
+        }
+        catch (Exception ex)
+        {
+            return "Error: " + ex.Message;
         }
     }
 }

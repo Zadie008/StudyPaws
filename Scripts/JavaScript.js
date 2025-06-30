@@ -193,18 +193,16 @@ function toggleExtraButtons() {
     if (extraVisible) {
         container.classList.add('show');
         btn.value = 'Back';
-        document.addEventListener('click', closeExtraOutside);
+        //document.addEventListener('click', closeExtraOutside);
     } else {
         container.classList.remove('show');
         btn.value = 'Add';
-        document.removeEventListener('click', closeExtraOutside);
+        //document.removeEventListener('click', closeExtraOutside);
     }
-
     return false;
 }
 
 // to take away the +5/+10/+15 buttons when you click somewhere else on the screen
-
 /*function closeExtraOutside(e) {
     const container = document.getElementById('extraTimeButtons');
     const btn = document.getElementById('mainContentPlaceHolder_btnToggleAddExtra');
@@ -230,15 +228,13 @@ function addExtraTime(mins) {
         },
         body: JSON.stringify({ addedSeconds: addedSeconds })
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Update success:", data);
-        })
-        .catch(error => {
-            console.error("Update failed:", error);
-        });
-
-
+    .then(response => response.json())
+    .then(data => {
+        console.log("Update success:", data);
+    })
+    .catch(error => {
+        console.error("Update failed:", error);
+    });
     return false;
 }
 

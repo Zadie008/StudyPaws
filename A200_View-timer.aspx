@@ -133,6 +133,7 @@
     </div>
 </div>
             </div>
+    <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" />
     <audio id="alarmSound" src="Audio/alarm.mp3" preload="auto"></audio> <!--add real audio-->
 </asp:Content>
 
