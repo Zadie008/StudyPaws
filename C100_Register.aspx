@@ -46,7 +46,7 @@
             <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" />
             <asp:Button ID="btnRegister" class="button" runat="server" Text="Register" OnClick="btnRegister_Click1" />
         </div>
-     <asp:Panel ID="pnlPopup" runat="server" Visible="false">
+     <asp:Panel ID="pnlConfirm" runat="server" Visible="false">
          <div id="popup" class="simple-popup">
         <div class="popup-pink-box">
             <p>You have been registered!</p>
@@ -58,6 +58,26 @@
         </div>
     </div>
 </asp:Panel>
+
+    <asp:Panel ID="pnlTut" runat="server" Visible="false">
+         <div id="popup" class="simple-popup">
+        <div class="popup-pink-box">
+            <p>Would you like to learn how to use the home page?</p>
+            <img src="Images/Notification%20Happy.png" />
+            <br />
+            <div class="buttonSection">
+                <asp:Button ID="btnWatchtut" CssClass="popup-button" runat="server" Text="Yes, please!" OnClientClick="hidePopup(); return false;" />
+                
+            </div>
+            <div class="buttonSection">
+             <asp:Button ID="BtnNotut" CssClass="popup-button" runat="server" Text="No, thank you!" OnClientClick="hidePopup(); return false;" />
+                     
+            </div>
+        </div>
+    </div>
+</asp:Panel>
+
+
 </div>
   
 </asp:Content>

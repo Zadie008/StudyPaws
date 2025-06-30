@@ -43,7 +43,7 @@
         <br />
         <div class="buttonSection">
             <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" />
-            <asp:Button ID="btnLogin" class="button" runat="server" Text="Login" />
+            <asp:Button ID="btnLogin" class="button" runat="server" Text="Login" OnClick="btnLogin_Click" />
         </div>
     </div>
 </asp:Content>

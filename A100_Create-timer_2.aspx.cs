@@ -38,4 +38,9 @@ public partial class Default2 : System.Web.UI.Page
 
         Response.Redirect("A100_Create-timer_3.aspx");
     }
+
+    protected void btnViewPastTimers_Click(object sender, EventArgs e)
+    {
+
+    }
 }
