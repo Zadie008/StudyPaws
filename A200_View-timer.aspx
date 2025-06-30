@@ -112,7 +112,7 @@
     <asp:Button ID="btnPlus15" runat="server" CssClass="button" Text="+15" OnClientClick="return addExtraTime(15);" UseSubmitBehavior="false" />
 </div>
             <div class="buttonRow">
-                <asp:Button ID="btnToggleAddExtra" CssClass="button" runat="server" Text="Add" OnClientClick="return toggleExtraButtons();" UseSubmitBehavior="false" />
+                <asp:Button ID="btnToggleAddExtra" CssClass="button" runat="server" Text="Add minutes" OnClientClick="return toggleExtraButtons();" UseSubmitBehavior="false" />
                 <asp:Button ID="btnStop" CssClass="button" runat="server" Text="Stop" OnClientClick="return stopTimer();" UseSubmitBehavior="false" />
             </div>
             
