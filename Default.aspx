@@ -81,7 +81,7 @@
     </div>
     <div class="welcomeBackTextDiv">
         <h2>Welcome back</h2>
-        <h1>zadie!</h1> <!--CHANGE: has to be session username-->
+        <asp:Label ID="lblLoggedInUserName" runat="server" CssClass="username-header"></asp:Label>
     </div>
 </asp:Content>
 

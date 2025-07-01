@@ -30,8 +30,8 @@
 
     
     <div class="profileIcon">
-    <div id="profileCircle"></div> <!--CHANGE: has to be corresponding background colour-->
-    <img id="profilePet" src="Images/Farm%204%20Cow%20White%20and%20Black.png" width="120"/> <!--CHANGE: has to be chosen profile pic-->
+    <div id="profileCircle"></div> 
+    <img id="profilePet" src="Images/Farm%204%20Cow%20White%20and%20Black.png" width="120"/> 
         <asp:Button ID="btnIcon" class="button" runat="server" Text="Change icon" />
     </div>
 
@@ -39,41 +39,34 @@
         <table>
             <tr>
                 <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>
-                <td><asp:TextBox ID="txtUsername" class="textbox" runat="server"></asp:TextBox></td>
-                   <td> <asp:Button ID="btnEditUser" class="button" runat="server" Text="Edit" /></td>
-
+                <td><asp:TextBox ID="txtUsername" class="textbox" runat="server" ReadOnly ="true" OnTextChanged="txtUsername_TextChanged"></asp:TextBox></td>
+                   <td> <asp:Button ID="btnEditUser" class="button" runat="server" Text="Edit" OnClientClick="enableEdit('txtUsername'); return false;" /></td>
             </tr>
             <tr>
                 <td><asp:Label ID="lblPassword" class="label" runat="server" Text="Password"></asp:Label></td>
-                <td><asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password"></asp:TextBox></td>
-                   <td> <asp:Button ID="btnEditPass" class="button" runat="server" Text="Edit" /></td>
+                <td><asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password" ReadOnly ="true"></asp:TextBox></td>
+                   <td> <asp:Button ID="btnEditPass" class="button" runat="server" Text="Edit" OnClientClick="enableEdit('txtPassword'); return false;" /></td>
             </tr>
             <tr>
                 <td><asp:Label ID="lblEmail" class="label" runat="server" Text="Email"></asp:Label></td>
-                <td><asp:TextBox ID="txtEmail" class="textbox" runat="server"></asp:TextBox></td>
-                 <td> <asp:Button ID="btnEditEmail" class="button" runat="server" Text="Edit" /></td>
+                <td><asp:TextBox ID="txtEmail" class="textbox" runat="server" ReadOnly ="true"></asp:TextBox></td>
+                 <td> <asp:Button ID="btnEditEmail" class="button" runat="server" Text="Edit" OnClientClick="enableEdit('txtEmail'); return false;" /></td>
             </tr>
             <tr>
-    <td><asp:Label ID="lblMode" CssClass="label" runat="server" Text="Light mode"></asp:Label></td>
-    <td>
-        <label class="switch">
-            <input type="checkbox" id="toggleLightMode">
-            <span class="slider"></span>
-        </label>
-    </td>
-</tr>
+                <td><asp:Label ID="lblMode" CssClass="label" runat="server" Text="Light mode"></asp:Label></td>
+                <td>
+                    <label class="switch">
+                        <input type="checkbox" id="toggleLightMode">
+                        <span class="slider"></span>
+                    </label>
+                </td>
+            </tr>
            <tr>
-    <td><asp:Label ID="lblDelete" class="label" runat="server" Text="Delete Profile"></asp:Label></td>
-<%--   <tr>
-    <td><asp:Label ID="Label1" CssClass="label" runat="server" Text="Delete Profile"></asp:Label></td>
-    <td>
-        <asp:LinkButton ID="btnDeletePfp" runat="server" CssClass="icon-button" OnClick="btnDeletePfp_Click">
-            <img src="Icons/icons8-cat-footprint-filled-white-96.png" alt="Delete" class="delete-icon" />
-        </asp:LinkButton>
-    </td>--%>
-<%--</tr>--%>
-</tr>
+               <td><asp:Label ID="lblDelete" class="label" runat="server" Text="Delete Profile"></asp:Label></td>
+              
+          </tr>
         </table>
+
         <br/>
         <div class="buttonSection">
             <asp:Button ID="btnLogout" class="button" runat="server" Text="Logout" />

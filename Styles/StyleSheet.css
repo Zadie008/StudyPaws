@@ -738,6 +738,16 @@ body.page-exit .welcomeBackTextDiv {
     transition: opacity 0.3s ease;
 }
 
+.username-header {
+    letter-spacing: 0.1em; 
+    font-size: 3.5em; 
+    font-family: 'Lilita One';
+    display: block;
+    margin-top: 0; 
+    margin-bottom: 0; 
+}
+
+
 /* ---------------------- DASHBOARD PAGE ---------------------- */
 .dashboardContainer{
     display: flex;
@@ -2062,3 +2072,6 @@ table {
         bottom: 0;
     }
 }
+
+/*miscellaneous buttons*/
+

@@ -44,7 +44,7 @@ public partial class Login : System.Web.UI.Page
                 if (collection.HasRows && collection.Read())
                 {
                     FormsAuthentication.SetAuthCookie(txtUsername.Text, false);
-                    Response.Redirect("Landing-page.aspx");
+                    Response.Redirect("Default.aspx");
                 }
                 else
                 {
@@ -54,6 +54,7 @@ public partial class Login : System.Web.UI.Page
 
                 con.Close();
             }
+
         }
     }
 }
