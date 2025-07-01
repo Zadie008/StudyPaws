@@ -110,7 +110,17 @@
             </div>
             
             <div class="calendarBox">
-                <ul class="weeks">
+                <div class="weeks">
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                    <div>Sun</div>
+                </div>
+                <div id="days" class="days"></div>
+                <!--<ul class="weeks">
                     <li>Mon</li>
                     <li>Tue</li>
                     <li>Wed</li>
@@ -156,7 +166,7 @@
                     <li class="noncurrentMonth">3</li>
                     <li class="noncurrentMonth">4</li>
 
-                </ul>
+                </ul> -->
             </div>
         </div>
 
@@ -164,30 +174,44 @@
             <div class="toDoListControls">
                 <p class="toDoListHeading">To-do List</p>
                 <div class ="toDoListFilters">
-                    <span id="allTasks" class="active">All</span>
-                    <span id="pendingTasks">In Progress</span>
-                    <span id="completedTasks">Completed</span>
+                    <asp:LinkButton ID="btnAll" runat="server" CssClass="filterBtn" OnClick="filter_Click">All</asp:LinkButton>
+                    <asp:LinkButton ID="btnProgress" runat="server" CssClass="filterBtn" OnClick="filter_Click">In Progress</asp:LinkButton>
+                    <asp:LinkButton ID="btnCompleted" runat="server" CssClass="filterBtn" OnClick="filter_Click">Completed</asp:LinkButton>   
                 </div>
             </div>
-            <ul class="taskBox">
+            <asp:TextBox ID="txtNewTask" runat="server" CssClass="taskInput"></asp:TextBox>
+            <asp:Button ID="btnAddTask" runat="server" Text="+" class="plusBtn" OnClick="btnAddTask_Click"/>
+            <asp:Repeater ID="rptTasks" runat="server">
+                <ItemTemplate>
+                    <li class="task">
+                        <asp:CheckBox ID="chkComplete" runat="server" AutoPostBack="true" OnCheckedChanged="chkComplete_CheckedChange" 
+                            Checked='<%# Convert.ToBoolean(Eval("taskStatus"))%>'
+                            ToolTip='<%# Eval("taskID")%>' />
+                        <span class="taskText <%# Eval("taskStatus").ToString() == "Completed" ?"done":"" %>">
+                            <%# Eval("taskDesc") %>
+                            </span>
+                    </li>
+                </ItemTemplate>
+            </asp:Repeater>
+            <!--<ul class="taskBox">
                 <li class="task">
                     <label>
                         <input type="checkbox" />
                         <span class="taskText">study maths</span>
                     </label>
-            <!--<div class="taskListSettings">
+            <div class="taskListSettings">
                 <i class="dotdotdot"></i>
                 <ul class="taskEditMenu">
                     <li><i class="editTask"></i>Edit</li>
                     <li><i class="deleteTask"></i>Delete</li>
                 </ul>
-            </div>-->
-                </li>
+            </div>
+                </li>-->
                 <li class="addTask">
                     <span class="plusBtn">+</span>
                     <input type="text" placeholder="Add a new task" class="taskInput"/>
                 </li>
-            </ul>
+            <!--</ul>-->
         </div>
     </div>
     

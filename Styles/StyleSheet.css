@@ -872,7 +872,7 @@ body.page-exit .welcomeBackTextDiv {
 .toDoListHeading {
     font-family: 'Lilita One', sans-serif;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 22px;
     text-shadow: 1px 1px #5B548A;
     margin: 0;
     margin-bottom: 5px;
@@ -880,25 +880,32 @@ body.page-exit .welcomeBackTextDiv {
 }
 .toDoListControls {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items:center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     /*edit padding at top*/
 }
 .toDoListFilters{
     display:flex;
     gap:16px;
-    justify-content: center;
-    padding-left: 5px;
+    justify-content: flex-start;
+    padding: 0;
 }
-.toDoListFilters span{
+.toDoListFilters .filterBtn{
     cursor: pointer;
     font-size: 14px;
+    background:none;
+    border:none;
+    color:white;
+    font-weight:normal;
+    padding: 4px 10px;
+    border-radius: 8px;
 }
-.toDoListFilters span.active {
+.toDoListFilters .filterBtn:hover, .toDoListFilters .filterBtn.active {
     color: #5B548A;
     font-weight:bold;
+    background-color:#D7B9D5;
 }
 .taskBox{
     margin: 0;
@@ -955,6 +962,10 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 16px;
     color: #5B548A;
     background:transparent;
+}
+.taskText.done{
+    text-decoration:line-through;
+    color: #ddd;
 }
 
 /* ---------------------- CREATE TIMER PAGES A100 ---------------------- */
