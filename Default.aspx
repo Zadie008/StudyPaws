@@ -15,14 +15,16 @@
                 </div>
             </a>
             <div class="profileDetails">
-                <table>
+                   <table>
                     <tr>
-                        <td><asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Label">Level</asp:Label></td>
-                        <td><asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server" Text="Label">16</asp:Label></td> <!--CHANGE: has to be their level-->
+                        <td><asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Level"></asp:Label></td>
+                        <%-- REMOVED HARDCODED VALUE: Text="16" --%>
+                        <td><asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server"></asp:Label></td> 
                     </tr>
                     <tr>
-                        <td><asp:Label ID="lblXP" CssClass="accountInfoTableLabel" runat="server" Text="Label">XP</asp:Label></td>
-                        <td><asp:Label ID="lblXPAmount" CssClass="accountInfoTableLabelRight" runat="server" Text="Label">65</asp:Label></td> <!--CHANGE: has to be total xp-->
+                        <td><asp:Label ID="lblXP" CssClass="accountInfoTableLabel" runat="server" Text="XP"></asp:Label></td>
+                        <%-- REMOVED HARDCODED VALUE: Text="65" --%>
+                        <td><asp:Label ID="lblXPAmount" CssClass="accountInfoTableLabelRight" runat="server"></asp:Label></td> 
                     </tr>
                     <tr>
                         <td>
@@ -31,7 +33,8 @@
                                 <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
                             </div>
                         </td>
-                        <td><asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server" Text="Label">190</asp:Label></td> <!--CHANGE: has to be total paws currency-->
+                        <%-- REMOVED HARDCODED VALUE: Text="190" --%>
+                        <td><asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server"></asp:Label></td> 
                     </tr>
                 </table>
             </div>
