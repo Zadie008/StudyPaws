@@ -18,12 +18,10 @@
                    <table>
                     <tr>
                         <td><asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Level"></asp:Label></td>
-                        <%-- REMOVED HARDCODED VALUE: Text="16" --%>
                         <td><asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server"></asp:Label></td> 
                     </tr>
                     <tr>
                         <td><asp:Label ID="lblXP" CssClass="accountInfoTableLabel" runat="server" Text="XP"></asp:Label></td>
-                        <%-- REMOVED HARDCODED VALUE: Text="65" --%>
                         <td><asp:Label ID="lblXPAmount" CssClass="accountInfoTableLabelRight" runat="server"></asp:Label></td> 
                     </tr>
                     <tr>
@@ -33,7 +31,6 @@
                                 <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
                             </div>
                         </td>
-                        <%-- REMOVED HARDCODED VALUE: Text="190" --%>
                         <td><asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server"></asp:Label></td> 
                     </tr>
                 </table>

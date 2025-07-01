@@ -2072,6 +2072,76 @@ table {
         bottom: 0;
     }
 }
+/*FriendShip page*/
+.viewFriendshipsMainContent {
+    margin: 4em 4em 4em 4em;
+}
 
-/*miscellaneous buttons*/
+.viewFriendshipTableSection {
+    min-height: 55.5vh;
+    max-height: 55.5vh;
+    margin-top: -2%;
+}
 
+.viewFriendshipsHeading {
+    position: relative;
+    margin: 0 auto;
+    min-width: 75%;
+    max-width: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.viewFriendshipsHeading .leftSection {
+    flex: 1;
+}
+
+.viewFriendshipsHeading .middleSection {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: max-content;
+    z-index: 1;
+}
+
+.viewFriendshipsHeading .rightSection {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 2.5em;
+}
+
+.viewFriendshipsMessages img {
+    width: 2.5rem;
+    height: auto;
+}
+
+
+.friendshipTable {
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 2em;
+    min-width: 99%;
+    height: auto;
+    font-family: 'Gilda Display', serif;
+    font-size: 2.2rem;
+    color: white;
+    text-align: center;
+    background-color: #90A8C3;
+}
+
+.friendshipTable th {
+    color: white;
+    padding: 0.5em 1em;
+    border-bottom: 2px solid white;
+}
+
+.friendshipTable td {
+    padding: 0.5em 1em;
+    border-top: 1px solid white;
+}
