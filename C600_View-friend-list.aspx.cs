@@ -132,9 +132,7 @@ public partial class Default2 : System.Web.UI.Page
     }
     protected string GetProfilePictureUrl(string userID)
     {
-        // Implement logic to get profile picture URL
-        // This could come from a UserProfile table or similar
-        return "Images/default-profile.png"; // Default image
+        return "Images/default-profile.png"; 
     }
 
     private void LoadFriendList(string username)
@@ -184,7 +182,6 @@ public partial class Default2 : System.Web.UI.Page
                     }
                     catch (Exception ex)
                     {
-                        // Handle error
                         Console.WriteLine("Error loading friend list: " + ex.Message);
                     }
                 }
@@ -196,13 +193,10 @@ public partial class Default2 : System.Web.UI.Page
     {
         if (e.CommandName == "Edit")
         {
-            // Handle edit nickname
             string friendShipID = e.CommandArgument.ToString();
-            // Implement edit logic
         }
         else if (e.CommandName == "Delete")
         {
-            // Handle delete friend
             string friendShipID = e.CommandArgument.ToString();
             DeleteFriendShip(friendShipID);
             LoadFriendList(Session["Username"].ToString());
@@ -227,7 +221,6 @@ public partial class Default2 : System.Web.UI.Page
                 }
                 catch (Exception ex)
                 {
-                    // Handle error
                     Console.WriteLine("Error deleting friendship: " + ex.Message);
                 }
             }
@@ -236,10 +229,8 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnSearchFriends_Click(object sender, EventArgs e)
     {
-        // Implement search functionality
         Response.Redirect("SearchFriends.aspx");
     }
 
-    // Keep your existing methods (GetUserID, GetLevelInformation, GetUserStats) here
-    // ...
+    
 }
