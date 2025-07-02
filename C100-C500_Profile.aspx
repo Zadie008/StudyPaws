@@ -6,36 +6,49 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
     
-   <div class="buttonSection">
-    <asp:Button ID="btnBackProfile" class="button" runat="server" Text="Back" OnClick="btnBackProfile_Click" />
-   </div>
-
-    <div class="timeDateDiv">
-     <table>
-         <tr>
-             <td colspan="2"><asp:Label ID="lblTime" runat="server" Text="--:--" Font-Size="65"></asp:Label></td>
-             <td></td>
-         </tr>
-         <tr>
-             <td><asp:Label ID="lblDay" runat="server" Text="Day"></asp:Label></td>
-             <td><asp:Label ID="lblDate" runat="server" Text="Date"></asp:Label></td>
-         </tr>
-     </table>
- </div>
-
+    <div class="profileHeader">
+        <!-- Left Section - Back Button -->
+        <div class="headerLeft">
+            <asp:Button ID="btnBackProfile" class="button" runat="server" Text="Back" OnClick=" btnBackProfile_Click" />
+        </div>
+        
+        <!-- Middle Section - Profile Icon -->
+        <div class="headerCenter">
+            <div class="profileIcon">
+                <div class="profileImageContainer">
+                    <div id="profileCircle"></div>
+                    <img id="profilePet" src="Images/Farm%204%20Cow%20White%20and%20Black.png"/>
+                </div>
+               <%-- <asp:Button ID="btnChangeIcon" class="button" runat="server" Text="Change icon" />--%>
+            </div>
+        </div>
+        
+        <!-- Right Section - Time/Date -->
+        <div class="headerRight">
+            <div class="timeDateDiv">
+                <table>
+                    <tr>
+                        <td colspan="2"><asp:Label ID="lblTime" runat="server" Text="--:--" Font-Size="65"></asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td><asp:Label ID="lblDay" runat="server" Text="Day"></asp:Label></td>
+                        <td><asp:Label ID="lblDate" runat="server" Text="Date"></asp:Label></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
 </asp:Content>
+
+
 <asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
 
-    
-    <div class="profileIcon">
-    <div id="profileCircle"></div> 
-    <img id="profilePet" src="Images/Farm%204%20Cow%20White%20and%20Black.png" width="120"/> 
-        <asp:Button ID="btnIcon" class="button" runat="server" Text="Change icon" />
+    <div class="changeIconContainer">
+        <asp:Button ID="btnChangeIcon" class="button" runat="server" Text="Change icon" />
     </div>
-
-       
+        
         <table>
             <tr>
                 <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>
@@ -63,6 +76,7 @@
             </tr>
            <tr>
                <td><asp:Label ID="lblDelete" class="label" runat="server" Text="Delete Profile"></asp:Label></td>
+               <td> <img src="Icons/icons8-mail-white-96.png" alt="Messages" /></td>
               
           </tr>
         </table>

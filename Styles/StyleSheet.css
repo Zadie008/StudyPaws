@@ -1642,6 +1642,111 @@ footer p {
 }
 
 /* ---------------------- PROFILE PAGE ---------------------- */
+.profileMainContent {
+    margin: 4em;
+    background-color: #3b5998;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    color: white;
+}
+
+.profileHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2em;
+}
+
+.headerLeft {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.headerCenter {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profileIcon {
+    text-align: center;
+}
+
+.profileImageContainer {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+#profilePet {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.headerRight {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.timeDateDiv table {
+    text-align: right;
+}
+
+.profileForm {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.profileForm table {
+    width: 100%;
+}
+
+.profileForm .label {
+    font-weight: bold;
+    padding-right: 10px;
+}
+
+.profileForm .textbox {
+    padding: 8px;
+    width: 200px;
+    margin: 5px 0;
+}
+
+.button {
+    padding: 8px 15px;
+    margin-left: 10px;
+    background-color: #446791;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.changeIconContainer {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
 .switch input {
     opacity: 0;
     width: 0;
@@ -1681,6 +1786,10 @@ input:checked + .slider:before {
     transform: translateX(26px);
 }
 
+.buttonSection {
+    text-align: center;
+    margin-top: 20px;
+}
 /* ---------------------- OTHER ---------------------- */
 /* ---------------------- SMALL CONTAINER FOR MESSAGES ---------------------- */
 .container {
@@ -2073,125 +2182,117 @@ table {
     }
 }
 /*FriendShip page*/
-/* Apply to the main content container (outermost div) */
 .viewFriendshipsMainContent {
-    margin: 4em 4em 4em 4em;
-    background-color: #3b5998; /* Example background color for the page */
+    margin: 4em 4em 4em 4em;
+    background-color: #3b5998;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center content horizontally */
-    min-height: 100vh; /* Ensure it takes full viewport height */
-    padding: 20px; /* Add some padding around the content */
-    box-sizing: border-box; /* Include padding in element's total width and height */
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-/* Heading section - remains largely the same, but ensure width is constrained */
 .viewFriendshipsHeading {
-    position: relative;
-    margin: 0 auto; /* Center the heading */
-    min-width: 75%;
-    max-width: 75%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: white; /* Ensure text is visible */
-    margin-bottom: 20px; /* Space below heading */
+    position: relative;
+    margin: 0 auto;
+    min-width: 75%;
+    max-width: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    margin-bottom: 20px;
 }
 
 .viewFriendshipsHeading .leftSection {
-    flex: 1;
+    flex: 1;
 }
 
 .viewFriendshipsHeading .middleSection {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    width: max-content;
-    z-index: 1;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: max-content;
+    z-index: 1;
 }
 
-/* Style for the "Your friends" title */
 .viewFriendTitle {
-    font-size: 2.2rem; /* Adjusted based on your general font sizes */
+    font-size: 2.2rem;
     font-weight: normal;
     margin: 0;
-    color: white; /* Ensure title is white */
-    font-family: 'Gilda Display', serif; /* Use your preferred font */
+    color: white;
+    font-family: 'Gilda Display', serif;
 }
 
 
 .viewFriendshipsHeading .rightSection {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding-right: 2.5em;
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 2.5em;
 }
 
 .viewFriendshipsMessages img {
-    width: 2.5rem;
-    height: auto;
+    width: 2.5rem;
+    height: auto;
 }
 
-/* This is the container for your GridView, it defines the purple background and overall shape for the friend list area */
 .viewFriendshipTableSection {
-    min-height: 55.5vh; /* This sets the minimum height of the container */
-    max-height: 55.5vh; /* This sets the maximum height, enabling scrolling */
-    margin-top: -2%;
-    background-color: #90A8C3; /* The lighter purple background as in your image */
-    border-radius: 2em; /* Rounded corners for the container */
-    padding: 1em; /* Padding inside this container */
-    width: 75%; /* Match width of heading */
-    overflow-y: auto; /* Enable vertical scrolling */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+    min-height: 55.5vh;
+    max-height: 55.5vh;
+    margin-top: -2%;
+    background-color: #90A8C3;
+    border-radius: 2em;
+    padding: 1em;
+    width: 75%;
+    overflow-y: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Styles for the GridView itself - crucial for making it look like a list of cards */
-.friendsGridView { /* This class needs to be applied to your GridView */
-    width: 100%; /* Take full width of its container */
-    border-collapse: collapse; /* Essential to remove space between table elements */
-    background-color: transparent; /* GridView itself should be transparent */
+.friendsGridView {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: transparent;
 }
 
-/* Remove default table cell padding and border from GridView */
 .friendsGridView td {
-    padding: 0; /* Remove padding */
-    border: none; /* Remove borders */
-    /* If you have specific styling for GridView rows or cells from 'friendshipTable', you might need to override them here or ensure they don't apply. */
+    padding: 0;
+    border: none;
 }
 
-/* Your friend-card styling - this will be applied to the div inside each GridView row */
 .friend-card {
-    background-color: #C1B4D8; /* The inner card background color */
-    border-radius: 2em;
-    margin: 1em auto; /* Centers the card and adds vertical space between cards */
-    padding: 1em 2em;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start; /* Align content to the start by default */
-    gap: 1.5em; /* Space between elements within the card */
-    max-width: 95%; /* Adjust this if cards are too wide or too narrow within the container */
-    font-family: 'Gilda Display', serif;
-    font-size: 1.8rem;
-    color: white;
-    box-sizing: border-box; /* Include padding in width calculation */
+    background-color: #C1B4D8;
+    border-radius: 2em;
+    margin: 1em auto;
+    padding: 1em 2em;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1.5em;
+    max-width: 95%;
+    font-family: 'Gilda Display', serif;
+    font-size: 1.8rem;
+    color: white;
+    box-sizing: border-box;
 }
 
 .friend-icon {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    border: 2px solid white;
-    object-fit: cover; /* Ensure image covers the area without distortion */
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 2px solid white;
+    object-fit: cover;
 }
 
 .friend-name {
-    flex-grow: 1; /* Allows the name to take up available space, pushing actions to the right */
-    text-align: left; /* Align text to the left within its flex-grown space */
-    white-space: nowrap; /* Prevent name from wrapping */
-    overflow: hidden; /* Hide overflow if name is too long */
-    text-overflow: ellipsis; /* Add ellipsis for long names */
+    flex-grow: 1;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .friend-edit-button {
@@ -2203,44 +2304,46 @@ table {
     font-size: 1.6rem;
     font-family: 'Gilda Display', serif;
     cursor: pointer;
-    margin-right: 0.5em; /* Space between edit and delete */
-    white-space: nowrap; /* Prevent button text from wrapping */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effects */
+    margin-right: 0.5em; 
+    white-space: nowrap; 
+    transition: background-color 0.3s ease, color 0.3s ease; 
 }
 
 .friend-edit-button:hover {
-    background-color: white; /* Background becomes white on hover */
-    color: #C1B4D8; /* Text becomes the card color on hover */
+    background-color: white; 
+    color: #C1B4D8;
 }
 
 .friend-delete-icon {
     width: 2rem;
     height: auto;
     cursor: pointer;
-    filter: invert(100%); /* Assumes the icon is dark and needs to be inverted to white */
+    filter: invert(100%); 
 }
 
-/* New CSS for the search button */
 .searchFriendsContainer {
-    width: 75%; /* Match the width of the heading and friend list container */
-    margin-top: 20px; /* Space between the friend list and the button */
-    text-align: center; /* Center the button */
+    width: 75%; 
+    margin-top: 20px; 
+    text-align: center; 
 }
 
 .searchFriendsButton {
     background-color: white;
-    color: #6a8cbf; /* A shade of blue that contrasts with white, similar to your image */
+    color: #6a8cbf; 
     border: none;
-    border-radius: 25px; /* More rounded pill shape */
+    border-radius: 25px; 
     padding: 15px 40px;
     font-size: 1.1em;
     cursor: pointer;
     transition: background-color 0.3s ease;
     font-weight: bold;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    font-family: 'Gilda Display', serif; /* Consistent font */
+    font-family: 'Gilda Display', serif; 
 }
 
 .searchFriendsButton:hover {
     background-color: #e0e0e0;
 }
+
+
+
