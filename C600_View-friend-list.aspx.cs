@@ -16,8 +16,13 @@ public partial class Default2 : System.Web.UI.Page
         {
             if (Session["Username"] != null)
             {
+                Console.WriteLine("✅ Logged in as: " + Session["Username"]);
                 LoadUserData(Session["Username"].ToString());
-                LoadFriendList(Session["Username"].ToString());
+                
+            }
+            else
+            {
+                Console.WriteLine("⚠️ Session[\"Username\"] is null");
             }
         }
     }
@@ -132,105 +137,9 @@ public partial class Default2 : System.Web.UI.Page
     }
     protected string GetProfilePictureUrl(string userID)
     {
-        return "Images/default-profile.png"; 
+        return "Images/default-profile.png";
     }
 
-    private void LoadFriendList(string username)
-    {
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string userID = GetUserID(username, cs);
-
-        if (!string.IsNullOrEmpty(userID))
-        {
-            string query = @"
-                SELECT 
-                    f.friend3hipID, 
-                    f.userID1, 
-                    f.userID2, 
-                    f.nickname,
-                    CASE 
-                        WHEN f.userID1 = @userID THEN u2.username
-                        ELSE u1.username
-                    END AS friendUsername
-                FROM 
-                    FriendList AS f
-                INNER JOIN 
-                    Users AS u1 ON f.userID1 = u1.userID
-                INNER JOIN 
-                    Users AS u2 ON f.userID2 = u2.userID
-                WHERE 
-                    f.userID1 = @userID OR f.userID2 = @userID";
-
-            DataTable dtFriends = new DataTable();
-
-            using (OleDbConnection con = new OleDbConnection(cs))
-            {
-                using (OleDbCommand cmd = new OleDbCommand(query, con))
-                {
-                    cmd.Parameters.AddWithValue("@userID", userID);
-
-                    try
-                    {
-                        con.Open();
-                        using (OleDbDataAdapter da = new OleDbDataAdapter(cmd))
-                        {
-                            da.Fill(dtFriends);
-                        }
-
-                    //    rptFriends.DataSource = dtFriends;
-                    //    rptFriends.DataBind();
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Error loading friend list: " + ex.Message);
-                    }
-                }
-            }
-        }
-    }
-
-    protected void rptFriends_ItemCommand(object source, RepeaterCommandEventArgs e)
-    {
-        if (e.CommandName == "Edit")
-        {
-            string friendShipID = e.CommandArgument.ToString();
-        }
-        else if (e.CommandName == "Delete")
-        {
-            string friendShipID = e.CommandArgument.ToString();
-            DeleteFriendShip(friendShipID);
-            LoadFriendList(Session["Username"].ToString());
-        }
-    }
-
-    private void DeleteFriendShip(string friendShipID)
-    {
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string query = "DELETE FROM FriendList WHERE friend3hipID = @friendShipID";
-
-        using (OleDbConnection con = new OleDbConnection(cs))
-        {
-            using (OleDbCommand cmd = new OleDbCommand(query, con))
-            {
-                cmd.Parameters.AddWithValue("@friendShipID", friendShipID);
-
-                try
-                {
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error deleting friendship: " + ex.Message);
-                }
-            }
-        }
-    }
-
-    protected void btnSearchFriends_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("SearchFriends.aspx");
-    }
-
+    
     
 }

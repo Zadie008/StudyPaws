@@ -2073,75 +2073,174 @@ table {
     }
 }
 /*FriendShip page*/
+/* Apply to the main content container (outermost div) */
 .viewFriendshipsMainContent {
-    margin: 4em 4em 4em 4em;
-}
-
-.viewFriendshipTableSection {
-    min-height: 55.5vh;
-    max-height: 55.5vh;
-    margin-top: -2%;
-}
-
-.viewFriendshipsHeading {
-    position: relative;
-    margin: 0 auto;
-    min-width: 75%;
-    max-width: 75%;
+    margin: 4em 4em 4em 4em;
+    background-color: #3b5998; /* Example background color for the page */
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    min-height: 100vh; /* Ensure it takes full viewport height */
+    padding: 20px; /* Add some padding around the content */
+    box-sizing: border-box; /* Include padding in element's total width and height */
+}
+
+/* Heading section - remains largely the same, but ensure width is constrained */
+.viewFriendshipsHeading {
+    position: relative;
+    margin: 0 auto; /* Center the heading */
+    min-width: 75%;
+    max-width: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white; /* Ensure text is visible */
+    margin-bottom: 20px; /* Space below heading */
 }
 
 .viewFriendshipsHeading .leftSection {
-    flex: 1;
+    flex: 1;
 }
 
 .viewFriendshipsHeading .middleSection {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    width: max-content;
-    z-index: 1;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: max-content;
+    z-index: 1;
 }
 
+/* Style for the "Your friends" title */
+.viewFriendTitle {
+    font-size: 2.2rem; /* Adjusted based on your general font sizes */
+    font-weight: normal;
+    margin: 0;
+    color: white; /* Ensure title is white */
+    font-family: 'Gilda Display', serif; /* Use your preferred font */
+}
+
+
 .viewFriendshipsHeading .rightSection {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding-right: 2.5em;
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 2.5em;
 }
 
 .viewFriendshipsMessages img {
-    width: 2.5rem;
-    height: auto;
+    width: 2.5rem;
+    height: auto;
 }
 
-
-.friendshipTable {
-    margin-left: auto;
-    margin-right: auto;
-    border-collapse: separate;
-    border-spacing: 0;
-    border-radius: 2em;
-    min-width: 99%;
-    height: auto;
-    font-family: 'Gilda Display', serif;
-    font-size: 2.2rem;
-    color: white;
-    text-align: center;
-    background-color: #90A8C3;
+/* This is the container for your GridView, it defines the purple background and overall shape for the friend list area */
+.viewFriendshipTableSection {
+    min-height: 55.5vh; /* This sets the minimum height of the container */
+    max-height: 55.5vh; /* This sets the maximum height, enabling scrolling */
+    margin-top: -2%;
+    background-color: #90A8C3; /* The lighter purple background as in your image */
+    border-radius: 2em; /* Rounded corners for the container */
+    padding: 1em; /* Padding inside this container */
+    width: 75%; /* Match width of heading */
+    overflow-y: auto; /* Enable vertical scrolling */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
 }
 
-.friendshipTable th {
-    color: white;
-    padding: 0.5em 1em;
-    border-bottom: 2px solid white;
+/* Styles for the GridView itself - crucial for making it look like a list of cards */
+.friendsGridView { /* This class needs to be applied to your GridView */
+    width: 100%; /* Take full width of its container */
+    border-collapse: collapse; /* Essential to remove space between table elements */
+    background-color: transparent; /* GridView itself should be transparent */
 }
 
-.friendshipTable td {
-    padding: 0.5em 1em;
-    border-top: 1px solid white;
+/* Remove default table cell padding and border from GridView */
+.friendsGridView td {
+    padding: 0; /* Remove padding */
+    border: none; /* Remove borders */
+    /* If you have specific styling for GridView rows or cells from 'friendshipTable', you might need to override them here or ensure they don't apply. */
+}
+
+/* Your friend-card styling - this will be applied to the div inside each GridView row */
+.friend-card {
+    background-color: #C1B4D8; /* The inner card background color */
+    border-radius: 2em;
+    margin: 1em auto; /* Centers the card and adds vertical space between cards */
+    padding: 1em 2em;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align content to the start by default */
+    gap: 1.5em; /* Space between elements within the card */
+    max-width: 95%; /* Adjust this if cards are too wide or too narrow within the container */
+    font-family: 'Gilda Display', serif;
+    font-size: 1.8rem;
+    color: white;
+    box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.friend-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 2px solid white;
+    object-fit: cover; /* Ensure image covers the area without distortion */
+}
+
+.friend-name {
+    flex-grow: 1; /* Allows the name to take up available space, pushing actions to the right */
+    text-align: left; /* Align text to the left within its flex-grown space */
+    white-space: nowrap; /* Prevent name from wrapping */
+    overflow: hidden; /* Hide overflow if name is too long */
+    text-overflow: ellipsis; /* Add ellipsis for long names */
+}
+
+.friend-edit-button {
+    background-color: transparent;
+    border: 2px solid white;
+    color: white;
+    border-radius: 2em;
+    padding: 0.4em 1.2em;
+    font-size: 1.6rem;
+    font-family: 'Gilda Display', serif;
+    cursor: pointer;
+    margin-right: 0.5em; /* Space between edit and delete */
+    white-space: nowrap; /* Prevent button text from wrapping */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.friend-edit-button:hover {
+    background-color: white; /* Background becomes white on hover */
+    color: #C1B4D8; /* Text becomes the card color on hover */
+}
+
+.friend-delete-icon {
+    width: 2rem;
+    height: auto;
+    cursor: pointer;
+    filter: invert(100%); /* Assumes the icon is dark and needs to be inverted to white */
+}
+
+/* New CSS for the search button */
+.searchFriendsContainer {
+    width: 75%; /* Match the width of the heading and friend list container */
+    margin-top: 20px; /* Space between the friend list and the button */
+    text-align: center; /* Center the button */
+}
+
+.searchFriendsButton {
+    background-color: white;
+    color: #6a8cbf; /* A shade of blue that contrasts with white, similar to your image */
+    border: none;
+    border-radius: 25px; /* More rounded pill shape */
+    padding: 15px 40px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-family: 'Gilda Display', serif; /* Consistent font */
+}
+
+.searchFriendsButton:hover {
+    background-color: #e0e0e0;
 }
