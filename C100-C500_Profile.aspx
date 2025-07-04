@@ -7,23 +7,24 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
     
     <div class="profileHeader">
-        <!-- Left Section - Back Button -->
+        <!--Back Button -->
         <div class="headerLeft">
             <asp:Button ID="btnBackProfile" class="button" runat="server" Text="Back" OnClick=" btnBackProfile_Click" />
         </div>
         
-        <!-- Middle Section - Profile Icon -->
+        <!-- pfpIcon -->
         <div class="headerCenter">
             <div class="profileIcon">
                 <div class="profileImageContainer">
                     <div id="profileCircle"></div>
                     <img id="profilePet" src="Images/Farm%204%20Cow%20White%20and%20Black.png"/>
                 </div>
-               <%-- <asp:Button ID="btnChangeIcon" class="button" runat="server" Text="Change icon" />--%>
+              
             </div>
         </div>
         
-        <!-- Right Section - Time/Date -->
+        <!-- Time -->
+        <div class="headerRight">
         <div class="timeDateDiv">
              <table>
         <tr>
@@ -36,6 +37,7 @@
         </tr>
             </table>
         </div>
+            </div>
         </div>
     
 </asp:Content>
@@ -54,7 +56,8 @@
                 <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>
                 <td><asp:TextBox ID="txtUsername" class="textbox" runat="server" ReadOnly ="true" OnTextChanged="txtUsername_TextChanged"></asp:TextBox></td>
                    <td> <asp:Button ID="btnEditUser" class="button" runat="server" Text="Edit" OnClientClick="enableEdit('txtUsername'); return false;" /></td>
-            </tr>
+                
+                </tr>
             <tr>
                 <td><asp:Label ID="lblPassword" class="label" runat="server" Text="Password"></asp:Label></td>
                 <td><asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password" ReadOnly ="true"></asp:TextBox></td>
@@ -66,7 +69,7 @@
                  <td> <asp:Button ID="btnEditEmail" class="button" runat="server" Text="Edit" OnClientClick="enableEdit('txtEmail'); return false;" /></td>
             </tr>
             <tr>
-                <td><asp:Label ID="lblMode" CssClass="label" runat="server" Text="Light mode"></asp:Label></td>
+                <td><asp:Label ID="lblMode" class="label" runat="server" Text="Light mode"></asp:Label></td>
                 <td>
                      <div style="text-align: right;">
                       <label class="switch">
@@ -74,13 +77,13 @@
                       <span class="slider"></span>
                       </label>
                      </div>
-</td>
+                </td>
             </tr>
            <tr>
                <td><asp:Label ID="lblDelete" class="label" runat="server" Text="Delete Profile"></asp:Label></td>
              <td>
                     <div style="text-align: right;">
-                       <img src="Icons/icons8-delete-white-96.png" alt="Delete Icon" class="deleteIconSmall" />
+                       <img src="Icons/icons8-delete-white-96.png" alt="Delete Icon" CssClass="deleteIconSmall" />
                     </div>
                 </td>
           </tr>
@@ -88,7 +91,7 @@
 
         <br/>
         <div class="buttonSection">
-            <asp:Button ID="btnLogout" class="button no-border" runat="server" Text="Logout" />
+            <asp:Button ID="btnLogout" class="button" runat="server" Text="Logout" />
         </div>
    
 

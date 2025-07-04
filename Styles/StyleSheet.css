@@ -1725,19 +1725,6 @@ footer p {
     margin: 5px 0;
 }
 
-.button {
-    padding: 8px 15px;
-    margin-left: 10px;
-    background-color: #446791;
-    color: white;
-    border: 1px solid white;
-    border-radius: 4px;
-    cursor: pointer;
-}
-.no-border {
-    border: none !important;
-}
-
 .changeIconContainer {
     text-align: center;
     margin: 20px 0;
@@ -1778,7 +1765,7 @@ footer p {
     bottom: 3px;
     background-color: white;
     transition: 0.4s;
-    border-radius: 50%;
+    border-radius: 60%;
 }
 
 input:checked + .slider {
@@ -1794,7 +1781,7 @@ input:checked + .slider:before {
     margin-top: 20px;
 }
 .deleteIconSmall {
-    width: 3px;
+    width: 10px;
     height: 10px;
     display: block;
     margin-left: auto;
@@ -1818,6 +1805,15 @@ input:checked + .slider:before {
     display: inline-block;
 }
 
+/*.profilelabel { 
+    font-family: 'Gilda Display', serif;
+    font-weight: 200;
+    font-size: clamp(1.2rem, 2vw, 2.5rem);
+    color: white;
+    margin-bottom: 0.5vh;
+    display: inline-block;
+}*/
+
 /* ---------------------- BUTTONS ---------------------- */
 /* normal blue button */
 .buttonSection {
@@ -1825,9 +1821,8 @@ input:checked + .slider:before {
     margin-top: 3vh;
 }
 
-.button {
+.button, .buttonHighlight {
     background-color: #5f7fa3;
-    border: none;
     border-radius: 1rem;
     color: white;
     padding: 1vh 2vw;
@@ -1844,11 +1839,10 @@ input:checked + .slider:before {
     background-color: #446791;
 }
 
-.button a {
-    color: white;
-    text-decoration: none;
+.buttonHighlight {
+    border: 2px solid white;
+    background-color: #446791;
 }
-
 
 /* ---------------------- TEXTBOXES ---------------------- */
 
