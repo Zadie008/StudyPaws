@@ -55,18 +55,30 @@
             <tr>
                 <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>
                 <td><asp:TextBox ID="txtUsername" class="textbox" runat="server" ReadOnly ="true" OnTextChanged="txtUsername_TextChanged"></asp:TextBox></td>
-                   <td> <asp:Button ID="btnEditUser" class="button" runat="server" Text="Edit" OnClientClick="enableEdit('txtUsername'); return false;" /></td>
+                <td>
+                <asp:Button ID="btnEditUser" CssClass="button" runat="server" Text="Edit" OnClick="btnEditUser_Click" />
+                <asp:Button ID="btnSaveUser" CssClass="button" runat="server" Text="Save" Visible="false" OnClick="btnSaveUser_Click" />
+                <asp:Button ID="btnCancelUser" CssClass="button" runat="server" Text="Cancel" Visible="false" OnClick="btnCancelUser_Click" />
+                </td>
                 
                 </tr>
             <tr>
                 <td><asp:Label ID="lblPassword" class="label" runat="server" Text="Password"></asp:Label></td>
-                <td><asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password" ReadOnly ="true"></asp:TextBox></td>
-                   <td> <asp:Button ID="btnEditPass" class="button" runat="server" Text="Edit" OnClientClick="enableEdit('txtPassword'); return false;" /></td>
+                <td><asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password" ReadOnly ="true" OnTextChanged="txtPassword_TextChanged"></asp:TextBox></td>
+                <td>
+                <asp:Button ID="btnEditPass" CssClass="button" runat="server" Text="Edit" OnClick="btnEditPass_Click" />
+                <asp:Button ID="btnSavePass" CssClass="button" runat="server" Text="Save" Visible="false" OnClick="btnSavePass_Click" />
+                <asp:Button ID="btnCancelPass" CssClass="button" runat="server" Text="Cancel" Visible="false" OnClick="btnCancelPass_Click" />
+                </td>
             </tr>
             <tr>
                 <td><asp:Label ID="lblEmail" class="label" runat="server" Text="Email"></asp:Label></td>
                 <td><asp:TextBox ID="txtEmail" class="textbox" runat="server" ReadOnly ="true"></asp:TextBox></td>
-                 <td> <asp:Button ID="btnEditEmail" class="button" runat="server" Text="Edit" OnClientClick="enableEdit('txtEmail'); return false;" /></td>
+                <td>
+                <asp:Button ID="btnEditEmail" CssClass="button" runat="server" Text="Edit" OnClick="btnEditEmail_Click" />
+                <asp:Button ID="btnSaveEmail" CssClass="button" runat="server" Text="Save" Visible="false" OnClick="btnSaveEmail_Click" />
+                <asp:Button ID="btnCancelEmail" CssClass="button" runat="server" Text="Cancel" Visible="false" OnClick="btnCancelEmail_Click" />
+                </td>
             </tr>
             <tr>
                 <td><asp:Label ID="lblMode" class="label" runat="server" Text="Light mode"></asp:Label></td>
@@ -80,10 +92,10 @@
                 </td>
             </tr>
            <tr>
-               <td><asp:Label ID="lblDelete" class="label" runat="server" Text="Delete Profile"></asp:Label></td>
-             <td>
+             <td><asp:Label ID="lblDelete" CssClass="label" runat="server" Text="Delete Profile"></asp:Label></td>
+                <td>
                     <div style="text-align: right;">
-                       <img src="Icons/icons8-delete-white-96.png" alt="Delete Icon" CssClass="deleteIconSmall" />
+                        <img src="Icons/icons8-delete-white-96.png" alt="Delete Icon" class="deleteIconSmall" />
                     </div>
                 </td>
           </tr>

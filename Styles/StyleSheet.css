@@ -21,6 +21,7 @@
 
 /* ---------------------- FONTS ---------------------- */
 
+@import url('StyleSheet.css');
 @font-face {
     font-family: 'Lilita One';
     src: url('../Fonts/LilitaOne-Regular.ttf') format('truetype');
