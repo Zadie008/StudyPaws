@@ -1730,9 +1730,12 @@ footer p {
     margin-left: 10px;
     background-color: #446791;
     color: white;
-    border: none;
+    border: 1px solid white;
     border-radius: 4px;
     cursor: pointer;
+}
+.no-border {
+    border: none !important;
 }
 
 .changeIconContainer {
@@ -1789,6 +1792,12 @@ input:checked + .slider:before {
 .buttonSection {
     text-align: center;
     margin-top: 20px;
+}
+.deleteIconSmall {
+    width: 3px;
+    height: 10px;
+    display: block;
+    margin-left: auto;
 }
 /* ---------------------- OTHER ---------------------- */
 /* ---------------------- SMALL CONTAINER FOR MESSAGES ---------------------- */

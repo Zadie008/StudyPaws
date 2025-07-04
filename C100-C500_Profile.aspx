@@ -24,20 +24,20 @@
         </div>
         
         <!-- Right Section - Time/Date -->
-        <div class="headerRight">
-            <div class="timeDateDiv">
-                <table>
-                    <tr>
-                        <td colspan="2"><asp:Label ID="lblTime" runat="server" Text="--:--" Font-Size="65"></asp:Label></td>
-                    </tr>
-                    <tr>
-                        <td><asp:Label ID="lblDay" runat="server" Text="Day"></asp:Label></td>
-                        <td><asp:Label ID="lblDate" runat="server" Text="Date"></asp:Label></td>
-                    </tr>
-                </table>
-            </div>
+        <div class="timeDateDiv">
+             <table>
+        <tr>
+            <td colspan="2"><asp:Label ID="lblTime" CssClass="accountInfoLabel" runat="server" Text="--:--" Font-Size="65"></asp:Label></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><asp:Label ID="lblDay" CssClass="accountInfoLabel" runat="server" Text="Day"></asp:Label></td>
+            <td><asp:Label ID="lblDate" CssClass="accountInfoLabel" runat="server" Text="Date"></asp:Label></td>
+        </tr>
+            </table>
         </div>
-    </div>
+        </div>
+    
 </asp:Content>
 
 
@@ -68,22 +68,27 @@
             <tr>
                 <td><asp:Label ID="lblMode" CssClass="label" runat="server" Text="Light mode"></asp:Label></td>
                 <td>
-                    <label class="switch">
-                        <input type="checkbox" id="toggleLightMode">
-                        <span class="slider"></span>
-                    </label>
-                </td>
+                     <div style="text-align: right;">
+                      <label class="switch">
+                      <input type="checkbox" id="toggleLightMode">
+                      <span class="slider"></span>
+                      </label>
+                     </div>
+</td>
             </tr>
            <tr>
                <td><asp:Label ID="lblDelete" class="label" runat="server" Text="Delete Profile"></asp:Label></td>
-               <td> <img src="Icons/icons8-mail-white-96.png" alt="Messages" /></td>
-              
+             <td>
+                    <div style="text-align: right;">
+                       <img src="Icons/icons8-delete-white-96.png" alt="Delete Icon" class="deleteIconSmall" />
+                    </div>
+                </td>
           </tr>
         </table>
 
         <br/>
         <div class="buttonSection">
-            <asp:Button ID="btnLogout" class="button" runat="server" Text="Logout" />
+            <asp:Button ID="btnLogout" class="button no-border" runat="server" Text="Logout" />
         </div>
    
 
