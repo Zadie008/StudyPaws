@@ -47,19 +47,22 @@
         </div>
     </div>
 
-<div id="loginPopup" class="simple-popup" runat="server">
-    <div class="popup-blue-box">
-        <h2>Invalid Username or Password</h2>
-        <div class="buttonSection">
-           <button class="profilebutton" onclick="hideLoginPopup()">Try Again</button>
+    <asp:Panel ID="pnlLogin" runat="server" Visible="false">
+         <div id="popup" class="simple-popup">
+        <div class="popup-blue-box">
+            <p>Sorry! Your username or password is incorrect</p>
+            <img src="Images/Notification%20Sad%20Hamster.png" />
+            <br />
+            <div class="buttonSection">
+                <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay :(" OnClientClick="hidePopup(); return false;" />
+            </div>
         </div>
     </div>
-</div>
+    </asp:Panel>
 
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="navContent" Runat="Server">
-    
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

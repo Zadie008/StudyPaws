@@ -14,7 +14,7 @@ public partial class Login : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            loginPopup.Style["display"] = "none";
+           
         }
     }
 
@@ -49,7 +49,8 @@ public partial class Login : System.Web.UI.Page
                 }
                 else
                 {
-                    ScriptManager.RegisterStartupScript(this, GetType(), "showLoginPopup", "setTimeout(showLoginPopup, 100);", true);
+                    pnlLogin.Visible = true;
+                    ScriptManager.RegisterStartupScript(this, GetType(), "popup", "showPopup();", true);
                 }
 
                 con.Close();

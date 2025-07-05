@@ -93,19 +93,34 @@
             </tr>
            <tr>
              <td><asp:Label ID="lblDelete" CssClass="label" runat="server" Text="Delete Profile"></asp:Label></td>
-                <td>
-                    <div style="text-align: right;">
-                        <img src="Icons/icons8-delete-white-96.png" alt="Delete Icon" class="deleteIconSmall" />
-                    </div>
-                </td>
-          </tr>
-        </table>
-
-        <br/>
-        <div class="buttonSection">
-            <asp:Button ID="btnLogout" class="button" runat="server" Text="Logout" OnClick="btnLogout_Click1" />
+             
+          <td>
+            <div class="deleteIconContainer" style="text-align: left;">
+                <asp:ImageButton 
+                    ID="deleteImageButton" 
+                    runat="server"
+                    ImageUrl="~/Icons/icons8-delete-white-96.png"
+                    CssClass="deleteIcon"
+                    AlternateText="Delete Profile"
+                    OnClick="deleteImageButton_Click"
+                />
+            </div>
+        </td>
+       <asp:Panel ID="pnlDeleteProfile" runat="server" Visible="false">
+         <div id="popup" class="simple-popup">
+        <div class="popup-blue-box">
+            <p>Are you sure you want to delete your profile? all progress will be lost!</p>
+            <img src="Images/Notification%20Sad%20Hamster.png" />
+            <br />
+            <div class="buttonSection">
+               <asp:Button ID="btnConfirmDeleteProfile" CssClass="popup-button" runat="server" Text="Yes, I am sure!" OnClick="btnConfirmDeleteProfile_Click" />
+            </div>
+            <div class="buttonSection">
+                <asp:Button ID="btnCancelDelete" CssClass="popup-button" runat="server" Text="No, not sure!" OnClientClick="hidePopup(); return false;" />
+            </div>
         </div>
-   
+         </div>
+    </asp:Panel>
 
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

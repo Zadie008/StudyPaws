@@ -243,16 +243,3 @@ function stopTimer() {
     return false;
 }
 
-function hideLoginPopup() {
-    const popup = document.getElementById("loginPopup");
-    if (popup) {
-        popup.style.display = "none";
-    }
-}
-
-function showLoginPopup() {
-    const popup = document.getElementById("loginPopup");
-    if (popup) {
-        popup.style.display = "flex";
-    }
-}

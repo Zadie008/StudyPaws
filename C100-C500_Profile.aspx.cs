@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data.OleDb;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -14,6 +15,8 @@ public partial class Default2 : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
+            pnlDeleteProfile.Visible = false;
+
             string username = "";
             if (Session["Username"] != null)
             {
@@ -42,6 +45,10 @@ public partial class Default2 : System.Web.UI.Page
                 }
                 con.Close();
             }
+        }
+        else
+        {
+            pnlDeleteProfile.Visible = false;
         }
     }
 
@@ -160,9 +167,13 @@ public partial class Default2 : System.Web.UI.Page
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         using (OleDbConnection con = new OleDbConnection(cs))
         {
-            string query = "UPDATE [Users] SET [value] = ? WHERE [username] = ?";
+            string query = "UPDATE [Users] SET [password] = ? WHERE [username] = ?";
             OleDbCommand cmd = new OleDbCommand(query, con);
-            cmd.Parameters.AddWithValue("?", newPassword);
+
+            // Hash the password to match login format
+            string hashedPassword = FormsAuthentication.HashPasswordForStoringInConfigFile(newPassword, "SHA1");
+
+            cmd.Parameters.AddWithValue("?", hashedPassword);
             cmd.Parameters.AddWithValue("?", username);
 
             con.Open();
@@ -175,7 +186,7 @@ public partial class Default2 : System.Web.UI.Page
         btnSavePass.Visible = false;
         btnCancelPass.Visible = false;
 
-        originalPass = newPassword;
+        originalPass = newPassword; // (Optional: you may want to hash this too if you compare it)
     }
 
     protected void btnSaveUser_Click(object sender, EventArgs e)
@@ -240,4 +251,53 @@ public partial class Default2 : System.Web.UI.Page
     {
         Response.Redirect("Landing-page.aspx");
     }
+
+    protected void deleteImageButton_Click(object sender, ImageClickEventArgs e)
+    {
+       pnlDeleteProfile.Visible = true;
+
+       
+    }
+
+    protected void btnConfirmDeleteProfile_Click(object sender, EventArgs e)
+    {
+        string username = "";
+        if (Session["Username"] != null)
+        {
+            username = Session["Username"].ToString();
+        }
+
+        if (string.IsNullOrEmpty(username))
+        {
+            return; 
+        }
+
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (OleDbConnection con = new OleDbConnection(cs))
+        {
+            string deleteQuery = "DELETE FROM [Users] WHERE [username] = ?";
+            OleDbCommand cmd = new OleDbCommand(deleteQuery, con);
+            cmd.Parameters.AddWithValue("?", username);
+
+            con.Open();
+            int rowsAffected = cmd.ExecuteNonQuery();
+            con.Close();
+
+            if (rowsAffected > 0)
+            {
+                Session.Clear();
+                Session.Abandon();
+                Response.Redirect("Landing-page.aspx");
+            }
+            else
+            {
+               
+            }
+        }
+    }
+    protected void btnCancelDelete_Click(object sender, EventArgs e)
+    {
+        pnlDeleteProfile.Visible = false;
+    }
+
 }
