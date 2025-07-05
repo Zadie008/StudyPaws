@@ -106,6 +106,13 @@
                 />
             </div>
         </td>
+        <tr>
+        <td colspan="3">
+            <div class="buttonSection">
+                <asp:Button ID="btnLogout" CssClass="button" runat="server" Text="Logout" OnClick="btnLogout_Click" />
+            </div>
+        </td>
+    </tr>
        <asp:Panel ID="pnlDeleteProfile" runat="server" Visible="false">
          <div id="popup" class="simple-popup">
         <div class="popup-blue-box">
@@ -117,6 +124,19 @@
             </div>
             <div class="buttonSection">
                 <asp:Button ID="btnCancelDelete" CssClass="popup-button" runat="server" Text="No, not sure!" OnClientClick="hidePopup(); return false;" />
+            </div>
+        </div>
+         </div>
+    </asp:Panel>
+            
+     <asp:Panel ID="pnlLogout" runat="server" Visible="false">
+         <div id="popup" class="simple-popup">
+        <div class="popup-pink-box">
+            <p>Hope you have a purrfect day!</p>
+            <img src="Images/Notification%20Happy.png" />
+            <br />
+            <div class="buttonSection">
+               <asp:Button ID="btnGoodbye" CssClass="popup-button" runat="server" Text="Goodbye!" OnClick="btnGoodbye_Click" />
             </div>
         </div>
          </div>

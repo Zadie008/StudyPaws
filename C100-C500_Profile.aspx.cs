@@ -16,7 +16,7 @@ public partial class Default2 : System.Web.UI.Page
         if (!IsPostBack)
         {
             pnlDeleteProfile.Visible = false;
-
+            pnlLogout.Visible = false;
             string username = "";
             if (Session["Username"] != null)
             {
@@ -48,6 +48,7 @@ public partial class Default2 : System.Web.UI.Page
         }
         else
         {
+            pnlLogout.Visible = false;
             pnlDeleteProfile.Visible = false;
         }
     }
@@ -68,7 +69,7 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnLogout_Click(object sender, EventArgs e)
     {
-        Response.Redirect("Landing-page.aspx");
+      pnlLogout.Visible = true;
     }
     private string originalEmail
     {
@@ -170,7 +171,7 @@ public partial class Default2 : System.Web.UI.Page
             string query = "UPDATE [Users] SET [password] = ? WHERE [username] = ?";
             OleDbCommand cmd = new OleDbCommand(query, con);
 
-            // Hash the password to match login format
+           
             string hashedPassword = FormsAuthentication.HashPasswordForStoringInConfigFile(newPassword, "SHA1");
 
             cmd.Parameters.AddWithValue("?", hashedPassword);
@@ -186,7 +187,7 @@ public partial class Default2 : System.Web.UI.Page
         btnSavePass.Visible = false;
         btnCancelPass.Visible = false;
 
-        originalPass = newPassword; // (Optional: you may want to hash this too if you compare it)
+        originalPass = newPassword; 
     }
 
     protected void btnSaveUser_Click(object sender, EventArgs e)
@@ -212,7 +213,6 @@ public partial class Default2 : System.Web.UI.Page
             con.Close();
         }
 
-        // Update the session with the new username
         Session["Username"] = newUsername;
 
         txtUsername.ReadOnly = true;
@@ -239,7 +239,7 @@ public partial class Default2 : System.Web.UI.Page
     }
     protected void txtPassword_TextChanged(object sender, EventArgs e)
     {
-        // You can leave this empty or remove the OnTextChanged from the ASPX if not needed
+        
     }
 
     protected void btnChangeIcon_Click(object sender, EventArgs e)
@@ -298,6 +298,13 @@ public partial class Default2 : System.Web.UI.Page
     protected void btnCancelDelete_Click(object sender, EventArgs e)
     {
         pnlDeleteProfile.Visible = false;
+    }
+
+    protected void btnGoodbye_Click(object sender, EventArgs e)
+    {
+        Session.Clear();
+        Session.Abandon();
+        Response.Redirect("Landing-page.aspx");
     }
 
 }

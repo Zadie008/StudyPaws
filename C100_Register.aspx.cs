@@ -22,8 +22,12 @@ public partial class C100_Register : System.Web.UI.Page
     {
         if (txtPassword.Text != txtConfirmPassword.Text)
         {
-            ScriptManager.RegisterStartupScript(this, GetType(), "passwordMismatch", "alert('Passwords do not match.');", true);
+            lblPasswordMismatch.Visible = true;
             return;
+        }
+        else
+        {
+            lblPasswordMismatch.Visible = false;
         }
 
         string username = txtUsername.Text.Trim();

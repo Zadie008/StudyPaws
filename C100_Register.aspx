@@ -38,7 +38,9 @@
             </tr>
             <tr>
                 <td><asp:Label ID="lblConfirmPassword" class="label" runat="server" Text="Confirm Password"></asp:Label></td>
-                <td><asp:TextBox ID="txtConfirmPassword" class="textbox" runat="server" TextMode="Password"></asp:TextBox></td>
+                <td><asp:TextBox ID="txtConfirmPassword" class="textbox" runat="server" TextMode="Password"></asp:TextBox>
+                <asp:Label ID="lblPasswordMismatch" runat="server" Text="Password does not match" CssClass="errorLabel" Visible="false" />
+                </td>
             </tr>
         </table>
         <br/>
