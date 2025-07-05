@@ -115,35 +115,11 @@
         
          <div class="backgroundColorContainer">
            
- <%--<div class="scrollableTableContainer">
-                <asp:GridView ID="GridView1" runat="server" GridLines="None"
-                AutoGenerateColumns="False" DataKeyNames="FriendID" OnRowCommand="GridView1_RowCommand"
-                ShowHeader="False" EnableModelValidation="True"> <%-- Set ShowHeader to False as we don't need table headers for cards --%>
-               <%-- <Columns>
-                    <asp:TemplateField>
-                        <ItemTemplate>
-                            <div class="friend-card">
-                                <img src='<%# Eval("ImageUrl") %>' alt="Profile Picture" class="friend-icon" />
-                                <span class="friend-name"><%# Eval("NickName") %></span>
-                                
-                                <asp:Button ID="btnEdit" runat="server" Text="Edit" CommandName="EditFriend"
-                                    CommandArgument='<%# Eval("FriendID") %>' CssClass="friend-edit-button" />
-                                
-                                <asp:ImageButton ID="btnDelete" runat="server" ImageUrl="Icons/icons8-delete-trash.png"
-                                    AlternateText="Delete" CommandName="DeleteFriend" CommandArgument='<%# Eval("FriendID") %>'
-                                    CssClass="friend-delete-icon" OnClientClick="return confirm('Are you sure you want to delete this friend?');" />
-                            </div>
-                        </ItemTemplate>
-                    </asp:TemplateField>
-                </Columns>
-            </asp:GridView>--%>
-       <%-- </div>--%>
               </div>
         </div>
-<div class="buttonSection">
-       <%-- <asp:Button ID="btnSearchFriends" runat="server" Text="Search friends" 
-            OnClick="btnSearchFriends_Click" CssClass="search-button" />--%>
-    </div>
+<div class="SearchFriends">
+    <asp:Button ID="btnSearchFriends" class="button" runat="server" Text="Change icon" OnClick="btnSearchFriends_Click" />
+</div>
     
 </asp:Content>
 

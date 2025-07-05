@@ -230,4 +230,9 @@ public partial class Default2 : System.Web.UI.Page
     {
         // You can leave this empty or remove the OnTextChanged from the ASPX if not needed
     }
+
+    protected void btnChangeIcon_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("ChangeProfilePhoto.aspx");
+    }
 }

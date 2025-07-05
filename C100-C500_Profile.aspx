@@ -48,7 +48,7 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
 
     <div class="changeIconContainer">
-        <asp:Button ID="btnChangeIcon" class="button" runat="server" Text="Change icon" />
+        <asp:Button ID="btnChangeIcon" class="button" runat="server" Text="Change icon" OnClick="btnChangeIcon_Click" />
     </div>
         
         <table>

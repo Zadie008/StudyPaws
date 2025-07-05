@@ -1787,6 +1787,58 @@ input:checked + .slider:before {
     display: block;
     margin-left: auto;
 }
+
+/* -------------------- PROFILE ICON SELECTION PAGE -------------------- */
+
+.iconLayoutWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    margin-top: 40px;
+}
+
+.iconRow {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.iconItem {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+    .iconItem img {
+        max-width: 70%;
+        max-height: 70%;
+        object-fit: contain;
+    }
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .iconRowBottom {
+        transform: translateX(30px);
+        gap: 30px;
+    }
+
+    .iconSelectItem {
+        width: 100px;
+        height: 100px;
+    }
+
+        .iconSelectItem .profileImageContainer {
+            width: 100px;
+            height: 100px;
+        }
+}
+
 /* ---------------------- OTHER ---------------------- */
 /* ---------------------- SMALL CONTAINER FOR MESSAGES ---------------------- */
 .container {
@@ -1822,7 +1874,7 @@ input:checked + .slider:before {
     margin-top: 3vh;
 }
 
-.button, .buttonHighlight {
+.button {
     background-color: #5f7fa3;
     border-radius: 1rem;
     color: white;
@@ -1840,10 +1892,7 @@ input:checked + .slider:before {
     background-color: #446791;
 }
 
-.buttonHighlight {
-    border: 2px solid white;
-    background-color: #446791;
-}
+
 
 /* ---------------------- TEXTBOXES ---------------------- */
 
