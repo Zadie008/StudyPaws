@@ -1782,12 +1782,27 @@ input:checked + .slider:before {
     margin-top: 20px;
 }
 .deleteIconSmall {
-    width: 10px;
-    height: 10px;
+    width: 20px;
+    height: 20px;
     display: block;
     margin-left: auto;
 }
 
+.profilebutton {
+    background-color: #5f7fa3;
+    border-radius: 1rem;
+    border-color: white;
+    color: white;
+    padding: 1vh 2vw;
+    font-size: clamp(1.2rem, 2.5vw, 2.7rem);
+    font-family: 'Lilita One', sans-serif;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 1vh;
+    transition: background-color 0.3s ease;
+}
+}
 /* -------------------- PROFILE ICON SELECTION PAGE -------------------- */
 
 .iconLayoutWrapper {
