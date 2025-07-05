@@ -12,7 +12,10 @@ public partial class Login : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        if (!IsPostBack)
+        {
+            loginPopup.Style["display"] = "none";
+        }
     }
 
     protected void btnBack_Click(object sender, EventArgs e)
@@ -24,8 +27,6 @@ public partial class Login : System.Web.UI.Page
     {
         if (Page.IsValid)
         {
-            Session["Username"] = txtUsername.Text;
-
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
             using (OleDbConnection con = new OleDbConnection(cs))
@@ -34,27 +35,25 @@ public partial class Login : System.Web.UI.Page
                 OleDbCommand cmd = new OleDbCommand(command, con);
 
                 cmd.Parameters.AddWithValue("?", txtUsername.Text);
-
                 string hashedPassword = FormsAuthentication.HashPasswordForStoringInConfigFile(txtPassword.Text, "SHA1");
                 cmd.Parameters.AddWithValue("?", hashedPassword);
 
                 con.Open();
-                OleDbDataReader collection = cmd.ExecuteReader();
+                OleDbDataReader reader = cmd.ExecuteReader();
 
-                if (collection.HasRows && collection.Read())
+                if (reader.HasRows && reader.Read())
                 {
+                    Session["Username"] = txtUsername.Text;
                     FormsAuthentication.SetAuthCookie(txtUsername.Text, false);
                     Response.Redirect("Default.aspx");
                 }
                 else
                 {
-                    
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Invalid login. Please try again.');", true);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showLoginPopup", "setTimeout(showLoginPopup, 100);", true);
                 }
 
                 con.Close();
             }
-
         }
     }
 }

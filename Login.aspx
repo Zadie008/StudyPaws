@@ -46,6 +46,16 @@
             <asp:Button ID="btnLogin" class="button" runat="server" Text="Login" OnClick="btnLogin_Click" />
         </div>
     </div>
+
+<div id="loginPopup" class="simple-popup" runat="server">
+    <div class="popup-blue-box">
+        <h2>Invalid Username or Password</h2>
+        <div class="buttonSection">
+           <button class="profilebutton" onclick="hideLoginPopup()">Try Again</button>
+        </div>
+    </div>
+</div>
+
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="navContent" Runat="Server">

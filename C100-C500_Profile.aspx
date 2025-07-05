@@ -9,7 +9,7 @@
     <div class="profileHeader">
         <!--Back Button -->
         <div class="headerLeft">
-            <asp:Button ID="btnBackProfile" class="button" runat="server" Text="Back" OnClick=" btnBackProfile_Click" />
+            <asp:Button ID="btnBackProfile" class="profilebutton" runat="server" Text="Back" OnClick=" btnBackProfile_Click" />
         </div>
         
         <!-- pfpIcon -->
@@ -48,7 +48,7 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
 
     <div class="changeIconContainer">
-        <asp:Button ID="btnChangeIcon" class="button" runat="server" Text="Change icon" OnClick="btnChangeIcon_Click" />
+        <asp:Button ID="btnChangeIcon" class="profilebutton" runat="server" Text="Change icon" OnClick="btnChangeIcon_Click" />
     </div>
         
         <table>
@@ -56,9 +56,9 @@
                 <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>
                 <td><asp:TextBox ID="txtUsername" class="textbox" runat="server" ReadOnly ="true" OnTextChanged="txtUsername_TextChanged"></asp:TextBox></td>
                 <td>
-                <asp:Button ID="btnEditUser" CssClass="button" runat="server" Text="Edit" OnClick="btnEditUser_Click" />
-                <asp:Button ID="btnSaveUser" CssClass="button" runat="server" Text="Save" Visible="false" OnClick="btnSaveUser_Click" />
-                <asp:Button ID="btnCancelUser" CssClass="button" runat="server" Text="Cancel" Visible="false" OnClick="btnCancelUser_Click" />
+                <asp:Button ID="btnEditUser" CssClass="profilebutton" runat="server" Text="Edit" OnClick="btnEditUser_Click" />
+                <asp:Button ID="btnSaveUser" CssClass="profilebutton" runat="server" Text="Save" Visible="false" OnClick="btnSaveUser_Click" />
+                <asp:Button ID="btnCancelUser" CssClass="profilebutton" runat="server" Text="Cancel" Visible="false" OnClick="btnCancelUser_Click" />
                 </td>
                 
                 </tr>
@@ -66,9 +66,9 @@
                 <td><asp:Label ID="lblPassword" class="label" runat="server" Text="Password"></asp:Label></td>
                 <td><asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password" ReadOnly ="true" OnTextChanged="txtPassword_TextChanged"></asp:TextBox></td>
                 <td>
-                <asp:Button ID="btnEditPass" CssClass="button" runat="server" Text="Edit" OnClick="btnEditPass_Click" />
-                <asp:Button ID="btnSavePass" CssClass="button" runat="server" Text="Save" Visible="false" OnClick="btnSavePass_Click" />
-                <asp:Button ID="btnCancelPass" CssClass="button" runat="server" Text="Cancel" Visible="false" OnClick="btnCancelPass_Click" />
+                <asp:Button ID="btnEditPass" CssClass="profilebutton" runat="server" Text="Edit" OnClick="btnEditPass_Click" />
+                <asp:Button ID="btnSavePass" CssClass="profilebutton" runat="server" Text="Save" Visible="false" OnClick="btnSavePass_Click" />
+                <asp:Button ID="btnCancelPass" CssClass="profilebutton" runat="server" Text="Cancel" Visible="false" OnClick="btnCancelPass_Click" />
                 </td>
             </tr>
             <tr>
@@ -103,7 +103,7 @@
 
         <br/>
         <div class="buttonSection">
-            <asp:Button ID="btnLogout" class="button" runat="server" Text="Logout" />
+            <asp:Button ID="btnLogout" class="button" runat="server" Text="Logout" OnClick="btnLogout_Click1" />
         </div>
    
 

@@ -235,4 +235,9 @@ public partial class Default2 : System.Web.UI.Page
     {
         Response.Redirect("ChangeProfilePhoto.aspx");
     }
+
+    protected void btnLogout_Click1(object sender, EventArgs e)
+    {
+        Response.Redirect("Landing-page.aspx");
+    }
 }
