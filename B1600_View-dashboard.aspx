@@ -104,13 +104,14 @@
                 <div class="controlsCalendar">
                     <button class="calendarFilters"><img src="Icons/icons8-filter-bars-white-96.png" /></button>
                     <button class="prevMonth"><img src="Icons/icons8-arrow-left-white-96.png" /></button>
-                    <p class="dateCalendar">Month</p>
+                    <asp:Label ID="lblMonthYear" runat="server" Text="" CssClass="dateCalendar"></asp:Label>
+                    <!--<p class="dateCalendar">Month</p>-->
                     <button class="nextMonth"><img src="Icons/icons8-arrow-right-white-96.png" /></button>
                 </div>
             </div>
             
             <div class="calendarBox">
-                <div class="weeks">
+                <!--<div class="weeks">
                     <div>Mon</div>
                     <div>Tue</div>
                     <div>Wed</div>
@@ -118,8 +119,8 @@
                     <div>Fri</div>
                     <div>Sat</div>
                     <div>Sun</div>
-                </div>
-                <div id="days" class="days"></div>
+                </div>-->
+                <asp:Literal ID="literalCalendar" runat="server"></asp:Literal>
                 <!--<ul class="weeks">
                     <li>Mon</li>
                     <li>Tue</li>
@@ -174,13 +175,13 @@
             <div class="toDoListControls">
                 <p class="toDoListHeading">To-do List</p>
                 <div class ="toDoListFilters">
-                    <asp:LinkButton ID="btnAll" runat="server" CssClass="filterBtn" OnClick="filter_Click">All</asp:LinkButton>
+                    <button class="toDoFilterBtn"><img src="Icons/icons8-filter-bars-white-96.png" /></button>
+                    <!--<asp:LinkButton ID="btnAll" runat="server" CssClass="filterBtn" OnClick="filter_Click">All</asp:LinkButton>
                     <asp:LinkButton ID="btnProgress" runat="server" CssClass="filterBtn" OnClick="filter_Click">In Progress</asp:LinkButton>
-                    <asp:LinkButton ID="btnCompleted" runat="server" CssClass="filterBtn" OnClick="filter_Click">Completed</asp:LinkButton>   
+                    <asp:LinkButton ID="btnCompleted" runat="server" CssClass="filterBtn" OnClick="filter_Click">Completed</asp:LinkButton>  --> 
                 </div>
             </div>
-            <asp:TextBox ID="txtNewTask" runat="server" CssClass="taskInput"></asp:TextBox>
-            <asp:Button ID="btnAddTask" runat="server" Text="+" class="plusBtn" OnClick="btnAddTask_Click"/>
+
             <asp:Repeater ID="rptTasks" runat="server">
                 <ItemTemplate>
                     <li class="task">
@@ -193,6 +194,11 @@
                     </li>
                 </ItemTemplate>
             </asp:Repeater>
+
+             <div class="newTask">
+                 <button ID="addTaskBtn" onclick="btnAddTask_Click"><img src="Icons/icons8-add-new-white-96.png" /></button>
+                 <asp:TextBox ID="txtNewTask" runat="server" CssClass="taskInput"></asp:TextBox>
+             </div>
             <!--<ul class="taskBox">
                 <li class="task">
                     <label>
@@ -207,10 +213,6 @@
                 </ul>
             </div>
                 </li>-->
-                <li class="addTask">
-                    <span class="plusBtn">+</span>
-                    <input type="text" placeholder="Add a new task" class="taskInput"/>
-                </li>
             <!--</ul>-->
         </div>
     </div>
