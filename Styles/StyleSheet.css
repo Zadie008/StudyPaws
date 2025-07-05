@@ -752,74 +752,117 @@ body.page-exit .welcomeBackTextDiv {
 /* ---------------------- DASHBOARD PAGE ---------------------- */
 .dashboardContainer{
     display: flex;
-    gap: 30px;
-    padding: 40px;
+    gap: 15px;
+    padding-left: 100px;
+    padding-right:100px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 /* ---------------------- CALENDAR PAGES ---------------------- */
 .calendarDashboard {
-    flex: 2;
-    background: #F4CAE0;
-    width: 66%;
-    border-radius: 20px;
-    padding: 25px;
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+    flex: 75%;
+    background: #D7B9D5; 
+    border-radius: 30px;
+    padding: 10px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); /*fix this*/
+    /*add height*/
 }
-.calendarHeader{
+.calendarHeader {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    margin-bottom:20px;
-    font-size: 20px;
+    font-size: 22px;
+    margin: 20px;
+    margin-bottom: 5px;
+}
+.calendarTitle {
+    flex: 60%;
+    font-family: 'Lilita One', sans-serif;
     font-weight: bold;
+    font-size: 22px;
+    text-shadow: 1px 1px #5B548A;
+    margin: 0;
+    margin-bottom: 5px;
+    text-align: left;
+}
+.controlsCalendar{
+    flex:40%;
+    font-size: 22px;
+    display: flex;
+    align-content: space-between;
 }
 .controlsCalendar .calendarFilters{
-    position: relative;
+    flex:1;
     width: 2.5vw;
     max-width: 30px;
-    aspect-ratio: 1;
     border:none;
     background:transparent;
+    gap: 10px;
+    cursor:pointer;
 }
 .controlsCalendar .calendarFilters img{
     width:2.5vw;
     max-width:30px;
 }
-.controlsCalendar .prevMonth {
-    position: relative;
-    width: 2.5vw;
-    max-width: 30px;
-    aspect-ratio: 1;
-    border: none;
-    background: transparent;
-}
+    .controlsCalendar .prevMonth {
+        flex: 1;
+        width: 2.5vw;
+        max-width: 30px;
+        border: none;
+        background: transparent;
+        gap: 10px;
+        cursor: pointer;
+    }
 .controlsCalendar .prevMonth img {
     width: 2.5vw;
     max-width: 30px;
 }
-.controlsCalendar .nextMonth {
-    position: relative;
-    width: 2.5vw;
-    max-width: 30px;
-    aspect-ratio: 1;
-    border: none;
-    background: transparent;
-}
+    .controlsCalendar .nextMonth {
+        flex: 1;
+        width: 2.5vw;
+        max-width: 30px;
+        border: none;
+        background: transparent;
+        gap: 10px;
+        cursor: pointer;
+    }
 .controlsCalendar .nextMonth img {
     width: 2.5vw;
     max-width: 30px;
 }
-.calendarTitle {
-    font-size: 24px;
-    font-weight: bold;
-    text-shadow: 1px 1px #bd8da2;
-}
-.dateCalendar{
-    font-size: 20px;
+.controlsCalendar .dateCalendar{
+    flex:1;
+    font-size: 22px;
+    gap: 10px;
+    cursor: text;
+    text-align:center;
 }
 .calendarBox{
-    padding: 20px;
+    /*padding: 10px;
     display:flex;
-    text-align:center;
+    text-align:center;*/
+    border-collapse: collapse;
+    width:100%;
+    /*max-width: 800px;*/
+    margin: 20px auto;
+}
+.calendarBox th, .calendarBox td{
+    border: 3px solid white;
+    width: 14.28%;
+    height:75px;
+    text-align:right;
+    vertical-align: top;
+    padding: 5px;
+}
+    .calendarBox th .weeks {
+        background: #D7B9D5;
+    }
+
+.weeks {
+    background: #D7B9D5;
+}
+.today {
+    background-color: #446791;
+    font-weight: bold;
 }
 .calendarBox ul{
     display: flex;
@@ -829,7 +872,7 @@ body.page-exit .welcomeBackTextDiv {
 .calendarBox ul li{
     width: calc(100%/7);
 }
-.calendarBox .weeks li {
+.calendarBox .weeks th {
     background: #D7B9D5;
     color:white;
     font-weight:bold;
@@ -872,37 +915,51 @@ body.page-exit .welcomeBackTextDiv {
 }
 /* ---------------------- TO DO LIST PAGES ---------------------- */
 .toDoListDashboard {
-    flex: 1;
+    flex: 25%;
     background: #ADA7C9;
-    width: 33%;
-    margin: 100px auto;
-    border-radius: 20px;
-    padding: 30px 20px;
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 30px;
+    padding: 10px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);/*fix this*/
+    height:auto; /*fix this*/
 }
-.toDoListHeading {
+.toDoListControls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    /*edit padding at top*/
+    font-size: 22px;
+    margin: 15px;
+}
+.toDoListControls .toDoListHeading {
     font-family: 'Lilita One', sans-serif;
     font-weight: bold;
     font-size: 22px;
     text-shadow: 1px 1px #5B548A;
-    margin: 0;
-    margin-bottom: 5px;
+    flex: 90%;
+    text-align:left;
     /*add shadow and letter spacing*/
 }
-.toDoListControls {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items:center;
-    margin-bottom: 20px;
-    /*edit padding at top*/
-}
-.toDoListFilters{
-    display:flex;
+.toDoListControls .toDoListFilters{
+    flex:10%;
+    /*display:flex;
     gap:16px;
     justify-content: flex-start;
-    padding: 0;
+    padding: 0;*/
 }
+    .toDoListControls .toDoListFilters .toDoFilterBtn {
+        width: 2.5vw;
+        max-width: 30px;
+        border: none;
+        background: transparent;
+        gap: 5px;
+        cursor:pointer;
+    }
+
+        .toDoListControls .toDoListFilters .toDoFilterBtn img {
+            width: 2.5vw;
+            max-width: 30px;
+        }
 .toDoListFilters .filterBtn{
     cursor: pointer;
     font-size: 14px;
@@ -946,22 +1003,24 @@ body.page-exit .welcomeBackTextDiv {
     color:white;
     letter-spacing:0.5px;
 }
-.addTask{
+.newTask{
     display:flex;
-    align-items:center;
-    margin-top:25px;
-    background:white;
-    border-radius: 12px;
     padding: 5px 10px;
 }
-.plusBtn {
-    font-size: 22px;
-    margin-right: 10px;
-    cursor: pointer;
-    color: white;
-    line-height: 1;
-    color: #5B548A;
-    font-weight: bold;
+.newTask #addTaskBtn {
+    width: 2.5vw;
+        max-width: 30px;
+        border: none;
+        background: transparent;
+        gap: 5px;
+        cursor:pointer;
+}
+    .newTask #addTaskBtn img {
+        width: 2.5vw;
+        max-width: 30px;
+    }
+.newTask #txtNewTask{
+
 }
 .taskInput {
     flex-grow: 1;
