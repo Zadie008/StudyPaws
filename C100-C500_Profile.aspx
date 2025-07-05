@@ -56,9 +56,9 @@
                 <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>
                 <td><asp:TextBox ID="txtUsername" class="textbox" runat="server" ReadOnly ="true" OnTextChanged="txtUsername_TextChanged"></asp:TextBox></td>
                 <td>
-                <asp:Button ID="btnEditUser" CssClass="profilebutton" runat="server" Text="Edit" OnClick="btnEditUser_Click" />
-                <asp:Button ID="btnSaveUser" CssClass="profilebutton" runat="server" Text="Save" Visible="false" OnClick="btnSaveUser_Click" />
-                <asp:Button ID="btnCancelUser" CssClass="profilebutton" runat="server" Text="Cancel" Visible="false" OnClick="btnCancelUser_Click" />
+                <asp:Button ID="btnEditUser" class="profilebutton" runat="server" Text="Edit" OnClick="btnEditUser_Click" />
+                <asp:Button ID="btnSaveUser" class="profilebutton" runat="server" Text="Save" Visible="false" OnClick="btnSaveUser_Click" />
+                <asp:Button ID="btnCancelUser" class="profilebutton" runat="server" Text="Cancel" Visible="false" OnClick="btnCancelUser_Click" />
                 </td>
                 
                 </tr>
