@@ -97,7 +97,7 @@
     </tr>
             </table>
        <asp:Panel ID="pnlDeleteProfile" runat="server" Visible="false">
-         <div class="popup, simple-popup">
+         <div id="popup" class="simple-popup">
         <div class="popup-blue-box">
             <p>Are you sure you want to delete your profile? all progress will be lost!</p>
             <img src="Images/Notification%20Sad%20Hamster.png" />
@@ -113,7 +113,7 @@
     </asp:Panel>
             
      <asp:Panel ID="pnlLogout" runat="server" Visible="false">
-         <div class="popup, simple-popup">
+         <div id="popup" class="simple-popup">
         <div class="popup-pink-box">
             <p>Hope you have a purrfect day!</p>
             <img src="Images/Notification%20Happy.png" />

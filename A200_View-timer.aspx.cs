@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.OleDb;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -40,10 +41,10 @@ public partial class A200_View_timer : System.Web.UI.Page
             int timerID = Convert.ToInt32(HttpContext.Current.Session["timerID"]);
 
             string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            using (OleDbConnection conn = new OleDbConnection(connectionString))
+            using (OleDbConnection con = new OleDbConnection(connectionString))
             {
-                conn.Open();
-                OleDbCommand cmd = new OleDbCommand("UPDATE Timer SET timerDuration = ? WHERE timerID = ?", conn);
+                con.Open();
+                OleDbCommand cmd = new OleDbCommand("UPDATE Timer SET timerDuration = ? WHERE timerID = ?", con);
                 cmd.Parameters.AddWithValue("?", newDuration);
                 cmd.Parameters.AddWithValue("?", timerID);
                 cmd.ExecuteNonQuery();
@@ -54,6 +55,40 @@ public partial class A200_View_timer : System.Web.UI.Page
         catch (Exception ex)
         {
             return "Error: " + ex.Message;
+        }
+    }
+
+    // Stop timer (deleting the timer entry)
+    protected void btnYes_Click(object sender, EventArgs e)
+    {
+        if (Session["userID"] != null && Session["timerID"] != null)
+        {
+            int thisTimerID = Convert.ToInt32(Session["timerID"]);
+
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            using (OleDbConnection con2 = new OleDbConnection(cs))
+            {
+                string deleteCommand = "DELETE FROM [Timer] WHERE [timerID] = ?";
+                using (OleDbCommand cmd = new OleDbCommand(deleteCommand, con2))
+                {
+                    cmd.Parameters.AddWithValue("?", thisTimerID);
+
+                    con2.Open();
+                    int code = cmd.ExecuteNonQuery();
+                    con2.Close();
+
+                    if (code == 1)
+                    {
+                        // Clean up the session if you want
+                        Session["timerID"] = null;
+                        Session["timerTitle"] = null;
+                        Session["timerTag"] = null;
+                        Session["timerDuration"] = null;
+
+                        Response.Redirect("Default.aspx");
+                    }
+                }
+            }
         }
     }
 }

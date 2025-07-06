@@ -239,5 +239,10 @@ function addExtraTime(mins) {
 
 function stopTimer() {
     showPopup();
-    return false;
+    return false; // don't allow postback
+}
+
+function confirmStop() {
+    hidePopup();
+    return true; // allow postback
 }

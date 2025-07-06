@@ -5,7 +5,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-    <!--account info to copy and paste-->
+                <!--account info to copy and paste-->
 <div class="accountInfoDiv">
     <div class="profileDiv">
         <a href="C100-C500_Profile.aspx" class="profileIconLink">
@@ -65,7 +65,7 @@
             </textPath>
         </text>
     </svg>
-    <img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" />
+    <a href="Default.aspx"><img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" /></a>
     <h2>purrfectly productive</h2>
 </div>
 </asp:Content>
@@ -118,7 +118,7 @@
                 <asp:Button ID="btnContinue" class="button" runat="server" Text="Continue" OnClick="btnContinue_Click" />
             </div>
             <div class="rightSection">
-                <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past timers" Visible="False" OnClick="btnViewPastTimers_Click" /> <!--invisible but for correct spacing of other buttons-->
+                <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
             </div>
         </div>
     </div>

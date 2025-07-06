@@ -5,37 +5,37 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-        <!--account info to copy and paste-->
-  <div class="accountInfoDiv">
-      <div class="profileDiv">
-          <a href="C100-C500_Profile.aspx" class="profileIconLink">
-              <div class="profileIcon">
-                  <div id="profileCircle"></div>
-                  <img id="profilePet" src="Images/Farm%204%20Cow%20White%20and%20Black.png" width="120"/>
-              </div>
-          </a>
-          <div class="profileDetails">
-                 <table>
-                  <tr>
-                      <td><asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Level"></asp:Label></td>
-                      <td><asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server"></asp:Label></td> 
-                  </tr>
-                  <tr>
-                      <td><asp:Label ID="lblXP" CssClass="accountInfoTableLabel" runat="server" Text="XP"></asp:Label></td>
-                      <td><asp:Label ID="lblXPAmount" CssClass="accountInfoTableLabelRight" runat="server"></asp:Label></td> 
-                  </tr>
-                  <tr>
-                      <td>
-                          <div class="pawIcon">
-                              <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
-                              <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
-                          </div>
-                      </td>
-                      <td><asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server"></asp:Label></td> 
-                  </tr>
-              </table>
-          </div>
-      </div>
+                    <!--account info to copy and paste-->
+<div class="accountInfoDiv">
+    <div class="profileDiv">
+        <a href="C100-C500_Profile.aspx" class="profileIconLink">
+            <div class="profileIcon">
+                <div id="profileCircle"></div>
+                <img id="profilePet" src="Images/Farm%204%20Cow%20White%20and%20Black.png" width="120"/>
+            </div>
+        </a>
+        <div class="profileDetails">
+            <table>
+                <tr>
+                    <td><asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Label">Level</asp:Label></td>
+                    <td><asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server" Text="Label">16</asp:Label></td> <!--CHANGE: has to be their level-->
+                </tr>
+                <tr>
+                    <td><asp:Label ID="lblXP" CssClass="accountInfoTableLabel" runat="server" Text="Label">XP</asp:Label></td>
+                    <td><asp:Label ID="lblXPAmount" CssClass="accountInfoTableLabelRight" runat="server" Text="Label">65</asp:Label></td> <!--CHANGE: has to be total xp-->
+                </tr>
+                <tr>
+                    <td>
+                        <div class="pawIcon">
+                            <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
+                            <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
+                        </div>
+                    </td>
+                    <td><asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server" Text="Label">190</asp:Label></td> <!--CHANGE: has to be total paws currency-->
+                </tr>
+            </table>
+        </div>
+    </div>
 
     <div class="timeDateDiv">
         <table>
@@ -65,7 +65,7 @@
             </textPath>
         </text>
     </svg>
-    <img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" />
+    <a href="Default.aspx"><img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" /></a>
     <h2>purrfectly productive</h2>
 </div>
 </asp:Content>

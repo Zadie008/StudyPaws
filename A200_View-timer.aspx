@@ -59,9 +59,7 @@
         </defs>
         <text>
             <textPath href="#curve" startOffset="50%" text-anchor="middle">
-                <a href="Default.aspx" class="curvedHeaderLink">
-                    StudyP<tspan dx="0.7em">w</tspan>s
-                </a>
+                StudyP<tspan dx="0.7em">w</tspan>s
             </textPath>
         </text>
     </svg>
@@ -121,13 +119,13 @@
             <asp:Button ID="btnViewPastTimers" CssClass="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
         </div>
     </div>
-     <div class="popup, simple-popup" style="display: none;">
+     <div id="popup" class="simple-popup" style="display: none;">
     <div class="popup-blue-box">
         <p>Are you sure you want to stop the timer? All XP and coins earned will be lost!</p>
         <img src="Images/Notification%20Sad%20Hamster.png" />
         <br />
         <div class="buttonSection">
-            <asp:Button ID="btnYes" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClientClick="hidePopup(); return false;" />
+            <asp:Button ID="btnYes" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnYes_Click" OnClientClick="return confirmStop();" />
             <asp:Button ID="btnNo" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClientClick="hidePopup(); return false;" />
         </div>
     </div>
