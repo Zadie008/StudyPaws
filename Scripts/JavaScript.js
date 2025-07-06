@@ -242,4 +242,3 @@ function stopTimer() {
     showPopup();
     return false;
 }
-

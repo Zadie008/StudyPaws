@@ -40,6 +40,8 @@ public partial class Login : System.Web.UI.Page
 
                 if (reader.HasRows && reader.Read())
                 {
+                    int userId = Convert.ToInt32(reader["UserID"]);
+                    Session["UserID"] = userId;
                     Session["Username"] = txtUsername.Text;
                     FormsAuthentication.SetAuthCookie(txtUsername.Text, false);
                     Response.Redirect("Default.aspx");
@@ -53,5 +55,6 @@ public partial class Login : System.Web.UI.Page
                 con.Close();
             }
         }
+
     }
 }

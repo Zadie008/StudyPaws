@@ -80,32 +80,14 @@
                 <asp:Button ID="btnCancelEmail" CssClass="profilebutton" runat="server" Text="Cancel" Visible="false" OnClick="btnCancelEmail_Click" />
                 </td>
             </tr>
-            <tr>
-                <td><asp:Label ID="lblMode" class="label" runat="server" Text="Light mode"></asp:Label></td>
-                <td>
-                     <div style="text-align: right;">
-                      <label class="switch">
-                      <input type="checkbox" id="toggleLightMode">
-                      <span class="slider"></span>
-                      </label>
-                     </div>
-                </td>
-            </tr>
-           <tr>
-             <td><asp:Label ID="lblDelete" CssClass="label" runat="server" Text="Delete Profile"></asp:Label></td>
-             
-          <td>
-            <div class="deleteIconContainer" style="text-align: left;">
-                <asp:ImageButton 
-                    ID="deleteImageButton" 
-                    runat="server"
-                    ImageUrl="~/Icons/icons8-delete-white-96.png"
-                    CssClass="deleteIcon"
-                    AlternateText="Delete Profile"
-                    OnClick="deleteImageButton_Click"
-                />
-            </div>
-        </td>
+         <tr>
+    <td><asp:Label ID="lblDelete" CssClass="label" runat="server" Text="Delete Profile"></asp:Label></td>
+    <td>
+        <div class="deleteIconContainer">
+            <asp:ImageButton ID="deleteImageButton" runat="server" ImageUrl="~/Icons/icons8-delete-white-96.png" CssClass="deleteIcon" AlternateText="Delete Profile" OnClick="deleteImageButton_Click"/>
+        </div>
+    </td>
+</tr>
         <tr>
         <td colspan="3">
             <div class="buttonSection">
@@ -113,6 +95,7 @@
             </div>
         </td>
     </tr>
+            </table>
        <asp:Panel ID="pnlDeleteProfile" runat="server" Visible="false">
          <div id="popup" class="simple-popup">
         <div class="popup-blue-box">

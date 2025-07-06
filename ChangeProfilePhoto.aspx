@@ -7,7 +7,7 @@
     <div class="profileHeader">
         <!--Back Button -->
         <div class="headerLeft">
-            <asp:Button ID="btnBackProfile" class="button" runat="server" Text="Back" OnClick=" btnBackProfile_Click" />
+            <asp:Button ID="btnBackProfile" class="profilebutton" runat="server" Text="Back" OnClick=" btnBackProfile_Click" />
         </div>
         
         <!-- pfpIcon -->
@@ -44,20 +44,43 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div class="changeIconContainer">
        <asp:Button ID="btnChangeIcon" class="profilebutton" runat="server" Text="Change icon" OnClick="btnChangeIcon_Click" />
+        <asp:HiddenField ID="selectedIcon" runat="server" ClientIDMode="Static" />
    </div>
 
 <div class="iconLayoutWrapper">
-    <!-- Top row with 3 icons -->
     <div class="iconRow topIconRow">
-        <div class="iconItem"><img src="ProfilePictures/CatPfp.png" alt="cat" /></div>
-        <div class="iconItem"><img src="ProfilePictures/DogPfp.png" alt="dog" /></div>
-        <div class="iconItem"><img src="ProfilePictures/BunnyPfp.png" alt="rabbit" /></div>
+        <asp:ImageButton ID="btnCat" runat="server" CssClass="iconItem circle-cat"
+            ImageUrl="ProfilePictures/CatPfp.png"
+            AlternateText="Cat"
+            CommandArgument="1"
+            OnClick="SelectIcon_Click" />
+        
+        <asp:ImageButton ID="btnDog" runat="server" CssClass="iconItem circle-dog"
+            ImageUrl="ProfilePictures/DogPfp.png"
+            AlternateText="Dog"
+            CommandArgument="2"
+            OnClick="SelectIcon_Click" />
+        
+        <asp:ImageButton ID="btnBunny" runat="server" CssClass="iconItem circle-bunny"
+            ImageUrl="ProfilePictures/BunnyPfp.png"
+            AlternateText="Bunny"
+            CommandArgument="3"
+            OnClick="SelectIcon_Click" />
     </div>
 
-    <!-- Bottom row with 2 icons -->
+    <!-- Bottom row -->
     <div class="iconRow bottomIconRow">
-        <div class="iconItem"><img src="ProfilePictures/CowPfp.png" alt="cow" /></div>
-        <div class="iconItem"><img src="ProfilePictures/UnicornPfp.png" alt="unicorn" /></div>
+        <asp:ImageButton ID="btnCow" runat="server" CssClass="iconItem circle-cow"
+            ImageUrl="ProfilePictures/CowPfp.png"
+            AlternateText="Cow"
+            CommandArgument="4"
+            OnClick="SelectIcon_Click" />
+
+        <asp:ImageButton ID="btnUnicorn" runat="server" CssClass="iconItem circle-unicorn"
+            ImageUrl="ProfilePictures/UnicornPfp.png"
+            AlternateText="Unicorn"
+            CommandArgument="5"
+            OnClick="SelectIcon_Click" />
     </div>
 </div>
    </asp:Content> 
