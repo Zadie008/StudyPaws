@@ -67,6 +67,7 @@ public partial class Default2 : System.Web.UI.Page
 
                             con.Open();
                             int rowsAffected = cmd.ExecuteNonQuery();
+                            con.Close();
 
                             if (rowsAffected == 0)
                             {

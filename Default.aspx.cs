@@ -18,6 +18,9 @@ public partial class _Default : System.Web.UI.Page
         }
         else
         {
+            Response.Redirect("Landing-page.aspx"); // or should it go directly to Login.aspx ?
+
+            // we can probably remove this:
             lblLoggedInUserName.Text = "You are not logged in"; //will change this at some point in the future
             lblPaws.Text = "N/A"; 
             lblXPAmount.Text = "N/A";
