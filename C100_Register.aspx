@@ -96,7 +96,7 @@
                     <img src="Images/Notification%20Sad%20Hamster.png" />
                     <br />
                     <div class="buttonSection">
-                        <asp:Button ID="btnUnderstandExists" CssClass="popup-button" runat="server" Text="I understand :(" OnClientClick="hidePanel(pnlProfileExistsClientID); return false;" />
+                       <asp:Button ID="btnUnderstandExists" CssClass="popup-button" runat="server" Text="I understand :(" OnClick="btnUnderstandExists_Click" />
                     </div>
                 </div>
             </div>

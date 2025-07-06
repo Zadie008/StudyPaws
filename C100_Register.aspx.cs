@@ -115,7 +115,7 @@ public partial class C100_Register : System.Web.UI.Page
                 {
                     pnlConfirm.Visible = true;
                     pnlTut.Visible = false;
-                    pnlProfileExists.Visible = false; // Hide if it was somehow visible
+                    pnlProfileExists.Visible = false; 
                 }
                 else
                 {
@@ -150,12 +150,12 @@ public partial class C100_Register : System.Web.UI.Page
     protected void btnWatchtut_Click(object sender, EventArgs e) //Watching the tutorial need to still do
     {
         pnlTut.Visible = false;
-        Response.Redirect("B1600_View-dashboard.aspx");
+        Response.Redirect("Default.aspx");
     }
     protected void BtnNotut_Click(object sender, EventArgs e) //Not watching the tutorial
     {
         pnlTut.Visible = false;
-        Response.Redirect("B1600_View-dashboard.aspx");
+        Response.Redirect("Default.aspx");
     }
 
     protected void btnUnderstandExists_Click(object sender, EventArgs e) //must direct them back to the page

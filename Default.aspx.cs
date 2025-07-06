@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.OleDb;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 public partial class _Default : System.Web.UI.Page
 {
@@ -18,21 +14,20 @@ public partial class _Default : System.Web.UI.Page
         }
         else
         {
-            Response.Redirect("Landing-page.aspx"); // or should it go directly to Login.aspx ?
-
-            // we can probably remove this:
-            lblLoggedInUserName.Text = "You are not logged in"; //will change this at some point in the future
-            lblPaws.Text = "N/A"; 
+            Response.Redirect("Landing-page.aspx");
+            lblLoggedInUserName.Text = "You are not logged in";
+            lblPaws.Text = "N/A";
             lblXPAmount.Text = "N/A";
             lblLevelNumber.Text = "N/A";
         }
     }
+
     private void LoadUserData(string username)
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         string userID = GetUserID(username, cs);
 
-        if (userID == null || userID == "")
+        if (string.IsNullOrEmpty(userID))
         {
             lblPaws.Text = "N/A (User not found)";
             lblXPAmount.Text = "N/A";
@@ -42,6 +37,7 @@ public partial class _Default : System.Web.UI.Page
 
         GetLevelInformation(cs, userID);
         GetUserStats(cs, userID);
+        GetUserProfileIcon(cs, userID);
     }
 
     private string GetUserID(string username, string connectionString)
@@ -50,24 +46,19 @@ public partial class _Default : System.Web.UI.Page
         string userID = null;
 
         using (OleDbConnection con = new OleDbConnection(connectionString))
+        using (OleDbCommand cmd = new OleDbCommand(query, con))
         {
-            using (OleDbCommand cmd = new OleDbCommand(query, con))
+            cmd.Parameters.AddWithValue("@username", username);
+            try
             {
-                cmd.Parameters.AddWithValue("@username", username);
-
-                try
-                {
-                    con.Open();
-                    object result = cmd.ExecuteScalar();
-                    if (result != null)
-                    {
-                        userID = result.ToString();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error getting userID: " + ex.Message);
-                }
+                con.Open();
+                object result = cmd.ExecuteScalar();
+                if (result != null)
+                    userID = result.ToString();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting userID: " + ex.Message);
             }
         }
         return userID;
@@ -78,22 +69,19 @@ public partial class _Default : System.Web.UI.Page
         string query = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
 
         using (OleDbConnection con = new OleDbConnection(connectionString))
+        using (OleDbCommand cmd = new OleDbCommand(query, con))
         {
-            using (OleDbCommand cmd = new OleDbCommand(query, con))
+            cmd.Parameters.AddWithValue("@userID", userID);
+            try
             {
-                cmd.Parameters.AddWithValue("@userID", userID);
-
-                try
-                {
-                    con.Open();
-                    object result = cmd.ExecuteScalar();
-                    lblLevelNumber.Text = (result != null) ? result.ToString() : "N/A";
-                }
-                catch (Exception ex)
-                {
-                    lblLevelNumber.Text = "ERR";
-                    Console.WriteLine("Error getting level: " + ex.Message);
-                }
+                con.Open();
+                object result = cmd.ExecuteScalar();
+                lblLevelNumber.Text = (result != null) ? result.ToString() : "N/A";
+            }
+            catch (Exception ex)
+            {
+                lblLevelNumber.Text = "ERR";
+                Console.WriteLine("Error getting level: " + ex.Message);
             }
         }
     }
@@ -103,37 +91,71 @@ public partial class _Default : System.Web.UI.Page
         string query = "SELECT userXP, userCoinCount FROM Users WHERE userID = @userID";
 
         using (OleDbConnection con = new OleDbConnection(connectionString))
+        using (OleDbCommand cmd = new OleDbCommand(query, con))
         {
-            using (OleDbCommand cmd = new OleDbCommand(query, con))
+            cmd.Parameters.AddWithValue("@userID", userID);
+            try
             {
-                cmd.Parameters.AddWithValue("@userID", userID);
-
-                try
+                con.Open();
+                using (OleDbDataReader reader = cmd.ExecuteReader())
                 {
-                    con.Open();
-                    using (OleDbDataReader reader = cmd.ExecuteReader())
+                    if (reader.Read())
                     {
-                        if (reader.Read())
-                        {
-                            lblXPAmount.Text = reader["userXP"] != DBNull.Value ?
-                                reader["userXP"].ToString() : "0";
-                            lblPaws.Text = reader["userCoinCount"] != DBNull.Value ?
-                                reader["userCoinCount"].ToString() : "0";
-                        }
-                        else
-                        {
-                            lblXPAmount.Text = "N/A";
-                            lblPaws.Text = "N/A";
-                        }
+                        lblXPAmount.Text = reader["userXP"] != DBNull.Value ? reader["userXP"].ToString() : "0";
+                        lblPaws.Text = reader["userCoinCount"] != DBNull.Value ? reader["userCoinCount"].ToString() : "0";
+                    }
+                    else
+                    {
+                        lblXPAmount.Text = "N/A";
+                        lblPaws.Text = "N/A";
                     }
                 }
-                catch (Exception ex)
+            }
+            catch (Exception ex)
+            {
+                lblXPAmount.Text = "ERR";
+                lblPaws.Text = "ERR";
+                Console.WriteLine("Error getting user data: " + ex.Message);
+            }
+        }
+    }
+
+    private void GetUserProfileIcon(string connectionString, string userID)
+    {
+        string query = "SELECT iconNum FROM Users WHERE userID = @userID";
+
+        using (OleDbConnection con = new OleDbConnection(connectionString))
+        using (OleDbCommand cmd = new OleDbCommand(query, con))
+        {
+            cmd.Parameters.AddWithValue("@userID", userID);
+            try
+            {
+                con.Open();
+                object result = cmd.ExecuteScalar();
+                int iconNum;
+                if (result != null && int.TryParse(result.ToString(), out iconNum))
                 {
-                    lblXPAmount.Text = "ERR";
-                    lblPaws.Text = "ERR";
-                    Console.WriteLine("Error getting user data: " + ex.Message);
+                    string iconPath = GetProfileImagePath(iconNum);
+                    profilePet.ImageUrl = iconPath;
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting profile icon: " + ex.Message);
+            }
+        }
+    }
+
+    private string GetProfileImagePath(int iconNum)
+    {
+        switch (iconNum)
+        {
+            case 1: return "~/ProfilePictures/CatPfp.png";
+            case 2: return "~/ProfilePictures/DogPfp.png";
+            case 3: return "~/ProfilePictures/BunnyPfp.png";
+            case 4: return "~/ProfilePictures/CowPfp.png";
+            case 5: return "~/ProfilePictures/UnicornPfp.png";
+            default: return "~/ProfilePictures/CatPfp.png";
         }
     }
 }
