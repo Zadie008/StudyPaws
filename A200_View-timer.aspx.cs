@@ -28,6 +28,10 @@ public partial class A200_View_timer : System.Web.UI.Page
             string.Format("document.addEventListener('DOMContentLoaded', function() {{ document.getElementById('mainContentPlaceHolder_lblCountdown').textContent = '{0}'; }});", formattedTime), true);
     }
 
+    // COMPLETE TIMER (COUNTDOWN ENDS) - for Zadie~~~~~~~~~~~~~~~~~~~~
+    
+
+    // EDIT TIMER (ADD MINUTES)
     [System.Web.Services.WebMethod]
     public static string UpdateTimerDuration(int addedSeconds)
     {
@@ -58,7 +62,7 @@ public partial class A200_View_timer : System.Web.UI.Page
         }
     }
 
-    // Stop timer (deleting the timer entry)
+    // STOP TIMER (DELETING THE TIMER ENTRY)
     protected void btnYes_Click(object sender, EventArgs e)
     {
         if (Session["userID"] != null && Session["timerID"] != null)
@@ -79,11 +83,10 @@ public partial class A200_View_timer : System.Web.UI.Page
 
                     if (code == 1)
                     {
-                        // Clean up the session if you want
-                        Session["timerID"] = null;
-                        Session["timerTitle"] = null;
-                        Session["timerTag"] = null;
-                        Session["timerDuration"] = null;
+                        //Session["timerID"] = null;
+                        //Session["timerTitle"] = null;
+                        //Session["timerTag"] = null;
+                        //Session["timerDuration"] = null;
 
                         Response.Redirect("Default.aspx");
                     }

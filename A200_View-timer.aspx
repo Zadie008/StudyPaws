@@ -129,8 +129,19 @@
             <asp:Button ID="btnNo" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClientClick="hidePopup(); return false;" />
         </div>
     </div>
-</div>
             </div>
+
+                      <div id="popupTimeUp" class="simple-popup" style="display: none;">
+        <div class="popup-pink-box">
+    <p>Time's up! You earned:</p> <!--CHANGED: from "Congrats!" to "Time's up!"-->
+    <img src="Images/Notification%20Sad%20Hamster.png" />
+    <br />
+    <div class="buttonSection"> <!--CHANGE: button not centered-->
+        <asp:Button ID="btnThankYou" CssClass="popup-button" runat="server" Text="Thank you!" OnClientClick="hideTimeUpPopup(); return false;" />
+    </div>
+</div>
+
+</div>
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" />
     <audio id="alarmSound" src="Audio/alarm.mp3" preload="auto"></audio> <!--add real audio-->
 </asp:Content>

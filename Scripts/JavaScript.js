@@ -176,6 +176,7 @@ function updateCountdown() {
         clearInterval(countdownInterval);
         const alarm = document.getElementById("alarmSound");
         if (alarm) alarm.play();
+        showTimeUpPopup();
     }
 }
 
@@ -245,4 +246,13 @@ function stopTimer() {
 function confirmStop() {
     hidePopup();
     return true; // allow postback
+}
+
+function showTimeUpPopup() {
+    document.getElementById("popupTimeUp").style.display = "flex";
+}
+
+function hideTimeUpPopup() {
+    document.getElementById("popupTimeUp").style.display = "none";
+    window.location.href = "Default.aspx";
 }
