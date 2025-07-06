@@ -256,3 +256,70 @@ function hideTimeUpPopup() {
     document.getElementById("popupTimeUp").style.display = "none";
     window.location.href = "Default.aspx";
 }
+// ---  REGISTRATION PAGE  ---
+
+if (window.location.pathname.toLowerCase().includes("c100_register.aspx")) {
+    let usernameCheckTimeout;
+
+    function checkUsernameAvailability() {
+        clearTimeout(usernameCheckTimeout);
+
+        usernameCheckTimeout = setTimeout(function () {
+            const usernameInput = document.getElementById(txtUsernameClientID);
+            const username = usernameInput ? usernameInput.value : '';
+            const lblAvailability = document.getElementById(lblUsernameAvailabilityClientID);
+
+            if (lblAvailability) {
+                lblAvailability.innerHTML = '';
+                lblAvailability.style.display = 'none';
+            }
+
+            if (username.length >= 3) {
+                if (typeof PageMethods !== 'undefined' && PageMethods.CheckUsernameExists) {
+                    PageMethods.CheckUsernameExists(username, onCheckUsernameSuccess, onCheckUsernameError);
+                } else {
+                    console.error("PageMethods.CheckUsernameExists is not available.");
+                }
+            } else if (username.length > 0 && lblAvailability) {
+                lblAvailability.innerHTML = 'Username too short.';
+                lblAvailability.style.color = 'white';
+                lblAvailability.style.display = 'block';
+            }
+        }, 700);
+    }
+
+    function onCheckUsernameSuccess(result) {
+        const lblAvailability = document.getElementById(lblUsernameAvailabilityClientID);
+        if (lblAvailability) {
+            lblAvailability.innerHTML = result ? 'Username already taken.' : '';
+            lblAvailability.style.color = result ? 'white' : '';
+            lblAvailability.style.display = 'block';
+        }
+    }
+
+    function onCheckUsernameError(error) {
+        const lblAvailability = document.getElementById(lblUsernameAvailabilityClientID);
+        if (lblAvailability) {
+            lblAvailability.innerHTML = 'Error checking username.';
+            lblAvailability.style.color = 'white';
+            lblAvailability.style.display = 'block';
+        }
+        console.error("AJAX Error: ", error);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        if (typeof pnlConfirmClientID !== 'undefined') hidePanel(pnlConfirmClientID);
+        if (typeof pnlTutClientID !== 'undefined') hidePanel(pnlTutClientID);
+        if (typeof pnlProfileExistsClientID !== 'undefined') hidePanel(pnlProfileExistsClientID);
+
+        if (typeof btnUnderstandExistsClientID !== 'undefined') {
+            const btnUnderstandExists = document.getElementById(btnUnderstandExistsClientID);
+            if (btnUnderstandExists) {
+                btnUnderstandExists.onclick = function () {
+                    hidePanel(pnlProfileExistsClientID);
+                    return false;
+                };
+            }
+        }
+    });
+}

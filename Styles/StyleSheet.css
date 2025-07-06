@@ -1660,7 +1660,11 @@ footer p {
 #registerPageDiv table td:last-child {
     text-align: right;
 }
-
+.errorLabel {
+    margin-left: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
 /* ---------------------- LOGIN PAGE ---------------------- */
 #loginPageDiv {
     margin-top: 17%;
