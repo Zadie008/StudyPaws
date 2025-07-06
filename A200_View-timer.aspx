@@ -121,7 +121,7 @@
             <asp:Button ID="btnViewPastTimers" CssClass="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
         </div>
     </div>
-     <div id="popup" class="simple-popup" style="display: none;">
+     <div class="popup, simple-popup" style="display: none;">
     <div class="popup-blue-box">
         <p>Are you sure you want to stop the timer? All XP and coins earned will be lost!</p>
         <img src="Images/Notification%20Sad%20Hamster.png" />

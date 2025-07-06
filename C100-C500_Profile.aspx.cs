@@ -66,7 +66,6 @@ public partial class Default2 : System.Web.UI.Page
         btnCancelUser.Visible = true;
     }
    
-
     protected void btnLogout_Click(object sender, EventArgs e)
     {
       pnlLogout.Visible = true;

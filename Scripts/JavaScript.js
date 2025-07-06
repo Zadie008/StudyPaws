@@ -176,7 +176,6 @@ function updateCountdown() {
         clearInterval(countdownInterval);
         const alarm = document.getElementById("alarmSound");
         if (alarm) alarm.play();
-        // trigger pop-up here
     }
 }
 
@@ -202,7 +201,7 @@ function toggleExtraButtons() {
     return false;
 }
 
-// to take away the +5/+10/+15 buttons when you click somewhere else on the screen
+// to take away the +5/+10/+15 buttons when you click somewhere else on the screen (WORK IN PROGRESS)
 /*function closeExtraOutside(e) {
     const container = document.getElementById('extraTimeButtons');
     const btn = document.getElementById('mainContentPlaceHolder_btnToggleAddExtra');
