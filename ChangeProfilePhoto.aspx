@@ -82,6 +82,21 @@
             CommandArgument="5"
             OnClick="SelectIcon_Click" />
     </div>
+
+    <asp:Panel ID="pnlConfirmPfpf" runat="server" Visible="false">
+     <div id="popup" class="simple-popup">
+    <div class="popup-pink-box">
+        <p>Your profile photo has been updated!</p>
+        <img src="Images/Notification%20Happy.png" />
+        <br />
+        <div class="buttonSection">
+            <asp:Button ID="btnConfirmChange" CssClass="popup-button" runat="server" Text="Okay" OnClientClick="hidePopup(); return false;" />
+        </div>
+    </div>
+</div>
+</asp:Panel>
+
+
 </div>
    </asp:Content> 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

@@ -54,9 +54,9 @@ public partial class Default2 : System.Web.UI.Page
 
                 try
                 {
-                    string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+                    string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
-                    using (SqlConnection con = new SqlConnection(connectionString))
+                    using (SqlConnection con = new SqlConnection(cs))
                     {
                         string query = "UPDATE Users SET iconNum = @IconNum WHERE userID = @UserID";
 
@@ -74,6 +74,7 @@ public partial class Default2 : System.Web.UI.Page
                             }
                             else
                             {
+
                                 Response.Redirect("C100-C500_Profile.aspx");
                             }
                         }
