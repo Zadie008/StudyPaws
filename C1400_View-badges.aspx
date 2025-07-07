@@ -97,11 +97,28 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-    <div id="badgesMainContent">
-        <div class="backgroundColorContainer">
 
+<div id="badgesMainContent">
+    <div class="backgroundColorContainer">
+        <div class="badges-scroll-wrapper">
+            <h2>Badges</h2>
+            <div class="badges-container">
+                <asp:Repeater ID="rpPets" runat="server">
+                    <ItemTemplate>
+                        <div class="badge-card">
+                            <div class="badge-image">
+                                <asp:Image ID="imgBadge" runat="server" ImageUrl='<%# Eval("badgeIconNum") %>' />
+                            </div>
+                            <asp:Label ID="lblBadgeName" runat="server" Text='<%# Eval("badgeName") %>' CssClass="badge-name"></asp:Label>
+                            <asp:Label ID="lblBadgeDescription" runat="server" Text='<%# Eval("badgeDescBronze") %>' CssClass="badge-description"></asp:Label>
+                        </div>
+                    </ItemTemplate>
+                </asp:Repeater>
+            </div>
         </div>
     </div>
+</div>
+
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

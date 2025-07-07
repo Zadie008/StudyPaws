@@ -1561,19 +1561,85 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 /* ---------------------- BADGES PAGE ---------------------- */
-#badgesMainContent{
-    margin: 4em 4em 4em 4em;
+
+#badgesMainContent {
+    margin: 4em;
+    height: 63vh;
+    overflow: hidden; 
 }
 
 #badgesMainContent .backgroundColorContainer {
     align-items: center;
     margin: auto;
-    background-color: #90A8C3; /*dusty blue*/
+    background-color: #90A8C3; 
     min-width: 85%;
     max-width: 85%;
-    height: 63vh;
+    height: 100%;
     border-radius: 2em;
     padding: 0.5em;
+    display: flex;
+    flex-direction: column;
+}
+
+.badges-scroll-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    width: 100%;
+    padding-right: 10px; 
+    margin-top: 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: #446791 #e0e0e0;
+}
+
+.badges-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 per row */
+    gap: 2rem;
+    padding: 0 1rem 1rem 1rem;
+}
+
+.badge-card {
+    background-color: #90a8c3;
+    border-radius: 1rem;
+    width: 100%;
+    text-align: center;
+}
+
+.badge-image {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 4px solid white;
+    background-color: #D7B9D5;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.badge-image img {
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+}
+
+.badge-name {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-top: 0.6rem;
+    padding: 0.3rem 0.7rem;
+    border: 2px solid #ccc;
+    border-radius: 1.5rem;
+    background-color: #90a8c3;
+}
+
+.badge-description {
+    display: block;
+    font-size: 0.95rem;
+    color: white;
+    margin-top: 0.3rem;
 }
 
 /* ---------------------- ABOUT PAGE ---------------------- */
@@ -2370,169 +2436,4 @@ table {
         bottom: 0;
     }
 }
-/*FriendShip page*/
-.viewFriendshipsMainContent {
-    margin: 4em 4em 4em 4em;
-    background-color: #3b5998;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-.viewFriendshipsHeading {
-    position: relative;
-    margin: 0 auto;
-    min-width: 75%;
-    max-width: 75%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: white;
-    margin-bottom: 20px;
-}
-
-.viewFriendshipsHeading .leftSection {
-    flex: 1;
-}
-
-.viewFriendshipsHeading .middleSection {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    width: max-content;
-    z-index: 1;
-}
-
-.viewFriendTitle {
-    font-size: 2.2rem;
-    font-weight: normal;
-    margin: 0;
-    color: white;
-    font-family: 'Gilda Display', serif;
-}
-
-
-.viewFriendshipsHeading .rightSection {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding-right: 2.5em;
-}
-
-.viewFriendshipsMessages img {
-    width: 2.5rem;
-    height: auto;
-}
-
-.viewFriendshipTableSection {
-    min-height: 55.5vh;
-    max-height: 55.5vh;
-    margin-top: -2%;
-    background-color: #90A8C3;
-    border-radius: 2em;
-    padding: 1em;
-    width: 75%;
-    overflow-y: auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.friendsGridView {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: transparent;
-}
-
-.friendsGridView td {
-    padding: 0;
-    border: none;
-}
-
-.friend-card {
-    background-color: #C1B4D8;
-    border-radius: 2em;
-    margin: 1em auto;
-    padding: 1em 2em;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 1.5em;
-    max-width: 95%;
-    font-family: 'Gilda Display', serif;
-    font-size: 1.8rem;
-    color: white;
-    box-sizing: border-box;
-}
-
-.friend-icon {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    border: 2px solid white;
-    object-fit: cover;
-}
-
-.friend-name {
-    flex-grow: 1;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.friend-edit-button {
-    background-color: transparent;
-    border: 2px solid white;
-    color: white;
-    border-radius: 2em;
-    padding: 0.4em 1.2em;
-    font-size: 1.6rem;
-    font-family: 'Gilda Display', serif;
-    cursor: pointer;
-    margin-right: 0.5em; 
-    white-space: nowrap; 
-    transition: background-color 0.3s ease, color 0.3s ease; 
-}
-
-.friend-edit-button:hover {
-    background-color: white; 
-    color: #C1B4D8;
-}
-
-.friend-delete-icon {
-    width: 2rem;
-    height: auto;
-    cursor: pointer;
-    filter: invert(100%); 
-}
-
-.searchFriendsContainer {
-    width: 75%; 
-    margin-top: 20px; 
-    text-align: center; 
-}
-
-.searchFriendsButton {
-    background-color: white;
-    color: #6a8cbf; 
-    border: none;
-    border-radius: 25px; 
-    padding: 15px 40px;
-    font-size: 1.1em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-weight: bold;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    font-family: 'Gilda Display', serif; 
-}
-
-.searchFriendsButton:hover {
-    background-color: #e0e0e0;
-}
-
-
-
+/*BADGES PAGE*/
