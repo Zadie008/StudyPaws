@@ -15,10 +15,16 @@ public partial class Default2 : System.Web.UI.Page
         if (!IsPostBack)
         {
             ViewState["SelectedIcon"] = "";
-        }
-        pnlConfirmPfpf.Visible = false;
 
-       RefreshSelectedIcon();
+            if (Session["UserID"] != null)
+            {
+                string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+                GetUserProfileIcon(cs, Session["UserID"].ToString());
+            }
+        }
+
+        pnlConfirmPfpf.Visible = false;
+        RefreshSelectedIcon();
     }
 
     protected void btnBackProfile_Click(object sender, EventArgs e)
@@ -36,7 +42,7 @@ public partial class Default2 : System.Web.UI.Page
 
             if (Session["UserID"] != null)
             {
-                int userId = (int)Session["UserID"];  
+                int userId = Convert.ToInt32(Session["UserID"]);
                 try
                 {
                     string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -51,13 +57,15 @@ public partial class Default2 : System.Web.UI.Page
                             con.Open();
                             int rowsAffected = cmd.ExecuteNonQuery();
                             con.Close();
-                            if (rowsAffected == 0)
+
+                            if (rowsAffected > 0)
                             {
-                                Response.Write("<script>alert('No rows updated. UserID might be incorrect.');</script>");
+                                pnlConfirmPfpf.Visible = true;
+                                GetUserProfileIcon(cs, Session["UserID"].ToString());
                             }
                             else
                             {
-                                pnlConfirmPfpf.Visible = true;
+                                Response.Write("<script>alert('No rows updated. UserID might be incorrect.');</script>");
                             }
                         }
                     }
@@ -77,6 +85,7 @@ public partial class Default2 : System.Web.UI.Page
             Response.Write("<script>alert('No icon selected.');</script>");
         }
     }
+
     protected void SelectIcon_Click(object sender, ImageClickEventArgs e)
     {
         ImageButton clickedButton = sender as ImageButton;
@@ -89,19 +98,24 @@ public partial class Default2 : System.Web.UI.Page
         }
     }
 
-    private void RefreshSelectedIcon() //I am so happy, the user does not have to double select the image anymore
+    private void RefreshSelectedIcon()
     {
-        
+        // Reset all button styles
         btnCat.CssClass = "iconItem circle-cat";
         btnDog.CssClass = "iconItem circle-dog";
         btnBunny.CssClass = "iconItem circle-bunny";
         btnCow.CssClass = "iconItem circle-cow";
         btnUnicorn.CssClass = "iconItem circle-unicorn";
 
-        string selected = null; 
+        string selected; // Declare the variable first
+
         if (ViewState["SelectedIcon"] != null)
         {
             selected = ViewState["SelectedIcon"].ToString();
+        }
+        else
+        {
+            selected = null; // Explicitly set to null if the ViewState entry is null
         }
 
         switch (selected)
@@ -114,5 +128,43 @@ public partial class Default2 : System.Web.UI.Page
         }
     }
 
+    private void GetUserProfileIcon(string connectionString, string userID)
+    {
+        string query = "SELECT iconNum FROM Users WHERE userID = @userID";
 
+        using (OleDbConnection con = new OleDbConnection(connectionString))
+        using (OleDbCommand cmd = new OleDbCommand(query, con))
+        {
+            cmd.Parameters.AddWithValue("@userID", userID);
+            try
+            {
+                con.Open();
+                object result = cmd.ExecuteScalar();
+                int iconNum;
+                if (result != null && int.TryParse(result.ToString(), out iconNum))
+                {
+                    string iconPath = GetProfileImagePath(iconNum);
+                    profilePet.ImageUrl = ResolveUrl(iconPath);
+                    ViewState["SelectedIcon"] = iconNum.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting profile icon: " + ex.Message);
+            }
+        }
+    }
+
+    private string GetProfileImagePath(int iconNum)
+    {
+        switch (iconNum)
+        {
+            case 1: return "~/ProfilePictures/CatPfp.png";
+            case 2: return "~/ProfilePictures/DogPfp.png";
+            case 3: return "~/ProfilePictures/BunnyPfp.png";
+            case 4: return "~/ProfilePictures/CowPfp.png";
+            case 5: return "~/ProfilePictures/UnicornPfp.png";
+            default: return "~/ProfilePictures/CatPfp.png";
+        }
+    }
 }

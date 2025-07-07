@@ -11,13 +11,12 @@
         </div>
         
         <!-- pfpIcon -->
-        <div class="headerCenter">
+         <div class="headerCenter">
             <div class="profileIcon">
                 <div class="profileImageContainer">
                     <div id="profileCircle"></div>
-                    <img id="profilePet" src="Images/Farm%204%20Cow%20White%20and%20Black.png"/>
+                    <asp:Image ID="profilePet" runat="server" Width="120" />
                 </div>
-              
             </div>
         </div>
         

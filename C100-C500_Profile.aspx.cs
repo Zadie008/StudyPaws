@@ -13,15 +13,18 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        string username = ""; 
+
+        if (Session["Username"] != null)
+        {
+            username = Session["Username"].ToString();
+        }
+
         if (!IsPostBack)
         {
             pnlDeleteProfile.Visible = false;
             pnlLogout.Visible = false;
-            string username = "";
-            if (Session["Username"] != null)
-            {
-                username = Session["Username"].ToString();
-            }
+
             if (string.IsNullOrEmpty(username)) return;
 
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -41,7 +44,7 @@ public partial class Default2 : System.Web.UI.Page
 
                     originalUsername = reader["username"].ToString();
                     originalPass = reader["password"].ToString();
-                    originalEmail = reader["email"].ToString(); 
+                    originalEmail = reader["email"].ToString();
                 }
                 con.Close();
             }
@@ -51,6 +54,8 @@ public partial class Default2 : System.Web.UI.Page
             pnlLogout.Visible = false;
             pnlDeleteProfile.Visible = false;
         }
+
+        LoadUserProfileIcon(username);
     }
 
     protected void btnBackProfile_Click(object sender, EventArgs e)
@@ -305,5 +310,48 @@ public partial class Default2 : System.Web.UI.Page
         Session.Abandon();
         Response.Redirect("Landing-page.aspx");
     }
+    private void LoadUserProfileIcon(string username)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
+        using (OleDbConnection con = new OleDbConnection(cs))
+        {
+            string query = "SELECT iconNum FROM Users WHERE username = ?";
+            OleDbCommand cmd = new OleDbCommand(query, con);
+            cmd.Parameters.AddWithValue("?", username);
+
+            try
+            {
+                con.Open();
+                object result = cmd.ExecuteScalar();
+                int iconNum;
+                if (result != null && int.TryParse(result.ToString(), out iconNum))
+                {
+                    string imageUrl = GetProfileImagePath(iconNum);
+                    profilePet.ImageUrl = imageUrl;
+                }
+                else
+                {
+                    profilePet.ImageUrl = "~/ProfilePictures/CatPfp.png"; // Default fallback
+                }
+            }
+            catch
+            {
+                profilePet.ImageUrl = "~/ProfilePictures/CatPfp.png";
+            }
+        }
+    }
+
+    private string GetProfileImagePath(int iconNum)
+    {
+        switch (iconNum)
+        {
+            case 1: return "~/ProfilePictures/CatPfp.png";
+            case 2: return "~/ProfilePictures/DogPfp.png";
+            case 3: return "~/ProfilePictures/BunnyPfp.png";
+            case 4: return "~/ProfilePictures/CowPfp.png";
+            case 5: return "~/ProfilePictures/UnicornPfp.png";
+            default: return "~/ProfilePictures/CatPfp.png";
+        }
+    }
 }
