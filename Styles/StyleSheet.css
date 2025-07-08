@@ -1421,6 +1421,7 @@ body.page-exit .welcomeBackTextDiv {
 .pastTimerStudySessionTableSection {
     min-height: 55.5vh;
     max-height: 55.5vh;
+    height: auto;
     margin-top: -2%;
 }
 
@@ -1467,13 +1468,13 @@ body.page-exit .welcomeBackTextDiv {
 
 .scrollableTableContainer {
     max-height: 50vh;
+    height: auto;
     overflow-y: auto;
     overflow-x: hidden;
     min-width: 75%;
     max-width: 75%;
     margin-left: auto;
     margin-right: auto;
-    border-radius: 3em;
 }
 
 .scrollableTableContainer::-webkit-scrollbar {
@@ -1567,27 +1568,43 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 /* ---------------------- BADGES PAGE ---------------------- */
-
 #badgesMainContent {
-    margin: 4em;
-    height: 63vh;
+    margin: 2em;
+    height: 67vh;
     overflow: hidden; 
+}
+
+#badgesMainContent h2 {
+    margin-bottom: 0.1em;
+    font-size: 2.5rem;
 }
 
 #badgesMainContent .backgroundColorContainer {
     align-items: center;
     margin: auto;
+    padding-left: 0.2em;
     background-color: #90A8C3; 
     min-width: 85%;
     max-width: 85%;
-    height: 100%;
-    border-radius: 2em;
+    height: auto;
+    border-radius: 3em;
     padding: 0.5em;
     display: flex;
     flex-direction: column;
 }
 
-.badges-scroll-wrapper {
+#badgesMainContent .scrollableTableContainer {
+    height: auto;
+    max-height: 58vh;
+    min-width: 97%;
+    max-width: 100%;
+}
+
+#badgesMainContent .scrollableTableContainer::-webkit-scrollbar {
+    padding-right: 0.2em;
+}
+
+/*.badges-scroll-wrapper {
     flex: 1;
     overflow-y: auto;
     width: 100%;
@@ -1595,8 +1612,7 @@ body.page-exit .welcomeBackTextDiv {
     margin-top: 1rem;
     scrollbar-width: thin;
     scrollbar-color: #446791 #e0e0e0;
-}
-
+}*/
 .badges-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* 4 per row */

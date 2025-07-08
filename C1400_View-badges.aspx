@@ -99,9 +99,10 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
 
 <div id="badgesMainContent">
+    <h2>Badges</h2>
     <div class="backgroundColorContainer">
-        <div class="badges-scroll-wrapper">
-            <h2>Badges</h2>
+        <div class="scrollableTableContainer">
+            
             <div class="badges-container">
                 <asp:Repeater ID="rpPets" runat="server">
                     <ItemTemplate>
