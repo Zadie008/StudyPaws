@@ -176,7 +176,7 @@ function animateDonut() {
 
     function animate(timestamp) {
         if (!startTime) startTime = timestamp;
-        const progress = Math.min((timestamp - startTime) / 1000, 1); // 1 second
+        const progress = Math.min((timestamp - startTime) / 1500, 1); // 1.5 seconds
 
         const offset = circumference * progress;
         ring.style.strokeDasharray = circumference;

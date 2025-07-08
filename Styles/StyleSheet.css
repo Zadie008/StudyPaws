@@ -108,7 +108,7 @@ p {
 
 .popup-pink-box {
     background-color: #D7B9D5; /*pink*/
-    padding: 40px;
+    padding: 1.5em;
     border-radius: 10px;
     border: 5px solid white;
     width: 40%;
@@ -135,7 +135,7 @@ p {
 
 .popup-blue-box {
     background-color: #90A8C3; /*blue*/
-    padding: 40px;
+    padding: 1.5em;
     border-radius: 10px;
     border: 5px solid white;
     width: 40%;
@@ -430,6 +430,7 @@ h2 {
 .pawIcon {
     position: relative;
     width: 2.5vw;
+    min-width: 40px;
     max-width: 50px;
     aspect-ratio: 1;
 }
@@ -1423,6 +1424,37 @@ body.page-exit .welcomeBackTextDiv {
 
 .viewTimerMainContent #popup .buttonSection .popup-button-best-blue {
     font-size: clamp(1rem, 2vw, 2rem);
+    width: 100%;
+}
+
+#popupTimeUpTable {
+    font-size: 40px;
+}
+
+#popupTimeUpTable td {
+    padding: 0 0.3em;
+}
+
+#popupTimeUpTable .pawIcon {
+    position: relative;
+    min-width: 4vw;
+    aspect-ratio: 1;
+}
+
+#popupTimeUpTable .pawIcon img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#popupTimeUpTable .pawIcon .paw {
+    z-index: 1;
+    width: 35%;
+}
+
+#popupTimeUpTable .pawIcon .circle {
+    z-index: 0;
     width: 100%;
 }
 

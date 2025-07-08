@@ -59,13 +59,11 @@
         </defs>
         <text>
             <textPath href="#curve" startOffset="50%" text-anchor="middle">
-                <a href="Default.aspx" class="curvedHeaderLink">
-                    StudyP<tspan dx="0.7em">w</tspan>s
-                </a>
+                StudyP<tspan dx="0.7em">w</tspan>s
             </textPath>
         </text>
     </svg>
-    <a href="Default.aspx"><img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" /></a>
+    <img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" />
     <h2>purrfectly productive</h2>
 </div></asp:Content>
 
@@ -134,16 +132,29 @@
 
     <div id="popupTimeUp" class="simple-popup" style="display: none;">
         <div class="popup-pink-box">
-    <p>Time's up! You earned:</p> <!--CHANGED: from "Congrats!" to "Time's up!"-->
-    <p>XP +10<br />(coin image) +10</p>
-    <img src="Images/Notification%20Happy.png" />
-    <br />
-    <div class="buttonSection">
-        <asp:Button ID="btnThankYou" CssClass="popup-button" runat="server" Text="Thank you!" OnClientClick="hideTimeUpPopup(); return false;" />
+            <p>Time's up! You earned:</p> <!--CHANGED: from "Congrats!" to "Time's up!"-->
+            <table id="popupTimeUpTable">
+                <tr>
+                    <td>XP</td>
+                    <td>+10</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="pawIcon">
+                            <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
+                            <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
+                        </div>
+                    </td>
+                    <td>+10</td>
+                </tr>
+            </table>
+            <img src="Images/Notification%20Happy.png" />
+            <br />
+            <div class="buttonSection">
+                <asp:Button ID="btnThankYou" CssClass="popup-button" runat="server" Text="Thank you!" OnClientClick="hideTimeUpPopup(); return false;" />
+            </div>
+        </div>
     </div>
-</div>
-
-</div>
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" />
     <audio id="timerStartSound" src="Audio/timerStartSound.mp3" preload="auto"></audio>
     <audio id="timerEndSound" src="Audio/timerEndSound.mp3" preload="auto"></audio>
