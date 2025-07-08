@@ -125,6 +125,12 @@ p {
 .popup-pink-box .buttonSection{
     text-align: center;
     margin-top: 3vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2em;
+    flex-wrap: nowrap;
+    flex-direction: row;
 }
 
 .popup-blue-box {
@@ -146,6 +152,12 @@ p {
 .popup-blue-box .buttonSection {
     text-align: center;
     margin-top: 3vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2em;
+    flex-wrap: nowrap;
+    flex-direction: row;
 }
 
 /* worse button option */
@@ -206,6 +218,7 @@ p {
     color: #D7B9D5;
     text-decoration: none;
 }
+
 /* ---------------------- MASTER PAGE DIVS ---------------------- */
 .page-wrapper {
     min-height: 100vh;

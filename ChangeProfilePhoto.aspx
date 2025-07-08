@@ -89,7 +89,7 @@
         <img src="Images/Notification%20Happy.png" />
         <br />
         <div class="buttonSection">
-            <asp:Button ID="btnConfirmChange" CssClass="popup-button" runat="server" Text="Okay" OnClientClick="hidePopup(); return false;" />
+            <asp:Button ID="btnConfirmChange" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hidePopup(); return false;" />
         </div>
     </div>
 </div>

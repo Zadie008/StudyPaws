@@ -154,6 +154,44 @@ function formatFullTime(seconds) {
     return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 }
 
+window.addEventListener('DOMContentLoaded', function () {
+    const startSound = document.getElementById('timerStartSound');
+    if (startSound) {
+        startSound.play().catch(err => {
+            console.warn("Start sound not played automatically (likely due to autoplay restrictions):", err);
+        });
+    }
+
+    animateDonut();
+});
+
+function animateDonut() {
+    const ring = document.querySelector(".progress-ring-fill");
+    if (!ring) return;
+
+    const radius = 210;
+    const circumference = 2 * Math.PI * radius;
+
+    let startTime = null;
+
+    function animate(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / 1000, 1); // 1 second
+
+        const offset = circumference * progress;
+        ring.style.strokeDasharray = circumference;
+        ring.style.strokeDashoffset = offset;
+
+        if (progress < 1) {
+            requestAnimationFrame(animate);
+        } else {
+            countdownInterval = setInterval(updateCountdown, 1000); // every second after that
+        }
+    }
+
+    requestAnimationFrame(animate);
+}
+
 function updateCountdown() {
     const countdownLabel = document.getElementById("mainContentPlaceHolder_lblCountdown");
     const ring = document.querySelector(".progress-ring-fill");
@@ -174,13 +212,11 @@ function updateCountdown() {
         remainingTime--;
     } else {
         clearInterval(countdownInterval);
-        const alarm = document.getElementById("alarmSound");
+        const alarm = document.getElementById("timerEndSound");
         if (alarm) alarm.play();
         showTimeUpPopup();
     }
 }
-
-const countdownInterval = setInterval(updateCountdown, 1000);
 
 let extraVisible = false;
 
@@ -256,8 +292,8 @@ function hideTimeUpPopup() {
     document.getElementById("popupTimeUp").style.display = "none";
     window.location.href = "Default.aspx";
 }
-// ---  REGISTRATION PAGE  ---
 
+// ---  REGISTRATION PAGE  ---
 if (window.location.pathname.toLowerCase().includes("c100_register.aspx")) {
     let usernameCheckTimeout;
 

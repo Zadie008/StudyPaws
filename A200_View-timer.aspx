@@ -5,37 +5,37 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-            <!--account info to copy and paste-->
-<div class="accountInfoDiv">
-    <div class="profileDiv">
-        <a href="C100-C500_Profile.aspx" class="profileIconLink">
-            <div class="profileIcon">
-                <div id="profileCircle"></div>
-                <img id="profilePet" src="Images/Farm%204%20Cow%20White%20and%20Black.png" width="120"/>
+    <!--account info to copy and paste-->
+    <div class="accountInfoDiv">
+        <div class="profileDiv">
+            <a href="C100-C500_Profile.aspx" class="profileIconLink">
+                <div class="profileIcon">
+                    <div id="profileCircle"></div>
+                    <asp:Image ID="profilePet" runat="server" ImageUrl="~/Images/Farm%204%20Cow%20White%20and%20Black.png" />
+                </div>
+            </a>
+            <div class="profileDetails">
+                <table>
+                    <tr>
+                        <td><asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Level"></asp:Label></td>
+                        <td><asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server" Text="16"></asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td><asp:Label ID="lblXP" CssClass="accountInfoTableLabel" runat="server" Text="XP"></asp:Label></td>
+                        <td><asp:Label ID="lblXPAmount" CssClass="accountInfoTableLabelRight" runat="server" Text="65"></asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="pawIcon">
+                                <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
+                                <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
+                            </div>
+                        </td>
+                    <td><asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server" Text="190"></asp:Label></td>
+                    </tr>
+                </table>
             </div>
-        </a>
-        <div class="profileDetails">
-            <table>
-                <tr>
-                    <td><asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Label">Level</asp:Label></td>
-                    <td><asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server" Text="Label">16</asp:Label></td> <!--CHANGE: has to be their level-->
-                </tr>
-                <tr>
-                    <td><asp:Label ID="lblXP" CssClass="accountInfoTableLabel" runat="server" Text="Label">XP</asp:Label></td>
-                    <td><asp:Label ID="lblXPAmount" CssClass="accountInfoTableLabelRight" runat="server" Text="Label">65</asp:Label></td> <!--CHANGE: has to be total xp-->
-                </tr>
-                <tr>
-                    <td>
-                        <div class="pawIcon">
-                            <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
-                            <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
-                        </div>
-                    </td>
-                    <td><asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server" Text="Label">190</asp:Label></td> <!--CHANGE: has to be total paws currency-->
-                </tr>
-            </table>
         </div>
-    </div>
 
     <div class="timeDateDiv">
         <table>
@@ -59,14 +59,15 @@
         </defs>
         <text>
             <textPath href="#curve" startOffset="50%" text-anchor="middle">
-                StudyP<tspan dx="0.7em">w</tspan>s
+                <a href="Default.aspx" class="curvedHeaderLink">
+                    StudyP<tspan dx="0.7em">w</tspan>s
+                </a>
             </textPath>
         </text>
     </svg>
-    <img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" />
+    <a href="Default.aspx"><img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" /></a>
     <h2>purrfectly productive</h2>
-</div>
-</asp:Content>
+</div></asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
 
@@ -121,7 +122,7 @@
     </div>
      <div id="popup" class="simple-popup" style="display: none;">
     <div class="popup-blue-box">
-        <p>Are you sure you want to stop the timer? All XP and coins earned will be lost!</p>
+        <p>Are you sure you want to stop the timer?<br />All XP and coins earned will be lost!</p>
         <img src="Images/Notification%20Sad%20Hamster.png" />
         <br />
         <div class="buttonSection">
@@ -131,19 +132,21 @@
     </div>
             </div>
 
-                      <div id="popupTimeUp" class="simple-popup" style="display: none;">
+    <div id="popupTimeUp" class="simple-popup" style="display: none;">
         <div class="popup-pink-box">
     <p>Time's up! You earned:</p> <!--CHANGED: from "Congrats!" to "Time's up!"-->
-    <img src="Images/Notification%20Sad%20Hamster.png" />
+    <p>XP +10<br />(coin image) +10</p>
+    <img src="Images/Notification%20Happy.png" />
     <br />
-    <div class="buttonSection"> <!--CHANGE: button not centered-->
+    <div class="buttonSection">
         <asp:Button ID="btnThankYou" CssClass="popup-button" runat="server" Text="Thank you!" OnClientClick="hideTimeUpPopup(); return false;" />
     </div>
 </div>
 
 </div>
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" />
-    <audio id="alarmSound" src="Audio/alarm.mp3" preload="auto"></audio> <!--add real audio-->
+    <audio id="timerStartSound" src="Audio/timerStartSound.mp3" preload="auto"></audio>
+    <audio id="timerEndSound" src="Audio/timerEndSound.mp3" preload="auto"></audio>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
