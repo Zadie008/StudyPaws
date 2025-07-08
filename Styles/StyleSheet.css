@@ -1422,14 +1422,21 @@ body.page-exit .welcomeBackTextDiv {
     min-height: 55.5vh;
     max-height: 55.5vh;
     height: auto;
-    margin-top: -2%;
+    margin-top: -1%;
+    background-color: #90A8C3;
+    border-radius: 3em;
+    min-width: 75%;
+    max-width: 75%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .viewPastTimersHeading {
     position: relative;
     margin: 0 auto;
-    min-width: 75%;
-    max-width: 75%;
+    bottom: 2.2em;
+    min-width: 100%;
+    max-width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1477,6 +1484,12 @@ body.page-exit .welcomeBackTextDiv {
     margin-right: auto;
 }
 
+.viewPastTimersMainContent .scrollableTableContainer {
+    max-height: 49vh;
+    min-width: 97%;
+    max-width: 97%;
+}
+
 .scrollableTableContainer::-webkit-scrollbar {
     width: 0.7em;
 }
@@ -1489,7 +1502,6 @@ body.page-exit .welcomeBackTextDiv {
 .scrollableTableContainer::-webkit-scrollbar-thumb {
     background-color: #446791;
     border-radius: 100px;
-    border: 2px solid white;
     box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
 }
 
@@ -1498,14 +1510,12 @@ body.page-exit .welcomeBackTextDiv {
     margin-right: auto;
     border-collapse: separate;
     border-spacing: 0;
-    border-radius: 2em;
     min-width: 99%;
     height: auto;
     font-family: 'Gilda Display', serif;
     font-size: 2.2rem;
     color: white;
     text-align: center;
-    background-color: #90A8C3;
 }
 
 .pastTimerTable th {
