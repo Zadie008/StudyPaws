@@ -59,7 +59,7 @@ public partial class Default2 : System.Web.UI.Page
 
                         con.Close();
 
-                        Response.Redirect("A200_View-timer.aspx");
+                        Response.Redirect("A200-A500_Timer.aspx");
                     }
                     else
                     {
