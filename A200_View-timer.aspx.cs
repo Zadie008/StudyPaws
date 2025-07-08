@@ -26,10 +26,16 @@ public partial class A200_View_timer : System.Web.UI.Page
 
         ClientScript.RegisterStartupScript(this.GetType(), "initialCountdownText",
             string.Format("document.addEventListener('DOMContentLoaded', function() {{ document.getElementById('mainContentPlaceHolder_lblCountdown').textContent = '{0}'; }});", formattedTime), true);
+
+        if (Session["EquippedPetImagePath"] != null)
+        {
+            pet.ImageUrl = Session["EquippedPetImagePath"].ToString();
+        }
+
     }
 
     // COMPLETE TIMER (COUNTDOWN ENDS) - for Zadie~~~~~~~~~~~~~~~~~~~~
-    
+
 
     // EDIT TIMER (ADD MINUTES)
     [System.Web.Services.WebMethod]

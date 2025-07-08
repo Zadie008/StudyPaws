@@ -38,6 +38,7 @@ public partial class _Default : System.Web.UI.Page
         GetLevelInformation(cs, userID);
         GetUserStats(cs, userID);
         GetUserProfileIcon(cs, userID);
+        LoadEquippedPet(cs, userID);
     }
 
     private string GetUserID(string username, string connectionString)
@@ -157,5 +158,47 @@ public partial class _Default : System.Web.UI.Page
             case 5: return "~/ProfilePictures/UnicornPfp.png";
             default: return "~/ProfilePictures/CatPfp.png";
         }
+    }
+
+    private void LoadEquippedPet(string connectionString, string userID)
+    {
+        string command = "SELECT Pet.petType, Pet.colourNum FROM UserPets INNER JOIN Pet ON UserPets.petID = Pet.petID WHERE UserPets.userID = @userID AND UserPets.equippedStatus = True";
+
+        using (OleDbConnection con = new OleDbConnection(connectionString))
+        using (OleDbCommand cmd = new OleDbCommand(command, con))
+        {
+            cmd.Parameters.AddWithValue("@userID", userID);
+            try
+            {
+                con.Open();
+                using (OleDbDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        string petType = reader["petType"].ToString();   // Cat/Dog/Fuzzy/Farm/Special
+                        int colourNum = Convert.ToInt32(reader["colourNum"]); // 1/2/3/4/5
+
+                        string imagePath = GetPetImagePath(petType, colourNum); // building file name of image
+                        pet.ImageUrl = imagePath;
+
+                        Session["EquippedPetImagePath"] = imagePath; // saved as session variable
+                    }
+                    else
+                    {
+                        pet.ImageUrl = "~/Images/Cat 1.png"; // default pet
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error loading equipped pet: " + ex.Message);
+                pet.ImageUrl = "~/Images/Cat 1.png";
+            }
+        }
+    }
+
+    private string GetPetImagePath(string petType, int colourNum)
+    {
+        return string.Format("~/Images/{0} {1}.png", petType, colourNum);
     }
 }

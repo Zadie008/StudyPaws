@@ -8,12 +8,10 @@
     <!--account info to copy and paste-->
     <div class="accountInfoDiv">
         <div class="profileDiv">
-            <a href="C100-C500_Profile.aspx" class="profileIconLink">
                 <div class="profileIcon">
                     <div id="profileCircle"></div>
                     <asp:Image ID="profilePet" runat="server" ImageUrl="~/Images/Farm%204%20Cow%20White%20and%20Black.png" />
                 </div>
-            </a>
             <div class="profileDetails">
                 <table>
                     <tr>
@@ -86,8 +84,8 @@
                 <div class="timerInnerContent">
                     <div id="mainContentPlaceHolder_lblCountdown" class="timerText"></div>
                     <div class="homePagePet">
-                        <img id="pet" src="Images/Cat%201%20Brown%20and%20White.png" /> <!--CHANGE: has to be chosen home page pet-->
                         <img id="glow" src="Images/Glow(cropped).png" />
+                        <asp:Image id="pet" runat="server" width="400" />
                     </div>
                 </div>
             </div>

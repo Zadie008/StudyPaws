@@ -9,6 +9,7 @@ using System.Web.UI.WebControls;
 
 public partial class Default2 : System.Web.UI.Page
 {
+    // update the session var for equipped pet image path once the user equips a new one!!!!!!!!!!!!
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
