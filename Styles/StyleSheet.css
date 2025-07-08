@@ -2477,11 +2477,11 @@ table {
     }
 
     .viewTimerMainContent {
-        margin: 3em 3em 3em 3em;
+        margin: 3em 3em 1em 3em;
     }
 
     .viewTimerMainContent .timeSection {
-        padding: 0 0 2.5% 0;
+        padding: 0;
     }
 
     .viewTimerMainContent .timeSection .rightSection {
@@ -2489,11 +2489,12 @@ table {
     }
 
     .viewPastTimersMainContent {
-        margin: 3em 3em 3em 3em;
+        margin: 3em 3em 1em 3em;
     }
 
     .pastTimerStudySessionTableSection {
-        margin-top: -4.5%;
+        margin-top: -1%;
+        margin-bottom: -1%;
     }
 
     .scrollableTableContainer {
