@@ -1,7 +1,7 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="A100_Create-timer_2.aspx.cs" Inherits="Default2" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="A700_Create-study-session_2.aspx.cs" Inherits="Default2" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
-    Create timer
+    Create study session
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
@@ -68,6 +68,7 @@
     <a href="Default.aspx"><img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" /></a>
     <h2>purrfectly productive</h2>
 </div>
+
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
@@ -75,7 +76,7 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-    <div class="createTimer2MainContent">
+        <div class="createTimer2MainContent">
         <div class="titleTagSection">
             <div class="leftSection">
             </div>
@@ -102,10 +103,10 @@
             <div class="rightSection">
                 <table>
                     <tr>
-                        <td><asp:RequiredFieldValidator ID="errorTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title for your Timer" EnableClientScript="true" ControlToValidate="txtTitle"></asp:RequiredFieldValidator></td>
+                        <td><asp:RequiredFieldValidator ID="errorTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title for your Study session" EnableClientScript="true" ControlToValidate="txtTitle"></asp:RequiredFieldValidator></td>
                     </tr>
                     <tr>
-                        <td><asp:RequiredFieldValidator ID="errorDropDown" class="validationError" runat="server" ErrorMessage="Please select a Tag for your Timer" EnableClientScript="true" ControlToValidate="dropdownTag"></asp:RequiredFieldValidator></td>
+                        <td><asp:RequiredFieldValidator ID="errorDropDown" class="validationError" runat="server" ErrorMessage="Please select a Tag for your Study session" EnableClientScript="true" ControlToValidate="dropdownTag"></asp:RequiredFieldValidator></td>
                     </tr>
                 </table>
             </div>
@@ -118,10 +119,11 @@
                 <asp:Button ID="btnContinue" class="button" runat="server" Text="Continue" OnClick="btnContinue_Click" />
             </div>
             <div class="rightSection">
-                <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
+                <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past sessions" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
             </div>
         </div>
     </div>
+
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

@@ -14,16 +14,6 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnBack_Click(object sender, EventArgs e)
     {
-        Response.Redirect("Default.aspx");
-    }
-
-    protected void btnCreate_Click(object sender, EventArgs e)
-    {
         Response.Redirect("A700_Create-study-session_2.aspx");
-    }
-
-    protected void btnViewPastTimers_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("A1700_View-past-study-sessions.aspx");
     }
 }

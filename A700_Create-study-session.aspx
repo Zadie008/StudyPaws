@@ -5,37 +5,37 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-                    <!--account info to copy and paste-->
-<div class="accountInfoDiv">
-    <div class="profileDiv">
-        <a href="C100-C500_Profile.aspx" class="profileIconLink">
-            <div class="profileIcon">
-                <div id="profileCircle"></div>
-                <img id="profilePet" src="Images/Farm%204%20Cow%20White%20and%20Black.png" width="120"/>
+    <!--account info to copy and paste-->
+    <div class="accountInfoDiv">
+        <div class="profileDiv">
+            <a href="C100-C500_Profile.aspx" class="profileIconLink">
+                <div class="profileIcon">
+                    <div id="profileCircle"></div>
+                    <asp:Image ID="profilePet" runat="server" ImageUrl="~/Images/Farm%204%20Cow%20White%20and%20Black.png" />
+                </div>
+            </a>
+            <div class="profileDetails">
+                <table>
+                    <tr>
+                        <td><asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Level"></asp:Label></td>
+                        <td><asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server" Text="16"></asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td><asp:Label ID="lblXP" CssClass="accountInfoTableLabel" runat="server" Text="XP"></asp:Label></td>
+                        <td><asp:Label ID="lblXPAmount" CssClass="accountInfoTableLabelRight" runat="server" Text="65"></asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="pawIcon">
+                                <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
+                                <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
+                            </div>
+                        </td>
+                    <td><asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server" Text="190"></asp:Label></td>
+                    </tr>
+                </table>
             </div>
-        </a>
-        <div class="profileDetails">
-            <table>
-                <tr>
-                    <td><asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Label">Level</asp:Label></td>
-                    <td><asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server" Text="Label">16</asp:Label></td> <!--CHANGE: has to be their level-->
-                </tr>
-                <tr>
-                    <td><asp:Label ID="lblXP" CssClass="accountInfoTableLabel" runat="server" Text="Label">XP</asp:Label></td>
-                    <td><asp:Label ID="lblXPAmount" CssClass="accountInfoTableLabelRight" runat="server" Text="Label">65</asp:Label></td> <!--CHANGE: has to be total xp-->
-                </tr>
-                <tr>
-                    <td>
-                        <div class="pawIcon">
-                            <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
-                            <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
-                        </div>
-                    </td>
-                    <td><asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server" Text="Label">190</asp:Label></td> <!--CHANGE: has to be total paws currency-->
-                </tr>
-            </table>
         </div>
-    </div>
 
     <div class="timeDateDiv">
         <table>
@@ -97,7 +97,19 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-
+    <div class="createTimerMainContent">
+        <div class="buttonSection">
+            <div class="leftSection">
+            </div>
+            <div class="middleSection">
+                <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" />
+                <asp:Button ID="btnCreate" class="button" runat="server" Text="Create" OnClick="btnCreate_Click" />
+            </div>
+            <div class="rightSection">
+                <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past sessions" OnClick="btnViewPastTimers_Click" />
+            </div>
+        </div>
+    </div>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

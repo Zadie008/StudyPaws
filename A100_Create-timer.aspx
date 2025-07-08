@@ -67,7 +67,8 @@
     </svg>
     <a href="Default.aspx"><img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" /></a>
     <h2>purrfectly productive</h2>
-</div></asp:Content>
+</div>
+</asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
     <!--navigation to copy and paste-->
