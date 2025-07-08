@@ -3,8 +3,8 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-    
-    <div class="profileHeader">
+    <div id="changeProfilePhotoPage">
+            <div class="profileHeader">
         <!--Back Button -->
         <div class="headerLeft">
             <asp:Button ID="btnBackProfile" class="profilebutton" runat="server" Text="Back" OnClick=" btnBackProfile_Click" />
@@ -15,7 +15,7 @@
             <div class="profileIcon">
                 <div class="profileImageContainer">
                     <div id="profileCircle"></div>
-                    <asp:Image ID="profilePet" runat="server" Width="120" />
+                    <asp:Image ID="profilePet" runat="server" />
                 </div>
             </div>
         </div>
@@ -96,8 +96,10 @@
 </asp:Panel>
 
 
+    </div>
 </div>
-   </asp:Content> 
+</asp:Content> 
+
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
 </asp:Content>
 

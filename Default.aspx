@@ -11,7 +11,7 @@
             <a href="C100-C500_Profile.aspx" class="profileIconLink">
                 <div class="profileIcon">
                     <div id="profileCircle"></div>
-                    <asp:Image ID="profilePet" runat="server" Width="120" ImageUrl="~/Images/Farm%204%20Cow%20White%20and%20Black.png" />
+                    <asp:Image ID="profilePet" runat="server" ImageUrl="~/Images/Farm%204%20Cow%20White%20and%20Black.png" />
                 </div>
             </a>
             <div class="profileDetails">

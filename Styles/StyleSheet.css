@@ -339,6 +339,12 @@ h2 {
     aspect-ratio: 1;
 }
 
+.profileIcon img {
+    margin-top: 3%;
+    max-width: 90%;
+    max-height: 90%;
+}
+
 .profileIconLink {
     display: block;
     position: relative;
@@ -1771,21 +1777,15 @@ footer p {
 }
 
 /* ---------------------- PROFILE PAGE ---------------------- */
-.profileMainContent {
-    margin: 4em;
-    background-color: #3b5998;
-    min-height: 100vh;
-    padding: 20px;
-    box-sizing: border-box;
-    color: white;
+#profileMainContent {
+    margin: 0 1em;
 }
 
 .profileHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
-    margin-bottom: 2em;
+    margin: 1em;
 }
 
 .headerLeft {
@@ -1958,6 +1958,9 @@ input:checked + .slider:before {
     transition: background-color 0.3s ease;
 }
 /* -------------------- PROFILE ICON SELECTION PAGE -------------------- */
+#changeProfilePhotoPage {
+    margin: 1em;
+}
 
 .iconLayoutWrapper {
     display: flex;

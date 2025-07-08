@@ -17,7 +17,7 @@
             <div class="profileIcon">
                 <div class="profileImageContainer">
                     <div id="profileCircle"></div>
-                  <asp:Image ID="profilePet" runat="server" Width="120" />
+                  <asp:Image ID="profilePet" runat="server" />
                 </div>
               
             </div>
@@ -46,8 +46,8 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-
-    <div class="changeIconContainer">
+    <div id="profileMainContent">
+            <div class="changeIconContainer">
         <asp:Button ID="btnChangeIcon" class="profilebutton" runat="server" Text="Change icon" OnClick="btnChangeIcon_Click" />
     </div>
         
@@ -124,7 +124,8 @@
         </div>
          </div>
     </asp:Panel>
-
+    </div>
+    
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
 </asp:Content>
