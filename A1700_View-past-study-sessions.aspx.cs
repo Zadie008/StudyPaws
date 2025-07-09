@@ -44,7 +44,7 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnBack_Click(object sender, EventArgs e)
     {
-        Response.Redirect("A100_Create-timer.aspx");
+        Response.Redirect("A700_Create-study-session.aspx");
     }
 
     public string FormatDuration(object totalSecondsObj)

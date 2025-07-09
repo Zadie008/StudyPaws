@@ -112,7 +112,7 @@
                     <tr>
                         <td><div class="petIcon">
                                 <div class="petCircle"></div>
-                                <img class="petImage" src="Images/Cat 1.png" width="120"/>
+                                <img class="petImage" src="Images/Cat 1.png" width="120" />
                             </div>
                         </td>
                         <td>

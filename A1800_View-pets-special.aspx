@@ -141,11 +141,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><asp:Button ID="btnSelect1" runat="server" CssClass="button" Text="Select" /></td>
-                        <td><asp:Button ID="btnSelect2" runat="server" CssClass="button" Text="Select" /></td>
-                        <td><asp:Button ID="btnSelect3" runat="server" CssClass="button" Text="Select" /></td>
-                        <td><asp:Button ID="btnSelect4" runat="server" CssClass="button" Text="Select" /></td>
-                        <td><asp:Button ID="btnSelect5" runat="server" CssClass="button" Text="Select" /></td>
+                        <td><asp:Button ID="btnSelect1" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
+                        <td><asp:Button ID="btnSelect2" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
+                        <td><asp:Button ID="btnSelect3" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
+                        <td><asp:Button ID="btnSelect4" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
+                        <td><asp:Button ID="btnSelect5" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
                     </tr>
                 </table>
             </div>
@@ -153,9 +153,9 @@
         <div class="buttonSection">
             <div class="leftSection">
             </div>
-            <div class="middleSection">
-                <asp:Button ID="btnSell" class="button" runat="server" Text="Sell" />
-                <asp:Button ID="btnEquip" class="button" runat="server" Text="Equip" />
+            <div class="middleSection buttonRow">
+                <asp:Button ID="btnSell" class="button" runat="server" Text="Sell" Style="display: none;" />
+                <asp:Button ID="btnEquip" class="button" runat="server" Text="Equip" Style="display: none;" />
             </div>
             <div class="rightSection">
             </div>

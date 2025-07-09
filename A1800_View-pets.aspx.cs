@@ -28,7 +28,8 @@ public partial class Default2 : System.Web.UI.Page
     private void LoadOwnedPets(string userID)
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string command = "SELECT Pet.colourNum FROM UserPets INNER JOIN Pet ON UserPets.petID = Pet.petID WHERE UserPets.userID = @userID";
+
+        string command = "SELECT UserPets.petID AND Pet.colourNum FROM UserPets INNER JOIN Pet ON UserPets.petID = Pet.petID WHERE UserPets.userID = @userID AND Pet.petType = @petType";
 
         List<int> ownedPetColours = new List<int>();
 
@@ -36,6 +37,7 @@ public partial class Default2 : System.Web.UI.Page
         using (OleDbCommand cmd = new OleDbCommand(command, con))
         {
             cmd.Parameters.AddWithValue("@userID", userID);
+            cmd.Parameters.AddWithValue("@petType", "Cat");
 
             try
             {
@@ -200,10 +202,8 @@ public partial class Default2 : System.Web.UI.Page
                     {
                         if (reader.Read())
                         {
-                            lblXPAmount.Text = reader["userXP"] != DBNull.Value ?
-                                reader["userXP"].ToString() : "0";
-                            lblPaws.Text = reader["userCoinCount"] != DBNull.Value ?
-                                reader["userCoinCount"].ToString() : "0";
+                            lblXPAmount.Text = reader["userXP"] != DBNull.Value ? reader["userXP"].ToString() : "0";
+                            lblPaws.Text = reader["userCoinCount"] != DBNull.Value ? reader["userCoinCount"].ToString() : "0";
                         }
                         else
                         {
