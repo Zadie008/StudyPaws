@@ -1,11 +1,11 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="A1800_View-pets.aspx.cs" Inherits="Default2" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="A1800_View-pets-farm.aspx.cs" Inherits="Default2" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
     Inventory
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-                    <!--account info to copy and paste-->
+                        <!--account info to copy and paste-->
 <div class="accountInfoDiv">
     <div class="profileDiv">
         <a href="C100-C500_Profile.aspx" class="profileIconLink">
@@ -71,7 +71,7 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
-    <!--navigation to copy and paste-->
+        <!--navigation to copy and paste-->
 <div class="collapsedNav">
     <div class="navbar">
         <asp:Menu ID="MenuLeft" runat="server" Orientation="Vertical" CssClass="nav-left" StaticDisplayLevels="1" StaticMenuItemStyle-CssClass="menu-item">
@@ -94,17 +94,18 @@
         </asp:Menu>
     </div>
 </div>
+
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-    <div id="viewInventoryMainContent">
+        <div id="viewInventoryMainContent">
         <h2>Your inventory</h2>
         <div class="backgroundColorContainer">
             <div class="leftCategorySection">
-                <asp:Button ID="btnCats" runat="server" CssClass="button buttonSelected" Text="Cats" OnClick="btnCats_Click" />
+                <asp:Button ID="btnCats" runat="server" CssClass="button" Text="Cats" OnClick="btnCats_Click" />
                 <asp:Button ID="btnDogs" runat="server" CssClass="button" Text="Dogs" OnClick="btnDogs_Click" />
                 <asp:Button ID="btnFuzzy" runat="server" CssClass="button" Text="Fuzzy" OnClick="btnFuzzy_Click" />
-                <asp:Button ID="btnFarm" runat="server" CssClass="button" Text="Farm" OnClick="btnFarm_Click" />
+                <asp:Button ID="btnFarm" runat="server" CssClass="button buttonSelected" Text="Farm" OnClick="btnFarm_Click" />
                 <asp:Button ID="btnSpecial" runat="server" CssClass="button" Text="Special" OnClick="btnSpecial_Click" />
             </div>
             <div class="rightPetsSection">
@@ -112,40 +113,40 @@
                     <tr>
                         <td><div class="petIcon">
                                 <div class="petCircle"></div>
-                                <img class="petImage" src="Images/Cat 1.png" width="120"/>
+                                <img class="petImage" src="Images/Farm 1.png" width="120"/>
                             </div>
                         </td>
                         <td>
                             <div class="petIcon">
                                 <div class="petCircle"></div>
-                                <img class="petImage" src="Images/Cat 2.png" width="120"/>
+                                <img class="petImage" src="Images/Farm 2.png" width="120"/>
                             </div>
                         </td>
                         <td>
                             <div class="petIcon">
                                 <div class="petCircle"></div>
-                                <img class="petImage" src="Images/Cat 3.png" width="120"/>
+                                <img class="petImage" src="Images/Farm 3.png" width="120"/>
                             </div>
                         </td>
                         <td>
                             <div class="petIcon">
                                 <div class="petCircle"></div>
-                                <img class="petImage" src="Images/Cat 4.png" width="120"/>
+                                <img class="petImage" src="Images/Farm 4.png" width="120"/>
                             </div>
                         </td>
                         <td>
                             <div class="petIcon">
                                 <div class="petCircle"></div>
-                                <img class="petImage" src="Images/Cat 5.png" width="120"/>
+                                <img class="petImage" src="Images/Farm 5.png" width="120"/>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td><asp:Button ID="btnSelect1" runat="server" CssClass="button" Text="Select" OnClick="btnSelect1_Click" /></td>
-                        <td><asp:Button ID="btnSelect2" runat="server" CssClass="button" Text="Select" OnClick="btnSelect2_Click" /></td>
-                        <td><asp:Button ID="btnSelect3" runat="server" CssClass="button" Text="Select" OnClick="btnSelect3_Click" /></td>
-                        <td><asp:Button ID="btnSelect4" runat="server" CssClass="button" Text="Select" OnClick="btnSelect4_Click" /></td>
-                        <td><asp:Button ID="btnSelect5" runat="server" CssClass="button" Text="Select" OnClick="btnSelect5_Click" /></td>
+                        <td><asp:Button ID="btnSelect1" runat="server" CssClass="button" Text="Select" /></td>
+                        <td><asp:Button ID="btnSelect2" runat="server" CssClass="button" Text="Select" /></td>
+                        <td><asp:Button ID="btnSelect3" runat="server" CssClass="button" Text="Select" /></td>
+                        <td><asp:Button ID="btnSelect4" runat="server" CssClass="button" Text="Select" /></td>
+                        <td><asp:Button ID="btnSelect5" runat="server" CssClass="button" Text="Select" /></td>
                     </tr>
                 </table>
             </div>

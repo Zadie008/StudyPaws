@@ -20,6 +20,57 @@ public partial class Default2 : System.Web.UI.Page
             }
         }
     }
+
+    protected void btnCats_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("A1800_View-pets.aspx");
+    }
+
+    protected void btnDogs_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("A1800_View-pets-dogs.aspx");
+    }
+
+    protected void btnFuzzy_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("A1800_View-pets-fuzzy.aspx");
+    }
+
+    protected void btnFarm_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("A1800_View-pets-farm.aspx");
+    }
+
+    protected void btnSpecial_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("A1800_View-pets-special.aspx");
+    }
+
+    protected void btnSelect1_Click(object sender, EventArgs e)
+    {
+        btnSelect1.CssClass("buttonSelected");
+    }
+
+    protected void btnSelect2_Click(object sender, EventArgs e)
+    {
+        btnSelect1.CssClass("buttonSelected");
+    }
+
+    protected void btnSelect3_Click(object sender, EventArgs e)
+    {
+        btnSelect1.CssClass("buttonSelected");
+    }
+
+    protected void btnSelect4_Click(object sender, EventArgs e)
+    {
+        btnSelect1.CssClass("buttonSelected");
+    }
+
+    protected void btnSelect5_Click(object sender, EventArgs e)
+    {
+        btnSelect1.CssClass("buttonSelected");
+    }
+
     private void LoadUserData(string username)
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
