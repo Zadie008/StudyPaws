@@ -76,7 +76,29 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-
+    <div id="createSession3MainContent" class="createTimer3MainContent">
+    <div class="timeSection">
+        <h2>Invite your friends to study with you</h2>
+        <div class="leftSection">
+        </div>
+        <div id="inviteFriendsToSession" class="middleSection">
+            <asp:TextBox ID="txtSearch" ClientIDMode="Static" CssClass="textbox" runat="server" Placeholder="Search" ></asp:TextBox>
+        </div>
+        <div class="rightSection">
+        </div>
+    </div>
+    <div class="buttonSection">
+        <div class="leftSection">
+        </div>
+        <div class="middleSection">
+            <asp:Button ID="btnBack" CssClass="button" runat="server" Text="Back" OnClick="btnBack_Click" />
+            <asp:Button ID="btnContinue" CssClass="button" runat="server" Text="Continue" OnClick="btnContinue_Click" />
+        </div>
+        <div class="rightSection">
+            <asp:Button ID="btnViewPastTimers" CssClass="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
+        </div>
+    </div>
+</div>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

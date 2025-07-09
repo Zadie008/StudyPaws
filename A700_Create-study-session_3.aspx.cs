@@ -16,4 +16,9 @@ public partial class Default2 : System.Web.UI.Page
     {
         Response.Redirect("A700_Create-study-session_2.aspx");
     }
+
+    protected void btnContinue_Click(object sender, EventArgs e)
+    {
+
+    }
 }
