@@ -10,7 +10,7 @@
         <div class="profileDiv">
                 <div class="profileIcon">
                     <div id="profileCircle"></div>
-                    <asp:Image ID="profilePet" runat="server" ImageUrl="~/Images/Farm%204%20Cow%20White%20and%20Black.png" />
+                    <asp:Image ID="profilePet" runat="server" ImageUrl="~/Images/Cat 1.png" />
                 </div>
             <div class="profileDetails">
                 <table>

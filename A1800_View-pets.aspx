@@ -11,7 +11,7 @@
         <a href="C100-C500_Profile.aspx" class="profileIconLink">
             <div class="profileIcon">
                 <div id="profileCircle"></div>
-                <img id="profilePet" src="Images/Farm%204%20Cow%20White%20and%20Black.png" width="120"/>
+                <img id="profilePet" src="Images/Cat 1.png" width="120"/>
             </div>
         </a>
         <div class="profileDetails">
@@ -98,8 +98,67 @@
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div id="viewInventoryMainContent">
+        <h2>Your inventory</h2>
         <div class="backgroundColorContainer">
-            
+            <div class="leftCategorySection">
+                <asp:Button ID="btnCats" runat="server" CssClass="button buttonSelected" Text="Cats" />
+                <asp:Button ID="btnDogs" runat="server" CssClass="button" Text="Dogs" />
+                <asp:Button ID="btnFuzzy" runat="server" CssClass="button" Text="Fuzzy" />
+                <asp:Button ID="btnFarm" runat="server" CssClass="button" Text="Farm" />
+                <asp:Button ID="btnSpecial" runat="server" CssClass="button" Text="Special" />
+            </div>
+            <div class="rightPetsSection">
+                <table>
+                    <tr>
+                        <td><div class="petIcon">
+                                <div class="petCircle"></div>
+                                <img class="petImage" src="Images/Cat 1.png" width="120"/>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="petIcon">
+                                <div class="petCircle"></div>
+                                <img class="petImage" src="Images/Cat 2.png" width="120"/>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="petIcon">
+                                <div class="petCircle"></div>
+                                <img class="petImage" src="Images/Cat 3.png" width="120"/>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="petIcon">
+                                <div class="petCircle"></div>
+                                <img class="petImage" src="Images/Cat 4.png" width="120"/>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="petIcon">
+                                <div class="petCircle"></div>
+                                <img class="petImage" src="Images/Cat 5.png" width="120"/>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><asp:Button ID="btnSelect1" runat="server" CssClass="button" Text="Select" /></td>
+                        <td><asp:Button ID="btnSelect2" runat="server" CssClass="button" Text="Select" /></td>
+                        <td><asp:Button ID="btnSelect3" runat="server" CssClass="button" Text="Select" /></td>
+                        <td><asp:Button ID="btnSelect4" runat="server" CssClass="button" Text="Select" /></td>
+                        <td><asp:Button ID="btnSelect5" runat="server" CssClass="button" Text="Select" /></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="buttonSection">
+            <div class="leftSection">
+            </div>
+            <div class="middleSection">
+                <asp:Button ID="btnSell" class="button" runat="server" Text="Sell" />
+                <asp:Button ID="btnEquip" class="button" runat="server" Text="Equip" />
+            </div>
+            <div class="rightSection">
+            </div>
         </div>
     </div>
 </asp:Content>

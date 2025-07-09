@@ -1633,7 +1633,13 @@ body.page-exit .welcomeBackTextDiv {
 
 /* ---------------------- INVENTORY PAGE ---------------------- */
 #viewInventoryMainContent {
-    margin: 4em 4em 4em 4em;
+    margin: 1em 4em 4em 4em;
+}
+
+#viewInventoryMainContent h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.1em;
+    margin-top: 0;
 }
 
 #viewInventoryMainContent .backgroundColorContainer {
@@ -1645,6 +1651,106 @@ body.page-exit .welcomeBackTextDiv {
     height: 63vh;
     border-radius: 2em;
     padding: 0.5em;
+    display: flex;
+}
+
+#viewInventoryMainContent .buttonSection {
+    margin: -6em 0 0 0;
+}
+
+#viewInventoryMainContent .button {
+    background-color: #ADA7C9; /*dark purple*/
+}
+
+#viewInventoryMainContent .leftCategorySection {
+    flex: 1;
+    z-index: 12;
+}
+
+#viewInventoryMainContent .leftCategorySection .button {
+    background-color: transparent;
+    border: 2px solid white;
+    border-radius: 2rem;
+    width: 6em;
+    padding: 0.3em;
+}
+
+/* SELECTED CATEGORY BUTTON */
+#viewInventoryMainContent .leftCategorySection .buttonSelected {
+    background-color: #ADA7C9; /*dark purple*/
+}
+
+#viewInventoryMainContent table {
+    width: auto;
+}
+
+#viewInventoryMainContent table td {
+}
+
+#viewInventoryMainContent .rightPetsSection {
+    flex: 4;
+    z-index: 12;
+    padding: 0 2em;
+    display: flex;
+}
+
+#viewInventoryMainContent .rightPetsSection .button {
+    background-color: transparent;
+    border: 2px solid white;
+    border-radius: 2rem;
+    width: 8vw;
+    max-width: 147px;
+    padding: 0.3em;
+    font-size: 1.8rem;
+    text-align: center;
+    margin: 0.5em 1em;
+}
+
+/* SELECTED PET BUTTON */
+#viewInventoryMainContent .rightPetsSection .buttonSelected {
+    background-color: #ADA7C9; /*dark purple*/
+}
+
+.petIcon {
+    position: relative;
+    width: 8vw;
+    max-width: 147px;
+    aspect-ratio: 1;
+    flex-direction: row;
+    margin: 0 1.7em;
+}
+
+.petIcon img {
+    margin-top: 3%;
+    max-width: 90%;
+    max-height: 90%;
+}
+
+.petIcon img.petImage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    z-index: 1; 
+}
+
+.petIcon .petCircle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #90A8C3; /*dull blue*/
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* WHEN PET IS EQUIPPED */
+.petIcon .petCircle {
+    background-color: #446791; /*dark blue*/
 }
 
 /* ---------------------- VIEW FRIEND LIST PAGE ---------------------- */

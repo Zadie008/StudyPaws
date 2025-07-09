@@ -11,7 +11,7 @@
         <a href="C100-C500_Profile.aspx" class="profileIconLink">
             <div class="profileIcon">
                 <div id="profileCircle"></div>
-                <img id="profilePet" src="Images/Farm%204%20Cow%20White%20and%20Black.png" width="120"/>
+                <img id="profilePet" src="Images/Cat 1.png" width="120"/>
             </div>
         </a>
         <div class="profileDetails">

@@ -11,18 +11,18 @@
             <a href="C100-C500_Profile.aspx" class="profileIconLink">
                 <div class="profileIcon">
                     <div id="profileCircle"></div>
-                    <asp:Image ID="profilePet" runat="server" ImageUrl="~/Images/Farm%204%20Cow%20White%20and%20Black.png" />
+                    <asp:Image ID="profilePet" runat="server" ImageUrl="~/Images/Cat 1.png" />
                 </div>
             </a>
             <div class="profileDetails">
                 <table>
                     <tr>
                         <td><asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Level"></asp:Label></td>
-                        <td><asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server" Text="16"></asp:Label></td>
+                        <td><asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server" Text="--"></asp:Label></td>
                     </tr>
                     <tr>
                         <td><asp:Label ID="lblXP" CssClass="accountInfoTableLabel" runat="server" Text="XP"></asp:Label></td>
-                        <td><asp:Label ID="lblXPAmount" CssClass="accountInfoTableLabelRight" runat="server" Text="65"></asp:Label></td>
+                        <td><asp:Label ID="lblXPAmount" CssClass="accountInfoTableLabelRight" runat="server" Text="--"></asp:Label></td>
                     </tr>
                     <tr>
                         <td>
@@ -31,7 +31,7 @@
                                 <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
                             </div>
                         </td>
-                    <td><asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server" Text="190"></asp:Label></td>
+                    <td><asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server" Text="---"></asp:Label></td>
                     </tr>
                 </table>
             </div>
