@@ -293,6 +293,46 @@ function hideTimeUpPopup() {
     window.location.href = "Default.aspx";
 }
 
+// ---- INVENTORY PAGES ---- //
+document.addEventListener('DOMContentLoaded', function () {
+    const selectButtons = [
+        'mainContentPlaceHolder_btnSelect1',
+        'mainContentPlaceHolder_btnSelect2',
+        'mainContentPlaceHolder_btnSelect3',
+        'mainContentPlaceHolder_btnSelect4',
+        'mainContentPlaceHolder_btnSelect5'
+    ];
+
+    const btnSell = document.getElementById('mainContentPlaceHolder_btnSell');
+    const btnEquip = document.getElementById('mainContentPlaceHolder_btnEquip');
+
+    selectButtons.forEach(id => {
+        const button = document.getElementById(id);
+        if (!button) return;
+
+        button.addEventListener('click', () => {
+            const isSelected = button.classList.contains('buttonSelected');
+
+            // unselecting all buttons:
+            selectButtons.forEach(otherId => {
+                const otherBtn = document.getElementById(otherId);
+                if (otherBtn) otherBtn.classList.remove('buttonSelected');
+            });
+
+            // toggling the current button:
+            if (!isSelected) {
+                button.classList.add('buttonSelected');
+                btnSell.style.display = 'block';
+                btnEquip.style.display = 'block';
+            } else {
+                button.classList.remove('buttonSelected');
+                btnSell.style.display = 'none';
+                btnEquip.style.display = 'none';
+            }
+        });
+    });
+});
+
 // ---  REGISTRATION PAGE  ---
 if (window.location.pathname.toLowerCase().includes("c100_register.aspx")) {
     let usernameCheckTimeout;

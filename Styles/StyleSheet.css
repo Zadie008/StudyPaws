@@ -1658,6 +1658,15 @@ body.page-exit .welcomeBackTextDiv {
     margin: -6em 0 0 0;
 }
 
+#viewInventoryMainContent .buttonSection .buttonRow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1vh;
+    flex-wrap: wrap; /*if screen gets too small*/
+}
+
 #viewInventoryMainContent .button {
     background-color: #ADA7C9; /*dark purple*/
 }
@@ -1749,7 +1758,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 /* WHEN PET IS EQUIPPED */
-.petIcon .petCircle {
+.petIcon .petCircle .equipped {
     background-color: #446791; /*dark blue*/
 }
 
