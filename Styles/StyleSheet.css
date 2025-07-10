@@ -1815,15 +1815,6 @@ body.page-exit .welcomeBackTextDiv {
     padding-right: 0.2em;
 }
 
-/*.badges-scroll-wrapper {
-    flex: 1;
-    overflow-y: auto;
-    width: 100%;
-    padding-right: 10px; 
-    margin-top: 1rem;
-    scrollbar-width: thin;
-    scrollbar-color: #446791 #e0e0e0;
-}*/
 .badges-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* 4 per row */
@@ -1875,6 +1866,31 @@ body.page-exit .welcomeBackTextDiv {
     margin-top: 0.3rem;
 }
 
+.stars {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    position: relative;
+    height: 40px;
+}
+
+.star-icon {
+    width: 45px;
+    height: 45px;
+    transform-origin: bottom center;
+}
+
+.stars .star-icon:nth-child(1) { /*first star*/
+    transform: translateY(-12px) rotate(15deg);
+}
+
+.stars .star-icon:nth-child(2) { /*middle star*/
+    transform: translateY(0px) rotate(0deg);
+}
+
+.stars .star-icon:nth-child(3) { /*Last star*/
+    transform: translateY(-12px) rotate(15deg);
+}
 /* ---------------------- ABOUT PAGE ---------------------- */
 /* PALETTE WIDGET FROM "COOLERS" IN ABOUT PAGE? */
 /*<!-- Coolors Palette Widget -->

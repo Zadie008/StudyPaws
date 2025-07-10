@@ -97,29 +97,34 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
+    <div id="badgesMainContent">
+        <h2>Badges</h2>
+        <div class="backgroundColorContainer">
+            <div class="scrollableTableContainer">
+                <div class="badges-container">
+                    <asp:Repeater ID="rpPets" runat="server">
+                        <ItemTemplate>
+                            <div class="badge-card">
+                                <div class="badge-image">
+                                    <asp:Image ID="imgBadge" runat="server" ImageUrl='<%# Eval("badgeIconNum") %>' />
+                                </div>
 
-<div id="badgesMainContent">
-    <h2>Badges</h2>
-    <div class="backgroundColorContainer">
-        <div class="scrollableTableContainer">
-            
-            <div class="badges-container">
-                <asp:Repeater ID="rpPets" runat="server">
-                    <ItemTemplate>
-                        <div class="badge-card">
-                            <div class="badge-image">
-                                <asp:Image ID="imgBadge" runat="server" ImageUrl='<%# Eval("badgeIconNum") %>' />
+                                <!-- Star rating -->
+                                <div class="stars">
+                                    <asp:Literal ID="litStars" runat="server" Text='<%# GetStarHtml(Eval("badgeType").ToString()) %>' />
+                                </div>
+
+                                <asp:Label ID="lblBadgeName" runat="server" Text='<%# Eval("badgeName") %>' CssClass="badge-name"></asp:Label>
+                                <asp:Label ID="lblBadgeDescription" runat="server" 
+                                    Text='<%# Eval("badgeType").ToString() == "gold" ? Eval("badgeDescGold") : Eval("badgeType").ToString() == "silver" ? Eval("badgeDescSilver") : Eval("badgeDescBronze") %>' 
+                                    CssClass="badge-description"></asp:Label>
                             </div>
-                            <asp:Label ID="lblBadgeName" runat="server" Text='<%# Eval("badgeName") %>' CssClass="badge-name"></asp:Label>
-                            <asp:Label ID="lblBadgeDescription" runat="server" Text='<%# Eval("badgeDescBronze") %>' CssClass="badge-description"></asp:Label>
-                        </div>
-                    </ItemTemplate>
-                </asp:Repeater>
+                        </ItemTemplate>
+                    </asp:Repeater>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
