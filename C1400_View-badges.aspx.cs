@@ -23,23 +23,30 @@ public partial class Default2 : System.Web.UI.Page
     public class BadgeIcon
     {
         public string badgeName { get; set; }
-        public string  badgeDescBronze{ get; set; }
+        public string badgeDescBronze { get; set; }
         public string badgeDescSilver { get; set; }
         public string badgeDescGold { get; set; }
         public string badgeIconNum { get; set; }
-       
+        public string badgeType { get; set; }
     }
 
     private void LoadBadges()
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string query = "SELECT badgeName, badgeDescBronze, badgeIconNum FROM Badges";
+        string query = @"
+                        SELECT b.badgeName, b.badgeDescBronze, b.badgeDescSilver, b.badgeDescGold, 
+                        b.badgeIconNum, ub.badgeType
+                        FROM Badges b
+                        LEFT JOIN UserBadge ub ON b.badgeID = ub.badgeID
+                        WHERE ub.userID = ? OR ub.userID IS NULL";
 
         List<BadgeIcon> badgeList = new List<BadgeIcon>();
 
         using (OleDbConnection con = new OleDbConnection(cs))
         using (OleDbCommand cmd = new OleDbCommand(query, con))
         {
+            cmd.Parameters.AddWithValue("?", Session["userID"]);
+
             con.Open();
             using (OleDbDataReader reader = cmd.ExecuteReader())
             {
@@ -49,7 +56,10 @@ public partial class Default2 : System.Web.UI.Page
                     {
                         badgeName = reader["badgeName"].ToString(),
                         badgeDescBronze = reader["badgeDescBronze"].ToString(),
-                        badgeIconNum = GetBadgeImagePath(Convert.ToInt32(reader["badgeIconNum"]))
+                        badgeDescSilver = reader["badgeDescSilver"].ToString(),
+                        badgeDescGold = reader["badgeDescGold"].ToString(),
+                        badgeIconNum = GetBadgeImagePath(Convert.ToInt32(reader["badgeIconNum"])),
+                        badgeType = reader["badgeType"] == DBNull.Value ? "none" : reader["badgeType"].ToString().ToLower()
                     };
                     badgeList.Add(badge);
                 }
@@ -59,6 +69,7 @@ public partial class Default2 : System.Web.UI.Page
         rpPets.DataSource = badgeList;
         rpPets.DataBind();
     }
+
 
     private string GetBadgeImagePath(int badgeImageID)
     {
@@ -79,5 +90,23 @@ public partial class Default2 : System.Web.UI.Page
             case 13: return "~/Images/Badges/WesternCats.png";
             default: return "~/Images/Badges/WesternCats.png";
         }
+    }
+    protected string GetStarHtml(string badgeType)
+    {
+        int stars = 0;
+        if (badgeType == "bronze") stars = 1;
+        else if (badgeType == "silver") stars = 2;
+        else if (badgeType == "gold") stars = 3;
+
+        string filledStar = "<img src='Icons/icons8-star-filled-white-96.png' class='star-icon' />";
+        string emptyStar = "<img src='Icons/icons8-star-white-96.png' class='star-icon' />";
+
+        string html = "";
+        for (int i = 0; i < 3; i++)
+        {
+            html += i < stars ? filledStar : emptyStar;
+        }
+
+        return html;
     }
 }
