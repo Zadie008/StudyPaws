@@ -8,22 +8,8 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
-public class OwnedPet
-{
-    public int ColourNum { get; set; }
-    public bool IsEquipped { get; set; }
-
-    public OwnedPet(int colourNum, bool isEquipped)
-    {
-        ColourNum = colourNum;
-        IsEquipped = isEquipped;
-    }
-}
-
 public partial class View_pets : System.Web.UI.Page
 {
-    // update the session var for equipped pet image path once the user equips a new one!!!!!!!!!!!!
-
     private string userID;
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -177,7 +163,7 @@ public partial class View_pets : System.Web.UI.Page
 
             // 2. get petID
             int petID = -1;
-            string getPetIDQuery = "SELECT petID FROM Pet WHERE petType = 'Cat' AND colourNum = ?";
+            string getPetIDQuery = "SELECT petID FROM Pet WHERE petType = 'Cat' AND colourNum = ?"; // PET TYPE~~~~
 
             using (OleDbCommand getPetIDCmd = new OleDbCommand(getPetIDQuery, con))
             {
@@ -204,7 +190,7 @@ public partial class View_pets : System.Web.UI.Page
         }
 
         // update session variable
-        Session["EquippedPetImagePath"] = string.Format("Images/Cat {0}.png", selectedColourNum);
+        Session["EquippedPetImagePath"] = string.Format("Images/Cat {0}.png", selectedColourNum); // PET TYPE~~~~
 
         // reload pets to reflect new equipped status
         LoadOwnedPets(userID);
