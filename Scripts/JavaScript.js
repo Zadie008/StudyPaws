@@ -313,25 +313,39 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', () => {
             const isSelected = button.classList.contains('buttonSelected');
 
-            // unselecting all buttons:
+            // unselect all
             selectButtons.forEach(otherId => {
                 const otherBtn = document.getElementById(otherId);
                 if (otherBtn) otherBtn.classList.remove('buttonSelected');
             });
 
-            // toggling the current button:
             if (!isSelected) {
                 button.classList.add('buttonSelected');
-                btnSell.style.display = 'block';
-                btnEquip.style.display = 'block';
+
+
+                const colourNum = button.getAttribute('data-colour');
+
+
+                document.getElementById('mainContentPlaceHolder_hfSelectedColourNum').value = colourNum;
+
+                btnSell.style.display = 'inline-block';
+                btnEquip.style.display = 'inline-block';
             } else {
                 button.classList.remove('buttonSelected');
+                document.getElementById('mainContentPlaceHolder_hfSelectedColourNum').value = "";
+
                 btnSell.style.display = 'none';
                 btnEquip.style.display = 'none';
             }
         });
     });
 });
+
+function showEquipSellButtons(colourNum) {
+    document.getElementById('hfSelectedColourNum').value = colourNum;
+    document.getElementById('<%= btnEquip.ClientID %>').style.display = 'inline-block';
+    document.getElementById('<%= btnSell.ClientID %>').style.display = 'inline-block';
+}
 
 // ---  REGISTRATION PAGE  ---
 if (window.location.pathname.toLowerCase().includes("c100_register.aspx")) {

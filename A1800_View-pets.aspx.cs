@@ -8,6 +8,18 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
+public class OwnedPet
+{
+    public int ColourNum { get; set; }
+    public bool IsEquipped { get; set; }
+
+    public OwnedPet(int colourNum, bool isEquipped)
+    {
+        ColourNum = colourNum;
+        IsEquipped = isEquipped;
+    }
+}
+
 public partial class View_pets : System.Web.UI.Page
 {
     // update the session var for equipped pet image path once the user equips a new one!!!!!!!!!!!!
@@ -35,9 +47,9 @@ public partial class View_pets : System.Web.UI.Page
 
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
-        string command = "SELECT Pet.colourNum FROM UserPets INNER JOIN Pet ON UserPets.petID = Pet.petID WHERE UserPets.userID = ? AND Pet.petType = ?";
+        string command = "SELECT Pet.colourNum, UserPets.equippedStatus FROM UserPets INNER JOIN Pet ON UserPets.petID = Pet.petID WHERE UserPets.userID = ? AND Pet.petType = ?";
 
-        List<int> ownedPetColours = new List<int>();
+        List<OwnedPet> ownedPets = new List<OwnedPet>();
 
         using (OleDbConnection con = new OleDbConnection(cs))
         using (OleDbCommand cmd = new OleDbCommand(command, con))
@@ -52,10 +64,9 @@ public partial class View_pets : System.Web.UI.Page
                 {
                     while (reader.Read())
                     {
-                        if (reader["colourNum"] != DBNull.Value)
-                        {
-                            ownedPetColours.Add(Convert.ToInt32(reader["colourNum"]));
-                        }
+                        int colour = Convert.ToInt32(reader["colourNum"]);
+                        bool equipped = (reader["equippedStatus"] != DBNull.Value) && Convert.ToBoolean(reader["equippedStatus"]);
+                        ownedPets.Add(new OwnedPet(colour, equipped));
                     }
                 }
             }
@@ -65,28 +76,50 @@ public partial class View_pets : System.Web.UI.Page
             }
         }
 
-        // loop through the colourNum values 1-5
+        for (int i = 1; i <= 5; i++)
+        {
+            HtmlGenericControl circleDiv = (HtmlGenericControl)content.FindControl("circle" + i);
+            if (circleDiv != null)
+            {
+                string classes = circleDiv.Attributes["class"];
+                if (!string.IsNullOrEmpty(classes) && classes.Contains("equipped"))
+                {
+                    circleDiv.Attributes["class"] = classes.Replace("equipped", "").Trim();
+                }
+            }
+        }
+
         int displayIndex = 1;
 
-        foreach (int ownedColour in ownedPetColours)
+        foreach (OwnedPet pet in ownedPets)
         {
-            // find pet image, circle and button to display in next available slot
             Image petImg = (Image)content.FindControl("imgPet" + displayIndex);
             Button selectBtn = (Button)content.FindControl("btnSelect" + displayIndex);
+            HtmlGenericControl circleDiv = (HtmlGenericControl)content.FindControl("circle" + displayIndex);
 
-            if (petImg != null && selectBtn != null)
+            if (petImg != null && selectBtn != null && circleDiv != null)
             {
-                petImg.ImageUrl = string.Format("Images/Cat {0}.png", ownedColour); // PET TYPE~~~~
+                petImg.ImageUrl = string.Format("Images/Cat {0}.png", pet.ColourNum); // PET TYPE~~~~
                 petImg.Visible = true;
 
                 selectBtn.Visible = true;
-                selectBtn.CommandArgument = ownedColour.ToString(); // maybe for later
+                selectBtn.CommandArgument = pet.ColourNum.ToString();
+                selectBtn.Attributes["data-colour"] = pet.ColourNum.ToString();
+
+                if (pet.IsEquipped)
+                {
+                    string existingClass = circleDiv.Attributes["class"];
+                    if (!existingClass.Contains("equipped"))
+                    {
+                        circleDiv.Attributes["class"] = existingClass + " equipped";
+                    }
+                }
             }
 
             displayIndex++;
         }
 
-        // hide remaining spots
+        // hide remaining pets
         for (int i = displayIndex; i <= 5; i++)
         {
             Image petImg = (Image)content.FindControl("imgPet" + i);
@@ -112,6 +145,69 @@ public partial class View_pets : System.Web.UI.Page
         }
 
         return null;
+    }
+
+    protected void Page_Init(object sender, EventArgs e)
+    {
+        btnEquip.Click += new EventHandler(btnEquip_Click);
+    }
+
+    protected void btnEquip_Click(object sender, EventArgs e)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string selectedColourNum = hfSelectedColourNum.Value;
+        string userID = Session["UserID"] as string;
+
+        if (string.IsNullOrEmpty(selectedColourNum) || string.IsNullOrEmpty(userID))
+        {
+            return;
+        }
+
+        using (OleDbConnection con = new OleDbConnection(cs))
+        {
+            con.Open();
+
+            // 1. uncheck all current equipped pets for this user
+            string unequipQuery = "UPDATE UserPets SET equippedStatus = FALSE WHERE userID = ?";
+            using (OleDbCommand cmdUnequip = new OleDbCommand(unequipQuery, con))
+            {
+                cmdUnequip.Parameters.AddWithValue("?", userID);
+                cmdUnequip.ExecuteNonQuery();
+            }
+
+            // 2. get petID
+            int petID = -1;
+            string getPetIDQuery = "SELECT petID FROM Pet WHERE petType = 'Cat' AND colourNum = ?";
+
+            using (OleDbCommand getPetIDCmd = new OleDbCommand(getPetIDQuery, con))
+            {
+                getPetIDCmd.Parameters.AddWithValue("?", selectedColourNum);
+                object result = getPetIDCmd.ExecuteScalar();
+                if (result != null)
+                {
+                    petID = Convert.ToInt32(result);
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            // 3. equip the selected one (check the checkbox)
+            string equipQuery = "UPDATE UserPets SET equippedStatus = TRUE WHERE userID = ? AND petID = ?";
+            using (OleDbCommand equipCmd = new OleDbCommand(equipQuery, con))
+            {
+                equipCmd.Parameters.AddWithValue("?", userID);
+                equipCmd.Parameters.AddWithValue("?", petID);
+                equipCmd.ExecuteNonQuery();
+            }
+        }
+
+        // update session variable
+        Session["EquippedPetImagePath"] = string.Format("Images/Cat {0}.png", selectedColourNum);
+
+        // reload pets to reflect new equipped status
+        LoadOwnedPets(userID);
     }
 
     protected void btnCats_Click(object sender, EventArgs e)
@@ -143,6 +239,7 @@ public partial class View_pets : System.Web.UI.Page
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         string uid = GetUserID(username, cs);
+        Session["UserID"] = uid;
 
         if (string.IsNullOrEmpty(uid))
         {

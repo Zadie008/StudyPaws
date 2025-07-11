@@ -1758,7 +1758,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 /* WHEN PET IS EQUIPPED */
-.petIcon .petCircle .equipped {
+.petCircle.equipped {
     background-color: #446791; /*dark blue*/
 }
 

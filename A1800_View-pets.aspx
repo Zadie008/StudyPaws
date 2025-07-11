@@ -155,6 +155,7 @@
             </div>
             <div class="middleSection buttonRow">
                 <asp:Button ID="btnSell" class="button" runat="server" Text="Sell" Style="display: none;" />
+                <asp:HiddenField ID="hfSelectedColourNum" runat="server" />
                 <asp:Button ID="btnEquip" class="button" runat="server" Text="Equip" Style="display: none;" />
             </div>
             <div class="rightSection">
