@@ -5,9 +5,10 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
-public partial class Default2 : System.Web.UI.Page
+public partial class View_Pets_dogs : System.Web.UI.Page
 {
     // update the session var for equipped pet image path once the user equips a new one!!!!!!!!!!!!
 
@@ -19,23 +20,30 @@ public partial class Default2 : System.Web.UI.Page
             if (Session["Username"] != null)
             {
                 string username = Session["Username"].ToString();
-                LoadUserData(username);
-                LoadOwnedPets(userID);
+                userID = LoadUserData(username);
+                if (userID != null)
+                {
+                    LoadOwnedPets(userID);
+                }
             }
         }
     }
 
     private void LoadOwnedPets(string userID)
     {
+        ContentPlaceHolder content = (ContentPlaceHolder)Master.FindControl("mainContentPlaceHolder");
+
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string command = "SELECT UserPets.petID FROM UserPets INNER JOIN Pet ON UserPets.petID = Pet.petID WHERE UserPets.userID = @userID AND Pet.petType = Cat";
+
+        string command = "SELECT Pet.colourNum FROM UserPets INNER JOIN Pet ON UserPets.petID = Pet.petID WHERE UserPets.userID = ? AND Pet.petType = ?";
 
         List<int> ownedPetColours = new List<int>();
 
         using (OleDbConnection con = new OleDbConnection(cs))
         using (OleDbCommand cmd = new OleDbCommand(command, con))
         {
-            cmd.Parameters.AddWithValue("@userID", userID);
+            cmd.Parameters.AddWithValue("?", userID);
+            cmd.Parameters.AddWithValue("?", "Dog"); // PET TYPE~~~~
 
             try
             {
@@ -58,17 +66,36 @@ public partial class Default2 : System.Web.UI.Page
         }
 
         // loop through the colourNum values 1-5
-        for (int i = 1; i <= 5; i++)
+        int displayIndex = 1;
+
+        foreach (int ownedColour in ownedPetColours)
         {
-            Image petImg = (Image)FindControlRecursive(this, "mainContentPlaceHolder_imgPet" + i);
-            Button selectBtn = (Button)FindControlRecursive(this, "mainContentPlaceHolder_btnSelect" + i);
+            // find pet image, circle and button to display in next available slot
+            Image petImg = (Image)content.FindControl("imgPet" + displayIndex);
+            Button selectBtn = (Button)content.FindControl("btnSelect" + displayIndex);
 
             if (petImg != null && selectBtn != null)
             {
-                bool owned = ownedPetColours.Contains(i);
-                petImg.Visible = owned;
-                selectBtn.Visible = owned;
+                petImg.ImageUrl = string.Format("Images/Dog {0}.png", ownedColour); // PET TYPE~~~~
+                petImg.Visible = true;
+
+                selectBtn.Visible = true;
+                selectBtn.CommandArgument = ownedColour.ToString(); // maybe for later
             }
+
+            displayIndex++;
+        }
+
+        // hide remaining spots
+        for (int i = displayIndex; i <= 5; i++)
+        {
+            Image petImg = (Image)content.FindControl("imgPet" + i);
+            Button selectBtn = (Button)content.FindControl("btnSelect" + i);
+            HtmlGenericControl circleDiv = (HtmlGenericControl)content.FindControl("circle" + i);
+
+            if (petImg != null) petImg.Visible = false;
+            if (selectBtn != null) selectBtn.Visible = false;
+            if (circleDiv != null) circleDiv.Visible = false;
         }
     }
 
@@ -112,22 +139,24 @@ public partial class Default2 : System.Web.UI.Page
         Response.Redirect("A1800_View-pets-special.aspx");
     }
 
-    private void LoadUserData(string username)
+    private string LoadUserData(string username)
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        userID = GetUserID(username, cs);
+        string uid = GetUserID(username, cs);
 
-        if (string.IsNullOrEmpty(userID))
+        if (string.IsNullOrEmpty(uid))
         {
             lblPaws.Text = "N/A (User not found)";
             lblXPAmount.Text = "N/A";
             lblLevelNumber.Text = "N/A";
-            return;
+            return null;
         }
 
-        GetLevelInformation(cs, userID);
-        GetUserStats(cs, userID);
+        GetLevelInformation(cs, uid);
+        GetUserStats(cs, uid);
+        return uid;
     }
+
 
     private string GetUserID(string username, string connectionString)
     {
@@ -200,10 +229,8 @@ public partial class Default2 : System.Web.UI.Page
                     {
                         if (reader.Read())
                         {
-                            lblXPAmount.Text = reader["userXP"] != DBNull.Value ?
-                                reader["userXP"].ToString() : "0";
-                            lblPaws.Text = reader["userCoinCount"] != DBNull.Value ?
-                                reader["userCoinCount"].ToString() : "0";
+                            lblXPAmount.Text = reader["userXP"] != DBNull.Value ? reader["userXP"].ToString() : "0";
+                            lblPaws.Text = reader["userCoinCount"] != DBNull.Value ? reader["userCoinCount"].ToString() : "0";
                         }
                         else
                         {

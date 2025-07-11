@@ -8,7 +8,7 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
-public partial class Default2 : System.Web.UI.Page
+public partial class View_pets : System.Web.UI.Page
 {
     // update the session var for equipped pet image path once the user equips a new one!!!!!!!!!!!!
 
@@ -43,7 +43,7 @@ public partial class Default2 : System.Web.UI.Page
         using (OleDbCommand cmd = new OleDbCommand(command, con))
         {
             cmd.Parameters.AddWithValue("?", userID);
-            cmd.Parameters.AddWithValue("?", "Cat");
+            cmd.Parameters.AddWithValue("?", "Cat"); // PET TYPE~~~~
 
             try
             {
@@ -76,7 +76,7 @@ public partial class Default2 : System.Web.UI.Page
 
             if (petImg != null && selectBtn != null)
             {
-                petImg.ImageUrl = string.Format("Images/Cat {0}.png", ownedColour);
+                petImg.ImageUrl = string.Format("Images/Cat {0}.png", ownedColour); // PET TYPE~~~~
                 petImg.Visible = true;
 
                 selectBtn.Visible = true;
