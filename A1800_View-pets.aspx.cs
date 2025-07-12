@@ -208,23 +208,19 @@ public partial class View_pets : System.Web.UI.Page
         if (string.IsNullOrEmpty(selectedColourNum) || string.IsNullOrEmpty(userID))
             return;
 
-        if (selectedColourNum == "1") // DON'T ALLOW USER TO SELL CAT 1
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "cannotSell", "showCannotSellPopup();", true);
-            return;
-        }
-
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         int petID = -1;
         int sellPrice = 0;
+        string petType = "";
 
         using (OleDbConnection con = new OleDbConnection(cs))
         {
             con.Open();
 
-            string queryPetID = "SELECT petID, sellPrice FROM Pet WHERE petType = 'Cat' AND colourNum = ?";
-            using (OleDbCommand cmd = new OleDbCommand(queryPetID, con))
+            string queryPet = "SELECT petID, sellPrice, petType FROM Pet WHERE petType = ? AND colourNum = ?";
+            using (OleDbCommand cmd = new OleDbCommand(queryPet, con))
             {
+                cmd.Parameters.AddWithValue("?", "Cat"); // PET TYPE~~~~
                 cmd.Parameters.AddWithValue("?", selectedColourNum);
                 using (OleDbDataReader reader = cmd.ExecuteReader())
                 {
@@ -232,9 +228,16 @@ public partial class View_pets : System.Web.UI.Page
                     {
                         petID = Convert.ToInt32(reader["petID"]);
                         sellPrice = Convert.ToInt32(reader["sellPrice"]);
+                        petType = reader["petType"].ToString();
                     }
                 }
             }
+        }
+
+        if (selectedColourNum == "1" && petType == "Cat")
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "cannotSell", "showCannotSellPopup();", true);
+            return;
         }
 
         Session["petID"] = petID;
@@ -261,7 +264,7 @@ public partial class View_pets : System.Web.UI.Page
         using (OleDbConnection con = new OleDbConnection(cs))
         {
             con.Open();
-            
+
             // CHECK IF SOLD PET WAS EQUIPPED
             string checkEquippedQuery = "SELECT equippedStatus FROM UserPets WHERE userID = ? AND petID = ?";
             using (OleDbCommand cmd = new OleDbCommand(checkEquippedQuery, con))

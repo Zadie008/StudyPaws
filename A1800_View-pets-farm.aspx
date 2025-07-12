@@ -151,17 +151,56 @@
             </table>
         </div>
     </div>
-    <div class="buttonSection">
+            <div class="buttonSection">
         <div class="leftSection">
         </div>
         <div class="middleSection buttonRow">
-            <asp:Button ID="btnSell" class="button" runat="server" Text="Sell" Style="display: none;" />
+            <asp:Button ID="btnSell" class="button" runat="server" Text="Sell" Style="display: none;" OnClick="btnSell_Click" />
             <asp:HiddenField ID="hfSelectedColourNum" runat="server" />
             <asp:Button ID="btnEquip" class="button" runat="server" Text="Equip" Style="display: none;" />
         </div>
         <div class="rightSection">
         </div>
     </div>
+
+     <div id="popup" class="simple-popup" style="display: none;">
+        <div class="popup-blue-box">
+            <p>Are you sure you want to sell this pet for</p>
+            <table id="popupSellPriceTable">
+                <tr>
+                    <td>
+                        <div class="pawIcon">
+                            <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
+                            <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
+                        </div>
+                    </td>
+                    <td><asp:Label ID="lblSellPrice" runat="server" Text="0"></asp:Label></td>
+                    <td>?</td>
+                </tr>
+            </table>
+            <img src="Images/Notification%20Sad%20Hamster.png" />
+
+            <div class="buttonSection">
+                <asp:Button ID="btnYes" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnYes_Click" OnClientClick="return confirmSell();" />
+                <asp:Button ID="btnNo" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClientClick="hidePopup(); return false;" />
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function showPopup() {
+            document.getElementById('popup').style.display = 'flex';
+        }
+
+        function hidePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        function confirmSell() {
+            hidePopup();
+            return true;
+        }
+    </script>
 </div>
 </asp:Content>
 
