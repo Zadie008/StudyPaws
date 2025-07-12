@@ -209,6 +209,7 @@ public partial class View_pets : System.Web.UI.Page
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
             using (OleDbConnection con2 = new OleDbConnection(cs))
             {
+                // 1. DELETING PET FROM USER
                 string deleteCommand = "DELETE FROM [UserPets] WHERE [userID] = ? AND [petID] = ?";
                 using (OleDbCommand cmd = new OleDbCommand(deleteCommand, con2))
                 {
@@ -221,10 +222,42 @@ public partial class View_pets : System.Web.UI.Page
 
                     if (code == 1)
                     {
-                        //Session["timerID"] = null;
-                        //Session["timerTitle"] = null;
-                        //Session["timerTag"] = null;
-                        //Session["timerDuration"] = null;
+                        Session["petID"] = null;
+
+                        LoadOwnedPets(userID);
+                    }
+                }
+
+                // 2. GET SELL PRICE OF PET
+                string selectCommand = "SELECT [sellPrice] FROM [PET] WHERE [petID] = ?";
+                using (OleDbCommand cmd = new OleDbCommand(selectCommand, con2))
+                {
+                    cmd.Parameters.AddWithValue("?", thisPetID);
+
+                    con2.Open();
+                    int code = cmd.ExecuteNonQuery();
+                    con2.Close();
+
+                    if (code == 1)
+                    {
+                        int soldSellPrice = Convert.ToInt32(Session["sellPrice"]);
+                    }
+                }
+
+                // 3. INCREMENT COINS WITH SELL PRICE OF PET SOLD
+                string updateCommand = "UPDATE [USER] SET [coinCount] WHERE [userID] = ?";
+                using (OleDbCommand cmd = new OleDbCommand(updateCommand, con2))
+                {
+                    cmd.Parameters.AddWithValue("?", userID);
+                    cmd.Parameters.AddWithValue("?", thisPetID);
+
+                    con2.Open();
+                    int code = cmd.ExecuteNonQuery();
+                    con2.Close();
+
+                    if (code == 1)
+                    {
+                        Session["petID"] = null;
 
                         LoadOwnedPets(userID);
                     }
