@@ -347,6 +347,16 @@ function showEquipSellButtons(colourNum) {
     document.getElementById('<%= btnSell.ClientID %>').style.display = 'inline-block';
 }
 
+function sellPet() {
+    showPopup();
+    return false; // don't allow postback
+}
+
+function confirmSell() {
+    hidePopup();
+    return true; // allow postback
+}
+
 // ---  REGISTRATION PAGE  ---
 if (window.location.pathname.toLowerCase().includes("c100_register.aspx")) {
     let usernameCheckTimeout;

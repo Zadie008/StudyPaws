@@ -27,6 +27,7 @@ public partial class View_pets : System.Web.UI.Page
         }
     }
 
+    // DISPLAYING THE OWNED PETS OF THE USER
     private void LoadOwnedPets(string userID)
     {
         ContentPlaceHolder content = (ContentPlaceHolder)Master.FindControl("mainContentPlaceHolder");
@@ -133,6 +134,8 @@ public partial class View_pets : System.Web.UI.Page
         return null;
     }
 
+    // EQUIPPING THE HOME PAGE PET (UPDATING THE EQUIPPEDSTATUS)
+
     protected void Page_Init(object sender, EventArgs e)
     {
         btnEquip.Click += new EventHandler(btnEquip_Click);
@@ -194,6 +197,40 @@ public partial class View_pets : System.Web.UI.Page
 
         // reload pets to reflect new equipped status
         LoadOwnedPets(userID);
+    }
+
+    // SELL PET (DELETING THE USERPETS ENTRY)
+    protected void btnYes_Click(object sender, EventArgs e)
+    {
+        if (Session["userID"] != null && Session["petID"] != null)
+        {
+            int thisPetID = Convert.ToInt32(Session["petID"]);
+
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            using (OleDbConnection con2 = new OleDbConnection(cs))
+            {
+                string deleteCommand = "DELETE FROM [UserPets] WHERE [userID] = ? AND [petID] = ?";
+                using (OleDbCommand cmd = new OleDbCommand(deleteCommand, con2))
+                {
+                    cmd.Parameters.AddWithValue("?", userID);
+                    cmd.Parameters.AddWithValue("?", thisPetID);
+
+                    con2.Open();
+                    int code = cmd.ExecuteNonQuery();
+                    con2.Close();
+
+                    if (code == 1)
+                    {
+                        //Session["timerID"] = null;
+                        //Session["timerTitle"] = null;
+                        //Session["timerTag"] = null;
+                        //Session["timerDuration"] = null;
+
+                        LoadOwnedPets(userID);
+                    }
+                }
+            }
+        }
     }
 
     protected void btnCats_Click(object sender, EventArgs e)

@@ -109,7 +109,7 @@ p {
 .popup-pink-box {
     background-color: #D7B9D5; /*pink*/
     padding: 1.5em;
-    border-radius: 10px;
+    border-radius: 2em;
     border: 5px solid white;
     width: 40%;
     max-width: 1500px;
@@ -136,7 +136,7 @@ p {
 .popup-blue-box {
     background-color: #90A8C3; /*blue*/
     padding: 1.5em;
-    border-radius: 10px;
+    border-radius: 2em;
     border: 5px solid white;
     width: 40%;
     max-width: 1500px;
@@ -163,8 +163,8 @@ p {
 /* worse button option */
 .popup-button {
     background-color: transparent;
-    border: 4px solid white;
-    border-radius: 1rem;
+    border: 3px solid white;
+    border-radius: 2em;
     color: white;
     padding: 1vh 2vw;
     font-size: clamp(1.2rem, 2.5vw, 2.7rem);
@@ -183,8 +183,8 @@ p {
 /* best button option */
 .popup-button-best-blue {
     background-color: white;
-    border: 2px solid white;
-    border-radius: 1rem;
+    border: 3px solid white;
+    border-radius: 2em;
     color: #90A8C3; /*blue*/
     padding: 1vh 2vw;
     font-size: clamp(1.2rem, 2.5vw, 2.7rem);
@@ -202,8 +202,8 @@ p {
 
 .popup-button-best-pink {
     background-color: white;
-    border: 2px solid white;
-    border-radius: 1rem;
+    border: 3px solid white;
+    border-radius: 2em;
     color: #D7B9D5; /*pink*/
     padding: 1vh 2vw;
     font-size: clamp(1.2rem, 2.5vw, 2.7rem);
@@ -1693,9 +1693,6 @@ body.page-exit .welcomeBackTextDiv {
     width: auto;
 }
 
-#viewInventoryMainContent table td {
-}
-
 #viewInventoryMainContent .rightPetsSection {
     flex: 4;
     z-index: 12;
@@ -1760,6 +1757,55 @@ body.page-exit .welcomeBackTextDiv {
 /* WHEN PET IS EQUIPPED */
 .petCircle.equipped {
     background-color: #446791; /*dark blue*/
+}
+
+/* SELL POP UP */
+#viewInventoryMainContent #popup .buttonSection {
+    align-content: center;
+    margin : 0;
+}
+
+#viewInventoryMainContent #popup .buttonSection .popup-button {
+    font-size: clamp(1rem, 2vw, 2rem);
+    width: 100%;
+}
+
+#viewInventoryMainContent #popup .buttonSection .popup-button-best-blue {
+    font-size: clamp(1rem, 2vw, 2rem);
+    width: 100%;
+}
+
+#popupSellPriceTable {
+    margin: 0 auto;
+    padding: 0;
+    font-size: 40px;
+}
+
+#popupSellPriceTable td {
+    padding: 0;
+}
+
+#popupSellPriceTable .pawIcon {
+    position: relative;
+    min-width: 4vw;
+    aspect-ratio: 1;
+}
+
+#popupSellPriceTable .pawIcon img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#popupSellPriceTable .pawIcon .paw {
+    z-index: 1;
+    width: 35%;
+}
+
+#popupSellPriceTable .pawIcon .circle {
+    z-index: 0;
+    width: 100%;
 }
 
 /* ---------------------- VIEW FRIEND LIST PAGE ---------------------- */

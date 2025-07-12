@@ -154,11 +154,35 @@
             <div class="leftSection">
             </div>
             <div class="middleSection buttonRow">
-                <asp:Button ID="btnSell" class="button" runat="server" Text="Sell" Style="display: none;" />
+                <asp:Button ID="btnSell" class="button" runat="server" Text="Sell" Style="display: none;" OnClientClick="return sellPet();" />
                 <asp:HiddenField ID="hfSelectedColourNum" runat="server" />
                 <asp:Button ID="btnEquip" class="button" runat="server" Text="Equip" Style="display: none;" />
             </div>
             <div class="rightSection">
+            </div>
+        </div>
+
+         <div id="popup" class="simple-popup" style="display: none;">
+            <div class="popup-blue-box">
+                <p>Are you sure you want to sell this pet for</p>
+                <table id="popupSellPriceTable">
+                    <tr>
+                        <td>
+                            <div class="pawIcon">
+                                <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
+                                <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
+                            </div>
+                        </td>
+                        <td>0</td> <!--CHANGE: actual selling price of pet-->
+                        <td>?</td>
+                    </tr>
+                </table>
+                <img src="Images/Notification%20Sad%20Hamster.png" />
+
+                <div class="buttonSection">
+                    <asp:Button ID="btnYes" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnYes_Click" OnClientClick="return confirmSell();" />
+                    <asp:Button ID="btnNo" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClientClick="hidePopup(); return false;" />
+                </div>
             </div>
         </div>
     </div>
