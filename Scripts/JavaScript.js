@@ -348,6 +348,10 @@ function showEquipSellButtons(colourNum) {
 }
 
 function sellPet() {
+    const colourNum = document.getElementById('mainContentPlaceHolder_hfSelectedColourNum').value;
+
+    __doPostBack('FetchSellPrice', colourNum); // a postback fetch of the sellPrice
+
     showPopup();
     return false; // don't allow postback
 }

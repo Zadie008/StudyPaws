@@ -154,7 +154,7 @@
             <div class="leftSection">
             </div>
             <div class="middleSection buttonRow">
-                <asp:Button ID="btnSell" class="button" runat="server" Text="Sell" Style="display: none;" OnClientClick="return sellPet();" />
+                <asp:Button ID="btnSell" class="button" runat="server" Text="Sell" Style="display: none;" OnClick="btnSell_Click" />
                 <asp:HiddenField ID="hfSelectedColourNum" runat="server" />
                 <asp:Button ID="btnEquip" class="button" runat="server" Text="Equip" Style="display: none;" />
             </div>
@@ -173,7 +173,7 @@
                                 <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
                             </div>
                         </td>
-                        <td>0</td> <!--CHANGE: actual selling price of pet-->
+                        <td><asp:Label ID="lblSellPrice" runat="server" Text="0"></asp:Label></td>
                         <td>?</td>
                     </tr>
                 </table>
@@ -185,6 +185,40 @@
                 </div>
             </div>
         </div>
+
+         <div id="popupCannotSell" class="simple-popup" style="display: none;">
+            <div class="popup-blue-box">
+                <p>Sorry!<br />You can't sell this pet.</p>
+                <img src="Images/Notification%20Sad%20Hamster.png" />
+
+                <div class="buttonSection">
+                    <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideCannotSellPopup(); return false;" />
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            function showPopup() {
+                document.getElementById('popup').style.display = 'flex';
+            }
+
+            function hidePopup() {
+                document.getElementById('popup').style.display = 'none';
+            }
+
+            function confirmSell() {
+                hidePopup();
+                return true;
+            }
+
+            function showCannotSellPopup() {
+                document.getElementById('popupCannotSell').style.display = 'flex';
+            }
+
+            function hideCannotSellPopup() {
+                document.getElementById('popupCannotSell').style.display = 'none';
+            }
+        </script>
     </div>
 </asp:Content>
 

@@ -1762,7 +1762,7 @@ body.page-exit .welcomeBackTextDiv {
 /* SELL POP UP */
 #viewInventoryMainContent #popup .buttonSection {
     align-content: center;
-    margin : 0;
+    margin: 0;
 }
 
 #viewInventoryMainContent #popup .buttonSection .popup-button {
@@ -1782,7 +1782,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 #popupSellPriceTable td {
-    padding: 0;
+    padding: 3px;
 }
 
 #popupSellPriceTable .pawIcon {
@@ -1806,6 +1806,16 @@ body.page-exit .welcomeBackTextDiv {
 #popupSellPriceTable .pawIcon .circle {
     z-index: 0;
     width: 100%;
+}
+
+/* CAT 1 POP UP */
+#viewInventoryMainContent #popupCannotSell .buttonSection {
+    align-content: center;
+    margin: 0;
+}
+
+#viewInventoryMainContent #popupCannotSell .buttonSection .popup-button {
+    font-size: clamp(1rem, 2vw, 2rem);
 }
 
 /* ---------------------- VIEW FRIEND LIST PAGE ---------------------- */

@@ -200,70 +200,157 @@ public partial class View_pets : System.Web.UI.Page
     }
 
     // SELL PET (DELETING THE USERPETS ENTRY)
-    protected void btnYes_Click(object sender, EventArgs e)
+    protected void btnSell_Click(object sender, EventArgs e)
     {
-        if (Session["userID"] != null && Session["petID"] != null)
+        string selectedColourNum = hfSelectedColourNum.Value;
+        userID = Session["UserID"] as string;
+
+        if (string.IsNullOrEmpty(selectedColourNum) || string.IsNullOrEmpty(userID))
+            return;
+
+        if (selectedColourNum == "1") // DON'T ALLOW USER TO SELL CAT 1
         {
-            int thisPetID = Convert.ToInt32(Session["petID"]);
+            ScriptManager.RegisterStartupScript(this, GetType(), "cannotSell", "showCannotSellPopup();", true);
+            return;
+        }
 
-            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            using (OleDbConnection con2 = new OleDbConnection(cs))
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        int petID = -1;
+        int sellPrice = 0;
+
+        using (OleDbConnection con = new OleDbConnection(cs))
+        {
+            con.Open();
+
+            string queryPetID = "SELECT petID, sellPrice FROM Pet WHERE petType = 'Cat' AND colourNum = ?";
+            using (OleDbCommand cmd = new OleDbCommand(queryPetID, con))
             {
-                // 1. DELETING PET FROM USER
-                string deleteCommand = "DELETE FROM [UserPets] WHERE [userID] = ? AND [petID] = ?";
-                using (OleDbCommand cmd = new OleDbCommand(deleteCommand, con2))
+                cmd.Parameters.AddWithValue("?", selectedColourNum);
+                using (OleDbDataReader reader = cmd.ExecuteReader())
                 {
-                    cmd.Parameters.AddWithValue("?", userID);
-                    cmd.Parameters.AddWithValue("?", thisPetID);
-
-                    con2.Open();
-                    int code = cmd.ExecuteNonQuery();
-                    con2.Close();
-
-                    if (code == 1)
+                    if (reader.Read())
                     {
-                        Session["petID"] = null;
-
-                        LoadOwnedPets(userID);
-                    }
-                }
-
-                // 2. GET SELL PRICE OF PET
-                string selectCommand = "SELECT [sellPrice] FROM [PET] WHERE [petID] = ?";
-                using (OleDbCommand cmd = new OleDbCommand(selectCommand, con2))
-                {
-                    cmd.Parameters.AddWithValue("?", thisPetID);
-
-                    con2.Open();
-                    int code = cmd.ExecuteNonQuery();
-                    con2.Close();
-
-                    if (code == 1)
-                    {
-                        int soldSellPrice = Convert.ToInt32(Session["sellPrice"]);
-                    }
-                }
-
-                // 3. INCREMENT COINS WITH SELL PRICE OF PET SOLD
-                string updateCommand = "UPDATE [USER] SET [coinCount] WHERE [userID] = ?";
-                using (OleDbCommand cmd = new OleDbCommand(updateCommand, con2))
-                {
-                    cmd.Parameters.AddWithValue("?", userID);
-                    cmd.Parameters.AddWithValue("?", thisPetID);
-
-                    con2.Open();
-                    int code = cmd.ExecuteNonQuery();
-                    con2.Close();
-
-                    if (code == 1)
-                    {
-                        Session["petID"] = null;
-
-                        LoadOwnedPets(userID);
+                        petID = Convert.ToInt32(reader["petID"]);
+                        sellPrice = Convert.ToInt32(reader["sellPrice"]);
                     }
                 }
             }
         }
+
+        Session["petID"] = petID;
+        Session["sellPrice"] = sellPrice;
+        Session["colourNum"] = selectedColourNum;
+
+        lblSellPrice.Text = sellPrice.ToString(); // UPDATE COIN LABEL
+        ScriptManager.RegisterStartupScript(this, GetType(), "showPopup", "showPopup();", true);
+    }
+    protected void btnYes_Click(object sender, EventArgs e)
+    {
+        string userID = Session["UserID"] as string;
+        if (Session["petID"] == null || Session["sellPrice"] == null || string.IsNullOrEmpty(userID))
+            return;
+
+        int petID = Convert.ToInt32(Session["petID"]);
+        int sellPrice = Convert.ToInt32(Session["sellPrice"]);
+        string colourNum = Session["colourNum"] as string;
+
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        int currentCoins = 0;
+        bool wasEquipped = false;
+
+        using (OleDbConnection con = new OleDbConnection(cs))
+        {
+            con.Open();
+            
+            // CHECK IF SOLD PET WAS EQUIPPED
+            string checkEquippedQuery = "SELECT equippedStatus FROM UserPets WHERE userID = ? AND petID = ?";
+            using (OleDbCommand cmd = new OleDbCommand(checkEquippedQuery, con))
+            {
+                cmd.Parameters.AddWithValue("?", userID);
+                cmd.Parameters.AddWithValue("?", petID);
+                object result = cmd.ExecuteScalar();
+                wasEquipped = result != null && Convert.ToBoolean(result);
+            }
+
+            // 1. DELETE PET FROM UserPets
+            string deleteCommand = "DELETE FROM UserPets WHERE userID = ? AND petID = ?";
+            using (OleDbCommand cmd = new OleDbCommand(deleteCommand, con))
+            {
+                cmd.Parameters.AddWithValue("?", userID);
+                cmd.Parameters.AddWithValue("?", petID);
+                cmd.ExecuteNonQuery();
+            }
+
+            // 2. GET CURRENT coin count
+            string getCoinsQuery = "SELECT userCoinCount FROM Users WHERE userID = ?";
+            using (OleDbCommand cmd = new OleDbCommand(getCoinsQuery, con))
+            {
+                cmd.Parameters.AddWithValue("?", userID);
+                object result = cmd.ExecuteScalar();
+                currentCoins = result != null ? Convert.ToInt32(result) : 0;
+            }
+
+            // 3. UPDATE coin count
+            int updatedCoins = currentCoins + sellPrice;
+            string updateCoins = "UPDATE Users SET userCoinCount = ? WHERE userID = ?";
+            using (OleDbCommand cmd = new OleDbCommand(updateCoins, con))
+            {
+                cmd.Parameters.AddWithValue("?", updatedCoins);
+                cmd.Parameters.AddWithValue("?", userID);
+                cmd.ExecuteNonQuery();
+            }
+
+            if (wasEquipped)
+            {
+                // GET petID of Cat 1
+                int cat1PetID = -1;
+                string getCat1ID = "SELECT petID FROM Pet WHERE petType = 'Cat' AND colourNum = 1";
+                using (OleDbCommand cmd = new OleDbCommand(getCat1ID, con))
+                {
+                    object result = cmd.ExecuteScalar();
+                    if (result != null)
+                        cat1PetID = Convert.ToInt32(result);
+                }
+
+                // ENSURE CAT 1 IS OWNED BY USER
+                bool ownsCat1 = false;
+                string checkOwnership = "SELECT COUNT(*) FROM UserPets WHERE userID = ? AND petID = ?";
+                using (OleDbCommand cmd = new OleDbCommand(checkOwnership, con))
+                {
+                    cmd.Parameters.AddWithValue("?", userID);
+                    cmd.Parameters.AddWithValue("?", cat1PetID);
+                    ownsCat1 = Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+                }
+
+                if (ownsCat1)
+                {
+                    string unequipAll = "UPDATE UserPets SET equippedStatus = FALSE WHERE userID = ?";
+                    using (OleDbCommand cmd = new OleDbCommand(unequipAll, con))
+                    {
+                        cmd.Parameters.AddWithValue("?", userID);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    string equipCat1 = "UPDATE UserPets SET equippedStatus = TRUE WHERE userID = ? AND petID = ?";
+                    using (OleDbCommand cmd = new OleDbCommand(equipCat1, con))
+                    {
+                        cmd.Parameters.AddWithValue("?", userID);
+                        cmd.Parameters.AddWithValue("?", cat1PetID);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // UPDATE SESSION FOR HOME PAGE PET PATH
+                    Session["EquippedPetImagePath"] = "Images/Cat 1.png";
+                }
+            }
+        }
+
+        Session.Remove("petID");
+        Session.Remove("sellPrice");
+        Session.Remove("colourNum");
+
+        lblPaws.Text = (currentCoins + sellPrice).ToString();
+        LoadOwnedPets(userID);
     }
 
     protected void btnCats_Click(object sender, EventArgs e)
