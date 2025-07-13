@@ -345,20 +345,46 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function playEquipSound(button) {
     const audio = document.getElementById("equipSound");
-    if (audio) {
-        audio.currentTime = 0;
-        audio.play().then(() => {
-            console.log("Audio played");
-        }).catch(err => {
-            console.warn("Audio play failed:", err);
-        });
+    // SHOW BACKGROUND CHANGE OF EQUIPPED PET HAPPEN BEFORE FUNCTIONALITY
+    const selectedColour = document.getElementById("mainContentPlaceHolder_hfSelectedColourNum").value;
+
+    for (let i = 1; i <= 5; i++) {
+        const circle = document.getElementById("circle" + i);
+        if (circle) circle.classList.remove("equipped");
     }
 
-    setTimeout(function () {
-        __doPostBack(button.name || button.id, '');
-    }, 800); // might have to make this shorter if possible
+    if (selectedColour) {
+        const selectedCircle = document.getElementById("circle" + selectedColour);
+        if (selectedCircle) selectedCircle.classList.add("equipped");
+    }
 
-    return false; // stop immediate postback
+    if (!audio) return false;
+
+    try {
+        audio.currentTime = 0;
+        const playPromise = audio.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                console.log("Equip sound played");
+
+                // WAIT FOR SOUND TO FINISH BEFORE POSTBACK
+                audio.onended = function () {
+                    __doPostBack(button.name || button.id, '');
+                };
+            }).catch((err) => { // PROCEED WITH POSTBACK ANYWAY
+                console.warn("Audio play failed:", err);
+                __doPostBack(button.name || button.id, '');
+            });
+        } else {
+            __doPostBack(button.name || button.id, '');
+        }
+    } catch (err) {
+        console.warn("Error playing sound:", err);
+        __doPostBack(button.name || button.id, '');
+    }
+
+    return false; // prevent default submit
 }
 
 function showEquipSellButtons(colourNum) {
