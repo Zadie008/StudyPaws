@@ -2087,7 +2087,7 @@ footer p {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 1em;
+    padding: 1vh 2vw;
 }
 
 .headerLeft {
@@ -2129,10 +2129,6 @@ footer p {
     flex: 1;
     display: flex;
     justify-content: flex-end;
-}
-
-.timeDateDiv table {
-    text-align: right;
 }
 
 .profileForm {

@@ -1,10 +1,11 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="ChangeProfilePhoto.aspx.cs" Inherits="Default2" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
+    Profile
 </asp:Content>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-    <div id="changeProfilePhotoPage">
-            <div class="profileHeader">
+    <div class="profileHeader">
         <!--Back Button -->
         <div class="headerLeft">
             <asp:Button ID="btnBackProfile" class="profilebutton" runat="server" Text="Back" OnClick=" btnBackProfile_Click" />
@@ -22,21 +23,20 @@
         
         <!-- Time -->
         <div class="headerRight">
-        <div class="timeDateDiv">
-             <table>
-        <tr>
-            <td colspan="2"><asp:Label ID="lblTime" CssClass="accountInfoLabel" runat="server" Text="--:--" Font-Size="65"></asp:Label></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td><asp:Label ID="lblDay" CssClass="accountInfoLabel" runat="server" Text="Day"></asp:Label></td>
-            <td><asp:Label ID="lblDate" CssClass="accountInfoLabel" runat="server" Text="Date"></asp:Label></td>
-        </tr>
-            </table>
-        </div>
+            <div class="timeDateDiv">
+                <table>
+                    <tr>
+                        <td colspan="2"><asp:Label ID="lblTime" CssClass="accountInfoLabel" runat="server" Text="--:--" Font-Size="65"></asp:Label></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><asp:Label ID="lblDay" CssClass="accountInfoLabel" runat="server" Text="Day"></asp:Label></td>
+                        <td><asp:Label ID="lblDate" CssClass="accountInfoLabel" runat="server" Text="Date"></asp:Label></td>
+                    </tr>
+                </table>
             </div>
         </div>
-    
+    </div>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
 </asp:Content>

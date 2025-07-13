@@ -5,7 +5,6 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-    
     <div class="profileHeader">
         <!--Back Button -->
         <div class="headerLeft">
@@ -25,21 +24,20 @@
         
         <!-- Time -->
         <div class="headerRight">
-        <div class="timeDateDiv">
-             <table>
-        <tr>
-            <td colspan="2"><asp:Label ID="lblTime" CssClass="accountInfoLabel" runat="server" Text="--:--" Font-Size="65"></asp:Label></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td><asp:Label ID="lblDay" CssClass="accountInfoLabel" runat="server" Text="Day"></asp:Label></td>
-            <td><asp:Label ID="lblDate" CssClass="accountInfoLabel" runat="server" Text="Date"></asp:Label></td>
-        </tr>
-            </table>
-        </div>
+            <div class="timeDateDiv">
+                <table>
+                    <tr>
+                        <td colspan="2"><asp:Label ID="lblTime" CssClass="accountInfoLabel" runat="server" Text="--:--" Font-Size="65"></asp:Label></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><asp:Label ID="lblDay" CssClass="accountInfoLabel" runat="server" Text="Day"></asp:Label></td>
+                        <td><asp:Label ID="lblDate" CssClass="accountInfoLabel" runat="server" Text="Date"></asp:Label></td>
+                    </tr>
+                </table>
             </div>
         </div>
-    
+    </div>
 </asp:Content>
 
 
