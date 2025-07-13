@@ -83,6 +83,19 @@
         </div>
         <div id="inviteFriendsToSession" class="middleSection">
             <asp:TextBox ID="txtSearch" ClientIDMode="Static" CssClass="textbox" runat="server" Placeholder="Search" ></asp:TextBox>
+            <img src="Icons/icons8-search-white-96.png" />
+
+            <div class="scrollableTableContainer">
+                <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" AutoGenerateColumns="False">
+                    <Columns>
+                        <asp:BoundField DataField="Date Created" HeaderText="Date" DataFormatString="{0:yyyy-MM-dd HH:mm}" />
+                        <asp:BoundField DataField="Title" HeaderText="Title" />
+                        <asp:BoundField DataField="Tag" HeaderText="Tag" />
+                    </Columns>
+                </asp:GridView>
+                <img src="Icons/icons8-add-new-white-96.png" />
+                <img src="Icons/icons8-check-white-96.png" />
+            </div>
         </div>
         <div class="rightSection">
         </div>
