@@ -293,6 +293,18 @@ function hideTimeUpPopup() {
     window.location.href = "Default.aspx";
 }
 
+// ---- VIEW PAST TIMER PAGE ---- //
+document.addEventListener("DOMContentLoaded", function () {
+    var icon = document.getElementById("filterIcon");
+    var controls = document.getElementById("filterControls");
+
+    if (icon && controls) {
+        icon.addEventListener("click", function () {
+            controls.style.display = (controls.style.display === "none" || controls.style.display === "") ? "flex" : "none";
+        });
+    }
+});
+
 // ---- INVENTORY PAGES ---- //
 document.addEventListener('DOMContentLoaded', function () {
     const selectButtons = [
@@ -345,6 +357,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function playEquipSound(button) {
     const audio = document.getElementById("equipSound");
+    if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(err => {
+            console.warn("Audio play failed:", err);
+        });
+    }
+
+    const selectedColour = document.getElementById('mainContentPlaceHolder_hfSelectedColourNum').value;
+    const circles = document.querySelectorAll('.petCircle');
+    circles.forEach(circle => circle.classList.remove('equipped'));
+
+    const selectedCircle = document.getElementById(`mainContentPlaceHolder_circle${selectedColour}`);
+    if (selectedCircle) {
+        selectedCircle.classList.add('equipped');
+    }
+
+    setTimeout(() => {
+        __doPostBack(button.name || button.id, '');
+    }, 200);
+    return false;
+}
+
+// OLD playEquipSound method:
+/*function playEquipSound(button) {
+    const audio = document.getElementById("equipSound");
     // SHOW BACKGROUND CHANGE OF EQUIPPED PET HAPPEN BEFORE FUNCTIONALITY
     const selectedColour = document.getElementById("mainContentPlaceHolder_hfSelectedColourNum").value;
 
@@ -386,6 +423,7 @@ function playEquipSound(button) {
 
     return false; // prevent default submit
 }
+*/
 
 function showEquipSellButtons(colourNum) {
     document.getElementById('hfSelectedColourNum').value = colourNum;

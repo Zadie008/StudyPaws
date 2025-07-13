@@ -1467,7 +1467,7 @@ body.page-exit .welcomeBackTextDiv {
     max-height: 55.5vh;
     height: auto;
     margin-top: -1%;
-    background-color: #90A8C3;
+    background-color: #90A8C3; /*dull blue*/
     border-radius: 3em;
     min-width: 75%;
     max-width: 75%;
@@ -1484,6 +1484,25 @@ body.page-exit .welcomeBackTextDiv {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.filterControls {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 100%;
+    transform: translateX(-50%);
+    background-color: #90A8C3; /*dull blue*/
+    border-radius: 3em;
+    padding: 1em 1em 0 1em;
+    z-index: 10;
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+}
+
+.filterControls .dropDownList {
+    max-width: 350px;
 }
 
 .viewPastTimersHeading .leftSection {
@@ -2430,6 +2449,41 @@ input:checked + .slider:before {
 .dropDownList.open {
     background-image: url('../Icons/icons8-collapse-arrow-up-white-96.png'); /* up arrow */
     transition: background-image 0.2s ease;
+}
+
+.filterDateBox {
+    width: 300px;
+    padding: 0.2em 0.5em 0.2em 0.5em;
+    font-family: 'Gilda Display', serif;
+    font-size: 2.2rem;
+    border: 2px solid white;
+    border-radius: 2em;
+    background-color: transparent;
+    color: white;
+}
+
+.filterDateBox::-webkit-calendar-picker-indicator { /* browser calendar icon */
+    opacity: 0;
+    cursor: pointer;
+}
+
+.customDateWrapper { /* custom calendar icon */
+    position: relative;
+    display: inline-block;
+}
+
+.customDateWrapper::after {
+    content: "";
+    background-image: url('../Icons/icons8-calendar-96.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 2em;
+    height: 2em;
+    position: absolute;
+    right: 1em;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
 }
 
 /* ---------------------- TABLES ---------------------- */
