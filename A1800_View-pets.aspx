@@ -156,7 +156,7 @@
             <div class="middleSection buttonRow">
                 <asp:Button ID="btnSell" class="button" runat="server" Text="Sell" Style="display: none;" OnClick="btnSell_Click" />
                 <asp:HiddenField ID="hfSelectedColourNum" runat="server" />
-                <asp:Button ID="btnEquip" class="button" runat="server" Text="Equip" Style="display: none;" />
+                <asp:Button ID="btnEquip" class="button" runat="server" Text="Equip" Style="display: none;" UseSubmitBehavior="false" OnClientClick="return playEquipSound(this);" />
             </div>
             <div class="rightSection">
             </div>
@@ -220,6 +220,7 @@
             }
         </script>
     </div>
+    <audio id="equipSound" src="Audio/soundEffectPop_1.mp3" preload="auto"></audio>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

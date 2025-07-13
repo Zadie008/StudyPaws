@@ -158,7 +158,7 @@ window.addEventListener('DOMContentLoaded', function () {
     const startSound = document.getElementById('timerStartSound');
     if (startSound) {
         startSound.play().catch(err => {
-            console.warn("Start sound not played automatically (likely due to autoplay restrictions):", err);
+            console.warn("Start sound not played automatically:", err);
         });
     }
 
@@ -330,7 +330,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 btnSell.style.display = 'inline-block';
                 btnEquip.style.display = 'inline-block';
-            } else {
+            }
+            else
+            {
                 button.classList.remove('buttonSelected');
                 document.getElementById('mainContentPlaceHolder_hfSelectedColourNum').value = "";
 
@@ -340,6 +342,24 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+function playEquipSound(button) {
+    const audio = document.getElementById("equipSound");
+    if (audio) {
+        audio.currentTime = 0;
+        audio.play().then(() => {
+            console.log("Audio played");
+        }).catch(err => {
+            console.warn("Audio play failed:", err);
+        });
+    }
+
+    setTimeout(function () {
+        __doPostBack(button.name || button.id, '');
+    }, 800); // might have to make this shorter if possible
+
+    return false; // stop immediate postback
+}
 
 function showEquipSellButtons(colourNum) {
     document.getElementById('hfSelectedColourNum').value = colourNum;

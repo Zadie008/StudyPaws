@@ -200,6 +200,7 @@
             return true;
         }
     </script>
+    <audio id="equipSound" src="Audio/soundEffectPop_1.mp3" preload="auto"></audio>
 </div>
 </asp:Content>
 
