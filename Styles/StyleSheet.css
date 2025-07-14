@@ -777,36 +777,36 @@ body.page-exit .welcomeBackTextDiv {
     padding-bottom: 20px;
 }
 /* ---------------------- CALENDAR PAGES ---------------------- */
-.calendarDashboard {
+.calendarDashboard { 
     flex: 75%;
     background: #D7B9D5; 
     border-radius: 30px;
     padding: 10px;
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); /*fix this*/
-    /*add height*/
 }
-.calendarHeader {
+.calendarHeader { 
     display: flex;
     justify-content: space-between;
     font-size: 22px;
     margin: 20px;
     margin-bottom: 5px;
 }
-.calendarTitle {
+.calendarTitle { 
     flex: 60%;
-    font-family: 'Lilita One', sans-serif;
-    font-weight: bold;
-    font-size: 22px;
-    text-shadow: 1px 1px #5B548A;
-    margin: 0;
     margin-bottom: 5px;
     text-align: left;
+    font-family: 'Lilita One', sans-serif;
+    font-weight: 400;
+    font-size: 28px;
+    text-shadow: 2px 2px #5B548A;
+    margin: 0;
 }
 .controlsCalendar{
     flex:40%;
     font-size: 22px;
     display: flex;
     align-content: space-between;
+    gap:5px;
 }
 .controlsCalendar .calendarFilters{
     flex:1;
@@ -823,47 +823,59 @@ body.page-exit .welcomeBackTextDiv {
 }
     .controlsCalendar .prevMonth {
         flex: 1;
-        width: 2.5vw;
-        max-width: 30px;
+        width: 32px;
+        height:32px;
+        max-width: 32px;
         border: none;
         background: transparent;
         gap: 10px;
         cursor: pointer;
     }
-.controlsCalendar .prevMonth img {
-    width: 2.5vw;
-    max-width: 30px;
-}
+
     .controlsCalendar .nextMonth {
         flex: 1;
-        width: 2.5vw;
-        max-width: 30px;
+        width: 32px;
+        height:32px;
+        max-width: 32px;
         border: none;
         background: transparent;
         gap: 10px;
         cursor: pointer;
     }
-.controlsCalendar .nextMonth img {
-    width: 2.5vw;
-    max-width: 30px;
-}
-.controlsCalendar .dateCalendar{
-    flex:1;
-    font-size: 22px;
-    gap: 10px;
-    cursor: text;
-    text-align:center;
-}
+
+    .controlsCalendar .dateCalendar {
+        flex: 1;
+        font-size: 20px;
+        text-align: center;
+        background-color: #cca6c9;
+        border: none;
+        border-radius: 1rem;
+        color: white;
+        height:25px;
+        font-family: 'Lilita One', sans-serif;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        text-decoration: none;
+        margin-top: 5px;
+        transition: background-color 0.3s ease;
+    }
+        .controlsCalendar .dateCalendar:hover {
+            background-color: #D7B9D5;
+        }
 .calendarBox{
-    /*padding: 10px;
-    display:flex;
-    text-align:center;*/
     border-collapse: collapse;
     width:100%;
-    /*max-width: 800px;*/
     margin: 20px auto;
 }
-.calendarBox th, .calendarBox td{
+.calendarBox th{
+    border: 3px solid white;
+    width: 14.28%;
+    height:75px;
+    text-align:center;
+    vertical-align: middle;
+    padding: 5px;
+}
+.calendarBox td{
     border: 3px solid white;
     width: 14.28%;
     height:75px;
@@ -871,66 +883,24 @@ body.page-exit .welcomeBackTextDiv {
     vertical-align: top;
     padding: 5px;
 }
-    .calendarBox th .weeks {
-        background: #D7B9D5;
-    }
 
 .weeks {
-    background: #D7B9D5;
+    background: #cca6c9;
+    font-size:22px;
 }
 .today {
+    display: inline-block;
+    width: 25px;
+    height:25px;
+    border-radius: 50%;
+    border: 2px solid white;
+    text-align:center;
     background-color: #446791;
-    font-weight: bold;
 }
-.calendarBox ul{
-    display: flex;
-    list-style:none;
-    flex-wrap: wrap;
+.otherMonth {
+    background-color: #446791;
 }
-.calendarBox ul li{
-    width: calc(100%/7);
-}
-.calendarBox .weeks th {
-    background: #D7B9D5;
-    color:white;
-    font-weight:bold;
-    text-align:center;
-    padding: 10px 0;
-    border: solid 2px white;
-}
-.calendarBox .days{
-    margin-bottom: 20px;
-}
-.calendarBox .days li {
-    margin-top: 30px;
-    text-align:center;
-    line-height:40px;
-    height:40px;
-    font-size:14px;
-    cursor: pointer;
-    border: solid 2px white;
-}
-.calendarBox .days li .noncurrentMonth {
-    background: #446791;
-}
-.calendarTitle {
-    font-family: 'Lilita One', sans-serif;
-    font-weight: 400;
-    font-size: 28px;
-    text-shadow: 2px 2px #5B548A;
-    margin: 0;
-}
-.controlsCalendar {
-    height:38px;
-    width:38px;
-    line-height: 38px;
-    cursor:pointer;
-    margin: 0 1px;
-    border-radius:50%;
-}
-.controlsCalendar span:hover {
-    background: #D7B9D5;
-}
+
 /* ---------------------- TO DO LIST PAGES ---------------------- */
 .toDoListDashboard {
     flex: 25%;
@@ -943,20 +913,22 @@ body.page-exit .welcomeBackTextDiv {
 .toDoListControls {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    /*align-items: center;*/
     margin-bottom: 5px;
     /*edit padding at top*/
     font-size: 22px;
-    margin: 15px;
+    margin: 20px;
 }
 .toDoListControls .toDoListHeading {
     font-family: 'Lilita One', sans-serif;
-    font-weight: bold;
-    font-size: 22px;
-    text-shadow: 1px 1px #5B548A;
+    font-weight: 400;
+    font-size: 28px;
     flex: 90%;
     text-align:left;
     /*add shadow and letter spacing*/
+    margin-bottom: 5px;
+    text-shadow: 2px 2px #5B548A;
+    margin: 0;
 }
 .toDoListControls .toDoListFilters{
     flex:10%;

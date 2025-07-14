@@ -21,12 +21,24 @@ public partial class Default2 : System.Web.UI.Page
             //Session["Tasks"] = new List<TaskItem>();
             //Calendar.SelectedDate = DateTime.Today;
             //UpdateEventList();
+            DateTime currentDate = DateTime.Today;
+            hfYear.Value = currentDate.Year.ToString();
+            hfMonth.Value = DateTime.Today.Month.ToString();
+            LoadCalendar(currentDate.Year, currentDate.Month);
         }
-        DateTime currentDate = DateTime.Today;
-        int year = currentDate.Year;
-        int month = currentDate.Month;
-        lblMonthYear.Text = currentDate.ToString("MMMM yyyy");
+        else
+        {
+            int year = int.Parse(hfYear.Value);
+            int month = int.Parse(hfMonth.Value);
+            LoadCalendar(year, month);
+        }
+    }
+    private void LoadCalendar(int year, int month)
+    {
+        lblMonthYear.Text = new DateTime(year, month, 1).ToString("MMMM yyyy");
         literalCalendar.Text = GenerateCalendar(year, month);
+        hfYear.Value = year.ToString();
+        hfMonth.Value = month.ToString();
     }
     private String GenerateCalendar(int year, int month)
     {
@@ -34,7 +46,6 @@ public partial class Default2 : System.Web.UI.Page
         DateTime firstDayOfMonth = new DateTime(year, month, 1);
         int daysInMonth = DateTime.DaysInMonth(year, month);
 
-        // Adjust so Monday = 0, Sunday = 6
         int adjustedStartDay = ((int)firstDayOfMonth.DayOfWeek + 6) % 7;
 
         sb.Append("<table class='calendarBox'>");
@@ -48,85 +59,54 @@ public partial class Default2 : System.Web.UI.Page
 
         int currentDay = 1;
 
-        // Loop through rows (weeks)
-        for (int week = 0; currentDay <= daysInMonth; week++)
+        DateTime prevMonth = firstDayOfMonth.AddMonths(-1);
+        int daysInPrevMonth = DateTime.DaysInMonth(prevMonth.Year, prevMonth.Month);
+
+        DateTime nextMonth = firstDayOfMonth.AddMonths(1);
+        int week = 0;
+
+        while (currentDay <= daysInMonth)
         {
             sb.Append("<tr>");
 
             for (int dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++)
             {
-                // First row: add empty cells before the 1st day
+            
                 if (week == 0 && dayOfWeek < adjustedStartDay)
                 {
-                    sb.Append("<td></td>");
+                    int prevDay = daysInPrevMonth - (adjustedStartDay - dayOfWeek-1);
+                    sb.Append(string.Format("<td class='otherMonth'>{0}</td>", prevDay));
                 }
                 else if (currentDay <= daysInMonth)
                 {
                     DateTime thisDay = new DateTime(year, month, currentDay);
                     string cssClass = thisDay.Date == DateTime.Today ? "today" : "";
-                    sb.Append(string.Format("<td class='{0}'>{1}</td>", cssClass, currentDay));
+                    if (cssClass == "today")
+                    {
+                        sb.Append(string.Format("<td><span class='today'>{0}</span></td>", currentDay));
+                    }
+                    else
+                    {
+                        sb.Append(string.Format("<td>{0}</td>", currentDay));
+                    }
+
                     currentDay++;
                 }
                 else
                 {
-                    sb.Append("<td></td>");
+                    int nextDay = (currentDay - daysInMonth);
+                    sb.Append(string.Format("<td class='otherMonth'>{0}</td>", nextDay));
+                    currentDay++;
                 }
             }
 
             sb.Append("</tr>");
+            week++;
         }
 
         sb.Append("</table>");
         return sb.ToString();
-        /*StringBuilder sb = new StringBuilder();
-        DateTime firstDayOfMonth = new DateTime(year, month, 1);
-        int daysInMonth = DateTime.DaysInMonth(year, month);
-        int startDayOfWeek = ((int)firstDayOfMonth.DayOfWeek+6)%7;
-
-        sb.Append("<table class='calendarBox'>");
-        sb.Append("<tr>");
-        string[] dayNames = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
-
-        foreach (string dayName in dayNames)
-        {
-            sb.Append(string.Format("<th>{0}</th>", dayName)); 
-        }
-        sb.Append("</tr>");
-
-        int currentDay = 1;
-
-        for (int week = 0; currentDay <= daysInMonth; week++) 
-            {
-            if (week == 0 && DayOfWeek < 7; day)
-            sb.Append("<td></td>");
-            }
-
-        for (int day = 1; day <= daysInMonth; day++)
-        {
-            DateTime thisDay = new DateTime(year, month, day);
-            string cssClass = thisDay.Date == DateTime.Today ? "today" : "";
-            int currentCol = startDayOfWeek;
-
-            sb.Append(string.Format("<td class='{0}'>{1}</td>", cssClass, day)); 
-
-            if (currentCol == 6)
-            {
-                sb.Append("</tr>");
-                if (day != daysInMonth)
-                {
-                    sb.Append("<tr>");
-                }
-            }
-        }
-        int endDayOfWeek = ((int)new DateTime(year, month, daysInMonth).DayOfWeek+1);
-        for (int i = endDayOfWeek + 1; i <= 6; i++)
-        {
-            sb.Append("<td></td>");
-        }
-
-        sb.Append("</tr></table>");
-        return sb.ToString();
-        */
+        
     }
     private void UpdateEventList()
     {
@@ -223,5 +203,29 @@ public partial class Default2 : System.Web.UI.Page
     {
         String filter = ((LinkButton)sender).Text;
         LoadTasks(filter);
+    }
+
+    protected void btnPrevMonth_Click(Object sender, EventArgs e)
+    {
+        int year = int.Parse(hfYear.Value);
+        int month = int.Parse(hfMonth.Value);
+
+        DateTime prevMonth = new DateTime(year, month, 1).AddMonths(-1);
+        LoadCalendar(prevMonth.Year, prevMonth.Month);
+    }
+    protected void btnNextMonth_Click(Object sender, EventArgs e)
+    {
+        int year = int.Parse(hfYear.Value);
+        int month = int.Parse(hfMonth.Value);
+
+        DateTime nextMonth = new DateTime(year, month, 1).AddMonths(1);
+        LoadCalendar(nextMonth.Year, nextMonth.Month);
+    }
+    protected void btnToday_Click(Object sender, EventArgs e)
+    {
+        DateTime today = DateTime.Today;
+        hfYear.Value = today.Year.ToString();
+        hfMonth.Value = today.Month.ToString();
+        LoadCalendar(today.Year, today.Month);
     }
 }

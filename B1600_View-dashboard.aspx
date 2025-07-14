@@ -100,74 +100,19 @@
     <div class="dashboardContainer">
         <div class="calendarDashboard">
             <div class="calendarHeader">
-                <p class="calendarTitle">Calendar</p>
+                <asp:Label ID="lblMonthYear" runat="server" Text="" CssClass="calendarTitle"></asp:Label>
                 <div class="controlsCalendar">
                     <button class="calendarFilters"><img src="Icons/icons8-filter-bars-white-96.png" /></button>
-                    <button class="prevMonth"><img src="Icons/icons8-arrow-left-white-96.png" /></button>
-                    <asp:Label ID="lblMonthYear" runat="server" Text="" CssClass="dateCalendar"></asp:Label>
-                    <!--<p class="dateCalendar">Month</p>-->
-                    <button class="nextMonth"><img src="Icons/icons8-arrow-right-white-96.png" /></button>
+                    <asp:ImageButton ID="btnPrevMonth" class="prevMonth" runat="server" OnClick="btnPrevMonth_Click" ImageUrl ="~/Icons/icons8-arrow-left-white-96.png" />
+                    <asp:Button ID="btnToday" class="dateCalendar" runat="server" Text="Today" OnClick="btnToday_Click" />
+                    <asp:ImageButton ID="btnNextMonth" class="nextMonth" runat="server" OnClick="btnNextMonth_Click" ImageUrl="~/Icons/icons8-arrow-right-white-96.png" />
+                    <asp:HiddenField ID="hfYear" runat="server" />
+                    <asp:HiddenField ID="hfMonth" runat="server" />
                 </div>
             </div>
             
             <div class="calendarBox">
-                <!--<div class="weeks">
-                    <div>Mon</div>
-                    <div>Tue</div>
-                    <div>Wed</div>
-                    <div>Thu</div>
-                    <div>Fri</div>
-                    <div>Sat</div>
-                    <div>Sun</div>
-                </div>-->
                 <asp:Literal ID="literalCalendar" runat="server"></asp:Literal>
-                <!--<ul class="weeks">
-                    <li>Mon</li>
-                    <li>Tue</li>
-                    <li>Wed</li>
-                    <li>Thu</li>
-                    <li>Fri</li>
-                    <li>Sat</li>
-                    <li>Sun</li>
-                </ul>
-                <ul class="days">
-                    <li class="noncurrentMonth">31</li>
-                    <li>1</li>
-                    <li>2</li>
-                    <li>3</li>
-                    <li>4</li>
-                    <li>5</li>
-                    <li>6</li>
-                    <li>7</li>
-                    <li>8</li>
-                    <li>9</li>
-                    <li>10</li>
-                    <li>11</li>
-                    <li>12</li>
-                    <li>13</li>
-                    <li>14</li>
-                    <li>15</li>
-                    <li>16</li>
-                    <li>17</li>
-                    <li>18</li>
-                    <li>19</li>
-                    <li>20</li>
-                    <li>21</li>
-                    <li>22</li>
-                    <li>23</li>
-                    <li>24</li>
-                    <li>25</li>
-                    <li>26</li>
-                    <li>27</li>
-                    <li>28</li>
-                    <li>29</li>
-                    <li>30</li>
-                    <li class="noncurrentMonth">1</li>
-                    <li class="noncurrentMonth">2</li>
-                    <li class="noncurrentMonth">3</li>
-                    <li class="noncurrentMonth">4</li>
-
-                </ul> -->
             </div>
         </div>
 
