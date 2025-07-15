@@ -126,8 +126,28 @@
                     <asp:LinkButton ID="btnCompleted" runat="server" CssClass="filterBtn" OnClick="filter_Click">Completed</asp:LinkButton>  --> 
                 </div>
             </div>
+            <div class="tasksContainer">
+                <div class="newTaskContainer">
+                    <button class="addTaskBtn"><img src="Icons/icons8-add-new-white-96.png" /></button>
+                    <input type="text" placeholder="Add new task ..." />
+                </div>
+                <ul class="taskList">
+                    <li class="task"><button class="taskCheckBoxBtn"><img src="Icons/icons8-unchecked-checkbox-white-96.png" /></button>Task<button class="editTaskBtn"><img src="Icons/icons8-edit-white-96.png" /></button><button class="deleteTaskBtn"><img src="Icons/icons8-delete-white-96.png" /></button></li>
+                </ul>
+            </div>
+            <!--<div class="tasksContainer">
+                <ul id="taskList">
 
-            <asp:Repeater ID="rptTasks" runat="server">
+                </ul>
+
+                <div class="newTaskContainer">
+                    <button class="addTaskBtn">
+                        <img src="Icons/icons8-add-new-white-96.png" /></button>
+                    <input type="text" class="newTaskText" readonly />
+                </div>
+            </div>-->
+
+            <!--<asp:Repeater ID="rptTasks" runat="server">
                 <ItemTemplate>
                     <li class="task">
                         <asp:CheckBox ID="chkComplete" runat="server" AutoPostBack="true" OnCheckedChanged="chkComplete_CheckedChange" 
@@ -143,7 +163,7 @@
              <div class="newTask">
                  <button ID="addTaskBtn" onclick="btnAddTask_Click"><img src="Icons/icons8-add-new-white-96.png" /></button>
                  <asp:TextBox ID="txtNewTask" runat="server" CssClass="taskInput"></asp:TextBox>
-             </div>
+             </div>-->
             <!--<ul class="taskBox">
                 <li class="task">
                     <label>
@@ -155,6 +175,7 @@
                 <ul class="taskEditMenu">
                     <li><i class="editTask"></i>Edit</li>
                     <li><i class="deleteTask"></i>Delete</li>
+<img src="Icons/icons8-delete-white-96.png" />
                 </ul>
             </div>
                 </li>-->

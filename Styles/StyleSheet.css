@@ -909,6 +909,7 @@ body.page-exit .welcomeBackTextDiv {
     padding: 10px;
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);/*fix this*/
     height:auto; /*fix this*/
+    color: white;
 }
 .toDoListControls {
     display: flex;
@@ -965,18 +966,170 @@ body.page-exit .welcomeBackTextDiv {
     font-weight:bold;
     background-color:#D7B9D5;
 }
-.taskBox{
+.tasksContainer{
+    margin: 0;
+    padding: 0;
+}
+.newTaskContainer{
+    display:flex;
+    width:100%;
+    height:32px;
+    margin: 5px 0;
+ }
+.newTaskContainer input{
+    width:85%;
+    height:100%;
+    border:none;
+    font-size: 16px;
+    padding-left: 5px;
+    background: none;
+    color: white;
+}
+.addTaskBtn {
+    width: 30px;
+    height: 30px;
+    max-width: 30px;
+    border: none;
+    background: transparent;
+    gap: 10px;
+    cursor: pointer;
+}
+    .addTaskBtn img {
+        width: 2.5vw;
+        max-width: 30px;
+    }
+.taskList{
+    
+}
+.taskList li{
+    list-style:none;
+    /*line-height:30px;*/
+    /*padding-left:5px;*/
+    position:relative;
+    /*margin-bottom:2px;*/
+}
+.task {
+    display: flex;
+    width: 100%;
+    height: 32px;
+    margin: 5px 0;
+}
+.taskCheckBoxBtn {
+    width: 30px;
+    height: 30px;
+    max-width: 30px;
+    border: none;
+    background: transparent;
+    /*gap: 10px;*/
+    cursor: pointer;
+}
+    .taskCheckBoxBtn img {
+        width: 2.5vw;
+        max-width: 30px;
+    }
+.editTaskBtn {
+    display: none;
+    margin-left: 5px;
+    width: 30px;
+    height: 30px;
+    max-width: 30px;
+    border: none;
+    background: transparent;
+    gap: 10px;
+    cursor: pointer;
+    position:absolute;
+    right: 30px;
+}
+.deleteTaskBtn {
+    display: none;
+    margin-left: 5px;
+    width: 30px;
+    height: 30px;
+    max-width: 30px;
+    border: none;
+    background: transparent;
+    gap: 10px;
+    cursor: pointer;
+    position: absolute;
+    right: 0px;
+}
+    .editTaskBtn img{
+        width: 2.5vw;
+        max-width: 30px;
+    }
+.deleteTaskBtn img {
+    width: 2.5vw;
+    max-width: 30px;
+}
+.task:hover .editTaskBtn, .task:hover .deleteTaskBtn {
+    display: inline;
+}
+/*ul #taskList{
+    list-style:none;
+}
+.task{
+    display: flex;
+    align-items:center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+    transition: background 0.3s;
+}
+.task:hover{
+    background-color: #f9f9f9;
+}
+.taskCheckBoxBtn {
+    width: 24px;
+    height: 24px;
+    background-image: url('../Icons/icons8-unchecked-checkbox-white-96.png');
+    background-size:cover;
+    border:none;
+    cursor:pointer;
+    margin-right:10px;
+}
+.task.completed .taskCheckBoxBtn {
+    background-image: url('../Icons/icons8-check-white-96.png');
+}
+.taskText{
+    flex-grow:1;
+    border:none;
+    background: none;
+    font-size:16px;
+}
+.task.completed .taskText{
+    text-decoration: line-through;
+    color: #999;
+}
+.editTaskBtn, .deleteTaskBtn{
+    display:none;
+    background:none;
+    border:none;
+    cursor:pointer;
+    margin-left:5px;
+    font-size:14px;
+}
+.task:hover .editTaskBtn, .task:hover .deleteTaskBtn{
+    display: inline;
+}
+
+.newTaskText{
+    border:none;
+    font-size:16px;
+    background:none;
+    pointer-events:none;
+}*/
+/*.taskBox{
     margin: 0;
     padding:0;
     list-style:none;
 }
-/*.taskBox .task{
+.taskBox .task{
     display:flex;
     align-items: center;
     margin-bottom: 10px;
     padding-bottom: 10px;
     padding-left: 10px;
-}*/
+}
 .task{
     display: flex;
     align-items:center;
@@ -1026,7 +1179,7 @@ body.page-exit .welcomeBackTextDiv {
 .taskText.done{
     text-decoration:line-through;
     color: #ddd;
-}
+}*/
 
 /* ---------------------- CREATE TIMER PAGES A100 ---------------------- */
 /* page 1 (back, create, view past timers) */

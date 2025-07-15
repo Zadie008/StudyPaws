@@ -511,3 +511,66 @@ if (window.location.pathname.toLowerCase().includes("c100_register.aspx")) {
         }
     });
 }
+
+//adding next task to the to-do list
+let taskId = 0;
+function addNewTask() {
+    const list = document.getElementById('taskList');
+
+    const li = document.createElement('li');
+    li.className = 'task';
+    li.dataset.id = taskId++;
+
+    const btn = document.createElemtn('button');
+    btn.className = 'taskCheckBoxBtn';
+    btn.onclick = () => toggleComplete(li);
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'taskText';
+    input.placeholder = 'New Task';
+    input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            input.blur();
+        }
+    });
+    input.addEventListener('blur', () => {
+        input.readOnly = true;
+    });
+    input.readOnly = false;
+    input.focus();
+
+    const editBtn = document.createElement('button');
+    editBtn.className = 'editTaskBtn';
+    editBtn.innerHTML = '<img src="Icons/icons8-edit-white-96.png" />';
+    editBtn.onclick = () => {
+        input.readOnly = false;
+        input.focus();
+    };
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'deleteTaskBtn';
+    deleteBtn.innerHTML = '<img src="Icons/icons8-delete-white-96.png" />';
+    deleteBtn.onclick = () => {
+        li.remove();
+    };
+
+    li.appendChild(btn);
+    li.appendChild(input);
+    li.appendChild(editBtn);
+    li.appendChild(deleteBtn);
+
+    list.appendChild(li);
+}
+
+//completing a task on the to do list
+function toggleComplete(task) {
+    const list = document.getElementById('taskList');
+    task.classList.toggle('completed');
+
+    if (task.classList.contains('completed')) {
+        list.appendChild(task);
+    } else {
+        list.insertBefore(task, list.firstChild);
+    }
+}
