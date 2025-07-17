@@ -1,6 +1,5 @@
-﻿/*
-    ---------------------- COLOUR PALETTE ----------------------
-
+﻿/* ---------------------- COLOUR PALETTE ---------------------- */
+/*
     LIGHT MODE
     ~ Fairy Tale (pink) : #F4CAE0
     ~ Thistle (light purple) : #D7B9D5
@@ -16,11 +15,9 @@
     ~ African Violet (light purple) : #9F86C0
     ~ Ultra Violet (medium purple) : #5E548E
     ~ Russian violet (dark purple) : #231942
-
 */
 
 /* ---------------------- FONTS ---------------------- */
-
 @import url('StyleSheet.css');
 @font-face {
     font-family: 'Lilita One';
@@ -43,7 +40,6 @@
 }
 
 /* ---------------------- ALL PAGES ---------------------- */
-
 * {
     padding: 0;
     box-sizing: border-box;
@@ -3046,6 +3042,21 @@ table {
     /* login page */
     #loginPageDiv {
         margin-top: 15%;
+    }
+
+    /* dashboard pages */
+    .dashboardContainer {
+        height: 70vh;
+    }
+
+    .calendarBox th {
+        width: 10%;
+        height: 55px;
+    }
+
+    .calendarBox td {
+        width: 10%;
+        height: 55px;
     }
 
     /* timer pages */
