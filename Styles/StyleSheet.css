@@ -3143,6 +3143,24 @@ table {
         max-height: 46vh;
     }
 
+    .viewTimerMainContent {
+        margin: 2em 4em 0em 4em;
+    }
+
+    .viewTimerMainContent .buttonSection {
+        margin-top: 0em;
+        margin-bottom: 0em;
+    }
+
+    .buttonRow {
+        margin-top: 0em;
+        margin-bottom: 0em;
+    }
+
+    .extraTimeRow {
+        top: 77%;
+    }
+
     /* ---------------------- INVENTORY PAGE ---------------------- */
     #viewInventoryMainContent {
         margin: -0.1em 4em 4em 4em;
