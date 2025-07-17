@@ -117,76 +117,64 @@
         </div>
 
         <div class="toDoListDashboard">
-            <div class="toDoListControls">
+            <div class="todo-header">
+                <h1>My To-Do List</h1>
+                <div class="filter-container">
+                    <button id="filterButton" class="filter-button" type="button" ClientIDMode="Static">
+                        Filter <span class="arrow">▼</span>
+                    </button>
+                    <div id="filterDropdown" class="filter-dropdown" ClientIDMode="Static">
+                        <button type="button" data-filter="all">All Tasks</button>
+                        <button type="button" data-filter="active">In Progress</button>
+                        <button type="button" data-filter="completed">Completed</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Add new task section -->
+            <div class="add-task">
+                <button id="addButton" class="add-button" type="button" ClientIDMode="Static">+</button>
+                <span class="add-text">Add a new task</span>
+            </div>
+            
+            <!-- Task list -->
+            <div id="taskList" class="task-list" runat="server" ClientIDMode="Static">
+                <!-- Tasks will be loaded here -->
+            </div>
+
+
+            <!--<div class="toDoListControls">
                 <p class="toDoListHeading">To-do List</p>
                 <div class ="toDoListFilters">
                     <button class="toDoFilterBtn"><img src="Icons/icons8-filter-bars-white-96.png" /></button>
-                    <!--<asp:LinkButton ID="btnAll" runat="server" CssClass="filterBtn" OnClick="filter_Click">All</asp:LinkButton>
+                    <asp:LinkButton ID="btnAll" runat="server" CssClass="filterBtn" OnClick="filter_Click">All</asp:LinkButton>
                     <asp:LinkButton ID="btnProgress" runat="server" CssClass="filterBtn" OnClick="filter_Click">In Progress</asp:LinkButton>
-                    <asp:LinkButton ID="btnCompleted" runat="server" CssClass="filterBtn" OnClick="filter_Click">Completed</asp:LinkButton>  --> 
+                    <asp:LinkButton ID="btnCompleted" runat="server" CssClass="filterBtn" OnClick="filter_Click">Completed</asp:LinkButton> 
                 </div>
             </div>
             <div class="tasksContainer">
                 <div class="newTaskContainer">
-                    <button class="addTaskBtn"><img src="Icons/icons8-add-new-white-96.png" /></button>
-                    <input type="text" placeholder="Add new task ..." />
+                    <button id="addTaskBtn"><img src="Icons/icons8-add-new-white-96.png" /></button>
                 </div>
-                <ul class="taskList">
-                    <li class="task"><button class="taskCheckBoxBtn"><img src="Icons/icons8-unchecked-checkbox-white-96.png" /></button>Task<button class="editTaskBtn"><img src="Icons/icons8-edit-white-96.png" /></button><button class="deleteTaskBtn"><img src="Icons/icons8-delete-white-96.png" /></button></li>
-                </ul>
-            </div>
-            <!--<div class="tasksContainer">
                 <ul id="taskList">
+                    <li class="task"><button class="taskCheckBoxBtn"><img src="Icons/icons8-unchecked-checkbox-white-96.png" /></button>Task<button class="editTaskBtn"><img src="Icons/icons8-edit-white-96.png" /></button><button class="deleteTaskBtn"><img src="Icons/icons8-delete-white-96.png" /></button></li>
 
                 </ul>
-
-                <div class="newTaskContainer">
-                    <button class="addTaskBtn">
-                        <img src="Icons/icons8-add-new-white-96.png" /></button>
-                    <input type="text" class="newTaskText" readonly />
-                </div>
             </div>-->
-
-            <!--<asp:Repeater ID="rptTasks" runat="server">
-                <ItemTemplate>
-                    <li class="task">
-                        <asp:CheckBox ID="chkComplete" runat="server" AutoPostBack="true" OnCheckedChanged="chkComplete_CheckedChange" 
-                            Checked='<%# Convert.ToBoolean(Eval("taskStatus"))%>'
-                            ToolTip='<%# Eval("taskID")%>' />
-                        <span class="taskText <%# Eval("taskStatus").ToString() == "Completed" ?"done":"" %>">
-                            <%# Eval("taskDesc") %>
-                            </span>
-                    </li>
-                </ItemTemplate>
-            </asp:Repeater>
-
-             <div class="newTask">
-                 <button ID="addTaskBtn" onclick="btnAddTask_Click"><img src="Icons/icons8-add-new-white-96.png" /></button>
-                 <asp:TextBox ID="txtNewTask" runat="server" CssClass="taskInput"></asp:TextBox>
-             </div>-->
-            <!--<ul class="taskBox">
-                <li class="task">
-                    <label>
-                        <input type="checkbox" />
-                        <span class="taskText">study maths</span>
-                    </label>
-            <div class="taskListSettings">
-                <i class="dotdotdot"></i>
-                <ul class="taskEditMenu">
-                    <li><i class="editTask"></i>Edit</li>
-                    <li><i class="deleteTask"></i>Delete</li>
-<img src="Icons/icons8-delete-white-96.png" />
-                </ul>
-            </div>
-                </li>-->
-            <!--</ul>-->
         </div>
+
+        <asp:HiddenField ID="hdnTaskAction" runat="server" />
+        <asp:HiddenField ID="hdnTaskId" runat="server" />
+        <asp:HiddenField ID="hdnTaskText" runat="server" />
+        <asp:HiddenField ID="hdnTaskStatus" runat="server" />
+
+
     </div>
-    
     
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
 
 </asp:Content>
+
 

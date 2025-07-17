@@ -798,7 +798,7 @@ body.page-exit .welcomeBackTextDiv {
     font-family: 'Lilita One', sans-serif;
     font-weight: 400;
     font-size: 28px;
-    text-shadow: 2px 2px #5B548A;
+    /*text-shadow: 2px 2px #5B548A;*/
     margin: 0;
 }
 .controlsCalendar{
@@ -847,46 +847,47 @@ body.page-exit .welcomeBackTextDiv {
         flex: 1;
         font-size: 20px;
         text-align: center;
-        background-color: #cca6c9;
-        border: none;
+        background-color: #D7B9D5;
+        border: 2.3px solid white;
         border-radius: 1rem;
         color: white;
-        height:25px;
+        height: 27px;
         font-family: 'Lilita One', sans-serif;
         letter-spacing: 0.1em;
         cursor: pointer;
         text-decoration: none;
-        margin-top: 5px;
+        margin-top: 3px;
         transition: background-color 0.3s ease;
     }
         .controlsCalendar .dateCalendar:hover {
-            background-color: #D7B9D5;
+            background-color: #cca6c9;
         }
 .calendarBox{
     border-collapse: collapse;
     width:100%;
     margin: 20px auto;
 }
-.calendarBox th{
-    border: 3px solid white;
-    width: 14.28%;
-    height:75px;
-    text-align:center;
-    vertical-align: middle;
-    padding: 5px;
-}
-.calendarBox td{
-    border: 3px solid white;
-    width: 14.28%;
-    height:75px;
-    text-align:right;
-    vertical-align: top;
-    padding: 5px;
-}
+    .calendarBox th {
+        border: 3px solid white;
+        width: 14.28%;
+        height: 75px;
+        text-align: center;
+        vertical-align: middle;
+        padding: 5px;
+        
+    }
+    .calendarBox td {
+        border: 3px solid white;
+        width: 14.28%;
+        height: 75px;
+        text-align: right;
+        vertical-align: top;
+        padding: 5px;
+    }
 
 .weeks {
-    background: #cca6c9;
-    font-size:22px;
+    background-color: #446791;
+    font-size: 22px;
 }
 .today {
     display: inline-block;
@@ -898,7 +899,7 @@ body.page-exit .welcomeBackTextDiv {
     background-color: #446791;
 }
 .otherMonth {
-    background-color: #446791;
+    background-color: #cca6c9;
 }
 
 /* ---------------------- TO DO LIST PAGES ---------------------- */
@@ -926,7 +927,6 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 28px;
     flex: 90%;
     text-align:left;
-    /*add shadow and letter spacing*/
     margin-bottom: 5px;
     text-shadow: 2px 2px #5B548A;
     margin: 0;
@@ -985,7 +985,7 @@ body.page-exit .welcomeBackTextDiv {
     background: none;
     color: white;
 }
-.addTaskBtn {
+#addTaskBtn {
     width: 30px;
     height: 30px;
     max-width: 30px;
@@ -994,15 +994,17 @@ body.page-exit .welcomeBackTextDiv {
     gap: 10px;
     cursor: pointer;
 }
-    .addTaskBtn img {
+    #addTaskBtn img {
         width: 2.5vw;
         max-width: 30px;
     }
-.taskList{
-    
+#taskList {
+    max-height: 400px;
+    overflow-y: auto;
 }
-.taskList li{
+#taskList li{
     list-style:none;
+    
     /*line-height:30px;*/
     /*padding-left:5px;*/
     position:relative;
@@ -1013,6 +1015,21 @@ body.page-exit .welcomeBackTextDiv {
     width: 100%;
     height: 32px;
     margin: 5px 0;
+    margin-top:3px;
+}
+.taskText{
+    width:100%;
+    height:100%;
+    border:none;
+    font-size:16px;
+    padding-left:5px;
+    background:none;
+    color:white;
+    outline:none;
+}
+.taskText[readonly]{
+    pointer-events:none;
+    color:white;
 }
 .taskCheckBoxBtn {
     width: 30px;
@@ -1061,7 +1078,7 @@ body.page-exit .welcomeBackTextDiv {
     width: 2.5vw;
     max-width: 30px;
 }
-.task:hover .editTaskBtn, .task:hover .deleteTaskBtn {
+#taskList li:hover .editTaskBtn, #taskList li:hover .deleteTaskBtn {
     display: inline;
 }
 /*ul #taskList{
@@ -1180,6 +1197,193 @@ body.page-exit .welcomeBackTextDiv {
     text-decoration:line-through;
     color: #ddd;
 }*/
+
+
+
+
+/* FROM DEEPSEEK*/
+.todo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+    .todo-header h1 {
+        margin: 0;
+        color: #333;
+        font-size: 24px;
+    }
+
+.filter-container {
+    position: relative;
+    display: inline-block;
+}
+
+.filter-button {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+    .filter-button:hover {
+        background-color: #e0e0e0;
+    }
+
+.arrow {
+    margin-left: 5px;
+    font-size: 12px;
+}
+
+.filter-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 150px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    z-index: 1;
+}
+
+    .filter-dropdown button {
+        display: block;
+        width: 100%;
+        padding: 8px 15px;
+        text-align: left;
+        border: none;
+        background: none;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+        .filter-dropdown button:hover {
+            background-color: #f5f5f5;
+        }
+
+.add-task {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 15px;
+}
+
+.add-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .add-button:hover {
+        background-color: #45a049;
+    }
+
+.add-text {
+    color: #777;
+    font-size: 14px;
+}
+
+.task-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    position: relative;
+}
+
+    .task-item:hover {
+        background-color: #f9f9f9;
+    }
+
+.task-checkbox {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+    background-image: url('unchecked.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: none;
+    background-color: transparent;
+}
+
+    .task-checkbox.checked {
+        background-image: url('checked.png');
+    }
+
+.task-text {
+    flex-grow: 1;
+    margin-right: 10px;
+    word-break: break-word;
+}
+
+    .task-text.completed {
+        text-decoration: line-through;
+        color: #999;
+    }
+
+.task-edit {
+    flex-grow: 1;
+    margin-right: 10px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.task-actions {
+    display: none;
+    position: absolute;
+    right: 10px;
+}
+
+.task-item:hover .task-actions {
+    display: flex;
+}
+
+.edit-button, .delete-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 5px;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.edit-button {
+    color: #2196F3;
+}
+
+.delete-button {
+    color: #f44336;
+}
+
+    .edit-button:hover, .delete-button:hover {
+        opacity: 0.8;
+    }
 
 /* ---------------------- CREATE TIMER PAGES A100 ---------------------- */
 /* page 1 (back, create, view past timers) */

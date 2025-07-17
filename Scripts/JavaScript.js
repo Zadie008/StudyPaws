@@ -512,7 +512,7 @@ if (window.location.pathname.toLowerCase().includes("c100_register.aspx")) {
     });
 }
 
-//adding next task to the to-do list
+/*adding next task to the to-do list
 let taskId = 0;
 function addNewTask() {
     const list = document.getElementById('taskList');
@@ -572,5 +572,255 @@ function toggleComplete(task) {
         list.appendChild(task);
     } else {
         list.insertBefore(task, list.firstChild);
+    }
+}*/
+
+//TO DO LIST DASHBOARD
+document.getElementById("addTaskBtn").addEventListener("click", function () {
+    const taskList = document.getElementById("taskList");
+
+    const li = document.createElement("li");
+    li.className = "task";
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.className = "taskText";
+    input.placeholder = "Type your task ...";
+    li.appendChild(input);
+
+    taskList.insertBefore(li, taskList.firstChild);
+
+    input.focus();
+
+    input.addEventListener("keydown", function (e) {
+        if (e.key == "Enter") {
+            finaliseInput(input);
+        } else if (e.key == "Escape") {
+            li.remove();
+        }
+    });
+
+    input.addEventListener("blur", function () {
+        if (input.value.trim() !== "") {
+            finaliseInput(input);
+        } else {
+            li.remove();
+        }
+    });
+});
+function finaliseInput(input) {
+    input.setAttribute("readonly", true);
+}
+
+// DEEPSEEK TESTING
+// Wait for the DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function () {
+    console.log("DOM fully loaded and parsed");
+
+    // Get references to elements
+    const filterButton = document.getElementById('filterButton');
+    const filterDropdown = document.getElementById('filterDropdown');
+    const addButton = document.getElementById('addButton');
+    const taskList = document.getElementById('taskList');
+
+    // Check if elements exist
+    if (!filterButton || !filterDropdown || !addButton || !taskList) {
+        console.error("One or more essential elements not found");
+        return;
+    }
+
+    // Filter dropdown functionality
+    filterButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        filterDropdown.style.display = filterDropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function () {
+        filterDropdown.style.display = 'none';
+    });
+
+    // Prevent dropdown from closing when clicking inside it
+    filterDropdown.addEventListener('click', function (e) {
+        e.stopPropagation();
+    });
+
+    // Filter tasks
+    document.querySelectorAll('.filter-dropdown button').forEach(button => {
+        button.addEventListener('click', function () {
+            const filter = this.getAttribute('data-filter');
+            filterTasks(filter);
+            filterDropdown.style.display = 'none';
+            filterButton.innerHTML = `Filter <span class="arrow">▼</span> (${this.textContent})`;
+        });
+    });
+
+    // Add new task
+    addButton.addEventListener('click', addNewTask);
+
+    // Delegate events for dynamic elements
+    taskList.addEventListener('click', function (e) {
+        // Checkbox click
+        if (e.target.classList.contains('task-checkbox')) {
+            toggleTaskCompletion(e.target);
+        }
+        // Edit button click
+        else if (e.target.classList.contains('edit-button')) {
+            if (e.target.textContent === '✎') {
+                editTask(e.target);
+            } else {
+                saveTaskEdit(e.target);
+            }
+        }
+        // Delete button click
+        else if (e.target.classList.contains('delete-button')) {
+            const taskId = e.target.closest('.task-item').dataset.taskId;
+            deleteTask(taskId);
+        }
+    });
+
+    // Initial load of tasks
+    loadTasks();
+});
+
+function loadTasks() {
+    console.log("Loading tasks...");
+    // This will need to be handled by your server-side code
+    // The server should render the tasks initially
+}
+
+function filterTasks(filter) {
+    console.log(`Filtering tasks by: ${filter}`);
+    const tasks = document.querySelectorAll('.task-item');
+
+    tasks.forEach(task => {
+        const isCompleted = task.querySelector('.task-checkbox').classList.contains('checked');
+
+        switch (filter) {
+            case 'all':
+                task.style.display = 'flex';
+                break;
+            case 'active':
+                task.style.display = isCompleted ? 'none' : 'flex';
+                break;
+            case 'completed':
+                task.style.display = isCompleted ? 'flex' : 'none';
+                break;
+        }
+    });
+}
+
+function addNewTask() {
+    console.log("Adding new task...");
+    const taskList = document.getElementById('taskList');
+    const taskId = 'new-' + Date.now();
+
+    const taskItem = document.createElement('div');
+    taskItem.className = 'task-item';
+    taskItem.dataset.taskId = taskId;
+
+    taskItem.innerHTML = `
+        <button class="task-checkbox"></button>
+        <input type="text" class="task-edit" placeholder="Enter task description" autofocus />
+        <div class="task-actions">
+            <button class="edit-button">✓</button>
+            <button class="delete-button">✕</button>
+        </div>
+    `;
+
+    if (taskList.firstChild) {
+        taskList.insertBefore(taskItem, taskList.firstChild);
+    } else {
+        taskList.appendChild(taskItem);
+    }
+
+    const input = taskItem.querySelector('.task-edit');
+    input.focus();
+
+    input.addEventListener('blur', function () {
+        if (input.value.trim() !== '') {
+            saveNewTask(taskId, input.value.trim());
+        } else {
+            taskItem.remove();
+        }
+    });
+
+    input.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            if (input.value.trim() !== '') {
+                saveNewTask(taskId, input.value.trim());
+            } else {
+                taskItem.remove();
+            }
+        }
+    });
+}
+
+function saveNewTask(taskId, text) {
+    console.log(`Saving new task: ${text}`);
+    // You'll need to implement server-side handling for this
+    // This would typically be done with an AJAX call or form submission
+}
+
+function toggleTaskCompletion(checkbox) {
+    const taskItem = checkbox.closest('.task-item');
+    const taskText = taskItem.querySelector('.task-text');
+    const isCompleted = checkbox.classList.toggle('checked');
+
+    if (taskText) {
+        taskText.classList.toggle('completed', isCompleted);
+    }
+
+    console.log(`Toggled task completion for task ID: ${taskItem.dataset.taskId}`);
+    // Implement server-side update for task status
+}
+
+function editTask(button) {
+    const taskItem = button.closest('.task-item');
+    const taskText = taskItem.querySelector('.task-text');
+    const currentText = taskText.textContent;
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'task-edit';
+    input.value = currentText;
+
+    taskText.replaceWith(input);
+    input.focus();
+
+    button.textContent = '✓';
+}
+
+function saveTaskEdit(button) {
+    const taskItem = button.closest('.task-item');
+    const input = taskItem.querySelector('.task-edit');
+    const newText = input.value.trim();
+
+    if (newText !== '') {
+        const taskText = document.createElement('span');
+        taskText.className = 'task-text';
+        if (taskItem.querySelector('.task-checkbox').classList.contains('checked')) {
+            taskText.classList.add('completed');
+        }
+        taskText.textContent = newText;
+
+        input.replaceWith(taskText);
+        button.textContent = '✎';
+
+        console.log(`Saved edit for task ID: ${taskItem.dataset.taskId}`);
+        // Implement server-side update for task text
+    } else {
+        deleteTask(taskItem.dataset.taskId);
+    }
+}
+
+function deleteTask(taskId) {
+    if (confirm('Are you sure you want to delete this task?')) {
+        const taskItem = document.querySelector(`.task-item[data-task-id="${taskId}"]`);
+        if (taskItem) {
+            taskItem.remove();
+        }
+        console.log(`Deleted task ID: ${taskId}`);
+        // Implement server-side deletion
     }
 }
