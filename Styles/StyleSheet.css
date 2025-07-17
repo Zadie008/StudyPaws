@@ -109,7 +109,7 @@ p {
 .popup-pink-box {
     background-color: #D7B9D5; /*pink*/
     padding: 1.5em;
-    border-radius: 2em;
+    border-radius: 3em;
     border: 5px solid white;
     width: 40%;
     max-width: 1500px;
@@ -136,7 +136,7 @@ p {
 .popup-blue-box {
     background-color: #90A8C3; /*blue*/
     padding: 1.5em;
-    border-radius: 2em;
+    border-radius: 3em;
     border: 5px solid white;
     width: 40%;
     max-width: 1500px;
@@ -164,7 +164,7 @@ p {
 .popup-button {
     background-color: transparent;
     border: 3px solid white;
-    border-radius: 2em;
+    border-radius: 3em;
     color: white;
     padding: 1vh 2vw;
     font-size: clamp(1.2rem, 2.5vw, 2.7rem);
@@ -184,7 +184,7 @@ p {
 .popup-button-best-blue {
     background-color: white;
     border: 3px solid white;
-    border-radius: 2em;
+    border-radius: 3em;
     color: #90A8C3; /*blue*/
     padding: 1vh 2vw;
     font-size: clamp(1.2rem, 2.5vw, 2.7rem);
@@ -203,7 +203,7 @@ p {
 .popup-button-best-pink {
     background-color: white;
     border: 3px solid white;
-    border-radius: 2em;
+    border-radius: 3em;
     color: #D7B9D5; /*pink*/
     padding: 1vh 2vw;
     font-size: clamp(1.2rem, 2.5vw, 2.7rem);
@@ -377,7 +377,7 @@ h2 {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 90%;
-    z-index: 1; 
+    z-index: 1;
 }
 
 .profileIcon #profileCircle {
@@ -742,7 +742,7 @@ body.page-exit .homePagePet {
 /* USER WELCOME BACK TEXT */
 .welcomeBackTextDiv {
     text-align: center;
-    margin-top: -3em;
+    margin-top: -2em;
 }
 
 .welcomeBackTextDiv h2 {
@@ -759,12 +759,12 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .username-header {
-    letter-spacing: 0.1em; 
-    font-size: 3.5em; 
+    letter-spacing: 0.1em;
+    font-size: 3.5em;
     font-family: 'Lilita One';
     display: block;
-    margin-top: 0; 
-    margin-bottom: 0; 
+    margin-top: -0.3em;
+    margin-bottom: 0;
 }
 
 /* ---------------------- DASHBOARD PAGE ---------------------- */
@@ -1997,7 +1997,7 @@ body.page-exit .welcomeBackTextDiv {
     min-width: 85%;
     max-width: 85%;
     height: 63vh;
-    border-radius: 2em;
+    border-radius: 3em;
     padding: 0.5em;
     display: flex;
 }
@@ -2026,7 +2026,7 @@ body.page-exit .welcomeBackTextDiv {
 
 #viewInventoryMainContent .leftCategorySection .button {
     background-color: transparent;
-    border: 2px solid white;
+    border: 3px solid white;
     border-radius: 2rem;
     width: 6em;
     padding: 0.3em;
@@ -2050,7 +2050,7 @@ body.page-exit .welcomeBackTextDiv {
 
 #viewInventoryMainContent .rightPetsSection .button {
     background-color: transparent;
-    border: 2px solid white;
+    border: 3px solid white;
     border-radius: 2rem;
     width: 8vw;
     max-width: 147px;
@@ -2068,7 +2068,7 @@ body.page-exit .welcomeBackTextDiv {
 .petIcon {
     position: relative;
     width: 8vw;
-    max-width: 147px;
+    max-width: auto;
     aspect-ratio: 1;
     flex-direction: row;
     margin: 0 1.7em;
@@ -2095,7 +2095,7 @@ body.page-exit .welcomeBackTextDiv {
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #90A8C3; /*dull blue*/
-    border: 2px solid white;
+    border: 3px solid white;
     border-radius: 50%;
     width: 100%;
     height: 100%;
@@ -2178,13 +2178,13 @@ body.page-exit .welcomeBackTextDiv {
     min-width: 85%;
     max-width: 85%;
     height: 63vh;
-    border-radius: 2em;
+    border-radius: 3em;
     padding: 0.5em;
 }
 
 /* ---------------------- BADGES PAGE ---------------------- */
 #badgesMainContent {
-    margin: 2em;
+    margin: 1em 4em 4em 4em;
     height: 67vh;
     overflow: hidden; 
 }
@@ -2267,7 +2267,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 1.1rem;
     margin-top: 0.6rem;
     padding: 0.3rem 0.7rem;
-    border: 2px solid #ccc;
+    border: 2px solid white;
     border-radius: 1.5rem;
     background-color: #90a8c3;
 }
@@ -2288,6 +2288,12 @@ body.page-exit .welcomeBackTextDiv {
     margin: 4em 4em 4em 4em;
 }
 
+#aboutMainContent h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.1em;
+    margin-top: 0;
+}
+
 #aboutMainContent .backgroundColorContainer {
     align-items: center;
     margin: auto;
@@ -2295,7 +2301,7 @@ body.page-exit .welcomeBackTextDiv {
     min-width: 85%;
     max-width: 85%;
     height: 63vh;
-    border-radius: 2em;
+    border-radius: 3em;
     padding: 0.5em;
 }
 
@@ -2612,7 +2618,7 @@ input:checked + .slider:before {
     justify-content: center;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    border: 4px solid White; 
+    border: 4px solid white;
     transition: all 0.2s ease;
     cursor: pointer;
 }
@@ -2645,25 +2651,6 @@ input:checked + .slider:before {
 
 .circle-unicorn {
     background-color: #D7B9D5; 
-}
-
-
-/* Responsive tweaks */
-@media (max-width: 768px) {
-    .iconRowBottom {
-        transform: translateX(30px);
-        gap: 30px;
-    }
-
-    .iconSelectItem {
-        width: 100px;
-        height: 100px;
-    }
-
-        .iconSelectItem .profileImageContainer {
-            width: 100px;
-            height: 100px;
-        }
 }
 
 /* ---------------------- OTHER ---------------------- */
@@ -2776,6 +2763,7 @@ input:checked + .slider:before {
     transition: background-image 0.2s ease;
 }
 
+/* ---------------------- DATE AND TIME BOX ---------------------- */
 .filterDateBox {
     width: 300px;
     padding: 0.2em 0.5em 0.2em 0.5em;
@@ -2949,9 +2937,24 @@ table {
     footer {
         bottom: 0;
     }
+
+    .iconRowBottom {
+        transform: translateX(30px);
+        gap: 30px;
+    }
+
+    .iconSelectItem {
+        width: 100px;
+        height: 100px;
+    }
+
+    .iconSelectItem .profileImageContainer {
+        width: 100px;
+        height: 100px;
+    }
 }
 
-@media (max-width: 1800px) {
+@media (max-width: 1910px) {
     .curved-header h2 {
         margin-top: clamp(-5rem, -4vw, -3rem);
     }
@@ -3023,6 +3026,16 @@ table {
     /* home page */
     .homePagePet {
         width: min(90vw, 350px);
+    }
+
+    /* USER WELCOME BACK TEXT */
+    .welcomeBackTextDiv {
+        margin-top: 0;
+    }
+
+    .username-header {
+        font-size: 3em;
+        margin-top: -0.5em;
     }
 
     /* register page */
@@ -3097,9 +3110,76 @@ table {
         font-size: 1.5rem;
     }
 
+    .filterControls {
+        padding: 0.99em 1em 0 1em;
+    }
+
+    .filterControls .label {
+        font-size: 1.6rem;
+    }
+
+    .filterControls .dropDownList {
+        max-width: 275px;
+    }
+
+    .filterDateBox {
+        width: 275px;
+        padding: 0.2em 0.5em 0.2em 0.5em;
+        font-size: 1.8rem;
+    }
+
+    .viewPastTimersMainContent .scrollableTableContainer {
+        max-height: 46vh;
+    }
+
+    /* ---------------------- INVENTORY PAGE ---------------------- */
+    #viewInventoryMainContent {
+        margin: -0.1em 4em 4em 4em;
+    }
+
+    #viewInventoryMainContent .buttonSection {
+        margin: -5.5em 0 0 0;
+    }
+
+    /* ---------------------- BADGES PAGE ---------------------- */
+    #badgesMainContent {
+        margin: 0 4em 4em 4em;
+        height: 67.5vh;
+    }
+
+    #badgesMainContent .scrollableTableContainer {
+        max-height: 57vh;
+        min-width: 97%;
+        max-width: 97%;
+    }
+
+    /* ---------------------- ABOUT PAGE ---------------------- */
+    #aboutMainContent {
+        margin: 0em 4em 4em 4em;
+        height: 67vh;
+    }
+
+    /* POPUPS */
+    .popup-pink-box {
+        width: 40%;
+    }
+
+    .popup-pink-box .buttonSection {
+        margin-top: 3vh;
+        gap: 0.1em;
+    }
+
+    .popup-blue-box {
+        width: 40%;
+    }
+
+    .popup-blue-box .buttonSection {
+        margin-top: 3vh;
+        gap: 0.1em;
+    }
+
     footer {
         max-height: 35px;
         bottom: 0;
     }
 }
-/*BADGES PAGE*/

@@ -98,6 +98,7 @@
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div id="aboutMainContent">
+        <h2>About Us</h2>
         <div class="backgroundColorContainer">
             <table>
                 <tr>
