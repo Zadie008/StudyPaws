@@ -117,30 +117,30 @@
         </div>
 
         <div class="toDoListDashboard">
-            <div class="todo-header">
-                <h1>My To-Do List</h1>
-                <div class="filter-container">
-                    <button id="filterButton" class="filter-button" type="button" ClientIDMode="Static">
-                        Filter <span class="arrow">▼</span>
-                    </button>
-                    <div id="filterDropdown" class="filter-dropdown" ClientIDMode="Static">
-                        <button type="button" data-filter="all">All Tasks</button>
-                        <button type="button" data-filter="active">In Progress</button>
-                        <button type="button" data-filter="completed">Completed</button>
-                    </div>
+            <div class="toDoListControls">
+                <p class="toDoListHeading">To Do List</p>
+                <div class="toDoListFilters">
+                    <asp:DropDownList ID="toDoFilterDropDown" ClientIDMode="Static" class="toDoFilterDropDownList" runat="server" BackColor="#ADA7C9">
+                        <asp:ListItem></asp:ListItem>
+                        <asp:ListItem>All</asp:ListItem>
+                        <asp:ListItem>Completed</asp:ListItem>
+                        <asp:ListItem>In Progress</asp:ListItem>
+                    </asp:DropDownList>
+                    <asp:ImageButton ID="filterButton" runat="server" class="toDoFilterBtn" ClientIDMode="Static" ImageUrl="~/Icons/icons8-filter-bars-white-96.png"/>
+                </div>
+            </div>
+            <div class="tasksContainer">
+                <div class="newTaskContainer">
+                    <asp:ImageButton ID="addTaskButton" class="addTaskBtn" ClientIDMode="Static" runat="server" ImageUrl="~/Icons/icons8-add-new-white-96.png"/>
+                    <p class="addTaskText">Add a new task</p>
+                </div>
+
+                <!-- Task list -->
+                <div id="taskList" class="task-list" runat="server" ClientIDMode="Static">
+                    <!-- Tasks will be loaded here -->
                 </div>
             </div>
             
-            <!-- Add new task section -->
-            <div class="add-task">
-                <button id="addButton" class="add-button" type="button" ClientIDMode="Static">+</button>
-                <span class="add-text">Add a new task</span>
-            </div>
-            
-            <!-- Task list -->
-            <div id="taskList" class="task-list" runat="server" ClientIDMode="Static">
-                <!-- Tasks will be loaded here -->
-            </div>
 
 
             <!--<div class="toDoListControls">

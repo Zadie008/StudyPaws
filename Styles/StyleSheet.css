@@ -794,7 +794,7 @@ body.page-exit .welcomeBackTextDiv {
     font-family: 'Lilita One', sans-serif;
     font-weight: 400;
     font-size: 28px;
-    /*text-shadow: 2px 2px #5B548A;*/
+    text-shadow: 2px 2px #5B548A;
     margin: 0;
 }
 .controlsCalendar{
@@ -861,6 +861,7 @@ body.page-exit .welcomeBackTextDiv {
 .calendarBox{
     border-collapse: collapse;
     width:100%;
+    height:auto;
     margin: 20px auto;
 }
     .calendarBox th {
@@ -921,20 +922,21 @@ body.page-exit .welcomeBackTextDiv {
     font-family: 'Lilita One', sans-serif;
     font-weight: 400;
     font-size: 28px;
-    flex: 90%;
+    flex: 50%;
     text-align:left;
     margin-bottom: 5px;
     text-shadow: 2px 2px #5B548A;
     margin: 0;
 }
 .toDoListControls .toDoListFilters{
-    flex:10%;
-    /*display:flex;
-    gap:16px;
+    flex:50%;
+    display:flex;
+    /*gap:16px;
     justify-content: flex-start;
     padding: 0;*/
 }
     .toDoListControls .toDoListFilters .toDoFilterBtn {
+        flex:1;
         width: 2.5vw;
         max-width: 30px;
         border: none;
@@ -946,33 +948,26 @@ body.page-exit .welcomeBackTextDiv {
         .toDoListControls .toDoListFilters .toDoFilterBtn img {
             width: 2.5vw;
             max-width: 30px;
+            cursor: pointer;
         }
-.toDoListFilters .filterBtn{
-    cursor: pointer;
-    font-size: 14px;
-    background:none;
-    border:none;
-    color:white;
-    font-weight:normal;
-    padding: 4px 10px;
-    border-radius: 8px;
-}
-.toDoListFilters .filterBtn:hover, .toDoListFilters .filterBtn.active {
-    color: #5B548A;
-    font-weight:bold;
-    background-color:#D7B9D5;
+.toDoListControls .toDoListFilters .toDoFilterDropDownList{
+    flex:3;
+    cursor:pointer;
 }
 .tasksContainer{
     margin: 0;
     padding: 0;
 }
-.newTaskContainer{
+.tasksContainer .newTaskContainer{
     display:flex;
     width:100%;
-    height:32px;
-    margin: 5px 0;
+    height:30px;
+    /*margin: 5px 0;*/
+    text-align:center;
+    align-items:center;
+    border-bottom: 1px white solid;
  }
-.newTaskContainer input{
+/*.newTaskContainer input{
     width:85%;
     height:100%;
     border:none;
@@ -980,8 +975,8 @@ body.page-exit .welcomeBackTextDiv {
     padding-left: 5px;
     background: none;
     color: white;
-}
-#addTaskBtn {
+}*/
+.tasksContainer .newTaskContainer .addTaskBtn {
     width: 30px;
     height: 30px;
     max-width: 30px;
@@ -990,10 +985,17 @@ body.page-exit .welcomeBackTextDiv {
     gap: 10px;
     cursor: pointer;
 }
-    #addTaskBtn img {
+    .tasksContainer .newTaskContainer .addTaskBtn img {
         width: 2.5vw;
         max-width: 30px;
     }
+.tasksContainer .newTaskContainer .addTaskText{
+    color:white;
+    font-size:18px;
+    text-align:center;
+    margin-top:5px;
+    vertical-align:bottom;
+}
 #taskList {
     max-height: 400px;
     overflow-y: auto;
