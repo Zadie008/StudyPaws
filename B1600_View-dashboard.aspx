@@ -102,7 +102,14 @@
             <div class="calendarHeader">
                 <asp:Label ID="lblMonthYear" runat="server" Text="" CssClass="calendarTitle"></asp:Label>
                 <div class="controlsCalendar">
-                    <button class="calendarFilters"><img src="Icons/icons8-filter-bars-white-96.png" /></button>
+                    <asp:DropDownList ID="calendarDropDown" ClientIDMode="Static" class="calendarDropDownList" runat="server" BackColor="#ADA7C9">
+                        <asp:ListItem></asp:ListItem>
+                        <asp:ListItem>Test</asp:ListItem>
+                        <asp:ListItem>Exam</asp:ListItem>
+                        <asp:ListItem>Birthday</asp:ListItem>
+                    </asp:DropDownList>
+
+                    <asp:ImageButton ID="calendarFilterBtn" runat="server" class="calendarFilters" ImageUrl="~/Icons/icons8-filter-bars-white-96.png"/>
                     <asp:ImageButton ID="btnPrevMonth" class="prevMonth" runat="server" OnClick="btnPrevMonth_Click" ImageUrl ="~/Icons/icons8-arrow-left-white-96.png" />
                     <asp:Button ID="btnToday" class="dateCalendar" runat="server" Text="Today" OnClick="btnToday_Click" />
                     <asp:ImageButton ID="btnNextMonth" class="nextMonth" runat="server" OnClick="btnNextMonth_Click" ImageUrl="~/Icons/icons8-arrow-right-white-96.png" />
@@ -126,7 +133,7 @@
                         <asp:ListItem>Completed</asp:ListItem>
                         <asp:ListItem>In Progress</asp:ListItem>
                     </asp:DropDownList>
-                    <asp:ImageButton ID="filterButton" runat="server" class="toDoFilterBtn" ClientIDMode="Static" ImageUrl="~/Icons/icons8-filter-bars-white-96.png"/>
+                    <asp:ImageButton ID="filterButton" runat="server" class="toDoFilterBtn" ClientIDMode="Static" ImageUrl="~/Icons/icons8-filter-bars-white-96.png" OnClick="toDoFilterBtn_Click"/>
                 </div>
             </div>
             <div class="tasksContainer">
@@ -135,32 +142,37 @@
                     <p class="addTaskText">Add a new task</p>
                 </div>
 
+                <asp:GridView ID="gridViewTaskList" runat="server" AutoGenerateColumns="False" class="taskList">
+                    <Columns>
+                        <asp:TemplateField>
+                            <ItemTemplate>
+                                <img src='<%#Eval("taskStatus").ToString() == "True" ? "Icons/icons8-check-white-96.png" : "Icons/icons8-unchecked-checkbox-white-96.png" %>' class="taskCheckBox" onclick="toggleCheckbox(<%#Eval("TaskID") %>)" />
+                            </ItemTemplate>
+                        </asp:TemplateField>
+
+                        <asp:TemplateField>
+                            <ItemTemplate>
+                                <span class='<%#Eval("taskStatus").ToString() == "True" ? "completedTask":"" %>'><%#Eval("taskDesc") %></span>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+
+                        <asp:TemplateField>
+                            <ItemTemplate>
+                                <div class="taskControls">
+                                    <asp:ImageButton ID="editTaskBtn" class="editTaskBtn" runat="server" CommandName="editTask" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-edit-white-96.png"/>
+                                    <asp:ImageButton ID="deleteTaskBtn" class="deleteTaskBtn" runat="server" CommandName="deleteTask" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-delete-white-96.png" />
+                                </div>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                    </Columns>
+                </asp:GridView>
+                
                 <!-- Task list -->
-                <div id="taskList" class="task-list" runat="server" ClientIDMode="Static">
+                <%--<div id="taskList" class="task-list" runat="server" ClientIDMode="Static">
                     <!-- Tasks will be loaded here -->
-                </div>
+                </div>--%>
             </div>
             
-
-
-            <!--<div class="toDoListControls">
-                <p class="toDoListHeading">To-do List</p>
-                <div class ="toDoListFilters">
-                    <button class="toDoFilterBtn"><img src="Icons/icons8-filter-bars-white-96.png" /></button>
-                    <asp:LinkButton ID="btnAll" runat="server" CssClass="filterBtn" OnClick="filter_Click">All</asp:LinkButton>
-                    <asp:LinkButton ID="btnProgress" runat="server" CssClass="filterBtn" OnClick="filter_Click">In Progress</asp:LinkButton>
-                    <asp:LinkButton ID="btnCompleted" runat="server" CssClass="filterBtn" OnClick="filter_Click">Completed</asp:LinkButton> 
-                </div>
-            </div>
-            <div class="tasksContainer">
-                <div class="newTaskContainer">
-                    <button id="addTaskBtn"><img src="Icons/icons8-add-new-white-96.png" /></button>
-                </div>
-                <ul id="taskList">
-                    <li class="task"><button class="taskCheckBoxBtn"><img src="Icons/icons8-unchecked-checkbox-white-96.png" /></button>Task<button class="editTaskBtn"><img src="Icons/icons8-edit-white-96.png" /></button><button class="deleteTaskBtn"><img src="Icons/icons8-delete-white-96.png" /></button></li>
-
-                </ul>
-            </div>-->
         </div>
 
         <asp:HiddenField ID="hdnTaskAction" runat="server" />

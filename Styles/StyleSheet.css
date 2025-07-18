@@ -788,7 +788,7 @@ body.page-exit .welcomeBackTextDiv {
     margin-bottom: 5px;
 }
 .calendarTitle { 
-    flex: 60%;
+    flex: 30%;
     margin-bottom: 5px;
     text-align: left;
     font-family: 'Lilita One', sans-serif;
@@ -798,12 +798,41 @@ body.page-exit .welcomeBackTextDiv {
     margin: 0;
 }
 .controlsCalendar{
-    flex:40%;
+    flex:70%;
     font-size: 22px;
     display: flex;
     align-content: space-between;
     gap:5px;
 }
+    .controlsCalendar .calendarDropDownList {
+        display: none;
+        cursor: pointer;
+        height: 30px;
+        line-height: 30px;
+        border-radius: 2rem;
+        border: 2px solid white;
+        background-color: transparent;
+        -webkit-appearance: none;
+        appearance: none; /* removes default arrow */
+        background-image: url('../Icons/icons8-expand-arrow-white-96.png'); /* down arrow */
+        transition: background-image 0.2s ease;
+        background-repeat: no-repeat;
+        background-position: right 0.5em center;
+        background-size: 0.75em;
+        padding: 0 2em 0 1em;
+        /*padding: 0.2em 2em 0.2em 1em;*/
+        color: white;
+        font-size: 22px;
+        font-family: 'Gilda Display', serif;
+        /*font-weight: 200;*/
+        outline: none;
+        margin: 1vh auto;
+        text-align: left;
+        width: 100%;
+        max-width: 300px;
+        /*box-sizing: border-box;*/
+        display: block;
+    }
 .controlsCalendar .calendarFilters{
     flex:1;
     width: 2.5vw;
@@ -911,48 +940,95 @@ body.page-exit .welcomeBackTextDiv {
 }
 .toDoListControls {
     display: flex;
-    justify-content: space-between;
+    align-items:center;
+    /*justify-content: space-between;*/
     /*align-items: center;*/
-    margin-bottom: 5px;
+    /*margin-bottom: 5px;*/
     /*edit padding at top*/
-    font-size: 22px;
-    margin: 20px;
+    /*font-size: 22px;*/
+    margin: 20px 15px 15px 15px;
+    position:relative;
+    z-index:2;
 }
 .toDoListControls .toDoListHeading {
     font-family: 'Lilita One', sans-serif;
     font-weight: 400;
-    font-size: 28px;
-    flex: 50%;
+    font-size: 26px;
+    flex: 45%;
     text-align:left;
     margin-bottom: 5px;
     text-shadow: 2px 2px #5B548A;
-    margin: 0;
+    /*vertical-align:bottom;*/
+    /*margin: 0;*/
+    line-height: 32px;
 }
 .toDoListControls .toDoListFilters{
-    flex:50%;
+    /*margin-bottom:5px;*/
+    flex:55%;
     display:flex;
+    gap:5px;
+    justify-content: space-between;
+    line-height:32px;
+    vertical-align:central;
+    align-items:center;
     /*gap:16px;
     justify-content: flex-start;
     padding: 0;*/
 }
     .toDoListControls .toDoListFilters .toDoFilterBtn {
-        flex:1;
+        flex: 1;
         width: 2.5vw;
         max-width: 30px;
         border: none;
         background: transparent;
-        gap: 5px;
-        cursor:pointer;
+        gap: 10px;
+        cursor: pointer;
+        vertical-align: central;
+        align-items: center;
+
+        position:relative;
+        z-index:100;
     }
 
         .toDoListControls .toDoListFilters .toDoFilterBtn img {
-            width: 2.5vw;
+            /*width: 2.5vw;*/
             max-width: 30px;
             cursor: pointer;
         }
 .toDoListControls .toDoListFilters .toDoFilterDropDownList{
-    flex:3;
+    display: none;
+    flex:4;
     cursor:pointer;
+    height:32px;
+    line-height: 32px;
+    vertical-align:central;
+    align-items:center;
+    position:relative;
+    z-index:10;
+
+    border-radius: 2rem;
+    border: 2px solid white;
+    background-color: transparent;
+    -webkit-appearance: none;
+    appearance: none; /* removes default arrow */
+    background-image: url('../Icons/icons8-expand-arrow-white-96.png'); /* down arrow */
+    transition: background-image 0.2s ease;
+    background-repeat: no-repeat;
+    background-position: right 0.5em center;
+    background-size: 20px;
+    padding: 0 2em 0 1em;
+    /*padding: 0.2em 2em 0.2em 1em;*/
+    color: white;
+    font-size: 20px;
+    font-family: 'Gilda Display', serif;
+    font-weight: 200;
+    outline: none;
+    margin: 1vh auto;
+    text-align: left;
+    width: 100%;
+    max-width: 300px;
+    box-sizing: border-box;
+    display: block;
 }
 .tasksContainer{
     margin: 0;
@@ -962,6 +1038,7 @@ body.page-exit .welcomeBackTextDiv {
     display:flex;
     width:100%;
     height:30px;
+    margin-bottom: 5px;
     /*margin: 5px 0;*/
     text-align:center;
     align-items:center;
@@ -993,21 +1070,51 @@ body.page-exit .welcomeBackTextDiv {
     color:white;
     font-size:18px;
     text-align:center;
-    margin-top:5px;
+    margin: 0 0 0 10px;
+    line-height:30px;
     vertical-align:bottom;
 }
-#taskList {
+.taskList {
     max-height: 400px;
     overflow-y: auto;
+    width:100%;
+    border-collapse:collapse;
 }
-#taskList li{
-    list-style:none;
+.taskList td{
+    padding:10px;
+    vertical-align:middle;
+    border-bottom: 1px solid white;
+}
+.taskCheckBox img{
+    width:30px;
+    height:30px;
+    cursor:pointer;
+}
+.completedTask{
+    text-decoration:line-through;
+}
+.taskControls{
+    display:none;
+    text-align:right;
+}
+.taskList tr:hover .taskControls{
+    display:inline-block;
+}
+.editTaskBtn, .deleteTaskBtn{
+    margin-left:10px;
+    text-decoration:none;
+    cursor:pointer;
+    width:28px;
+    height:28px;
+}
+/*#taskList li{
+    list-style:none;*/
     
     /*line-height:30px;*/
     /*padding-left:5px;*/
-    position:relative;
+    /*position:relative;*/
     /*margin-bottom:2px;*/
-}
+/*}
 .task {
     display: flex;
     width: 100%;
@@ -1034,9 +1141,9 @@ body.page-exit .welcomeBackTextDiv {
     height: 30px;
     max-width: 30px;
     border: none;
-    background: transparent;
+    background: transparent;*/
     /*gap: 10px;*/
-    cursor: pointer;
+    /*cursor: pointer;
 }
     .taskCheckBoxBtn img {
         width: 2.5vw;
@@ -1078,7 +1185,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 #taskList li:hover .editTaskBtn, #taskList li:hover .deleteTaskBtn {
     display: inline;
-}
+}*/
 /*ul #taskList{
     list-style:none;
 }
@@ -1200,7 +1307,7 @@ body.page-exit .welcomeBackTextDiv {
 
 
 /* FROM DEEPSEEK*/
-.todo-header {
+/*.todo-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1381,7 +1488,7 @@ body.page-exit .welcomeBackTextDiv {
 
     .edit-button:hover, .delete-button:hover {
         opacity: 0.8;
-    }
+    }*/
 
 /* ---------------------- CREATE TIMER PAGES A100 ---------------------- */
 /* page 1 (back, create, view past timers) */
@@ -2966,7 +3073,7 @@ table {
     }
 }
 
-@media (max-width: 1910px) {
+@media (max-width: 1880px) {
     .curved-header h2 {
         margin-top: clamp(-5rem, -4vw, -3rem);
     }

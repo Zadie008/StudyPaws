@@ -18,13 +18,17 @@ public partial class Default2 : System.Web.UI.Page
         if (!IsPostBack)
         {
             LoadTasks();
-            //Session["Tasks"] = new List<TaskItem>();
-            //Calendar.SelectedDate = DateTime.Today;
-            //UpdateEventList();
             DateTime currentDate = DateTime.Today;
             hfYear.Value = currentDate.Year.ToString();
             hfMonth.Value = DateTime.Today.Month.ToString();
             LoadCalendar(currentDate.Year, currentDate.Month);
+        }
+        if (Request.QueryString["toggle"] != null)
+        {
+            int taskId = int.Parse(Request.QueryString["toggle"]);
+            ToggleTaskStatus(taskId);
+            Response.Redirect("B1600_View-dashboard.aspx");
+            return;
         }
         else
         {
@@ -32,8 +36,7 @@ public partial class Default2 : System.Web.UI.Page
             int month = int.Parse(hfMonth.Value);
             LoadCalendar(year, month);
 
-
-            string eventArgument = Request["__EVENTARGUMENT"];
+            //string eventArgument = Request["__EVENTARGUMENT"];
             string action = hdnTaskAction.Value;
 
             if (!string.IsNullOrEmpty(action))
@@ -48,9 +51,6 @@ public partial class Default2 : System.Web.UI.Page
                         break;
                     case "edit":
                         EditTask();
-                        break;
-                    case "toggle":
-                        ToggleTaskStatus();
                         break;
                     case "delete":
                         DeleteTask();
@@ -134,102 +134,6 @@ public partial class Default2 : System.Web.UI.Page
         return sb.ToString();
         
     }
-    private void UpdateEventList()
-    {
-        /*DateTime selectedDate = calendar.SelectedDate;
-        lblSelectedDate.Text = $"Events for {selectedDate.ToLongDateString()}";
-        listEevents.Items.Clear();
-
-        if (EventStore.ContainsKey(selectedDate))
-        {
-            foreach (String ev in EventDtore[selectedDate])
-            {
-                listEvents.Items.Add(new ListItem(ev));
-            }
-        }*/
-    }
-
-    /*protected void btnAddTask_Click(object sender, EventArgs e)
-    {
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection con = new OleDbConnection(cs))
-        {
-            String query = "INSERT INTO ToDoListTask (taskDesc, taskStatus, userID) VALUES (@desc, 0, @userID)";
-            OleDbCommand cmd = new OleDbCommand(query, con);
-            cmd.Parameters.AddWithValue("@desc", txtNewTask.Text.Trim());
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
-            con.Open();
-            cmd.ExecuteNonQuery();
-        }
-        txtNewTask.Text = "";
-        LoadTasks("All");
-    }
-    protected void chkComplete_CheckedChange(object sender, EventArgs e)
-    {
-        CheckBox chk = (CheckBox)sender;
-        RepeaterItem item = (RepeaterItem)chk.NamingContainer;
-        string taskID = chk.ToolTip;
-
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection con = new OleDbConnection(cs))
-        {
-            bool isChecked = chk.Checked;
-            String query = "UPDATE [ToDoListTask] SET taskStatus = @status WHERE taskID = @id";
-            OleDbCommand cmd = new OleDbCommand(query, con);
-            cmd.Parameters.AddWithValue("@status", isChecked);
-            cmd.Parameters.AddWithValue("@id", taskID);
-            con.Open();
-            cmd.ExecuteNonQuery();
-        }
-        LoadTasks("All");
-    }*/
-    /*private void LoadTasks(String filter)
-    {
-        List<TaskItem> tasks = new List<TaskItem>();
-
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection con = new OleDbConnection(cs))
-        {
-            String query = "SELECT * FROM [ToDoListTask] WHERE userID = @userID";
-
-            if (filter == "All")
-                query += " AND taskStatus = 1";
-            else if (filter == "In Porgress")
-                query += " AND taskStatus =0";
-
-            OleDbCommand cmd = new OleDbCommand(query, con);
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
-            if (filter != "All")
-                cmd.Parameters.AddWithValue("@filter", filter);
-
-            con.Open();
-            OleDbDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                tasks.Add(new TaskItem
-                {
-                    taskID = Convert.ToInt32(reader["taskID"]),
-                    taskDesc = reader["taskDesc"].ToString(),
-                    taskStatus = Convert.ToBoolean(reader["taskStatus"])
-                });
-            }
-        }
-        var sorted = tasks.OrderBy(t => t.taskStatus == false).ToList();
-        rptTasks.DataSource = sorted;
-        rptTasks.DataBind();
-    }*/
-    public class TaskItem
-    {
-        public int taskID { get; set; }
-        public string taskDesc { get; set; }
-        public bool taskStatus { get; set; }
-    }
-
-    protected void filter_Click(object sender, EventArgs e)
-    {
-        String filter = ((LinkButton)sender).Text;
-        //LoadTasks(filter);
-    }
 
     protected void btnPrevMonth_Click(Object sender, EventArgs e)
     {
@@ -258,9 +162,7 @@ public partial class Default2 : System.Web.UI.Page
     private void LoadTasks()
     {
         // Clear existing tasks
-        taskList.Controls.Clear();
-
-        // Get current user ID (you'll need to implement your own user authentication)
+        gridViewTaskList.Controls.Clear();
         int userId = GetCurrentUserId();
 
         string connectionString = GetConnectionString();
@@ -330,23 +232,25 @@ public partial class Default2 : System.Web.UI.Page
         }
     }
 
-    private void ToggleTaskStatus()
+    private void ToggleTaskStatus( int taskId)
     {
-        int taskId = Convert.ToInt32(hdnTaskId.Value);
-        bool isCompleted = Convert.ToBoolean(hdnTaskStatus.Value);
-
         string connectionString = GetConnectionString();
         using (OleDbConnection connection = new OleDbConnection(connectionString))
         {
-            string query = "UPDATE ToDoListTask SET taskStatus = ? WHERE taskID = ?";
-            using (OleDbCommand command = new OleDbCommand(query, connection))
-            {
-                command.Parameters.AddWithValue("?", isCompleted);
-                command.Parameters.AddWithValue("?", taskId);
+            string selectQuery = "SELECT taskStatus FROM ToDoListTask WHERE taskID = ?";
+            OleDbCommand selectCmd = new OleDbCommand(selectQuery, connection);
+            selectCmd.Parameters.AddWithValue("?", taskId);
 
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
+            connection.Open();
+            object result = selectCmd.ExecuteScalar();
+            bool currentStatus = Convert.ToBoolean(result);
+
+            string updateQuery = "UPDATE ToDoListTask SET taskStatus = ? WHERE taskID = ?";
+            OleDbCommand updateCmd = new OleDbCommand(updateQuery, connection);
+            updateCmd.Parameters.AddWithValue("?", !currentStatus);
+            updateCmd.Parameters.AddWithValue("?", taskId);
+            
+            updateCmd.ExecuteNonQuery ();
         }
     }
 
@@ -377,7 +281,7 @@ public partial class Default2 : System.Web.UI.Page
         // Checkbox button
         Button checkbox = new Button();
         checkbox.CssClass = "task-checkbox" + (isCompleted ? " checked" : "");
-        checkbox.Attributes["onclick"] = "toggleTaskCompletion(this); return false;";
+        checkbox.Attributes["onclick"] = "toggleCheckBox(" + taskId + "); return false;";
         taskItem.Controls.Add(checkbox);
 
         // Task text
@@ -404,7 +308,7 @@ public partial class Default2 : System.Web.UI.Page
 
         taskItem.Controls.Add(taskActions);
 
-        taskList.Controls.Add(taskItem);
+        gridViewTaskList.Controls.Add(taskItem);
     }
 
     private int GetCurrentUserId()
@@ -422,5 +326,45 @@ public partial class Default2 : System.Web.UI.Page
     {
         // Return your Access database connection string
         return ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString; ;
+    }
+
+    protected void toDoFilterBtn_Click(object sender, EventArgs e)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string userID = Session["userID"].ToString();
+        string statusFilter = toDoFilterDropDown.SelectedValue;
+
+        List<string> conditions = new List<string>();
+        List<OleDbParameter> parameters = new List<OleDbParameter>();
+
+        // Always filter by userID
+        conditions.Add("userID = ?");
+        parameters.Add(new OleDbParameter("userID", userID));
+
+        // Optional: Tag filter
+        if (!string.IsNullOrEmpty(statusFilter))
+        {
+            conditions.Add("status = ?");
+            parameters.Add(new OleDbParameter("status", statusFilter));
+        }
+
+        string whereClause = string.Join(" AND ", conditions);
+
+        using (OleDbConnection con = new OleDbConnection(cs))
+        {
+            string command = "SELECT timerDateCreated AS [Date Created], timerTitle AS Title, timerTag AS Tag, timerDuration AS Duration FROM Timer WHERE " + whereClause + " ORDER BY timerDateCreated DESC";
+
+            OleDbCommand cmd = new OleDbCommand(command, con);
+
+            foreach (var param in parameters)
+            {
+                cmd.Parameters.Add(param);
+            }
+
+            con.Open();
+            OleDbDataReader reader = cmd.ExecuteReader();
+            gridViewTaskList.DataSource = reader;
+            gridViewTaskList.DataBind();
+        }
     }
 }
