@@ -112,31 +112,31 @@
                 <tr>
                     <td><div class="petIcon">
                             <div id="circle1" class="petCircle" runat="server"></div>
-                            <asp:Image ID="imgPet1" runat="server" CssClass="petImage" ImageUrl="Images/Fuzzy 1.png" Width="120" />
+                            <asp:Image ID="imgPet1" runat="server" CssClass="petImage" ImageUrl="Images/Fuzzy 1.png" Width="130" />
                         </div>
                     </td>
                     <td>
                         <div class="petIcon">
                             <div id="circle2" class="petCircle" runat="server"></div>
-                            <asp:Image ID="imgPet2" runat="server" CssClass="petImage" ImageUrl="Images/Fuzzy 2.png" Width="120" />
+                            <asp:Image ID="imgPet2" runat="server" CssClass="petImage" ImageUrl="Images/Fuzzy 2.png" Width="130" />
                         </div>
                     </td>
                     <td>
                         <div class="petIcon">
                             <div id="circle3" class="petCircle" runat="server"></div>
-                            <asp:Image ID="imgPet3" runat="server" CssClass="petImage" ImageUrl="Images/Fuzzy 3.png" Width="120" />
+                            <asp:Image ID="imgPet3" runat="server" CssClass="petImage" ImageUrl="Images/Fuzzy 3.png" Width="130" />
                         </div>
                     </td>
                     <td>
                         <div class="petIcon">
                             <div id="circle4" class="petCircle" runat="server"></div>
-                            <asp:Image ID="imgPet4" runat="server" CssClass="petImage" ImageUrl="Images/Fuzzy 4.png" Width="120" />
+                            <asp:Image ID="imgPet4" runat="server" CssClass="petImage" ImageUrl="Images/Fuzzy 4.png" Width="130" />
                         </div>
                     </td>
                     <td>
                         <div class="petIcon">
                             <div id="circle5" class="petCircle" runat="server"></div>
-                            <asp:Image ID="imgPet5" runat="server" CssClass="petImage" ImageUrl="Images/Fuzzy 5.png" Width="120" />
+                            <asp:Image ID="imgPet5" runat="server" CssClass="petImage" ImageUrl="Images/Fuzzy 5.png" Width="130" />
                         </div>
                     </td>
                 </tr>

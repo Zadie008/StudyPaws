@@ -1979,6 +1979,7 @@ body.page-exit .welcomeBackTextDiv {
     max-width: 75%;
     margin-left: auto;
     margin-right: auto;
+    /*z-index: 1; // you can't scroll when on the sides of the screen*/
 }
 
 .viewPastTimersMainContent .scrollableTableContainer {
@@ -2084,7 +2085,13 @@ body.page-exit .welcomeBackTextDiv {
 
 /* ---------------------- PET SHOP PAGE ---------------------- */
 #viewShopMainContent {
-    margin: 4em 4em 4em 4em;
+    margin: 1em 4em 4em 4em;
+}
+
+#viewShopMainContent h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.1em;
+    margin-top: 0;
 }
 
 #viewShopMainContent .backgroundColorContainer {
@@ -2094,7 +2101,7 @@ body.page-exit .welcomeBackTextDiv {
     min-width: 85%;
     max-width: 85%;
     height: 63vh;
-    border-radius: 2em;
+    border-radius: 3em;
     padding: 0.5em;
 }
 
@@ -2287,7 +2294,13 @@ body.page-exit .welcomeBackTextDiv {
 
 /* ---------------------- VIEW FRIEND LIST PAGE ---------------------- */
 #viewFriendListMainContent {
-    margin: 4em 4em 4em 4em;
+    margin: 1em 4em 4em 4em;
+}
+
+#viewFriendListMainContent h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.1em;
+    margin-top: 0;
 }
 
 #viewFriendListMainContent .backgroundColorContainer {
@@ -2404,7 +2417,7 @@ body.page-exit .welcomeBackTextDiv {
 <script src="https://coolors.co/palette-widget/widget.js" > </script >
 <script data-id="000813941576946653" > new CoolorsPaletteWidget("000813941576946653", ["446791","64A6BD","90A8C3","ADA7C9","D7B9D5","F4CAE0"]); </script >*/
 #aboutMainContent{
-    margin: 4em 4em 4em 4em;
+    margin: 1em 4em 4em 4em;
 }
 
 #aboutMainContent h2 {
@@ -3174,12 +3187,12 @@ table {
 
     .calendarBox th {
         width: 10%;
-        height: 55px;
+        height: 48px;
     }
 
     .calendarBox td {
         width: 10%;
-        height: 55px;
+        height: 48px;
     }
 
     /* timer pages */
@@ -3282,6 +3295,15 @@ table {
 
     .extraTimeRow {
         top: 77%;
+    }
+
+    /* ---------------------- PET SHOP PAGE ---------------------- */
+    #viewShopMainContent {
+        margin: -0.1em 4em 0em 4em;
+    }
+
+    #viewShopMainContent .buttonSection {
+        margin: -5.5em 0 0 0;
     }
 
     /* ---------------------- INVENTORY PAGE ---------------------- */
