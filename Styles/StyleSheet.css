@@ -1921,8 +1921,12 @@ body.page-exit .welcomeBackTextDiv {
 
 /* ---------------------- CREATE STUDY SESSION PAGES A700 ---------------------- */
 #createSession3MainContent {
-    margin: 0;
+    margin: -1em 0 0 0;
     padding: 0;
+}
+
+#createSession3MainContent .timeSection {
+    padding-bottom: 2.8%;
 }
 
 #inviteFriendsToSession {
@@ -1959,6 +1963,16 @@ body.page-exit .welcomeBackTextDiv {
     margin: 0;
     padding: 0;
     padding-top: 0.5%;
+}
+
+#searchSection {
+    display: flex;
+}
+
+#searchSection img {
+    width: 3em;
+    height: 3em;
+    margin: 1em auto 1em 0;
 }
 
 /* ---------------------- PET SHOP PAGE ---------------------- */
