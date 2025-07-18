@@ -100,15 +100,63 @@
     <div id="aboutMainContent">
         <h2>About Us</h2>
         <div class="backgroundColorContainer">
-            <table>
+            <table id="coffeeTable">
                 <tr>
-                    <td><img src="Icons/icons8-coffee-to-go-white-96.png" /></td>
-                    <td><p>Buy us a coffee to keep us productive</p></td>
+                    <td><img src="Icons/icons8-coffee-to-go-white-96.png" width="50" /></td>
+                    <td><p>Buy us a coffee to keep us purrfectly productive</p></td>
                 </tr>
             </table>
-            <p>Icons by <a href="https://icons8.com/">Icons8</a></p>
+            <br />
+            <table id="madeByTable">
+                <tr>
+                    <td rowspan="5"><img src="Images/Cat Stack.png" /></td>
+                    <td><h2>Made by:</h2></td>
+                </tr>
+                <tr>
+                    <td><p>Lea Carelse</p></td>
+                </tr>
+                <tr>
+                    <td><p>Tamryn Forbes</p></td>
+
+                </tr>
+                <tr>
+                    <td><p>Zadie-Ann Gamba</p></td>
+                </tr>
+                <tr>
+                    <td><p>And together we are The HackStreet Boys</p></td>
+                </tr>
+            </table>
+            <br />
+            <br />
+            <table id="creditsTable">
+                <tr>
+                    <td rowspan="6"><img src="Images/Credits-Cat.png" /></td>
+                    <td><h2>Credits:</h2></td>
+                </tr>
+                <tr>
+                    <td><p>Images by <a href="https://www.redbubble.com/people/littlemandyart/shop?artistUserName=littlemandyart&iaCode=all-departments&sortOrder=top%20selling">littlemandyart</a></p></td>
+                </tr>
+                <tr>
+                    <td><p>Icons by <a href="https://icons8.com/">Icons8</a></p></td>
+                </tr>
+                <tr>
+                    <td><p>Colour pallete from <a href="https://coolors.co/">Coolers</a></p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <script src="https://coolors.co/palette-widget/widget.js"></script>
+                        <script data-id="000813941576946653"> 
+                            new CoolorsPaletteWidget("000813941576946653", ["446791", "64A6BD", "90A8C3", "ADA7C9", "D7B9D5", "F4CAE0"]);
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p id="hiddenSentence">And together we are The HackStreet Boys</p></td>
+                </tr>
+            </table>
         </div>
     </div>
+
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

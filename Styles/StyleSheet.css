@@ -2426,12 +2426,16 @@ body.page-exit .welcomeBackTextDiv {
     margin-top: 0;
 }
 
+#aboutMainContent p {
+    font-size: 1.5rem;
+}
+
 #aboutMainContent .backgroundColorContainer {
     align-items: center;
     margin: auto;
     background-color: #64A6BD; /*turquoise*/
-    min-width: 85%;
-    max-width: 85%;
+    min-width: 50%;
+    max-width: 50%;
     height: 63vh;
     border-radius: 3em;
     padding: 0.5em;
@@ -2443,6 +2447,38 @@ body.page-exit .welcomeBackTextDiv {
 
 #aboutMainContent a {
     color: white;
+}
+
+#madeByTable h2 {
+    font-size: 2rem;
+    text-align: left;
+}
+
+#madeByTable p {
+    font-size: 1.5rem;
+    text-align: left;
+}
+
+#madeByTable img {
+    width: 160px;
+}
+
+#creditsTable h2 {
+    font-size: 2rem;
+    text-align: left;
+}
+
+#creditsTable p {
+    font-size: 1.5rem;
+    text-align: left;
+}
+
+#creditsTable img {
+    width: 160px;
+}
+
+#hiddenSentence {
+    visibility: hidden;
 }
 
 /* ---------------------- FOOTER ---------------------- */
