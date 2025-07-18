@@ -5,7 +5,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-        <!--account info to copy and paste-->
+<!--account info to copy and paste-->
     <div class="accountInfoDiv">
         <div class="profileDiv">
             <a href="C100-C500_Profile.aspx" class="profileIconLink">

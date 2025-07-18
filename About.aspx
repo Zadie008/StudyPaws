@@ -102,11 +102,10 @@
         <div class="backgroundColorContainer">
             <table id="coffeeTable">
                 <tr>
-                    <td><img src="Icons/icons8-coffee-to-go-white-96.png" width="50" /></td>
+                    <td><img src="Icons/icons8-coffee-to-go-white-96.png" /></td>
                     <td><p>Buy us a coffee to keep us purrfectly productive</p></td>
                 </tr>
             </table>
-            <br />
             <table id="madeByTable">
                 <tr>
                     <td rowspan="5"><img src="Images/Cat Stack.png" /></td>
@@ -126,8 +125,6 @@
                     <td><p>And together we are The HackStreet Boys</p></td>
                 </tr>
             </table>
-            <br />
-            <br />
             <table id="creditsTable">
                 <tr>
                     <td rowspan="6"><img src="Images/Credits-Cat.png" /></td>
@@ -144,7 +141,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <script src="https://coolors.co/palette-widget/widget.js"></script>
+                        <script id="coolersWidget" src="https://coolors.co/palette-widget/widget.js"></script>
                         <script data-id="000813941576946653"> 
                             new CoolorsPaletteWidget("000813941576946653", ["446791", "64A6BD", "90A8C3", "ADA7C9", "D7B9D5", "F4CAE0"]);
                         </script>

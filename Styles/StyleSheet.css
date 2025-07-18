@@ -2412,10 +2412,6 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 /* ---------------------- ABOUT PAGE ---------------------- */
-/* PALETTE WIDGET FROM "COOLERS" IN ABOUT PAGE? */
-/*<!-- Coolors Palette Widget -->
-<script src="https://coolors.co/palette-widget/widget.js" > </script >
-<script data-id="000813941576946653" > new CoolorsPaletteWidget("000813941576946653", ["446791","64A6BD","90A8C3","ADA7C9","D7B9D5","F4CAE0"]); </script >*/
 #aboutMainContent{
     margin: 1em 4em 4em 4em;
 }
@@ -2449,6 +2445,18 @@ body.page-exit .welcomeBackTextDiv {
     color: white;
 }
 
+#coffeeTable {
+    padding-bottom: 1em;
+}
+
+#coffeeTable img {
+    width: 50px;
+}
+
+#madeByTable {
+    padding-bottom: 1.5em;
+}
+
 #madeByTable h2 {
     font-size: 2rem;
     text-align: left;
@@ -2461,6 +2469,10 @@ body.page-exit .welcomeBackTextDiv {
 
 #madeByTable img {
     width: 160px;
+}
+
+#creditsTable {
+    padding-bottom: 1em;
 }
 
 #creditsTable h2 {
@@ -3367,6 +3379,54 @@ table {
     #aboutMainContent {
         margin: 0em 4em 4em 4em;
         height: 67vh;
+    }
+
+    #aboutMainContent h2 {
+        font-size: 1.6rem;
+    }
+
+    #aboutMainContent p {
+        font-size: 1.2rem;
+    }
+
+    #coffeeTable {
+        padding-bottom: 0em;
+    }
+
+    #coffeeTable img {
+        width: 30px;
+    }
+
+    #madeByTable {
+        padding-bottom: 0em;
+    }
+
+    #madeByTable h2 {
+        font-size: 1.6rem;
+    }
+
+    #madeByTable p {
+        font-size: 1.2rem;
+    }
+
+    #madeByTable img {
+        width: 120px;
+    }
+
+    #creditsTable {
+        padding-bottom: 0em;
+    }
+
+    #creditsTable h2 {
+        font-size: 1.6rem;
+    }
+
+    #creditsTable p {
+        font-size: 1.2rem;
+    }
+
+    #creditsTable img {
+        width: 120px;
     }
 
     /* POPUPS */
