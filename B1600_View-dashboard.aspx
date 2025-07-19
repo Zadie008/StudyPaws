@@ -123,7 +123,7 @@
             </div>
         </div>
 
-        <div class="toDoListDashboard">
+       <div class="toDoListDashboard">
             <div class="toDoListControls">
                 <p class="toDoListHeading">To Do List</p>
                 <div class="toDoListFilters">
@@ -138,29 +138,31 @@
             </div>
             <div class="tasksContainer">
                 <div class="newTaskContainer">
-                    <asp:ImageButton ID="addTaskButton" class="addTaskBtn" ClientIDMode="Static" runat="server" ImageUrl="~/Icons/icons8-add-new-white-96.png"/>
-                    <p class="addTaskText">Add a new task</p>
+                    <asp:ImageButton ID="addTaskButton" class="addTaskBtn" OnClick="addTaskBtn_Click" ClientIDMode="Static" runat="server" ImageUrl="~/Icons/icons8-add-new-white-96.png"/>
+                    <asp:TextBox ID="newTaskText" class="addTaskText" runat="server" placeholder="Add a new task"></asp:TextBox>
                 </div>
 
-                <asp:GridView ID="gridViewTaskList" runat="server" AutoGenerateColumns="False" class="taskList">
+                <asp:GridView ID="gridViewTaskList" runat="server" AutoGenerateColumns="False" class="taskList" OnRowCommand="gridViewTaskList_RowCommand">
                     <Columns>
                         <asp:TemplateField>
                             <ItemTemplate>
-                                <img src='<%#Eval("taskStatus").ToString() == "True" ? "Icons/icons8-check-white-96.png" : "Icons/icons8-unchecked-checkbox-white-96.png" %>' class="taskCheckBox" onclick="toggleCheckbox(<%#Eval("TaskID") %>)" />
+                                <asp:ImageButton ID="checkBoxBtn" runat="server" ImageUrl='<%# (bool)Eval("taskStatus") ? "~/Icons/icons8-check-white-96.png" : "~/Icons/icons8-unchecked-checkbox-white-96.png" %>'
+                    CommandName="ToggleStatus" CommandArgument='<%# Eval("taskID") %>' CssClass="taskCheckBox" />/>
+                                <%--<img src='<%#Eval("taskStatus").ToString() == "True" ? "Icons/icons8-check-white-96.png" : "Icons/icons8-unchecked-checkbox-white-96.png" %>' class="taskCheckBox" onclick="toggleCheckbox(<%#Eval("TaskID") %>)" />--%>
                             </ItemTemplate>
                         </asp:TemplateField>
 
                         <asp:TemplateField>
                             <ItemTemplate>
-                                <span class='<%#Eval("taskStatus").ToString() == "True" ? "completedTask":"" %>'><%#Eval("taskDesc") %></span>
+                                <span class='<%# (bool)Eval("taskStatus") ? "completedTask" : "" %>'><%# Eval("taskDesc") %></span>
                             </ItemTemplate>
                         </asp:TemplateField>
 
                         <asp:TemplateField>
                             <ItemTemplate>
                                 <div class="taskControls">
-                                    <asp:ImageButton ID="editTaskBtn" class="editTaskBtn" runat="server" CommandName="editTask" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-edit-white-96.png"/>
-                                    <asp:ImageButton ID="deleteTaskBtn" class="deleteTaskBtn" runat="server" CommandName="deleteTask" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-delete-white-96.png" />
+                                    <asp:ImageButton ID="editTaskBtn" runat="server" ImageUrl="~/Icons/icons8-edit-white-96.png" CommandName="EditTask" CommandArgument='<%# Eval("taskID") %>' CssClass="editTaskBtn" />
+                                    <asp:ImageButton ID="deleteTaskBtn" runat="server" ImageUrl="~/Icons/icons8-delete-white-96.png" CommandName="DeleteTask" CommandArgument='<%# Eval("taskID") %>' CssClass="deleteTaskBtn" /> 
                                 </div>
                             </ItemTemplate>
                         </asp:TemplateField>
@@ -168,20 +170,13 @@
                 </asp:GridView>
                 
                 <!-- Task list -->
-                <%--<div id="taskList" class="task-list" runat="server" ClientIDMode="Static">
+                <div id="taskList" class="task-list" runat="server" ClientIDMode="Static">
                     <!-- Tasks will be loaded here -->
-                </div>--%>
+                </div>
             </div>
-            
+   
         </div>
-
-        <asp:HiddenField ID="hdnTaskAction" runat="server" />
-        <asp:HiddenField ID="hdnTaskId" runat="server" />
-        <asp:HiddenField ID="hdnTaskText" runat="server" />
-        <asp:HiddenField ID="hdnTaskStatus" runat="server" />
-
-
-    </div>
+ </div>
     
 </asp:Content>
 
