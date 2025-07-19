@@ -49,19 +49,19 @@
 <div class="iconLayoutWrapper">
     <div class="iconRow topIconRow">
         <asp:ImageButton ID="btnCat" runat="server" CssClass="iconItem circle-cat"
-            ImageUrl="ProfilePictures/CatPfp.png"
+            ImageUrl="Images/ProfilePictures/CatPfp.png"
             AlternateText="Cat"
             CommandArgument="1"
             OnClick="SelectIcon_Click" />
         
         <asp:ImageButton ID="btnDog" runat="server" CssClass="iconItem circle-dog"
-            ImageUrl="ProfilePictures/DogPfp.png"
+            ImageUrl="Images/ProfilePictures/DogPfp.png"
             AlternateText="Dog"
             CommandArgument="2"
             OnClick="SelectIcon_Click" />
         
         <asp:ImageButton ID="btnBunny" runat="server" CssClass="iconItem circle-bunny"
-            ImageUrl="ProfilePictures/BunnyPfp.png"
+            ImageUrl="Images/ProfilePictures/BunnyPfp.png"
             AlternateText="Bunny"
             CommandArgument="3"
             OnClick="SelectIcon_Click" />
@@ -70,13 +70,13 @@
     <!-- Bottom row -->
     <div class="iconRow bottomIconRow">
         <asp:ImageButton ID="btnCow" runat="server" CssClass="iconItem circle-cow"
-            ImageUrl="ProfilePictures/CowPfp.png"
+            ImageUrl="Images/ProfilePictures/CowPfp.png"
             AlternateText="Cow"
             CommandArgument="4"
             OnClick="SelectIcon_Click" />
 
         <asp:ImageButton ID="btnUnicorn" runat="server" CssClass="iconItem circle-unicorn"
-            ImageUrl="ProfilePictures/UnicornPfp.png"
+            ImageUrl="Images/ProfilePictures/UnicornPfp.png"
             AlternateText="Unicorn"
             CommandArgument="5"
             OnClick="SelectIcon_Click" />
@@ -97,7 +97,6 @@
 
 
     </div>
-</div>
 </asp:Content> 
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

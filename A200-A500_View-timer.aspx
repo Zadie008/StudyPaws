@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="A200-A500_Timer.aspx.cs" Inherits="A200_View_timer" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="A200-A500_View-timer.aspx.cs" Inherits="A200_View_timer" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
     Timer
@@ -63,7 +63,8 @@
     </svg>
     <img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" />
     <h2>purrfectly productive</h2>
-</div></asp:Content>
+</div>
+</asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
 

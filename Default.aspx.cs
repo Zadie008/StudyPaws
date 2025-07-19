@@ -151,12 +151,12 @@ public partial class _Default : System.Web.UI.Page
     {
         switch (iconNum)
         {
-            case 1: return "~/ProfilePictures/CatPfp.png";
-            case 2: return "~/ProfilePictures/DogPfp.png";
-            case 3: return "~/ProfilePictures/BunnyPfp.png";
-            case 4: return "~/ProfilePictures/CowPfp.png";
-            case 5: return "~/ProfilePictures/UnicornPfp.png";
-            default: return "~/ProfilePictures/CatPfp.png";
+            case 1: return "~/Images/ProfilePictures/CatPfp.png";
+            case 2: return "~/Images/ProfilePictures/DogPfp.png";
+            case 3: return "~/Images/ProfilePictures/BunnyPfp.png";
+            case 4: return "~/Images/ProfilePictures/CowPfp.png";
+            case 5: return "~/Images/ProfilePictures/UnicornPfp.png";
+            default: return "~/Images/ProfilePictures/CatPfp.png";
         }
     }
 
@@ -199,6 +199,6 @@ public partial class _Default : System.Web.UI.Page
 
     private string GetPetImagePath(string petType, int colourNum)
     {
-        return string.Format("~/Images/{0} {1}.png", petType, colourNum);
+        return string.Format("~/Images/{0} {1}.png", petType, colourNum); // png / gif
     }
 }

@@ -21,17 +21,14 @@ public partial class A200_View_timer : System.Web.UI.Page
 
         txtSessionTitle.Text = Session["timerTitle"].ToString();
 
-        ClientScript.RegisterStartupScript(this.GetType(), "timerDurationScript",
-            string.Format("var initialTime = {0};", totalSeconds), true);
+        ClientScript.RegisterStartupScript(this.GetType(), "timerDurationScript", string.Format("var initialTime = {0};", totalSeconds), true);
 
-        ClientScript.RegisterStartupScript(this.GetType(), "initialCountdownText",
-            string.Format("document.addEventListener('DOMContentLoaded', function() {{ document.getElementById('mainContentPlaceHolder_lblCountdown').textContent = '{0}'; }});", formattedTime), true);
+        ClientScript.RegisterStartupScript(this.GetType(), "initialCountdownText", string.Format("document.addEventListener('DOMContentLoaded', function() {{ document.getElementById('mainContentPlaceHolder_lblCountdown').textContent = '{0}'; }});", formattedTime), true);
 
         if (Session["EquippedPetImagePath"] != null)
         {
             pet.ImageUrl = Session["EquippedPetImagePath"].ToString();
         }
-
     }
 
     // COMPLETE TIMER (COUNTDOWN ENDS) - for Zadie~~~~~~~~~~~~~~~~~~~~

@@ -2446,7 +2446,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 #coffeeTable {
-    padding-bottom: 1em;
+    padding-bottom: 0.5em;
 }
 
 #coffeeTable img {
@@ -2455,6 +2455,15 @@ body.page-exit .welcomeBackTextDiv {
 
 #madeByTable {
     padding-bottom: 1.5em;
+    width: 80%;
+}
+
+#madeByTable td {
+    padding: 0 0 0 1em;
+}
+
+#madeByTable tr:first-child td:nth-child(1) {
+    border-right: 2px solid white;
 }
 
 #madeByTable h2 {
@@ -2473,6 +2482,15 @@ body.page-exit .welcomeBackTextDiv {
 
 #creditsTable {
     padding-bottom: 1em;
+    width: 80%;
+}
+
+#creditsTable td {
+    padding: 0 0 0 1em;
+}
+
+#creditsTable tr:first-child td:nth-child(1) {
+    border-right: 2px solid white;
 }
 
 #creditsTable h2 {
@@ -2491,6 +2509,10 @@ body.page-exit .welcomeBackTextDiv {
 
 #hiddenSentence {
     visibility: hidden;
+}
+
+#creditsTable tr:first-child td:nth-child(6) {
+    border-left: none;
 }
 
 /* ---------------------- FOOTER ---------------------- */
