@@ -20,6 +20,11 @@ public partial class _Default : System.Web.UI.Page
             lblXPAmount.Text = "N/A";
             lblLevelNumber.Text = "N/A";
         }
+
+        if (!IsPostBack)
+        {
+            SetupNotifications();
+        }
     }
 
     private void LoadUserData(string username)
@@ -158,6 +163,74 @@ public partial class _Default : System.Web.UI.Page
             case 5: return "~/Images/ProfilePictures/UnicornPfp.png";
             default: return "~/Images/ProfilePictures/CatPfp.png";
         }
+    }
+
+    private void SetupNotifications() // update to have info about study session on popup
+    {
+        int currentUserID = Convert.ToInt32(Session["userID"]);
+        bool hasNotification = false;
+        string title = "";
+        DateTime startTime = DateTime.MinValue;
+
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (OleDbConnection conn = new OleDbConnection(cs))
+        {
+            string query = "SELECT TOP 1 S.sessionTitle, S.sessionStart FROM StudySessionParticipants P " + "INNER JOIN StudySession S ON P.sessionID = S.sessionID " + "WHERE P.userID = ? AND P.replied = false";
+
+            OleDbCommand cmd = new OleDbCommand(query, conn);
+            cmd.Parameters.AddWithValue("?", currentUserID);
+            conn.Open();
+            using (OleDbDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    hasNotification = true;
+                    title = reader["sessionTitle"].ToString();
+                    startTime = Convert.ToDateTime(reader["sessionStart"]);
+                }
+            }
+        }
+
+        if (hasNotification)
+        {
+            litNotificationText.Text = "<p>You have received a study session invitation!<br />" + "Session title: <b>" + title + "</b><br />" + "Starts: <b>" + startTime.ToString("dddd, dd MMM yyyy @ HH:mm") + "</b></p>";
+        }
+
+        ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowPopup", "showNotificationPopup(" + hasNotification.ToString().ToLower() + ");", true);
+    }
+
+    protected void btnYes_Click(object sender, EventArgs e)
+    {
+        int currentUserID = Convert.ToInt32(Session["userID"]);
+
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (OleDbConnection conn = new OleDbConnection(cs))
+        {
+            string updateQuery = "UPDATE StudySessionParticipants " + "SET sessionStatus = 'Accepted', replied = true " + "WHERE userID = ? AND replied = false";
+            OleDbCommand cmd = new OleDbCommand(updateQuery, conn);
+            cmd.Parameters.AddWithValue("?", currentUserID);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+
+        Response.Redirect("Default.aspx");
+    }
+
+    protected void btnNo_Click(object sender, EventArgs e)
+    {
+        int currentUserID = Convert.ToInt32(Session["userID"]);
+
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (OleDbConnection conn = new OleDbConnection(cs))
+        {
+            string deleteQuery = "DELETE FROM StudySessionParticipants WHERE userID = ? AND replied = false";
+            OleDbCommand cmd = new OleDbCommand(deleteQuery, conn);
+            cmd.Parameters.AddWithValue("?", currentUserID);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+
+        Response.Redirect("Default.aspx");
     }
 
     private void LoadEquippedPet(string connectionString, string userID)

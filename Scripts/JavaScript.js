@@ -20,6 +20,23 @@ document.querySelectorAll('.navbar a').forEach(link => {
     });
 });
 
+// NOTIFICATIONS ON HOME PAGE
+function showNotificationPopup(hasNotifications) {
+    if (hasNotifications) {
+        document.getElementById("popupHasNotifications").style.display = "flex";
+    } else {
+        document.getElementById("popupNoNotifications").style.display = "flex";
+    }
+}
+
+function hideNotificationPopup() {
+    const noPopup = document.getElementById("popupNoNotifications");
+    const hasPopup = document.getElementById("popupHasNotifications");
+
+    if (noPopup) noPopup.style.display = "none";
+    if (hasPopup) hasPopup.style.display = "none";
+}
+
 // date and time in top right corner of header
 function updateTimeAndDate() {
     const timeLabel = document.getElementById("headerContentPlaceHolder_lblTime");

@@ -35,6 +35,10 @@
                     </tr>
                 </table>
             </div>
+            <div class="notificationDetails">
+                <asp:ImageButton ID="imgNotificationRinging" runat="server" CssClass="notificationIcon" ImageUrl="~/Icons/icons8-notification-bell-ringing-white-96.png" OnClientClick="showNotificationsPopup(); return false;" />
+                <asp:ImageButton ID="imgNotificationNormal" runat="server" CssClass="notificationIcon" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" OnClientClick="showNotificationsPopup(); return false;" />
+            </div>
         </div>
 
     <div class="timeDateDiv">
@@ -82,6 +86,31 @@
     <div class="welcomeBackTextDiv">
         <h2>Welcome back</h2>
         <asp:Label ID="lblLoggedInUserName" runat="server" CssClass="username-header"></asp:Label>
+    </div>
+
+    <!--does not have notification-->
+    <div id="popupNoNotifications" class="simple-popup" style="display: none;">
+        <div class="popup-blue-box">
+            <p>You do not have any notifications at the moment</p>
+            <img src="Images/Notification%20Sad%20Hamster.png" />
+            <br />
+            <div class="buttonSection">
+                <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideNotificationPopup(); return false;" />
+            </div>
+        </div>
+    </div>
+
+    <!--has notifications-->
+    <div id="popupHasNotifications" class="simple-popup" style="display: none;">
+        <div class="popup-pink-box">
+            <asp:Literal ID="litNotificationText" runat="server" />
+            <img src="Images/Notification%20Happy.png" />
+            <br />
+            <div class="buttonSection">
+                <asp:Button ID="btnYes" CssClass="popup-button-best-pink" runat="server" Text="Accept!" OnClick="btnYes_Click" />
+                <asp:Button ID="btnNo" CssClass="popup-button" runat="server" Text="Decline!" OnClick="btnNo_Click" />
+            </div>
+        </div>
     </div>
 </asp:Content>
 

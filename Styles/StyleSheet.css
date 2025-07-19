@@ -448,6 +448,22 @@ h2 {
     width: 100%;
 }
 
+/* notifications on left side of screen */
+.notificationDetails {
+    position: relative;
+    width: 50px; /*same width*/
+    height: 50px;
+}
+
+.notificationIcon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px; /*same width*/
+    height: 50px;
+    cursor: pointer;
+}
+
 /* date and time on right side of screen */
 .timeDateDiv {
     text-align: right;
