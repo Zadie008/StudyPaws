@@ -796,12 +796,73 @@ body.page-exit .welcomeBackTextDiv {
     padding: 10px;
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); /*fix this*/
 }
+.calendarCell {
+    position: relative;
+    padding: 5px;
+    vertical-align: top;
+    z-index:10;
+    height: 50px; /*make this relative*/
+    box-sizing: border-box;
+}
+.scrollableEvents {
+    max-height: 30px; /* adjust based on your needs */
+    overflow-y: auto;
+    margin-top: 5px;
+    font-size: 12px;
+}
+.dayNumber {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.events {
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+.eventItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+    font-size:12px;
+}
+
+.eventDot {
+    width: 6px;
+    height: 6px;
+    background-color: #7FC8F8;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.addEventBtn {
+    display: none;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background-color: #E6D6E5;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.calendarCell:hover .addEventBtn {
+    display: block;
+}
 .calendarHeader { 
     display: flex;
     justify-content: space-between;
     font-size: 22px;
-    margin: 20px;
+    margin: 15px 20px 20px 20px;
     margin-bottom: 5px;
+    align-items:center;
 }
 .calendarTitle { 
     flex: 30%;
@@ -819,12 +880,16 @@ body.page-exit .welcomeBackTextDiv {
     display: flex;
     align-content: space-between;
     gap:5px;
+    align-items:center;
 }
     .controlsCalendar .calendarDropDownList {
-        display: none;
         cursor: pointer;
         height: 30px;
         line-height: 30px;
+        vertical-align: central;
+        align-items: center;
+        position: relative;
+        z-index: 10;
         border-radius: 2rem;
         border: 2px solid white;
         background-color: transparent;
@@ -834,34 +899,36 @@ body.page-exit .welcomeBackTextDiv {
         transition: background-image 0.2s ease;
         background-repeat: no-repeat;
         background-position: right 0.5em center;
-        background-size: 0.75em;
+        background-size: 20px;
         padding: 0 2em 0 1em;
         /*padding: 0.2em 2em 0.2em 1em;*/
         color: white;
-        font-size: 22px;
+        font-size: 20px;
         font-family: 'Gilda Display', serif;
-        /*font-weight: 200;*/
+        font-weight: 200;
         outline: none;
         margin: 1vh auto;
         text-align: left;
         width: 100%;
         max-width: 300px;
-        /*box-sizing: border-box;*/
+        box-sizing: border-box;
         display: block;
     }
 .controlsCalendar .calendarFilters{
     flex:1;
-    width: 2.5vw;
-    max-width: 30px;
+    /*width: 2.5vw;*/
+    width: 32px;
+    height:32px;
+    max-width:32px;
     border:none;
     background:transparent;
     gap: 10px;
     cursor:pointer;
 }
-.controlsCalendar .calendarFilters img{
-    width:2.5vw;
-    max-width:30px;
-}
+/*.controlsCalendar .calendarFilters img{*/
+   /* width:2.5vw;*/
+    /*max-width:30px;
+}*/
     .controlsCalendar .prevMonth {
         flex: 1;
         width: 32px;
@@ -954,6 +1021,85 @@ body.page-exit .welcomeBackTextDiv {
     height:auto; /*fix this*/
     color: white;
 }
+
+.task {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    /*gap:5px;*/
+    /*padding: 5px;*/
+}
+.checkbox {
+    background-image: url('../Icons/icons8-unchecked-checkbox-white-96.png');
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 30px;
+    background-color:transparent;
+    border:none;
+}
+.checkbox.checked{
+    background-image: url('../Icons/icons8-check-white-96.png');
+    width:30px;
+    height:30px;
+    cursor:pointer;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 30px;
+    background-color:transparent;
+    border:none;
+}
+.taskCompleted {
+    text-decoration: line-through;
+    color: white;
+    font-size: 16px;
+    text-align: left;
+    /*margin: 0 0 0 10px;*/
+    line-height: 30px;
+    vertical-align: bottom;
+    border: none;
+    background: none;
+}
+.taskUncompleted {
+    color: white;
+    font-size: 16px;
+    text-align: left;
+    /*margin: 0 0 0 10px;*/
+    line-height: 30px;
+    vertical-align: bottom;
+    border: none;
+    background: none;
+}
+.editBtn {
+    flex: 1;
+    /*width: 2.5vw;*/
+    max-width: 28px;
+    border: none;
+    background: transparent;
+    /*gap: 10px;*/
+    cursor: pointer;
+}
+    .editBtn img {
+        /*width: 2.5vw;*/
+        max-width: 28px;
+    }
+.deleteBtn {
+    flex: 1;
+    /*width: 2.5vw;*/
+    max-width: 28px;
+    border: none;
+    background: transparent;
+    /*gap: 10px;*/
+    cursor: pointer;
+}
+    .deleteBtn img {
+        /*width: 2.5vw;*/
+        max-width: 28px;
+    }
+
 .toDoListControls {
     display: flex;
     align-items:center;
@@ -962,7 +1108,7 @@ body.page-exit .welcomeBackTextDiv {
     /*margin-bottom: 5px;*/
     /*edit padding at top*/
     /*font-size: 22px;*/
-    margin: 20px 15px 15px 15px;
+    margin: 15px 15px 15px 15px;
     position:relative;
     z-index:2;
 }
@@ -1000,9 +1146,9 @@ body.page-exit .welcomeBackTextDiv {
         gap: 10px;
         cursor: pointer;
         vertical-align: central;
-        align-items: center;
+        align-items: end;
 
-        position:relative;
+        position:fixed;
         z-index:100;
     }
 
@@ -1012,7 +1158,6 @@ body.page-exit .welcomeBackTextDiv {
             cursor: pointer;
         }
 .toDoListControls .toDoListFilters .toDoFilterDropDownList{
-    display: none;
     flex:4;
     cursor:pointer;
     height:32px;
@@ -1035,7 +1180,7 @@ body.page-exit .welcomeBackTextDiv {
     padding: 0 2em 0 1em;
     /*padding: 0.2em 2em 0.2em 1em;*/
     color: white;
-    font-size: 20px;
+    font-size: 16px;
     font-family: 'Gilda Display', serif;
     font-weight: 200;
     outline: none;
@@ -1047,28 +1192,24 @@ body.page-exit .welcomeBackTextDiv {
     display: block;
 }
 .tasksContainer{
-    margin: 0;
+    margin: 5px;
     padding: 0;
 }
 .tasksContainer .newTaskContainer{
     display:flex;
     width:100%;
-    height:30px;
+    height:40px;
     margin-bottom: 5px;
     /*margin: 5px 0;*/
     text-align:center;
     align-items:center;
     border-bottom: 1px white solid;
+    border-top: 1px white solid;
+    gap: 10px;
+    z-index:100;
+    color:white;
  }
-/*.newTaskContainer input{
-    width:85%;
-    height:100%;
-    border:none;
-    font-size: 16px;
-    padding-left: 5px;
-    background: none;
-    color: white;
-}*/
+
 .tasksContainer .newTaskContainer .addTaskBtn {
     width: 30px;
     height: 30px;
@@ -1077,6 +1218,7 @@ body.page-exit .welcomeBackTextDiv {
     background: transparent;
     gap: 10px;
     cursor: pointer;
+
 }
     .tasksContainer .newTaskContainer .addTaskBtn img {
         width: 2.5vw;
@@ -1084,427 +1226,26 @@ body.page-exit .welcomeBackTextDiv {
     }
 .tasksContainer .newTaskContainer .addTaskText{
     color:white;
-    font-size:18px;
-    text-align:center;
-    margin: 0 0 0 10px;
+    font-size:16px;
+    text-align:left;
+    /*margin: 0 0 0 10px;*/
     line-height:30px;
     vertical-align:bottom;
+    border:none;
+    background:none;
 }
-.taskList {
-    max-height: 400px;
-    overflow-y: auto;
-    width:100%;
-    border-collapse:collapse;
-}
-.taskList td{
-    padding:10px;
-    vertical-align:middle;
-    border-bottom: 1px solid white;
-}
-.taskCheckBox img{
-    width:30px;
-    height:30px;
-    cursor:pointer;
-}
-.completedTask{
-    text-decoration:line-through;
-}
+    .tasksContainer .newTaskContainer .addTaskText::placeholder {
+        color: white;
+    }
+
 .taskControls{
-    display:none;
+    visibility: hidden;
     text-align:right;
-}
-.taskList tr:hover .taskControls{
-    display:inline-block;
-}
-.editTaskBtn, .deleteTaskBtn{
-    margin-left:10px;
-    text-decoration:none;
-    cursor:pointer;
-    width:28px;
-    height:28px;
-}
-/*#taskList li{
-    list-style:none;*/
-    
-    /*line-height:30px;*/
-    /*padding-left:5px;*/
-    /*position:relative;*/
-    /*margin-bottom:2px;*/
-/*}
-.task {
-    display: flex;
-    width: 100%;
-    height: 32px;
-    margin: 5px 0;
-    margin-top:3px;
-}
-.taskText{
-    width:100%;
-    height:100%;
-    border:none;
-    font-size:16px;
-    padding-left:5px;
-    background:none;
-    color:white;
-    outline:none;
-}
-.taskText[readonly]{
-    pointer-events:none;
-    color:white;
-}
-.taskCheckBoxBtn {
-    width: 30px;
-    height: 30px;
-    max-width: 30px;
-    border: none;
-    background: transparent;*/
-    /*gap: 10px;*/
-    /*cursor: pointer;
-}
-    .taskCheckBoxBtn img {
-        width: 2.5vw;
-        max-width: 30px;
-    }
-.editTaskBtn {
-    display: none;
-    margin-left: 5px;
-    width: 30px;
-    height: 30px;
-    max-width: 30px;
-    border: none;
-    background: transparent;
-    gap: 10px;
-    cursor: pointer;
-    position:absolute;
-    right: 30px;
-}
-.deleteTaskBtn {
-    display: none;
-    margin-left: 5px;
-    width: 30px;
-    height: 30px;
-    max-width: 30px;
-    border: none;
-    background: transparent;
-    gap: 10px;
-    cursor: pointer;
-    position: absolute;
-    right: 0px;
-}
-    .editTaskBtn img{
-        width: 2.5vw;
-        max-width: 30px;
-    }
-.deleteTaskBtn img {
-    width: 2.5vw;
-    max-width: 30px;
-}
-#taskList li:hover .editTaskBtn, #taskList li:hover .deleteTaskBtn {
-    display: inline;
-}*/
-/*ul #taskList{
-    list-style:none;
-}
-.task{
-    display: flex;
-    align-items:center;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-    position: relative;
-    transition: background 0.3s;
-}
-.task:hover{
-    background-color: #f9f9f9;
-}
-.taskCheckBoxBtn {
-    width: 24px;
-    height: 24px;
-    background-image: url('../Icons/icons8-unchecked-checkbox-white-96.png');
-    background-size:cover;
-    border:none;
-    cursor:pointer;
-    margin-right:10px;
-}
-.task.completed .taskCheckBoxBtn {
-    background-image: url('../Icons/icons8-check-white-96.png');
-}
-.taskText{
-    flex-grow:1;
-    border:none;
-    background: none;
-    font-size:16px;
-}
-.task.completed .taskText{
-    text-decoration: line-through;
-    color: #999;
-}
-.editTaskBtn, .deleteTaskBtn{
-    display:none;
-    background:none;
-    border:none;
-    cursor:pointer;
-    margin-left:5px;
-    font-size:14px;
-}
-.task:hover .editTaskBtn, .task:hover .deleteTaskBtn{
-    display: inline;
-}
-
-.newTaskText{
-    border:none;
-    font-size:16px;
-    background:none;
-    pointer-events:none;
-}*/
-/*.taskBox{
-    margin: 0;
-    padding:0;
-    list-style:none;
-}
-.taskBox .task{
     display:flex;
-    align-items: center;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    padding-left: 10px;
 }
-.task{
-    display: flex;
-    align-items:center;
-    margin-bottom: 15px;
-    padding-left: 5px;
+.task:hover .taskControls, .taskUncompleted:hover ~ .taskControls, taskCompleted:hover ~ .taskControls{
+    visibility: visible;
 }
-.task input[type="checkbox"]{
-    transform: scale(1.5);
-    margin-right:12px;
-    accent-color:white;
-}
-.taskText{
-    font-size:18px;
-    color:white;
-    letter-spacing:0.5px;
-}
-.newTask{
-    display:flex;
-    padding: 5px 10px;
-}
-.newTask #addTaskBtn {
-    width: 2.5vw;
-        max-width: 30px;
-        border: none;
-        background: transparent;
-        gap: 5px;
-        cursor:pointer;
-}
-    .newTask #addTaskBtn img {
-        width: 2.5vw;
-        max-width: 30px;
-    }
-.newTask #txtNewTask{
-
-}
-.taskInput {
-    flex-grow: 1;
-    height: 35px;
-    border-radius: 8px;
-    border: none;
-    outline: none;
-    padding: 0 10px;
-    font-size: 16px;
-    color: #5B548A;
-    background:transparent;
-}
-.taskText.done{
-    text-decoration:line-through;
-    color: #ddd;
-}*/
-
-
-
-
-/* FROM DEEPSEEK*/
-/*.todo-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 15px;
-}
-
-    .todo-header h1 {
-        margin: 0;
-        color: #333;
-        font-size: 24px;
-    }
-
-.filter-container {
-    position: relative;
-    display: inline-block;
-}
-
-.filter-button {
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 8px 15px;
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-}
-
-    .filter-button:hover {
-        background-color: #e0e0e0;
-    }
-
-.arrow {
-    margin-left: 5px;
-    font-size: 12px;
-}
-
-.filter-dropdown {
-    display: none;
-    position: absolute;
-    right: 0;
-    background-color: white;
-    min-width: 150px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-    z-index: 1;
-}
-
-    .filter-dropdown button {
-        display: block;
-        width: 100%;
-        padding: 8px 15px;
-        text-align: left;
-        border: none;
-        background: none;
-        cursor: pointer;
-        font-size: 14px;
-    }
-
-        .filter-dropdown button:hover {
-            background-color: #f5f5f5;
-        }
-
-.add-task {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    margin-bottom: 15px;
-}
-
-.add-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    font-size: 18px;
-    cursor: pointer;
-    margin-right: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-    .add-button:hover {
-        background-color: #45a049;
-    }
-
-.add-text {
-    color: #777;
-    font-size: 14px;
-}
-
-.task-list {
-    display: flex;
-    flex-direction: column;
-}
-
-.task-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    position: relative;
-}
-
-    .task-item:hover {
-        background-color: #f9f9f9;
-    }
-
-.task-checkbox {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-    cursor: pointer;
-    background-image: url('unchecked.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    border: none;
-    background-color: transparent;
-}
-
-    .task-checkbox.checked {
-        background-image: url('checked.png');
-    }
-
-.task-text {
-    flex-grow: 1;
-    margin-right: 10px;
-    word-break: break-word;
-}
-
-    .task-text.completed {
-        text-decoration: line-through;
-        color: #999;
-    }
-
-.task-edit {
-    flex-grow: 1;
-    margin-right: 10px;
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    font-family: inherit;
-    font-size: inherit;
-}
-
-.task-actions {
-    display: none;
-    position: absolute;
-    right: 10px;
-}
-
-.task-item:hover .task-actions {
-    display: flex;
-}
-
-.edit-button, .delete-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin-left: 5px;
-    padding: 5px;
-    font-size: 14px;
-}
-
-.edit-button {
-    color: #2196F3;
-}
-
-.delete-button {
-    color: #f44336;
-}
-
-    .edit-button:hover, .delete-button:hover {
-        opacity: 0.8;
-    }*/
 
 /* ---------------------- CREATE TIMER PAGES A100 ---------------------- */
 /* page 1 (back, create, view past timers) */
@@ -3172,7 +2913,7 @@ table {
     }
 }
 
-@media (max-width: 1880px) {
+@media (max-width: 1900px) {
     .curved-header h2 {
         margin-top: clamp(-5rem, -4vw, -3rem);
     }

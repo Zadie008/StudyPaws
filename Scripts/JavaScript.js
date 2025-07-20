@@ -528,3 +528,4 @@ if (window.location.pathname.toLowerCase().includes("c100_register.aspx")) {
         }
     });
 }
+
