@@ -21,9 +21,11 @@ public partial class Default2 : System.Web.UI.Page
     {
         if (Session["userID"]!=null)
         {
+            ddlFilter.Visible = IsFilterVisible;
+            //ddlFilter.CssClass = IsFilterVisible ? "toDoFilterDropDownList" : "toDoFilterDropDownList hidden";
             if (!IsPostBack)
             {
-                ddlFilter.Visible = IsFilterVisible;
+               
                 userIDHidden.Value = Session["userID"].ToString();
                 LoadTasks();
 
@@ -38,6 +40,7 @@ public partial class Default2 : System.Web.UI.Page
                 int month = int.Parse(hfMonth.Value);
                 LoadCalendar(year, month);
             }
+
         }
         else
         {
@@ -136,7 +139,7 @@ public partial class Default2 : System.Web.UI.Page
 
                     // '+' Button
                     sb.AppendFormat(
-                        "<a class='addEventBtn' href='AddEvent.aspx?date={0}' title='Add event'>+</a>",
+                        "<a class='addEventBtn' href='B200_B500-800_Add-event_.aspx?date={0}' title='Add event'>+</a>",
                         thisDay.ToString("yyyy-MM-dd")
                     );
 
@@ -213,7 +216,7 @@ public partial class Default2 : System.Web.UI.Page
         using (OleDbConnection conn = new OleDbConnection(connString))
         {
             conn.Open();
-            string sql = "SELECT * FROM ToDoListTask WHERE userID = ? " + whereClause + " ORDER BY taskStatus, taskID DESC";
+            string sql = "SELECT * FROM ToDoListTask WHERE userID = ? " + whereClause + " ORDER BY taskStatus DESC";
             OleDbCommand cmd = new OleDbCommand(sql, conn);
             cmd.Parameters.AddWithValue("?", Session["userID"]);
             dt.Load(cmd.ExecuteReader());
@@ -232,7 +235,7 @@ public partial class Default2 : System.Web.UI.Page
         using (OleDbConnection conn = new OleDbConnection(connString))
         {
             conn.Open();
-            string sql = "INSERT INTO ToDoListTask (taskDesc, taskStatus, userID) VALUES (?, False, ?)";
+            string sql = "INSERT into [ToDoListTask] ([taskDesc], [taskStatus], [userID]) VALUES (?, False, ?)";
             OleDbCommand cmd = new OleDbCommand(sql, conn);
             cmd.Parameters.AddWithValue("?", taskDesc);
             cmd.Parameters.AddWithValue("?", Session["userID"]);
@@ -295,7 +298,7 @@ public partial class Default2 : System.Web.UI.Page
     protected void toDoFilterBtn_Click(object sender, EventArgs e)
     {
         IsFilterVisible = !IsFilterVisible;
-        ddlFilter.Visible = IsFilterVisible;
+        ddlFilter.Visible= IsFilterVisible;
     }
     protected void rptTasks_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
@@ -310,5 +313,9 @@ public partial class Default2 : System.Web.UI.Page
                 txt.Focus();
             }
         }
+    }
+    protected void txtNewTask_TextChanged(object sender, EventArgs e)
+    {
+        btnAdd_Click(sender, e);
     }
 }

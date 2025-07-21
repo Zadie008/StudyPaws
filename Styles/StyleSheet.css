@@ -790,7 +790,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 /* ---------------------- CALENDAR PAGES ---------------------- */
 .calendarDashboard { 
-    flex: 75%;
+    flex: 72%;
     background: #D7B9D5; 
     border-radius: 30px;
     padding: 10px;
@@ -1013,7 +1013,7 @@ body.page-exit .welcomeBackTextDiv {
 
 /* ---------------------- TO DO LIST PAGES ---------------------- */
 .toDoListDashboard {
-    flex: 25%;
+    flex: 28%;
     background: #ADA7C9;
     border-radius: 30px;
     padding: 10px;
@@ -1025,10 +1025,11 @@ body.page-exit .welcomeBackTextDiv {
 .task {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    /*gap:5px;*/
-    /*padding: 5px;*/
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    gap: 10px;
+    z-index: 20;
 }
 .checkbox {
     background-image: url('../Icons/icons8-unchecked-checkbox-white-96.png');
@@ -1040,6 +1041,7 @@ body.page-exit .welcomeBackTextDiv {
     background-size: 30px;
     background-color:transparent;
     border:none;
+    flex:9%;
 }
 .checkbox.checked{
     background-image: url('../Icons/icons8-check-white-96.png');
@@ -1051,6 +1053,7 @@ body.page-exit .welcomeBackTextDiv {
     background-size: 30px;
     background-color:transparent;
     border:none;
+    flex:9%;
 }
 .taskCompleted {
     text-decoration: line-through;
@@ -1062,6 +1065,9 @@ body.page-exit .welcomeBackTextDiv {
     vertical-align: bottom;
     border: none;
     background: none;
+    flex: 71%;
+    outline: none;
+    box-shadow: none;
 }
 .taskUncompleted {
     color: white;
@@ -1072,6 +1078,20 @@ body.page-exit .welcomeBackTextDiv {
     vertical-align: bottom;
     border: none;
     background: none;
+    flex: 71%;
+    outline: none;
+    box-shadow: none;
+}
+.openControlsBtn{
+    flex:1;
+    max-width:28px;
+    border:none;
+    background:none;
+    cursor:pointer;
+    z-index:20;
+    font-size:25px;
+    color:white;
+    vertical-align:central;
 }
 .editBtn {
     flex: 1;
@@ -1081,6 +1101,7 @@ body.page-exit .welcomeBackTextDiv {
     background: transparent;
     /*gap: 10px;*/
     cursor: pointer;
+    z-index:20;
 }
     .editBtn img {
         /*width: 2.5vw;*/
@@ -1094,6 +1115,7 @@ body.page-exit .welcomeBackTextDiv {
     background: transparent;
     /*gap: 10px;*/
     cursor: pointer;
+    z-index:20;
 }
     .deleteBtn img {
         /*width: 2.5vw;*/
@@ -1103,14 +1125,11 @@ body.page-exit .welcomeBackTextDiv {
 .toDoListControls {
     display: flex;
     align-items:center;
-    /*justify-content: space-between;*/
-    /*align-items: center;*/
-    /*margin-bottom: 5px;*/
-    /*edit padding at top*/
-    /*font-size: 22px;*/
-    margin: 15px 15px 15px 15px;
+    justify-content: space-between;
+    margin: 20px 15px 25px 15px;
     position:relative;
     z-index:2;
+    line-height:34px;
 }
 .toDoListControls .toDoListHeading {
     font-family: 'Lilita One', sans-serif;
@@ -1122,17 +1141,19 @@ body.page-exit .welcomeBackTextDiv {
     text-shadow: 2px 2px #5B548A;
     /*vertical-align:bottom;*/
     /*margin: 0;*/
-    line-height: 32px;
+    line-height: 34px;
 }
 .toDoListControls .toDoListFilters{
     /*margin-bottom:5px;*/
     flex:55%;
     display:flex;
     gap:5px;
-    justify-content: space-between;
+    justify-content: flex-end;
     line-height:32px;
     vertical-align:central;
     align-items:center;
+    flex-grow:1;
+    z-index:10;
     /*gap:16px;
     justify-content: flex-start;
     padding: 0;*/
@@ -1146,9 +1167,7 @@ body.page-exit .welcomeBackTextDiv {
         gap: 10px;
         cursor: pointer;
         vertical-align: central;
-        align-items: end;
-
-        position:fixed;
+        
         z-index:100;
     }
 
@@ -1166,6 +1185,9 @@ body.page-exit .welcomeBackTextDiv {
     align-items:center;
     position:relative;
     z-index:10;
+    /*visibility: visible;
+    opacity: 1;
+    transition: opacity 0.2s ease;*/
 
     border-radius: 2rem;
     border: 2px solid white;
@@ -1189,13 +1211,52 @@ body.page-exit .welcomeBackTextDiv {
     width: 100%;
     max-width: 300px;
     box-sizing: border-box;
-    display: block;
+    display:block;
 }
-.tasksContainer{
+    /*.toDoListControls .toDoListFilters .toDoFilterDropDownList .hidden{
+        flex: 4;
+        cursor: pointer;
+        height: 32px;
+        line-height: 32px;
+        vertical-align: central;
+        align-items: center;
+        position: relative;
+        z-index: 10;
+        visibility: hidden;
+        opacity: 1;
+        pointer-events:none;
+
+        border-radius: 2rem;
+        border: 2px solid white;
+        background-color: transparent;
+        -webkit-appearance: none;
+        appearance: none;*/ /* removes default arrow */
+        /*background-image: url('../Icons/icons8-expand-arrow-white-96.png');*/ /* down arrow */
+        /*transition: background-image 0.2s ease;
+        background-repeat: no-repeat;
+        background-position: right 0.5em center;
+        background-size: 20px;
+        padding: 0 2em 0 1em;*/
+        /*padding: 0.2em 2em 0.2em 1em;*/
+        /*color: white;
+        font-size: 16px;
+        font-family: 'Gilda Display', serif;
+        font-weight: 200;
+        outline: none;
+        margin: 1vh auto;
+        text-align: left;
+        width: 100%;
+        max-width: 300px;
+        box-sizing: border-box;
+    }*/
+.tasksContainer {
     margin: 5px;
     padding: 0;
+    z-index: 100;
+    max-height: 300px; /*make this relative*/
+    overflow-y: auto;
 }
-.tasksContainer .newTaskContainer{
+.newTaskContainer{
     display:flex;
     width:100%;
     height:40px;
@@ -1206,11 +1267,12 @@ body.page-exit .welcomeBackTextDiv {
     border-bottom: 1px white solid;
     border-top: 1px white solid;
     gap: 10px;
-    z-index:100;
+    z-index:20;
     color:white;
+
  }
 
-.tasksContainer .newTaskContainer .addTaskBtn {
+.newTaskContainer .addTaskBtn {
     width: 30px;
     height: 30px;
     max-width: 30px;
@@ -1218,33 +1280,40 @@ body.page-exit .welcomeBackTextDiv {
     background: transparent;
     gap: 10px;
     cursor: pointer;
-
+    flex:9%;
 }
-    .tasksContainer .newTaskContainer .addTaskBtn img {
+    .newTaskContainer .addTaskBtn img {
         width: 2.5vw;
         max-width: 30px;
     }
-.tasksContainer .newTaskContainer .addTaskText{
+.newTaskContainer .addTaskText{
+    flex:91%;
     color:white;
     font-size:16px;
     text-align:left;
-    /*margin: 0 0 0 10px;*/
     line-height:30px;
-    vertical-align:bottom;
-    border:none;
+    border: none;
     background:none;
+    z-index:20;
+    cursor:text;
+    width:100%;
+    outline:none;
+    box-shadow:none;
+    /*padding: 4px 10px;*/
 }
-    .tasksContainer .newTaskContainer .addTaskText::placeholder {
+    .newTaskContainer .addTaskText::placeholder {
         color: white;
     }
 
 .taskControls{
-    visibility: hidden;
+    /*visibility: hidden;*/
     text-align:right;
     display:flex;
+    z-index:20;
+    flex:20%;
 }
 .task:hover .taskControls, .taskUncompleted:hover ~ .taskControls, taskCompleted:hover ~ .taskControls{
-    visibility: visible;
+    /*visibility: visible;*/
 }
 
 /* ---------------------- CREATE TIMER PAGES A100 ---------------------- */

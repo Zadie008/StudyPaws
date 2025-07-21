@@ -135,11 +135,12 @@
                     <asp:ImageButton ID="filterButton" runat="server" class="toDoFilterBtn" ClientIDMode="Static" ImageUrl="~/Icons/icons8-filter-bars-white-96.png" OnClick="toDoFilterBtn_Click"/>
                 </div>
             </div>
+            <div class="newTaskContainer">
+    <asp:ImageButton ID="btnAdd" runat="server" CommandName="Add" class="addTaskBtn" OnClick="btnAdd_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png"/>
+    <asp:TextBox ID="txtNewTask" runat="server" CssClass="addTaskText" AutoPostBack="true" OnTextChanged="txtNewTask_TextChanged" Placeholder="Add a new task..."></asp:TextBox>
+</div>
             <div class="tasksContainer">
-                <div class="newTaskContainer">
-                    <asp:ImageButton ID="btnAdd" runat="server" CommandName="Add" class="addTaskBtn" OnClick="btnAdd_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png"/>
-                    <asp:TextBox ID="txtNewTask" runat="server" CssClass="addTaskText" Placeholder="Add a new task..."></asp:TextBox>
-                </div>
+                
                 <asp:Repeater ID="rptTasks" runat="server" OnItemCommand="rptTasks_ItemCommand" OnItemDataBound="rptTasks_ItemDataBound">
                     <ItemTemplate>
                         <div class="task">
@@ -148,6 +149,7 @@
                             <div class="taskControls">
                                 <asp:ImageButton ID="editBtn" runat="server" class="editBtn" CommandName="Edit" CommandArgument='<%# Eval("taskID") %>' ImageUrl="~/Icons/icons8-edit-white-96.png"/>
                                 <asp:ImageButton ID="deleteBtn" runat="server" class="deleteBtn" CommandName="Delete" CommandArgument='<%# Eval("taskID") %>' ImageUrl="~/Icons/icons8-delete-white-96.png"/>
+                                <asp:Button ID="openControlsBtn" runat="server" CssClass="openControlsBtn" Text="..." />
                             </div>
                         </div>
                     </ItemTemplate>
