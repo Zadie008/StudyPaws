@@ -139,7 +139,7 @@ public partial class Default2 : System.Web.UI.Page
 
                     // '+' Button
                     sb.AppendFormat(
-                        "<a class='addEventBtn' href='B200_B500-800_Add-event_.aspx?date={0}' title='Add event'>+</a>",
+                        "<a class='addEventBtn' href='B200_B500-800_Add-event_.aspx?date{0}'>" + "<img src='Icons/icons8-add-new-white-96.png' class='addEventBtnImg' />" + "</a>",
                         thisDay.ToString("yyyy-MM-dd")
                     );
 
@@ -272,21 +272,21 @@ public partial class Default2 : System.Web.UI.Page
                 cmd.ExecuteNonQuery();
             }
         }
-        else if (e.CommandName == "Edit")
-        {
-            TextBox txt = (TextBox)e.Item.FindControl("txtEditDesc");
-            string newDesc = txt.Text.Trim();
+        //else if (e.CommandName == "Edit")
+        //{
+        //    TextBox txt = (TextBox)e.Item.FindControl("txtEditDesc");
+        //    string newDesc = txt.Text.Trim();
 
-            using (OleDbConnection conn = new OleDbConnection(connString))
-            {
-                conn.Open();
-                string sql = "UPDATE ToDoListTask SET taskDesc = ? WHERE taskID = ?";
-                OleDbCommand cmd = new OleDbCommand(sql, conn);
-                cmd.Parameters.AddWithValue("?", newDesc);
-                cmd.Parameters.AddWithValue("?", taskID);
-                cmd.ExecuteNonQuery();
-            }
-        }
+        //    using (OleDbConnection conn = new OleDbConnection(connString))
+        //    {
+        //        conn.Open();
+        //        string sql = "UPDATE ToDoListTask SET taskDesc = ? WHERE taskID = ?";
+        //        OleDbCommand cmd = new OleDbCommand(sql, conn);
+        //        cmd.Parameters.AddWithValue("?", newDesc);
+        //        cmd.Parameters.AddWithValue("?", taskID);
+        //        cmd.ExecuteNonQuery();
+        //    }
+        //}
 
         LoadTasks();
     }
@@ -300,20 +300,20 @@ public partial class Default2 : System.Web.UI.Page
         IsFilterVisible = !IsFilterVisible;
         ddlFilter.Visible= IsFilterVisible;
     }
-    protected void rptTasks_ItemDataBound(object sender, RepeaterItemEventArgs e)
-    {
-        if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-        {
-            TextBox txt = (TextBox)e.Item.FindControl("txtEditDesc");
-            ImageButton editBtn = (ImageButton)e.Item.FindControl("editBtn");
+    //protected void rptTasks_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    //{
+    //    if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+    //    {
+    //        TextBox txt = (TextBox)e.Item.FindControl("txtEditDesc");
+    //        ImageButton editBtn = (ImageButton)e.Item.FindControl("editBtn");
 
-            if (Request.Form[editBtn.UniqueID] != null)
-            {
-                txt.ReadOnly = false;
-                txt.Focus();
-            }
-        }
-    }
+    //        if (Request.Form[editBtn.UniqueID] != null)
+    //        {
+    //            txt.ReadOnly = false;
+    //            txt.Focus();
+    //        }
+    //    }
+    //}
     protected void txtNewTask_TextChanged(object sender, EventArgs e)
     {
         btnAdd_Click(sender, e);

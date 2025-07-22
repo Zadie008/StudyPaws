@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.OleDb;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -24,14 +26,28 @@ public partial class Default2 : System.Web.UI.Page
     }
     protected void btnBack_Click(object sender, EventArgs e)
     {
-        Response.Redirect("A100_Create-timer.aspx");
+        Response.Redirect("B1600_View-dashboard.aspx");
     }
 
-    protected void btnContinue_Click(object sender, EventArgs e)
+    protected void btnAdd_Click(object sender, EventArgs e)
     {
-        Session["timerTitle"] = txtTitle.Text;
-        Session["timerTag"] = dropdownTag.SelectedValue;
+        String desc = txtTitle.Text;
+        int tag = int.Parse(dropdownTag.SelectedValue);
+        int userID = Convert.ToInt32(Session["userID"]);
 
-        Response.Redirect("A100_Create-timer_3.aspx");
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (OleDbConnection conn = new OleDbConnection(cs))
+        {
+            conn.Open();
+            string sql = "INSERT into [CalendarEvent] ([eventDesc], [eventDate], [tagID], [userID]) VALUES (?, ?, ?, ?)";
+            OleDbCommand cmd = new OleDbCommand(sql, conn);
+            cmd.Parameters.AddWithValue("?", desc);
+            cmd.Parameters.AddWithValue("?", DateTime.Today);
+            cmd.Parameters.AddWithValue("?", tag);
+            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            cmd.ExecuteNonQuery();
+        }
+
+        Response.Redirect("B1600_View-dashboard.aspx");
     }
 }

@@ -88,7 +88,7 @@
                 <tr>
                     <td><asp:Label ID="lblTag" class="label" runat="server" Text="Tag"></asp:Label></td>
                     <td>
-                        <asp:DropDownList ID="dropdownTag" ClientIDMode="Static" class="dropDownList" runat="server" BackColor="#446791">
+                        <asp:DropDownList ID="dropdownTag" ClientIDMode="Static" class="dropDownList" runat="server" BackColor="#446791" DataTextField="tagName" DataValueField="tagID">
                         <asp:ListItem></asp:ListItem>
                         <asp:ListItem>Studying</asp:ListItem>
                         <asp:ListItem>Assignments</asp:ListItem>
@@ -115,7 +115,7 @@
         </div>
         <div class="middleSection">
             <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="False" />
-            <asp:Button ID="btnContinue" class="button" runat="server" Text="Add" OnClick="btnContinue_Click" />
+            <asp:Button ID="btnAdd" class="button" runat="server" Text="Add" OnClick="btnAdd_Click" />
         </div>
         <div class="rightSection">
             <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
