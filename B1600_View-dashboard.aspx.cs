@@ -1,10 +1,8 @@
-﻿using Microsoft.SqlServer.Server;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,13 +20,13 @@ public partial class Default2 : System.Web.UI.Page
         if (Session["userID"]!=null)
         {
             ddlFilter.Visible = IsFilterVisible;
+
+            userIDHidden.Value = Convert.ToString(Session["userID"]);
+            LoadTasks();
+
             //ddlFilter.CssClass = IsFilterVisible ? "toDoFilterDropDownList" : "toDoFilterDropDownList hidden";
             if (!IsPostBack)
             {
-               
-                userIDHidden.Value = Session["userID"].ToString();
-                LoadTasks();
-
                 DateTime currentDate = DateTime.Today;
                 hfYear.Value = currentDate.Year.ToString();
                 hfMonth.Value = DateTime.Today.Month.ToString();
@@ -139,7 +137,7 @@ public partial class Default2 : System.Web.UI.Page
 
                     // '+' Button
                     sb.AppendFormat(
-                        "<a class='addEventBtn' href='B200_B500-800_Add-event_.aspx?date{0}'>" + "<img src='Icons/icons8-add-new-white-96.png' class='addEventBtnImg' />" + "</a>",
+                        "<a class='addEventBtn' href='B200_B500-800_Add-event_.aspx?date={0}'>" + "<img src='Icons/icons8-add-new-white-96.png' class='addEventBtnImg' />" + "</a>",
                         thisDay.ToString("yyyy-MM-dd")
                     );
 
@@ -203,7 +201,8 @@ public partial class Default2 : System.Web.UI.Page
 
     private void LoadTasks()
     {
-        string filter = ddlFilter.SelectedValue;
+        string filter = ViewState["SelectedFilter"] != null ? ViewState["SelectedFilter"].ToString() : "All";
+        ddlFilter.SelectedValue = filter;
         string whereClause = "";
 
         if (filter == "Completed")
@@ -260,6 +259,7 @@ public partial class Default2 : System.Web.UI.Page
                 cmd.Parameters.AddWithValue("?", taskID);
                 cmd.ExecuteNonQuery();
             }
+            Response.Redirect(Request.RawUrl);
         }
         else if (e.CommandName == "Delete")
         {
@@ -271,6 +271,7 @@ public partial class Default2 : System.Web.UI.Page
                 cmd.Parameters.AddWithValue("?", taskID);
                 cmd.ExecuteNonQuery();
             }
+            Response.Redirect(Request.RawUrl);
         }
         //else if (e.CommandName == "Edit")
         //{
@@ -287,12 +288,11 @@ public partial class Default2 : System.Web.UI.Page
         //        cmd.ExecuteNonQuery();
         //    }
         //}
-
-        LoadTasks();
     }
 
     protected void ddlFilter_SelectedIndexChanged(object sender, EventArgs e)
     {
+        ViewState["SelectedFilter"] = ddlFilter.SelectedValue;
         LoadTasks();
     }
     protected void toDoFilterBtn_Click(object sender, EventArgs e)

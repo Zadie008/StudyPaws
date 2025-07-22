@@ -68,8 +68,8 @@ public partial class _Default : System.Web.UI.Page
         {
             var invite = invites[0];
 
-            litNotificationText.Text = "<p>You have received a study session invitation from user <span style='font-weight:bold;'>" +
-                invite.leaderUsername + "</span>!<br /><br />" + "Study Session Title: <span style='font-weight:bold;'>" + invite.title + "</span><br />" + "Study Session Tag: " + invite.tag + "<br />" + "Starts: " + invite.startTime.ToString("dddd, dd MMMM yyyy @ HH:mm") + "<br />" + "Ends: " + invite.endTime.ToString("dddd, dd MMMM yyyy @ HH:mm") + "</p>";
+            litNotificationText.Text = "<p>You have received a study session invitation from your friend <span style='font-weight:bold;'>" +
+                invite.leaderUsername + "</span>!<br /><br />" + "Study Session Title: <span style='font-weight:bold;'>" + invite.title + "</span><br />" + "Study Session Tag: <span style='font-weight:bold;'>" + invite.tag + "</span><br />" + "Starts: <span style='font-weight:bold;'>" + invite.startTime.ToString("dddd, dd MMMM yyyy @ HH:mm") + "</span><br />" + "Ends: <span style='font-weight:bold;'>" + invite.endTime.ToString("dddd, dd MMMM yyyy @ HH:mm") + "</span></p>";
 
             hiddenSessionID.Value = invite.sessionID.ToString();
 
