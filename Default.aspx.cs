@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.OleDb;
 using System.Web.UI;
@@ -9,12 +10,15 @@ public partial class _Default : System.Web.UI.Page
     {
         if (Session["Username"] != null)
         {
-            if (!IsPostBack)
-            {
-                SetupNotifications();
-            }
             lblLoggedInUserName.Text = Session["Username"].ToString() + "!";
             LoadUserData(Session["Username"].ToString());
+
+            if (!IsPostBack)
+            {
+                LoadPendingInvitesFromDB();
+            }
+
+            ShowNextInvite(); // always show latest invite
         }
         else
         {
@@ -23,6 +27,110 @@ public partial class _Default : System.Web.UI.Page
             lblPaws.Text = "N/A";
             lblXPAmount.Text = "N/A";
             lblLevelNumber.Text = "N/A";
+        }
+    }
+
+    private void LoadPendingInvitesFromDB()
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        List<SessionInvite> pendingInvites = new List<SessionInvite>();
+        string query = "SELECT StudySession.sessionID, StudySession.sessionTitle, StudySession.sessionTag, StudySession.sessionStart, StudySession.sessionEnd, Users.username FROM (StudySessionParticipants INNER JOIN StudySession ON StudySessionParticipants.sessionID = StudySession.sessionID) INNER JOIN Users ON StudySession.leaderID = Users.userID WHERE StudySessionParticipants.userID = ? AND StudySessionParticipants.replied = false ORDER BY StudySession.sessionID ASC";
+
+        using (OleDbConnection conn = new OleDbConnection(cs))
+        using (OleDbCommand cmd = new OleDbCommand(query, conn))
+        {
+            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            conn.Open();
+            using (OleDbDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    pendingInvites.Add(new SessionInvite
+                    {
+                        sessionID = Convert.ToInt32(reader["sessionID"]),
+                        leaderUsername = reader["username"].ToString(),
+                        title = reader["sessionTitle"].ToString(),
+                        tag = reader["sessionTag"].ToString(),
+                        startTime = Convert.ToDateTime(reader["sessionStart"]),
+                        endTime = Convert.ToDateTime(reader["sessionEnd"])
+                    });
+                }
+            }
+        }
+
+        Session["PendingInvites"] = pendingInvites;
+    }
+
+    private void ShowNextInvite()
+    {
+        List<SessionInvite> invites = Session["PendingInvites"] as List<SessionInvite>;
+        if (invites != null && invites.Count > 0)
+        {
+            var invite = invites[0];
+
+            litNotificationText.Text = "<p>You have received a study session invitation from user <span style='font-weight:bold;'>" +
+                invite.leaderUsername + "</span>!<br /><br />" + "Study Session Title: <span style='font-weight:bold;'>" + invite.title + "</span><br />" + "Study Session Tag: " + invite.tag + "<br />" + "Starts: " + invite.startTime.ToString("dddd, dd MMMM yyyy @ HH:mm") + "<br />" + "Ends: " + invite.endTime.ToString("dddd, dd MMMM yyyy @ HH:mm") + "</p>";
+
+            hiddenSessionID.Value = invite.sessionID.ToString();
+
+            imgNotificationRinging.Visible = true;
+            imgNotificationNormal.Visible = false;
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "showNotificationPopup();", true);
+        }
+        else
+        {
+            imgNotificationRinging.Visible = false;
+            imgNotificationNormal.Visible = true;
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopupNone", "showNotificationPopup(false);", true);
+        }
+    }
+
+    protected void btnYes_Click(object sender, EventArgs e)
+    {
+        int sessionID = int.Parse(hiddenSessionID.Value);
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string updateQuery = "UPDATE StudySessionParticipants SET replied = true, sessionStatus = 'Accepted' WHERE sessionID = ? AND userID = ?";
+        using (OleDbConnection conn = new OleDbConnection(cs))
+        using (OleDbCommand cmd = new OleDbCommand(updateQuery, conn))
+        {
+            cmd.Parameters.AddWithValue("?", sessionID);
+            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+        RemoveInviteAndShowNext(sessionID);
+    }
+
+    protected void btnNo_Click(object sender, EventArgs e)
+    {
+        int sessionID = int.Parse(hiddenSessionID.Value);
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = ? AND userID = ? AND replied = false";
+        using (OleDbConnection conn = new OleDbConnection(cs))
+        using (OleDbCommand cmd = new OleDbCommand(deleteQuery, conn))
+        {
+            cmd.Parameters.AddWithValue("?", sessionID);
+            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+        RemoveInviteAndShowNext(sessionID);
+    }
+
+    private void RemoveInviteAndShowNext(int sessionID)
+    {
+        List<SessionInvite> invites = Session["PendingInvites"] as List<SessionInvite>;
+        if (invites != null)
+        {
+            var currentInvite = invites.Find(i => i.sessionID == sessionID);
+            if (currentInvite != null)
+            {
+                invites.Remove(currentInvite);
+            }
+            Session["PendingInvites"] = invites;
+            ShowNextInvite(); // recursively show all the invites
         }
     }
 
@@ -162,84 +270,6 @@ public partial class _Default : System.Web.UI.Page
             case 5: return "~/Images/ProfilePictures/UnicornPfp.png";
             default: return "~/Images/ProfilePictures/CatPfp.png";
         }
-    }
-
-    private void SetupNotifications()
-    {
-        int currentUserID = Convert.ToInt32(Session["userID"]);
-        bool hasNotification = false;
-        string title = "";
-        string tag = "";
-        DateTime startTime = DateTime.MinValue;
-        DateTime endTime = DateTime.MinValue;
-        string leaderUsername = "";
-
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection conn = new OleDbConnection(cs))
-        {
-            string query = "SELECT TOP 1 StudySession.sessionTitle, StudySession.sessionTag, StudySession.sessionStart, StudySession.sessionEnd, Users.username FROM (StudySessionParticipants INNER JOIN StudySession ON StudySessionParticipants.sessionID = StudySession.sessionID) INNER JOIN Users ON StudySession.leaderID = Users.userID WHERE StudySessionParticipants.userID = ? AND StudySessionParticipants.replied = false";
-
-            OleDbCommand cmd = new OleDbCommand(query, conn);
-            cmd.Parameters.AddWithValue("?", currentUserID);
-            conn.Open();
-            using (OleDbDataReader reader = cmd.ExecuteReader())
-            {
-                if (reader.Read())
-                {
-                    hasNotification = true;
-                    title = reader["sessionTitle"].ToString();
-                    tag = reader["sessionTag"].ToString();
-                    startTime = Convert.ToDateTime(reader["sessionStart"]);
-                    endTime = Convert.ToDateTime(reader["sessionEnd"]);
-                    leaderUsername = reader["username"].ToString();
-                }
-            }
-        }
-
-        if (hasNotification)
-        {
-            litNotificationText.Text = "<p>You have received a study session invitation from user <span style='font-weight:bold;'>" + leaderUsername + "</span>!<br /><br />" + "Study Session Title: <span style='font-weight:bold;'>" + title + "</span><br />" + "Study Session Tag: <span style='font-weight:bold;'>" + tag + "</span><br />" + "Starts: <span style='font-weight:bold;'>" + startTime.ToString("dddd, dd MMMM yyyy @ HH:mm") + "</span><br />" + "Ends: <span style='font-weight:bold;'>" + endTime.ToString("dddd, dd MMMM yyyy @ HH:mm") + "</span></p>";
-        }
-
-        // set which bell icon is showing in html
-        imgNotificationRinging.Visible = hasNotification;
-        imgNotificationNormal.Visible = !hasNotification;
-
-        ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowNotificationPopup", "showNotificationPopup(" + hasNotification.ToString().ToLower() + ");", true);
-    }
-
-    protected void btnYes_Click(object sender, EventArgs e)
-    {
-        int currentUserID = Convert.ToInt32(Session["userID"]);
-
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection conn = new OleDbConnection(cs))
-        {
-            string updateQuery = "UPDATE StudySessionParticipants " + "SET sessionStatus = 'Accepted', replied = true " + "WHERE userID = ? AND replied = false";
-            OleDbCommand cmd = new OleDbCommand(updateQuery, conn);
-            cmd.Parameters.AddWithValue("?", currentUserID);
-            conn.Open();
-            cmd.ExecuteNonQuery();
-        }
-
-        Response.Redirect("Default.aspx");
-    }
-
-    protected void btnNo_Click(object sender, EventArgs e)
-    {
-        int currentUserID = Convert.ToInt32(Session["userID"]);
-
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection conn = new OleDbConnection(cs))
-        {
-            string deleteQuery = "DELETE FROM StudySessionParticipants WHERE userID = ? AND replied = false";
-            OleDbCommand cmd = new OleDbCommand(deleteQuery, conn);
-            cmd.Parameters.AddWithValue("?", currentUserID);
-            conn.Open();
-            cmd.ExecuteNonQuery();
-        }
-
-        Response.Redirect("Default.aspx");
     }
 
     private void LoadEquippedPet(string connectionString, string userID)

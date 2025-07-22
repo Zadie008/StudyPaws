@@ -104,6 +104,7 @@
         <!--has notifications-->
         <div id="popupHasNotifications" class="simple-popup" style="display: none;">
             <div class="popup-pink-box">
+                <asp:HiddenField ID="hiddenSessionID" runat="server" />
                 <asp:Literal ID="litNotificationText" runat="server" />
                 <img src="Images/Notification%20Happy.png" />
                 <br />
