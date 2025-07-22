@@ -36,8 +36,8 @@
                 </table>
             </div>
             <div class="notificationDetails">
-                <asp:ImageButton ID="imgNotificationRinging" runat="server" CssClass="notificationIcon" ImageUrl="~/Icons/icons8-notification-bell-ringing-white-96.png" OnClientClick="showNotificationsPopup(); return false;" />
-                <asp:ImageButton ID="imgNotificationNormal" runat="server" CssClass="notificationIcon" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" OnClientClick="showNotificationsPopup(); return false;" />
+                <asp:ImageButton ID="imgNotificationRinging" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-ringing-white-96.png" OnClientClick="showNotificationPopup(true); return false;" />
+                <asp:ImageButton ID="imgNotificationNormal" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" OnClientClick="showNotificationPopup(false); return false;" />
             </div>
         </div>
 
@@ -79,36 +79,38 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-    <div class="homePagePet">
-        <img id="glow" src="Images/Glow(cropped).png" width="400" />
-        <asp:Image id="pet" runat="server" width="400" />
-    </div>
-    <div class="welcomeBackTextDiv">
-        <h2>Welcome back</h2>
-        <asp:Label ID="lblLoggedInUserName" runat="server" CssClass="username-header"></asp:Label>
-    </div>
+    <div id="defaultMainContent">
+        <div class="homePagePet">
+            <img id="glow" src="Images/Glow(cropped).png" width="400" />
+            <asp:Image id="pet" runat="server" width="400" />
+        </div>
+        <div class="welcomeBackTextDiv">
+            <h2>Welcome back</h2>
+            <asp:Label ID="lblLoggedInUserName" runat="server" CssClass="username-header"></asp:Label>
+        </div>
 
-    <!--does not have notification-->
-    <div id="popupNoNotifications" class="simple-popup" style="display: none;">
-        <div class="popup-blue-box">
-            <p>You do not have any notifications at the moment</p>
-            <img src="Images/Notification%20Sad%20Hamster.png" />
-            <br />
-            <div class="buttonSection">
-                <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideNotificationPopup(); return false;" />
+        <!--does not have notification-->
+        <div id="popupNoNotifications" class="simple-popup" style="display: none;">
+            <div class="popup-blue-box">
+                <p>You do not have any notifications at the moment!</p>
+                <img src="Images/Notification%20Sad%20Hamster.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideNotificationPopup(); return false;" />
+                </div>
             </div>
         </div>
-    </div>
 
-    <!--has notifications-->
-    <div id="popupHasNotifications" class="simple-popup" style="display: none;">
-        <div class="popup-pink-box">
-            <asp:Literal ID="litNotificationText" runat="server" />
-            <img src="Images/Notification%20Happy.png" />
-            <br />
-            <div class="buttonSection">
-                <asp:Button ID="btnYes" CssClass="popup-button-best-pink" runat="server" Text="Accept!" OnClick="btnYes_Click" />
-                <asp:Button ID="btnNo" CssClass="popup-button" runat="server" Text="Decline!" OnClick="btnNo_Click" />
+        <!--has notifications-->
+        <div id="popupHasNotifications" class="simple-popup" style="display: none;">
+            <div class="popup-pink-box">
+                <asp:Literal ID="litNotificationText" runat="server" />
+                <img src="Images/Notification%20Happy.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnYes" CssClass="popup-button-best-pink" runat="server" Text="Accept!" OnClick="btnYes_Click" />
+                    <asp:Button ID="btnNo" CssClass="popup-button" runat="server" Text="Decline!" OnClick="btnNo_Click" />
+                </div>
             </div>
         </div>
     </div>

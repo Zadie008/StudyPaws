@@ -22,9 +22,12 @@ document.querySelectorAll('.navbar a').forEach(link => {
 
 // NOTIFICATIONS ON HOME PAGE
 function showNotificationPopup(hasNotifications) {
-    if (hasNotifications) {
+    if (hasNotifications)
+    {
         document.getElementById("popupHasNotifications").style.display = "flex";
-    } else {
+    }
+    else
+    {
         document.getElementById("popupNoNotifications").style.display = "flex";
     }
 }

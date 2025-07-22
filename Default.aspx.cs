@@ -9,6 +9,10 @@ public partial class _Default : System.Web.UI.Page
     {
         if (Session["Username"] != null)
         {
+            if (!IsPostBack)
+            {
+                SetupNotifications();
+            }
             lblLoggedInUserName.Text = Session["Username"].ToString() + "!";
             LoadUserData(Session["Username"].ToString());
         }
@@ -19,11 +23,6 @@ public partial class _Default : System.Web.UI.Page
             lblPaws.Text = "N/A";
             lblXPAmount.Text = "N/A";
             lblLevelNumber.Text = "N/A";
-        }
-
-        if (!IsPostBack)
-        {
-            SetupNotifications();
         }
     }
 
@@ -165,17 +164,20 @@ public partial class _Default : System.Web.UI.Page
         }
     }
 
-    private void SetupNotifications() // update to have info about study session on popup
+    private void SetupNotifications()
     {
         int currentUserID = Convert.ToInt32(Session["userID"]);
         bool hasNotification = false;
         string title = "";
+        string tag = "";
         DateTime startTime = DateTime.MinValue;
+        DateTime endTime = DateTime.MinValue;
+        string leaderUsername = "";
 
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         using (OleDbConnection conn = new OleDbConnection(cs))
         {
-            string query = "SELECT TOP 1 S.sessionTitle, S.sessionStart FROM StudySessionParticipants P " + "INNER JOIN StudySession S ON P.sessionID = S.sessionID " + "WHERE P.userID = ? AND P.replied = false";
+            string query = "SELECT TOP 1 StudySession.sessionTitle, StudySession.sessionTag, StudySession.sessionStart, StudySession.sessionEnd, Users.username FROM (StudySessionParticipants INNER JOIN StudySession ON StudySessionParticipants.sessionID = StudySession.sessionID) INNER JOIN Users ON StudySession.leaderID = Users.userID WHERE StudySessionParticipants.userID = ? AND StudySessionParticipants.replied = false";
 
             OleDbCommand cmd = new OleDbCommand(query, conn);
             cmd.Parameters.AddWithValue("?", currentUserID);
@@ -186,17 +188,24 @@ public partial class _Default : System.Web.UI.Page
                 {
                     hasNotification = true;
                     title = reader["sessionTitle"].ToString();
+                    tag = reader["sessionTag"].ToString();
                     startTime = Convert.ToDateTime(reader["sessionStart"]);
+                    endTime = Convert.ToDateTime(reader["sessionEnd"]);
+                    leaderUsername = reader["username"].ToString();
                 }
             }
         }
 
         if (hasNotification)
         {
-            litNotificationText.Text = "<p>You have received a study session invitation!<br />" + "Session title: <b>" + title + "</b><br />" + "Starts: <b>" + startTime.ToString("dddd, dd MMM yyyy @ HH:mm") + "</b></p>";
+            litNotificationText.Text = "<p>You have received a study session invitation from user <span style='font-weight:bold;'>" + leaderUsername + "</span>!<br /><br />" + "Study Session Title: <span style='font-weight:bold;'>" + title + "</span><br />" + "Study Session Tag: <span style='font-weight:bold;'>" + tag + "</span><br />" + "Starts: <span style='font-weight:bold;'>" + startTime.ToString("dddd, dd MMMM yyyy @ HH:mm") + "</span><br />" + "Ends: <span style='font-weight:bold;'>" + endTime.ToString("dddd, dd MMMM yyyy @ HH:mm") + "</span></p>";
         }
 
-        ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowPopup", "showNotificationPopup(" + hasNotification.ToString().ToLower() + ");", true);
+        // set which bell icon is showing in html
+        imgNotificationRinging.Visible = hasNotification;
+        imgNotificationNormal.Visible = !hasNotification;
+
+        ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowNotificationPopup", "showNotificationPopup(" + hasNotification.ToString().ToLower() + ");", true);
     }
 
     protected void btnYes_Click(object sender, EventArgs e)
