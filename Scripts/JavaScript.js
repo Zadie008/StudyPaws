@@ -72,7 +72,7 @@ function updateTimeAndDate() {
 window.addEventListener("DOMContentLoaded", updateTimeAndDate);
 
 // update time every second
-setInterval(updateTimeAndDate, 6000);
+setInterval(updateTimeAndDate, 1000);
 
 // pop-ups
 function showPopup() {
