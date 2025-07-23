@@ -1097,10 +1097,12 @@ body.page-exit .welcomeBackTextDiv {
     width: 100%;
     height: 40px;
     text-align: center;
-    gap: 10px;
+    gap: 5px;
     z-index: 20;
+    flex-direction:row;
 }
 .checkbox {
+    order:1;
     background-image: url('../Icons/icons8-unchecked-checkbox-white-96.png');
     width: 30px;
     height: 30px;
@@ -1110,9 +1112,10 @@ body.page-exit .welcomeBackTextDiv {
     background-size: 30px;
     background-color:transparent;
     border:none;
-    flex:9%;
+    flex: 0 0 30px;
 }
 .checkbox.checked{
+    order:1;
     background-image: url('../Icons/icons8-check-white-96.png');
     width:30px;
     height:30px;
@@ -1122,7 +1125,7 @@ body.page-exit .welcomeBackTextDiv {
     background-size: 30px;
     background-color:transparent;
     border:none;
-    flex:9%;
+    flex: 0 0 30px;
 }
 .taskCompleted {
     text-decoration: line-through;
@@ -1134,9 +1137,10 @@ body.page-exit .welcomeBackTextDiv {
     vertical-align: bottom;
     border: none;
     background: none;
-    flex: 82%;
+    flex: 1;
     outline: none;
     box-shadow: none;
+    order:2;
 }
 .taskUncompleted {
     color: white;
@@ -1147,25 +1151,28 @@ body.page-exit .welcomeBackTextDiv {
     vertical-align: bottom;
     border: none;
     background: none;
-    flex: 82%;
+    flex: 1;
     outline: none;
     box-shadow: none;
+    order:2;
 }
 .openControlsBtn{
-    flex:1;
-    max-width:28px;
+    flex:0 0 5px;
+    max-width:5px;
     border:none;
     background:none;
     cursor:pointer;
     z-index:20;
     font-size:25px;
+    font-weight:bold;
     color:white;
     vertical-align:central;
+    height:30px;
 }
 .editBtn {
-    flex: 1;
+    flex: 0 0 24px;
     /*width: 2.5vw;*/
-    max-width: 28px;
+    max-width: 24px;
     border: none;
     background: transparent;
     /*gap: 10px;*/
@@ -1174,12 +1181,12 @@ body.page-exit .welcomeBackTextDiv {
 }
     .editBtn img {
         /*width: 2.5vw;*/
-        max-width: 28px;
+        max-width: 24px;
     }
 .deleteBtn {
-    flex: 1;
+    flex: 0 0 24px;
     /*width: 2.5vw;*/
-    max-width: 28px;
+    max-width: 24px;
     border: none;
     background: transparent;
     /*gap: 10px;*/
@@ -1188,7 +1195,7 @@ body.page-exit .welcomeBackTextDiv {
 }
     .deleteBtn img {
         /*width: 2.5vw;*/
-        max-width: 28px;
+        max-width: 24px;
     }
 
 .toDoListControls {
@@ -1282,42 +1289,6 @@ body.page-exit .welcomeBackTextDiv {
     box-sizing: border-box;
     display:block;
 }
-    /*.toDoListControls .toDoListFilters .toDoFilterDropDownList .hidden{
-        flex: 4;
-        cursor: pointer;
-        height: 32px;
-        line-height: 32px;
-        vertical-align: central;
-        align-items: center;
-        position: relative;
-        z-index: 10;
-        visibility: hidden;
-        opacity: 1;
-        pointer-events:none;
-
-        border-radius: 2rem;
-        border: 2px solid white;
-        background-color: transparent;
-        -webkit-appearance: none;
-        appearance: none;*/ /* removes default arrow */
-        /*background-image: url('../Icons/icons8-expand-arrow-white-96.png');*/ /* down arrow */
-        /*transition: background-image 0.2s ease;
-        background-repeat: no-repeat;
-        background-position: right 0.5em center;
-        background-size: 20px;
-        padding: 0 2em 0 1em;*/
-        /*padding: 0.2em 2em 0.2em 1em;*/
-        /*color: white;
-        font-size: 16px;
-        font-family: 'Gilda Display', serif;
-        font-weight: 200;
-        outline: none;
-        margin: 1vh auto;
-        text-align: left;
-        width: 100%;
-        max-width: 300px;
-        box-sizing: border-box;
-    }*/
 .tasksContainer {
     margin: 5px 0px 5px 3px;
     padding: 0;
@@ -1375,15 +1346,18 @@ body.page-exit .welcomeBackTextDiv {
     }
 
 .taskControls{
-    /*visibility: hidden;*/
     text-align:right;
-    display:flex;
+    display:none;
+    flex-direction:row;
+    gap:3px;
     z-index:100;
-    flex:9%;
+    flex:0 0 auto;
+    order:0;
 }
-.task:hover .taskControls, .taskUncompleted:hover ~ .taskControls, taskCompleted:hover ~ .taskControls{
-    /*visibility: visible;*/
-}
+    .taskControls.show {
+        display: flex;        
+    }
+
 
 /* NOTIFICATION POPUP */
 .toDoListDashboard .popup-pink-box table tr td p {
@@ -1394,7 +1368,101 @@ body.page-exit .welcomeBackTextDiv {
 .toDoListDashboard .popup-pink-box p {
     font-size: 2.2rem;
 }
+/*----------------------- CREATE EVENT PAGE B200 and B500-B800 -----------------------*/
+.createTimer2MainContent {
+    margin: 4em 4em 4em 4em;
+}
 
+    .createTimer2MainContent .titleTagSection {
+        padding: 6% 0 10.85% 0;
+        display: flex;
+    }
+
+        .createTimer2MainContent .titleTagSection .leftSection {
+            flex: 1;
+        }
+
+        .createTimer2MainContent .titleTagSection .middleSection {
+            flex: 1;
+        }
+
+        .createTimer2MainContent .titleTagSection .rightSection {
+            flex: 1;
+        }
+
+            .createTimer2MainContent .titleTagSection .rightSection table {
+                padding: 0;
+                margin: 0;
+                width: auto;
+            }
+
+                .createTimer2MainContent .titleTagSection .rightSection table td {
+                    padding: 3vh 0;
+                }
+
+                    .createTimer2MainContent .titleTagSection .rightSection table td .validationError {
+                        text-align: left;
+                        font-size: 1.5em;
+                    }
+
+.titleTagSection table {
+    width: auto;
+}
+
+    .titleTagSection table tr {
+        padding: 0.1em;
+    }
+
+    .titleTagSection table td {
+        vertical-align: middle;
+        padding: 0.1em 1em;
+    }
+
+        .titleTagSection table td:first-child {
+            text-align: left;
+        }
+
+        .titleTagSection table td:last-child {
+            text-align: right;
+        }
+
+.titleTagSection .textbox {
+    text-align: left;
+    max-width: 350px;
+}
+
+.titleTagSection .dropDownList {
+    max-width: 350px;
+}
+
+.createTimer2MainContent .buttonSection {
+    display: flex;
+}
+
+    .createTimer2MainContent .buttonSection .leftSection {
+        z-index: 10;
+        flex: 1;
+    }
+
+    .createTimer2MainContent .buttonSection .middleSection {
+        z-index: 10;
+        flex: 1;
+    }
+
+    .createTimer2MainContent .buttonSection .rightSection {
+        z-index: 10;
+        flex: 1;
+    }
+
+/* NOTIFICATION POPUP */
+.createTimer2MainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+.createTimer2MainContent .popup-pink-box p {
+    font-size: 2.2rem;
+}
 /* ---------------------- CREATE TIMER PAGES A100 ---------------------- */
 /* page 1 (back, create, view past timers) */
 .createTimerMainContent {

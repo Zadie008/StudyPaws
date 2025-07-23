@@ -105,6 +105,7 @@
                     <td><asp:RequiredFieldValidator ID="errorTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title for your Timer" EnableClientScript="true" ControlToValidate="txtTitle"></asp:RequiredFieldValidator></td>
                 </tr>
                 <tr>
+                    <td><asp:ImageButton ID="btnAddTag" runat="server" CommandName="AddTag" class="addTagBtn" OnClick="btnAddTag_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png" /></td>
                     <td><asp:RequiredFieldValidator ID="errorDropDown" class="validationError" runat="server" ErrorMessage="Please select a Tag for your Timer" EnableClientScript="true" ControlToValidate="dropdownTag"></asp:RequiredFieldValidator></td>
                 </tr>
             </table>

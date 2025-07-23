@@ -19,7 +19,7 @@ public partial class Default2 : System.Web.UI.Page
     {
         if (Session["userID"]!=null)
         {
-            ddlFilter.Visible = IsFilterVisible;
+            ddlFilter.Visible = IsToDoFilterVisible;
             userIDHidden.Value = Convert.ToString(Session["userID"]);
 
             //ddlFilter.CssClass = IsFilterVisible ? "toDoFilterDropDownList" : "toDoFilterDropDownList hidden";
@@ -49,7 +49,7 @@ public partial class Default2 : System.Web.UI.Page
             Response.Redirect("Login.aspx");
         }
     }
-    private bool IsFilterVisible
+    private bool IsToDoFilterVisible
     {
         get
         {
@@ -58,6 +58,17 @@ public partial class Default2 : System.Web.UI.Page
         set
         {
             ViewState["FilterVisible"] = value;
+        }
+    }
+    protected bool showTaskControls
+    {
+        get
+        {
+            return ViewState["ShowTaskControls"] != null && (bool)ViewState["ShowTaskControls"];
+        }
+        set
+        {
+            ViewState["ShowTaskControls"]= value;  
         }
     }
     private void LoadCalendar(int year, int month)
@@ -293,6 +304,11 @@ public partial class Default2 : System.Web.UI.Page
         //        cmd.ExecuteNonQuery();
         //    }
         //}
+        else if(e.CommandName == "ShowControls")
+        {
+            showTaskControls = !showTaskControls;
+            LoadTasks();
+        }
     }
 
     protected void ddlFilter_SelectedIndexChanged(object sender, EventArgs e)
@@ -303,23 +319,23 @@ public partial class Default2 : System.Web.UI.Page
     }
     protected void toDoFilterBtn_Click(object sender, EventArgs e)
     {
-        IsFilterVisible = !IsFilterVisible;
-        ddlFilter.Visible= IsFilterVisible;
+        IsToDoFilterVisible = !IsToDoFilterVisible;
+        ddlFilter.Visible= IsToDoFilterVisible;
     }
-    //protected void rptTasks_ItemDataBound(object sender, RepeaterItemEventArgs e)
-    //{
-    //    if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-    //    {
-    //        TextBox txt = (TextBox)e.Item.FindControl("txtEditDesc");
-    //        ImageButton editBtn = (ImageButton)e.Item.FindControl("editBtn");
+    protected void rptTasks_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+        {
+            TextBox txt = (TextBox)e.Item.FindControl("txtEditDesc");
+            ImageButton editBtn = (ImageButton)e.Item.FindControl("editBtn");
 
-    //        if (Request.Form[editBtn.UniqueID] != null)
-    //        {
-    //            txt.ReadOnly = false;
-    //            txt.Focus();
-    //        }
-    //    }
-    //}
+            if (Request.Form[editBtn.UniqueID] != null)
+            {
+                txt.ReadOnly = false;
+                txt.Focus();
+            }
+        }
+    }
     protected void txtNewTask_TextChanged(object sender, EventArgs e)
     {
         btnAdd_Click(sender, e);
