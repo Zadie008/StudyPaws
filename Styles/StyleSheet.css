@@ -456,6 +456,18 @@ h2 {
     cursor: pointer;
 }
 
+.notificationBadge {
+    position: absolute;
+    right: -2px;
+    width: 25px;
+    height: 25px;
+    background-color: #FF369E; /*Rose Bonbon*/
+    border-radius: 50%;
+    border: 3px solid white;
+    z-index: 10;
+    cursor: pointer;
+}
+
 /* date and time on right side of screen */
 .timeDateDiv {
     text-align: right;
@@ -794,6 +806,16 @@ body.page-exit .welcomeBackTextDiv {
     padding-top: 20px;
     padding-bottom: 20px;
 }
+
+/* NOTIFICATION POPUP */
+.dashboardContainer .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+.dashboardContainer .popup-pink-box p {
+    font-size: 2.2rem;
+}
 /* ---------------------- CALENDAR PAGES ---------------------- */
 .calendarDashboard { 
     flex: 72%;
@@ -1042,6 +1064,16 @@ body.page-exit .welcomeBackTextDiv {
 }
 .otherMonth {
     background-color: #cca6c9;
+}
+
+/* NOTIFICATION POPUP */
+.calendarDashboard .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+.calendarDashboard .popup-pink-box p {
+    font-size: 2.2rem;
 }
 
 /* ---------------------- TO DO LIST PAGES ---------------------- */
@@ -1349,6 +1381,16 @@ body.page-exit .welcomeBackTextDiv {
     /*visibility: visible;*/
 }
 
+/* NOTIFICATION POPUP */
+.toDoListDashboard .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+.toDoListDashboard .popup-pink-box p {
+    font-size: 2.2rem;
+}
+
 /* ---------------------- CREATE TIMER PAGES A100 ---------------------- */
 /* page 1 (back, create, view past timers) */
 .createTimerMainContent {
@@ -1373,6 +1415,16 @@ body.page-exit .welcomeBackTextDiv {
 .createTimerMainContent .buttonSection .rightSection {
     z-index: 10;
     flex: 1;
+}
+
+/* NOTIFICATION POPUP */
+.createTimerMainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+.createTimerMainContent .popup-pink-box p {
+    font-size: 2.2rem;
 }
 
 /* page 2 (title, tag, back, continue) */
@@ -1461,6 +1513,16 @@ body.page-exit .welcomeBackTextDiv {
     flex: 1;
 }
 
+/* NOTIFICATION POPUP */
+.createTimer2MainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+.createTimer2MainContent .popup-pink-box p {
+    font-size: 2.2rem;
+}
+
 /* page 3 (time, back, start) */
 .createTimer3MainContent {
     margin: 4em 4em 4em 4em;
@@ -1515,6 +1577,16 @@ body.page-exit .welcomeBackTextDiv {
 .createTimer3MainContent .buttonSection .rightSection {
     z-index: 10;
     flex: 1;
+}
+
+/* NOTIFICATION POPUP */
+.createTimer3MainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+.createTimer3MainContent .popup-pink-box p {
+    font-size: 2.2rem;
 }
 
 /* ---------------------- VIEW TIMER PAGE A200 ---------------------- */
@@ -1886,6 +1958,16 @@ body.page-exit .welcomeBackTextDiv {
     border-top: 1px solid white;
 }
 
+/* NOTIFICATION POPUP */
+.viewPastTimersMainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+.viewPastTimersMainContent .popup-pink-box p {
+    font-size: 2.2rem;
+}
+
 /* ---------------------- CREATE STUDY SESSION PAGES A700 ---------------------- */
 #createSession3MainContent {
     margin: -1em 0 0 0;
@@ -1942,6 +2024,16 @@ body.page-exit .welcomeBackTextDiv {
     margin: 1em auto 1em 0;
 }
 
+/* NOTIFICATION POPUP */
+#createSession3MainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+#createSession3MainContent .popup-pink-box p {
+    font-size: 2.2rem;
+}
+
 /* ---------------------- PET SHOP PAGE ---------------------- */
 #viewShopMainContent {
     margin: 1em 4em 4em 4em;
@@ -1962,6 +2054,16 @@ body.page-exit .welcomeBackTextDiv {
     height: 63vh;
     border-radius: 3em;
     padding: 0.5em;
+}
+
+/* NOTIFICATION POPUP */
+#viewShopMainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+#viewShopMainContent .popup-pink-box p {
+    font-size: 2.2rem;
 }
 
 /* ---------------------- INVENTORY PAGE ---------------------- */
@@ -2151,6 +2253,16 @@ body.page-exit .welcomeBackTextDiv {
     font-size: clamp(1rem, 2vw, 2rem);
 }
 
+/* NOTIFICATION POPUP */
+#viewInventoryMainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+#viewInventoryMainContent .popup-pink-box p {
+    font-size: 2.2rem;
+}
+
 /* ---------------------- VIEW FRIEND LIST PAGE ---------------------- */
 #viewFriendListMainContent {
     margin: 1em 4em 4em 4em;
@@ -2171,6 +2283,16 @@ body.page-exit .welcomeBackTextDiv {
     height: 63vh;
     border-radius: 3em;
     padding: 0.5em;
+}
+
+/* NOTIFICATION POPUP */
+#viewFriendListMainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+#viewFriendListMainContent .popup-pink-box p {
+    font-size: 2.2rem;
 }
 
 /* ---------------------- BADGES PAGE ---------------------- */
@@ -2268,6 +2390,16 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 0.95rem;
     color: white;
     margin-top: 0.3rem;
+}
+
+/* NOTIFICATION POPUP */
+#badgesMainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+#badgesMainContent .popup-pink-box p {
+    font-size: 2.2rem;
 }
 
 /* ---------------------- ABOUT PAGE ---------------------- */
@@ -2372,6 +2504,16 @@ body.page-exit .welcomeBackTextDiv {
 
 #creditsTable tr:first-child td:nth-child(6) {
     border-left: none;
+}
+
+/* NOTIFICATION POPUP */
+#aboutMainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+#aboutMainContent .popup-pink-box p {
+    font-size: 2.2rem;
 }
 
 /* ---------------------- FOOTER ---------------------- */

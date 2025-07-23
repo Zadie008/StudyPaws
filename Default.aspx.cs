@@ -30,6 +30,7 @@ public partial class _Default : System.Web.UI.Page
         }
     }
 
+    // Lea's code to copy starts here
     private void LoadPendingInvitesFromDB()
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -74,6 +75,7 @@ public partial class _Default : System.Web.UI.Page
 
             imgNotificationRinging.Visible = true;
             imgNotificationNormal.Visible = false;
+            notificationBadge.Visible = true;
 
             ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "showNotificationPopup();", true);
         }
@@ -81,6 +83,7 @@ public partial class _Default : System.Web.UI.Page
         {
             imgNotificationRinging.Visible = false;
             imgNotificationNormal.Visible = true;
+            notificationBadge.Visible = false;
 
             ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopupNone", "showNotificationPopup(false);", true);
         }
@@ -132,6 +135,7 @@ public partial class _Default : System.Web.UI.Page
             ShowNextInvite(); // recursively show all the invites
         }
     }
+    // Lea's code to copy ends here
 
     private void LoadUserData(string username)
     {

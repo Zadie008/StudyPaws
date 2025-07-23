@@ -38,6 +38,7 @@
             <div class="notificationDetails">
                 <asp:ImageButton ID="imgNotificationRinging" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-ringing-white-96.png" OnClientClick="showNotificationPopup(true); return false;" />
                 <asp:ImageButton ID="imgNotificationNormal" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" OnClientClick="showNotificationPopup(false); return false;" />
+                <div id="notificationBadge" runat="server" class="notificationBadge"></div> <!--the coloured circle-->
             </div>
         </div>
 
