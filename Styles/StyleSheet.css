@@ -305,6 +305,10 @@ h2 {
     font-size: clamp(0.5rem, 2vw, 2rem);
 }
 
+.curved-header h2 a {
+    text-decoration: none;
+}
+
 .curved-header a:visited {
     color: white;
 }

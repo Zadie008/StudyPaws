@@ -71,7 +71,7 @@
         </text>
     </svg>
     <a href="Default.aspx"><img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" /></a>
-    <h2>purrfectly productive</h2>
+    <h2><a href="Default.aspx">purrfectly productive</a></h2>
 </div>
 
     <script>
