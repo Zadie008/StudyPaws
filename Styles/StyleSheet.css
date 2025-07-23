@@ -373,10 +373,11 @@ h2 {
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #F4CAE0;
+    border: 3px solid white;
     border-radius: 50%;
     width: 100%;
     height: 100%;
-    z-index: -1;  
+    z-index: -1;
 }
 
 /* level, xp and paw currency on left side of screen */
@@ -771,6 +772,11 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 /* NOTIFICATION POPUP */
+#defaultMainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
 #defaultMainContent .popup-pink-box p {
     font-size: 2.2rem;
 }
@@ -2673,7 +2679,7 @@ input:checked + .slider:before {
     justify-content: center;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    border: 4px solid white;
+    border: 3px solid white;
     transition: all 0.2s ease;
     cursor: pointer;
 }
@@ -3013,6 +3019,25 @@ table {
 }
 
 @media (max-width: 1900px) {
+    /* ---------------------- POP-UPS ---------------------- */
+    .popup-pink-box p {
+        font-size: 1.5rem;
+    }
+
+    .popup-pink-box img {
+        max-width: 60%;
+        width: 220px;
+    }
+
+    .popup-blue-box p {
+        font-size: 1.5rem;
+    }
+
+    .popup-blue-box img {
+        max-width: 60%;
+        width: 220px;
+    }
+
     .curved-header h2 {
         margin-top: clamp(-5rem, -4vw, -3rem);
     }

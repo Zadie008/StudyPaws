@@ -20,13 +20,16 @@ public partial class Default2 : System.Web.UI.Page
         if (Session["userID"]!=null)
         {
             ddlFilter.Visible = IsFilterVisible;
-
             userIDHidden.Value = Convert.ToString(Session["userID"]);
-            LoadTasks();
 
             //ddlFilter.CssClass = IsFilterVisible ? "toDoFilterDropDownList" : "toDoFilterDropDownList hidden";
+
             if (!IsPostBack)
             {
+                ViewState["SelectedFilter"] = "All";
+                ddlFilter.SelectedValue = "All";
+                LoadTasks();
+
                 DateTime currentDate = DateTime.Today;
                 hfYear.Value = currentDate.Year.ToString();
                 hfMonth.Value = DateTime.Today.Month.ToString();
@@ -34,11 +37,12 @@ public partial class Default2 : System.Web.UI.Page
             }
             else
             {
+                LoadTasks();
+
                 int year = int.Parse(hfYear.Value);
                 int month = int.Parse(hfMonth.Value);
                 LoadCalendar(year, month);
             }
-
         }
         else
         {
@@ -201,8 +205,9 @@ public partial class Default2 : System.Web.UI.Page
 
     private void LoadTasks()
     {
-        string filter = ViewState["SelectedFilter"] != null ? ViewState["SelectedFilter"].ToString() : "All";
-        ddlFilter.SelectedValue = filter;
+        string filter = ddlFilter.SelectedValue ?? "All";
+        ViewState["SelectedFilter"] = filter;
+
         string whereClause = "";
 
         if (filter == "Completed")
@@ -292,7 +297,8 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void ddlFilter_SelectedIndexChanged(object sender, EventArgs e)
     {
-        ViewState["SelectedFilter"] = ddlFilter.SelectedValue;
+        string selectedFilter = ddlFilter.SelectedValue;
+        ViewState["SelectedFilter"] = selectedFilter;
         LoadTasks();
     }
     protected void toDoFilterBtn_Click(object sender, EventArgs e)
