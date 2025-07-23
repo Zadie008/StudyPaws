@@ -2920,7 +2920,6 @@ input:checked + .slider:before {
 
 
 /* ---------------------- TEXTBOXES ---------------------- */
-
 .textbox {
     border-radius: 2rem;
     border: 2px solid white;
@@ -2936,6 +2935,12 @@ input:checked + .slider:before {
     max-width: 300px;
     box-sizing: border-box;
     display: block;
+}
+
+input.textbox:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+    -webkit-text-fill-color: white !important;
+    transition: background-color 5000s ease-in-out 0s;
 }
 
 /* ---------------------- DROP DOWN LISTS ---------------------- */

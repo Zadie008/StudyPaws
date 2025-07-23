@@ -28,7 +28,7 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <br />
     <br />
-        
+    <asp:Panel ID="loginPanel" runat="server" DefaultButton="btnLogin">
     <div id="loginPageDiv">
         <table>
             <tr>
@@ -46,6 +46,7 @@
             <asp:Button ID="btnLogin" class="button" runat="server" Text="Login" OnClick="btnLogin_Click" />
         </div>
     </div>
+    </asp:Panel>
 
     <asp:Panel ID="pnlLogin" runat="server" Visible="false">
          <div id="popup" class="simple-popup">

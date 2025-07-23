@@ -28,34 +28,34 @@
     <br />
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" />
     <div id="registerPageDiv">
-        <table>
-            <tr>
-                <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>
-                <td>
-                    <asp:TextBox ID="txtUsername" class="textbox" runat="server" AutoPostBack="false" onkeyup="checkUsernameAvailability()"></asp:TextBox>
-                    <asp:Label ID="lblUsernameAvailability" runat="server" CssClass="errorLabel" Style="display:none;"></asp:Label>
-                    <asp:CustomValidator ID="cvUsername" runat="server" ControlToValidate="txtUsername"
-                        OnServerValidate="cvUsername_ServerValidate" EnableClientScript="false"
-                        ErrorMessage="Sorry! this username already exists" ForeColor="Red" Display="Dynamic"></asp:CustomValidator>
-                </td>
-            </tr>
-            <tr>
-                <td><asp:Label ID="lblPassword" class="label" runat="server" Text="Password"></asp:Label></td>
-                <td><asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password"></asp:TextBox></td>
-            </tr>
-            <tr>
-                <td><asp:Label ID="lblConfirmPassword" class="label" runat="server" Text="Confirm Password"></asp:Label></td>
-                <td>
-                    <asp:TextBox ID="txtConfirmPassword" class="textbox" runat="server" TextMode="Password"></asp:TextBox>
-                    <asp:Label ID="lblPasswordMismatch" runat="server" Text="Password does not match" CssClass="errorLabel" Visible="false" />
-                </td>
-            </tr>
-        </table>
-        <br />
-        <div class="buttonSection">
-            <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" />
-            <asp:Button ID="btnRegister" class="button" runat="server" Text="Register" OnClick="btnRegister_Click1" />
-        </div>
+        <asp:Panel ID="registerPanel" runat="server" DefaultButton="btnRegister">
+            <table>
+                <tr>
+                    <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>
+                    <td>
+                        <asp:TextBox ID="txtUsername" class="textbox" runat="server" AutoPostBack="false" onkeyup="checkUsernameAvailability()"></asp:TextBox>
+                        <asp:Label ID="lblUsernameAvailability" runat="server" CssClass="errorLabel" Style="display:none;"></asp:Label>
+                        <asp:CustomValidator ID="cvUsername" runat="server" ControlToValidate="txtUsername" OnServerValidate="cvUsername_ServerValidate" EnableClientScript="false" ErrorMessage="Sorry! this username already exists" ForeColor="Red" Display="Dynamic"></asp:CustomValidator>
+                    </td>
+                </tr>
+                <tr>
+                    <td><asp:Label ID="lblPassword" class="label" runat="server" Text="Password"></asp:Label></td>
+                    <td><asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password"></asp:TextBox></td>
+                </tr>
+                <tr>
+                    <td><asp:Label ID="lblConfirmPassword" class="label" runat="server" Text="Confirm Password"></asp:Label></td>
+                    <td>
+                        <asp:TextBox ID="txtConfirmPassword" class="textbox" runat="server" TextMode="Password"></asp:TextBox>
+                        <asp:Label ID="lblPasswordMismatch" runat="server" Text="Password does not match" CssClass="errorLabel" Visible="false" />
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <div class="buttonSection">
+                <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" />
+                <asp:Button ID="btnRegister" class="button" runat="server" Text="Register" OnClick="btnRegister_Click1" />
+            </div>
+        </asp:Panel>
 
         <%-- Panel for successful registration confirmation --%>
         <asp:Panel ID="pnlConfirm" runat="server" Visible="false">
