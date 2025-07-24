@@ -1,11 +1,11 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="A700_Create-study-session_3.aspx.cs" Inherits="Default2" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="A700_Create-study-session_4.aspx.cs" Inherits="Default2" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
     Create study session
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-<!--account info to copy and paste-->
+    <!--account info to copy and paste-->
     <div class="accountInfoDiv">
         <div class="profileDiv">
             <a href="C100-C500_Profile.aspx" class="profileIconLink">
@@ -68,7 +68,6 @@
     <a href="Default.aspx"><img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" /></a>
     <h2>purrfectly productive</h2>
 </div>
-
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
@@ -77,51 +76,28 @@
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div id="createSession3MainContent" class="createTimer3MainContent">
-    <div class="timeSection">
-        <h2>Invite your friends to study with you</h2>
-        <div class="leftSection">
-        </div>
-        <div id="inviteFriendsToSession" class="middleSection">
-            <div id="searchSection">
-                <asp:TextBox ID="txtSearch" ClientIDMode="Static" CssClass="textbox" runat="server" Placeholder="Search" OnTextChanged="txtSearch_TextChanged" AutoPostBack="true"></asp:TextBox>
-                <asp:ImageButton ID="btnSearch" runat="server" ImageUrl="Icons/icons8-search-white-96.png" OnClick="btnSearch_Click" />
+        <div class="timeSection">
+            <h2>Schedule your study session</h2>
+            <div class="leftSection">
             </div>
-            <div class="scrollableTableContainer">
-                <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" AutoGenerateColumns="False" OnRowCommand="GridView1_RowCommand">
-                    <Columns>
-                        <asp:TemplateField>
-                            <ItemTemplate>
-                                <div class="friendRow">
-                                    <a href="C600_View-friend-list.aspx" class="friendProfileIconLink">
-                                        <div class="friendProfileIcon">
-                                            <div class="friendProfileCircle"></div>
-                                            <img class="friendProfileImage" src='<%# GetProfileImageUrl(Eval("iconNum")) %>' />
-                                        </div>
-                                    </a>
-                                    <span class="friendUsername"><%# Eval("username") %></span>
-                                    <asp:ImageButton ID="btnAddFriend" runat="server" CssClass="addFriendBtn" CommandName="ToggleInvite" CommandArgument='<%# Eval("username") %>' ImageUrl='<%# GetAddButtonImage(Eval("username").ToString()) %>' />
-                                </div>
-                            </ItemTemplate>
-                        </asp:TemplateField>
-                    </Columns>
-                </asp:GridView>
+            <div id="selectDateTimeSection" class="middleSection">
+            
+            </div>
+            <div class="rightSection">
             </div>
         </div>
-        <div class="rightSection">
+        <div class="buttonSection">
+            <div class="leftSection">
+            </div>
+            <div class="middleSection">
+                <asp:Button ID="btnBack" CssClass="button" runat="server" Text="Back" OnClick="btnBack_Click" />
+                <asp:Button ID="btnSchedule" CssClass="button" runat="server" Text="Schedule" OnClick="btnSchedule_Click" />
+            </div>
+            <div class="rightSection">
+                <asp:Button ID="btnViewPastTimers" CssClass="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
+            </div>
         </div>
     </div>
-    <div class="buttonSection">
-        <div class="leftSection">
-        </div>
-        <div class="middleSection">
-            <asp:Button ID="btnBack" CssClass="button" runat="server" Text="Back" OnClick="btnBack_Click" />
-            <asp:Button ID="btnContinue" CssClass="button" runat="server" Text="Continue" OnClick="btnContinue_Click" />
-        </div>
-        <div class="rightSection">
-            <asp:Button ID="btnViewPastTimers" CssClass="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
-        </div>
-    </div>
-</div>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

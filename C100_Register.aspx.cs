@@ -104,11 +104,12 @@ public partial class C100_Register : System.Web.UI.Page
                     return; 
                 }
 
-                string insertQuery = "INSERT INTO [Users] ([username], [password], [collectedPets]) VALUES (?, ?, ?)";
+                string insertQuery = "INSERT INTO [Users] ([username], [password], [iconNum], [collectedPets]) VALUES (?, ?, ?, ?)";
                 OleDbCommand insertCmd = new OleDbCommand(insertQuery, con);
                 insertCmd.Parameters.AddWithValue("?", username);
                 insertCmd.Parameters.AddWithValue("?", hashedPassword);
-                insertCmd.Parameters.AddWithValue("?", 1);
+                insertCmd.Parameters.AddWithValue("?", 1); // iconNum
+                insertCmd.Parameters.AddWithValue("?", 1); // user always starts with 1 collected pet
 
                 int rowsAffected = insertCmd.ExecuteNonQuery();
 
