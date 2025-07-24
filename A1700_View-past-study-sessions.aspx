@@ -87,12 +87,12 @@
                     <img id="filterIcon" src="Icons/icons8-filter-bars-white-96.png" style="cursor:pointer;" />
                 </div>
                 <div class="filterControls" id="filterControls" style="display: none;">
-                    <asp:Label ID="lblFilterDate" for="txtFilterDate" runat="server" CssClass="label" Text="Select Date:"></asp:Label>
+                    <asp:Label ID="lblFilterDate" for="txtFilterDate" runat="server" CssClass="label" Text="Date:"></asp:Label>
                     <div class="customDateWrapper">
                         <asp:TextBox ID="txtFilterDate" runat="server" CssClass="filterDateBox" TextMode="Date"></asp:TextBox>
                     </div>
 
-                    <asp:Label ID="lblFilterTag" for="ddlFilterTag" runat="server" CssClass="label" Text="Select Tag:"></asp:Label>
+                    <asp:Label ID="lblFilterTag" for="ddlFilterTag" runat="server" CssClass="label" Text="Tag:"></asp:Label>
                     <asp:DropDownList ID="ddlFilterTag" runat="server" CssClass="dropDownList" BackColor="#90A8C3">
                         <asp:ListItem></asp:ListItem>
                         <asp:ListItem>Studying</asp:ListItem>

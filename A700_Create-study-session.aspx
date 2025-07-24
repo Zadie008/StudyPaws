@@ -98,18 +98,18 @@
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div class="createTimerMainContent">
-        <div class="buttonSection">
-            <div class="leftSection">
-            </div>
-            <div class="middleSection">
-                <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" />
-                <asp:Button ID="btnCreate" class="button" runat="server" Text="Create" OnClick="btnCreate_Click" />
-            </div>
-            <div class="rightSection">
-                <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past sessions" OnClick="btnViewPastTimers_Click" />
-            </div>
+    <div class="buttonSection">
+        <div class="leftSection">
+        </div>
+        <div class="middleSection">
+            <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" />
+            <asp:Button ID="btnCreate" class="button" runat="server" Text="Create" OnClick="btnCreate_Click" />
+        </div>
+        <div class="rightSection">
+            <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past sessions" OnClick="btnViewPastTimers_Click" />
         </div>
     </div>
+</div>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

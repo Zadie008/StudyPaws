@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Data.OleDb;
 using System.Web.UI;
@@ -91,6 +92,7 @@ public partial class _Default : System.Web.UI.Page
 
     protected void btnYes_Click(object sender, EventArgs e)
     {
+        // 1. update StudySessionParticipants table
         int sessionID = int.Parse(hiddenSessionID.Value);
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         string updateQuery = "UPDATE StudySessionParticipants SET replied = true, sessionStatus = 'Accepted' WHERE sessionID = ? AND userID = ?";
@@ -102,6 +104,44 @@ public partial class _Default : System.Web.UI.Page
             conn.Open();
             cmd.ExecuteNonQuery();
         }
+
+        // 2. add in CalendarEvent table
+        List<SessionInvite> invites = Session["PendingInvites"] as List<SessionInvite>;
+        SessionInvite invite = null;
+
+        if (invites != null)
+        {
+            foreach (SessionInvite i in invites)
+            {
+                if (i.sessionID == sessionID)
+                {
+                    invite = i;
+                    break;
+                }
+            }
+        }
+
+        if (invite != null)
+        {
+            string insertQuery = "INSERT INTO CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (?, ?, ?, ?)";
+            using (OleDbConnection conn = new OleDbConnection(cs))
+            using (OleDbCommand cmd2 = new OleDbCommand(insertQuery, conn))
+            {
+                string eventDesc = invite.title + " (From: " + invite.leaderUsername + ")";
+                DateTime eventDate = invite.startTime;
+                int tagID = 1; // Study Session tag
+                int userID = Convert.ToInt32(Session["userID"]);
+
+                cmd2.Parameters.AddWithValue("?", eventDesc);
+                cmd2.Parameters.AddWithValue("?", eventDate);
+                cmd2.Parameters.AddWithValue("?", tagID);
+                cmd2.Parameters.AddWithValue("?", userID);
+
+                conn.Open();
+                cmd2.ExecuteNonQuery();
+            }
+        }
+
         RemoveInviteAndShowNext(sessionID);
     }
 

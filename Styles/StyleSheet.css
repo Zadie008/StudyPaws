@@ -1527,26 +1527,25 @@ body.page-exit .welcomeBackTextDiv {
 /* ---------------------- CREATE TIMER PAGES A100 ---------------------- */
 /* page 1 (back, create, view past timers) */
 .createTimerMainContent {
-    margin: 4em 4em 4em 4em;
+    margin: 1em 4em 4em 4em;
+    position: relative;
+    z-index: 20;
 }
 
 .createTimerMainContent .buttonSection {
-    margin-top: 32%;
+    margin-top: 32.9%;
     display: flex;
 }
 
 .createTimerMainContent .buttonSection .leftSection {
-    z-index: 10;
     flex: 1;
 }
 
 .createTimerMainContent .buttonSection .middleSection {
-    z-index: 10;
     flex: 1;
 }
 
 .createTimerMainContent .buttonSection .rightSection {
-    z-index: 10;
     flex: 1;
 }
 
@@ -1566,7 +1565,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .createTimer2MainContent .titleTagSection {
-    padding: 6% 0 10.85% 0;
+    padding: 6.6% 0 11.1% 0;
     display: flex;
 }
 
@@ -1662,7 +1661,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .createTimer3MainContent .timeSection {
-    padding: 5% 0 1.9% 0;
+    padding: 5% 0 2.7% 0;
     text-align: center;
 }
 
@@ -2047,7 +2046,6 @@ body.page-exit .welcomeBackTextDiv {
     max-width: 75%;
     margin-left: auto;
     margin-right: auto;
-    /*z-index: 1; // you can't scroll when on the sides of the screen*/
 }
 
 .viewPastTimersMainContent .scrollableTableContainer {
@@ -2112,7 +2110,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 #createSession3MainContent .timeSection {
-    padding-bottom: 2.8%;
+    padding-bottom: 3.57%;
 }
 
 #inviteFriendsToSession {
@@ -2436,7 +2434,9 @@ body.page-exit .welcomeBackTextDiv {
 #badgesMainContent {
     margin: 1em 4em 4em 4em;
     height: 67vh;
-    overflow: hidden; 
+    overflow: hidden;
+    position: relative;
+    z-index: 20;
 }
 
 #badgesMainContent h2 {
