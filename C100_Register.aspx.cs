@@ -104,10 +104,11 @@ public partial class C100_Register : System.Web.UI.Page
                     return; 
                 }
 
-                string insertQuery = "INSERT INTO [Users] ([username], [password]) VALUES (?, ?)";
+                string insertQuery = "INSERT INTO [Users] ([username], [password], [collectedPets]) VALUES (?, ?, ?)";
                 OleDbCommand insertCmd = new OleDbCommand(insertQuery, con);
                 insertCmd.Parameters.AddWithValue("?", username);
                 insertCmd.Parameters.AddWithValue("?", hashedPassword);
+                insertCmd.Parameters.AddWithValue("?", 1);
 
                 int rowsAffected = insertCmd.ExecuteNonQuery();
 

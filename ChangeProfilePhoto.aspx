@@ -41,7 +41,8 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-    <div class="changeIconContainer">
+    <div id="changeProfilePhotoPage">
+            <div class="changeIconContainer">
        <asp:Button ID="btnChangeIcon" class="profilebutton" runat="server" Text="Change icon" OnClick="btnChangeIcon_Click" />
         <asp:HiddenField ID="selectedIcon" runat="server" ClientIDMode="Static" />
    </div>
@@ -94,8 +95,7 @@
     </div>
 </div>
 </asp:Panel>
-
-
+    </div>
     </div>
 </asp:Content> 
 

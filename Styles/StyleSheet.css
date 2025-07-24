@@ -534,6 +534,7 @@ nav:hover {
     text-decoration: none;
     font-family: 'Lilita One', sans-serif;
     font-size: 3.5em;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
     letter-spacing: 0.05em;
     color: white;
     border-radius: 0.65em;
@@ -932,14 +933,14 @@ body.page-exit .welcomeBackTextDiv {
     margin-bottom: 5px;
     align-items:center;
 }
-.calendarTitle { 
+.calendarTitle {
     flex: 30%;
     margin-bottom: 5px;
     text-align: left;
     font-family: 'Lilita One', sans-serif;
     font-weight: 400;
     font-size: 28px;
-    text-shadow: 2px 2px #5B548A;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
     margin: 0;
 }
 .controlsCalendar{
@@ -1208,7 +1209,8 @@ body.page-exit .welcomeBackTextDiv {
     font-family: 'Lilita One', sans-serif;
     font-size: 1.8rem;
     margin: 0;
-    text-shadow: 2px 2px #5B548A;
+    /*text-shadow: 2px 2px #5B548A; old text shadow*/
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
     color: white;
     flex-shrink: 0;
 }
@@ -2039,6 +2041,7 @@ body.page-exit .welcomeBackTextDiv {
 .pastTimerStudySessionTableSection h2 {
     font-size: 2.5rem;
     margin-bottom: 0;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
 
 .scrollableTableContainer {
@@ -2182,6 +2185,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 2.5rem;
     margin-bottom: 0.1em;
     margin-top: 0;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
 
 #viewShopMainContent .backgroundColorContainer {
@@ -2214,6 +2218,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 2.5rem;
     margin-bottom: 0.1em;
     margin-top: 0;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
 
 #viewInventoryMainContent .backgroundColorContainer {
@@ -2256,6 +2261,7 @@ body.page-exit .welcomeBackTextDiv {
     border-radius: 2rem;
     width: 6em;
     padding: 0.3em;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
 
 /* SELECTED CATEGORY BUTTON */
@@ -2284,6 +2290,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 1.8rem;
     text-align: center;
     margin: 0.5em 1em;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
 
 /* SELECTED PET BUTTON */
@@ -2411,6 +2418,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 2.5rem;
     margin-bottom: 0.1em;
     margin-top: 0;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
 
 #viewFriendListMainContent .backgroundColorContainer {
@@ -2446,6 +2454,7 @@ body.page-exit .welcomeBackTextDiv {
 #badgesMainContent h2 {
     margin-bottom: 0.1em;
     font-size: 2.5rem;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
 
 #badgesMainContent .backgroundColorContainer {
@@ -2552,6 +2561,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 2.5rem;
     margin-bottom: 0.1em;
     margin-top: 0;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
 
 #aboutMainContent p {
@@ -2588,6 +2598,7 @@ body.page-exit .welcomeBackTextDiv {
 #madeByTable {
     padding-bottom: 1.5em;
     width: 80%;
+    min-width: 600px;
 }
 
 #madeByTable td {
@@ -2596,6 +2607,7 @@ body.page-exit .welcomeBackTextDiv {
 
 #madeByTable tr:first-child td:nth-child(1) {
     border-right: 2px solid white;
+    width: 160px;
 }
 
 #madeByTable h2 {
@@ -2615,6 +2627,7 @@ body.page-exit .welcomeBackTextDiv {
 #creditsTable {
     padding-bottom: 1em;
     width: 80%;
+    min-width: 600px;
 }
 
 #creditsTable td {
@@ -2623,6 +2636,7 @@ body.page-exit .welcomeBackTextDiv {
 
 #creditsTable tr:first-child td:nth-child(1) {
     border-right: 2px solid white;
+    width: 160px;
 }
 
 #creditsTable h2 {
@@ -2637,14 +2651,6 @@ body.page-exit .welcomeBackTextDiv {
 
 #creditsTable img {
     width: 160px;
-}
-
-#hiddenSentence {
-    visibility: hidden;
-}
-
-#creditsTable tr:first-child td:nth-child(6) {
-    border-left: none;
 }
 
 /* NOTIFICATION POPUP */
@@ -2759,7 +2765,7 @@ footer p {
 
 /* ---------------------- PROFILE PAGE ---------------------- */
 #profileMainContent {
-    margin: 0 1em;
+    margin: 1em 4em 4em 4em;
 }
 
 .profileHeader {
@@ -2936,7 +2942,7 @@ input:checked + .slider:before {
 }
 /* -------------------- PROFILE ICON SELECTION PAGE -------------------- */
 #changeProfilePhotoPage {
-    margin: 1em;
+    margin: 1em 4em 4em 4em;
 }
 
 .iconLayoutWrapper {
@@ -3426,7 +3432,12 @@ table {
 
     /* dashboard pages */
     .dashboardContainer {
+        margin: 0em 4em 0em 4em;
         height: 70vh;
+    }
+
+    .toDoFilterDropDownList {
+        width: 150px;
     }
 
     .calendarBox th {
@@ -3516,6 +3527,7 @@ table {
 
     .filterControls {
         padding: 0.99em 1em 0 1em;
+        width: 94%;
     }
 
     .filterControls .label {
@@ -3523,7 +3535,8 @@ table {
     }
 
     .filterControls .dropDownList {
-        max-width: 275px;
+        max-width: 325px;
+        padding-left: 0.6em;
     }
 
     .filterDateBox {
@@ -3661,6 +3674,24 @@ table {
     #landingPageDiv img {
         width: 200px;
         margin-bottom: -1em;
+    }
+
+    /* PROFILE PAGE */
+    #profileMainContent {
+        margin: 1em 4em 2em 4em;
+    }
+
+    #changeProfilePhotoPage {
+        margin: 0 4em 1em 4em;
+    }
+
+    .iconLayoutWrapper {
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .iconRow {
+        gap: 20px;
     }
 
     footer {

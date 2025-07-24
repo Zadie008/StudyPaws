@@ -127,7 +127,7 @@
             </table>
             <table id="creditsTable">
                 <tr>
-                    <td rowspan="6"><img src="Images/Credits-Cat.png" /></td>
+                    <td rowspan="5"><img src="Images/Credits-Cat.png" /></td>
                     <td><h2>Credits:</h2></td>
                 </tr>
                 <tr>
@@ -147,13 +147,9 @@
                         </script>
                     </td>
                 </tr>
-                <tr>
-                    <td><p id="hiddenSentence">And together we are The HackStreet Boys</p></td>
-                </tr>
             </table>
         </div>
     </div>
-
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
