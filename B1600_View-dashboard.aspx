@@ -139,18 +139,18 @@
                 <asp:ImageButton ID="btnAdd" runat="server" CommandName="Add" class="addTaskBtn" OnClick="btnAdd_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png"/>
                 <asp:TextBox ID="txtNewTask" runat="server" CssClass="addTaskText" AutoPostBack="true" OnTextChanged="txtNewTask_TextChanged" Placeholder="Add a new task..."></asp:TextBox>
             </div>
-            <div class="tasksContainer">
+            <div class="scrollableTasksContainer">
                 
-                <asp:Repeater ID="rptTasks" runat="server" EnableViewState="false" OnItemCommand="rptTasks_ItemCommand" OnItemDataBound="rptTasks_ItemDataBound">
+                <asp:Repeater ID="rptTasks" runat="server" EnableViewState="false" OnItemCommand="rptTasks_ItemCommand">
                     <ItemTemplate>
                         <div class='<%# showTaskControls ? "task showControls" : "task" %>'>
                             <div class='<%# showTaskControls ? "taskControls show" : "taskControls hide" %>'>
-                                <asp:ImageButton ID="editBtn" runat="server" class="editBtn" CommandName="Edit" CommandArgument='<%# Eval("taskID") %>' ImageUrl="~/Icons/icons8-edit-white-96.png"/>
                                 <asp:ImageButton ID="deleteBtn" runat="server" class="deleteBtn" CommandName="Delete" CommandArgument='<%# Eval("taskID") %>' ImageUrl="~/Icons/icons8-delete-white-96.png"/>
                             </div>
+                            <asp:HiddenField ID="taskIDHidden" runat="server" Value='<%# Eval("taskID") %>' />
                             <asp:Button ID="openControlsBtn" runat="server" CssClass="openControlsBtn" Text=":" CommandName="ShowControls" UseSubmitBehavior="false" CommandArgument='<%# Eval("taskID") %>'/>
                             <asp:Button runat="server" CommandName="Toggle" CommandArgument='<%# Eval("taskID") %>' CssClass='<%# (bool)Eval("taskStatus") ? "checkbox checked" : "checkbox" %>' Text=" " />
-                            <asp:TextBox runat="server" ID="txtEditDesc" Text='<%# Eval("taskDesc") %>' ReadOnly="true" CssClass='<%# (bool)Eval("taskStatus") ? "taskCompleted" : "taskUncompleted" %>' />
+                            <asp:TextBox ID="txtEditDesc" runat="server"  AutoPostBack="true" OnTextChanged="txtEditDesc_TextChanged" Text='<%# Eval("taskDesc") %>' CssClass='<%# (bool)Eval("taskStatus") ? "taskCompleted" : "taskUncompleted" %>' />
                             
                         </div>
                     </ItemTemplate>

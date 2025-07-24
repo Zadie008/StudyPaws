@@ -1086,8 +1086,8 @@ body.page-exit .welcomeBackTextDiv {
     background: #ADA7C9;
     border-radius: 30px;
     padding: 10px;
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);/*fix this*/
-    height:auto; /*fix this*/
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+    height:auto; 
     color: white;
 }
 
@@ -1132,7 +1132,6 @@ body.page-exit .welcomeBackTextDiv {
     color: white;
     font-size: 16px;
     text-align: left;
-    /*margin: 0 0 0 10px;*/
     line-height: 30px;
     vertical-align: bottom;
     border: none;
@@ -1146,7 +1145,6 @@ body.page-exit .welcomeBackTextDiv {
     color: white;
     font-size: 16px;
     text-align: left;
-    /*margin: 0 0 0 10px;*/
     line-height: 30px;
     vertical-align: bottom;
     border: none;
@@ -1169,32 +1167,15 @@ body.page-exit .welcomeBackTextDiv {
     vertical-align:central;
     height:30px;
 }
-.editBtn {
-    flex: 0 0 24px;
-    /*width: 2.5vw;*/
-    max-width: 24px;
-    border: none;
-    background: transparent;
-    /*gap: 10px;*/
-    cursor: pointer;
-    z-index:100;
-}
-    .editBtn img {
-        /*width: 2.5vw;*/
-        max-width: 24px;
-    }
 .deleteBtn {
     flex: 0 0 24px;
-    /*width: 2.5vw;*/
     max-width: 24px;
     border: none;
     background: transparent;
-    /*gap: 10px;*/
     cursor: pointer;
     z-index:100;
 }
     .deleteBtn img {
-        /*width: 2.5vw;*/
         max-width: 24px;
     }
 
@@ -1215,12 +1196,9 @@ body.page-exit .welcomeBackTextDiv {
     text-align:left;
     margin-bottom: 5px;
     text-shadow: 2px 2px #5B548A;
-    /*vertical-align:bottom;*/
-    /*margin: 0;*/
     line-height: 34px;
 }
 .toDoListControls .toDoListFilters{
-    /*margin-bottom:5px;*/
     flex:55%;
     display:flex;
     gap:5px;
@@ -1229,10 +1207,7 @@ body.page-exit .welcomeBackTextDiv {
     vertical-align:central;
     align-items:center;
     flex-grow:1;
-    z-index:10;
-    /*gap:16px;
-    justify-content: flex-start;
-    padding: 0;*/
+    z-index:20;
 }
     .toDoListControls .toDoListFilters .toDoFilterBtn {
         flex: 1;
@@ -1243,12 +1218,10 @@ body.page-exit .welcomeBackTextDiv {
         gap: 10px;
         cursor: pointer;
         vertical-align: central;
-        
         z-index:100;
     }
 
         .toDoListControls .toDoListFilters .toDoFilterBtn img {
-            /*width: 2.5vw;*/
             max-width: 30px;
             cursor: pointer;
         }
@@ -1260,10 +1233,7 @@ body.page-exit .welcomeBackTextDiv {
     vertical-align:central;
     align-items:center;
     position:relative;
-    z-index:10;
-    /*visibility: visible;
-    opacity: 1;
-    transition: opacity 0.2s ease;*/
+    z-index:20;
 
     border-radius: 2rem;
     border: 2px solid white;
@@ -1276,7 +1246,6 @@ body.page-exit .welcomeBackTextDiv {
     background-position: right 0.5em center;
     background-size: 20px;
     padding: 0 2em 0 1em;
-    /*padding: 0.2em 2em 0.2em 1em;*/
     color: white;
     font-size: 16px;
     font-family: 'Gilda Display', serif;
@@ -1289,24 +1258,49 @@ body.page-exit .welcomeBackTextDiv {
     box-sizing: border-box;
     display:block;
 }
-.tasksContainer {
+.scrollableTasksContainer {
     margin: 5px 0px 5px 3px;
     padding: 0;
     z-index: 100;
-    max-height: 300px; /*make this relative*/
+    max-height: 40vh; /*make this relative*/
     overflow-y: auto;
+    height: auto;
+    overflow-x: hidden;
+    min-width: 75%;
+    max-width: 98%;
+    /*margin-left: auto;*/
+    margin-right: auto;
+    z-index: 20;
+}
+.toDoListDashBoard .scrollableTasksContainer {
+    max-height: 49vh;
+    min-width: 97%;
+    max-width: 97%;
+}
+
+.scrollableTasksContainer::-webkit-scrollbar {
+    width: 0.7em;
+}
+
+.scrollableTasksContainer::-webkit-scrollbar-track {
+    background: white;
+    border-radius: 100px;
+}
+
+.scrollableTasksContainer::-webkit-scrollbar-thumb {
+    background-color: #446791;
+    border-radius: 100px;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
 }
 .newTaskContainer {
     display: flex;
-    width: 100%;
+    width: 98%;
     height: 40px;
-    /*margin-bottom: 5px;*/
-    /*margin: 5px 0;*/
     text-align: center;
     align-items: center;
     border-bottom: 1px white solid;
     border-top: 1px white solid;
-    gap: 10px;
+    gap: 5.5px;
     z-index: 20;
     color: white;
     margin: 5px;
@@ -1318,16 +1312,17 @@ body.page-exit .welcomeBackTextDiv {
     max-width: 30px;
     border: none;
     background: transparent;
-    gap: 10px;
+    gap: 5px;
     cursor: pointer;
-    flex:9%;
+    flex: 0 0 35px;
+    margin-left:7.5px;
 }
     .newTaskContainer .addTaskBtn img {
         width: 2.5vw;
         max-width: 30px;
     }
 .newTaskContainer .addTaskText{
-    flex:91%;
+    flex:1;
     color:white;
     font-size:16px;
     text-align:left;
@@ -1339,7 +1334,6 @@ body.page-exit .welcomeBackTextDiv {
     width:100%;
     outline:none;
     box-shadow:none;
-    /*padding: 4px 10px;*/
 }
     .newTaskContainer .addTaskText::placeholder {
         color: white;
@@ -1358,7 +1352,6 @@ body.page-exit .welcomeBackTextDiv {
         display: flex;        
     }
 
-
 /* NOTIFICATION POPUP */
 .toDoListDashboard .popup-pink-box table tr td p {
     text-align: left;
@@ -1369,100 +1362,168 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 2.2rem;
 }
 /*----------------------- CREATE EVENT PAGE B200 and B500-B800 -----------------------*/
-.createTimer2MainContent {
+.createEventMainContent {
     margin: 4em 4em 4em 4em;
 }
 
-    .createTimer2MainContent .titleTagSection {
+    .createEventMainContent .eventTitleTagSection {
         padding: 6% 0 10.85% 0;
         display: flex;
     }
 
-        .createTimer2MainContent .titleTagSection .leftSection {
+        .createEventMainContent .eventTitleTagSection .leftSection {
             flex: 1;
         }
 
-        .createTimer2MainContent .titleTagSection .middleSection {
+        .createEventMainContent .eventTitleTagSection .middleSection {
             flex: 1;
         }
 
-        .createTimer2MainContent .titleTagSection .rightSection {
+        .createEventMainContent .eventTitleTagSection .rightSection {
             flex: 1;
         }
 
-            .createTimer2MainContent .titleTagSection .rightSection table {
+            .createEventMainContent .eventTitleTagSection .rightSection table {
                 padding: 0;
                 margin: 0;
-                width: auto;
+                /*width: auto;*/
+                align-items:center;
+                vertical-align:middle;
             }
 
-                .createTimer2MainContent .titleTagSection .rightSection table td {
+                .createEventMainContent .eventTitleTagSection .rightSection table td {
                     padding: 3vh 0;
+                    gap:2px;
+                    vertical-align:middle;
                 }
 
-                    .createTimer2MainContent .titleTagSection .rightSection table td .validationError {
+                    .createEventMainContent .eventTitleTagSection .rightSection table td .validationError {
                         text-align: left;
                         font-size: 1.5em;
                     }
 
-.titleTagSection table {
+.eventTitleTagSection table {
     width: auto;
 }
 
-    .titleTagSection table tr {
+    .eventTitleTagSection table tr {
         padding: 0.1em;
     }
 
-    .titleTagSection table td {
+    .eventTitleTagSection table td {
         vertical-align: middle;
         padding: 0.1em 1em;
     }
 
-        .titleTagSection table td:first-child {
+        .eventTitleTagSection table td:first-child {
             text-align: left;
         }
 
-        .titleTagSection table td:last-child {
+        .eventTitleTagSection table td:last-child {
             text-align: right;
         }
 
-.titleTagSection .textbox {
+.eventTitleTagSection .textbox {
     text-align: left;
     max-width: 350px;
 }
 
-.titleTagSection .dropDownList {
+.eventTitleTagSection .dropDownList {
     max-width: 350px;
 }
 
-.createTimer2MainContent .buttonSection {
+.createEventMainContent .buttonSection {
     display: flex;
 }
 
-    .createTimer2MainContent .buttonSection .leftSection {
+    .createEventMainContent .buttonSection .leftSection {
         z-index: 10;
         flex: 1;
     }
 
-    .createTimer2MainContent .buttonSection .middleSection {
+    .createEventMainContent .buttonSection .middleSection {
         z-index: 10;
         flex: 1;
     }
 
-    .createTimer2MainContent .buttonSection .rightSection {
+    .createEventMainContent .buttonSection .rightSection {
         z-index: 10;
         flex: 1;
     }
-
-/* NOTIFICATION POPUP */
-.createTimer2MainContent .popup-pink-box table tr td p {
-    text-align: left;
-    padding: 0 0.2em 0 0.2em;
+.createEventMainContent .eventTitleTagSection .rightSection .addTagBtn {
+    width: 40px;
+    height: 40px;
+    max-width: 40px;
+    border: none;
+    background: transparent;
+    gap: 5px;
+    cursor: pointer;
+    margin: 0 8px 8px 0;
 }
+    .createEventMainContent .eventTitleTagSection .rightSection .addTagBtn img {
+        width: 2.5vw;
+        max-width: 40px;
+    }
+    
+    /* NOTIFICATION POPUP */
+    .createEventMainContent .popup-pink-box table tr td p {
+        text-align: left;
+        padding: 0 0.2em 0 0.2em;
+    }
 
-.createTimer2MainContent .popup-pink-box p {
+.createEventMainContent .popup-pink-box p {
     font-size: 2.2rem;
 }
+.tagOne {
+    /*display: inline-block;*/
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 2px solid white;
+    text-align: center;
+    background-color: #F4CAE0;
+}
+.tagTwo {
+    /*display: inline-block;*/
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 2px solid white;
+    text-align: center;
+    background-color: #D7B9D5;
+}
+.tagThree {
+    /*display: inline-block;*/
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 2px solid white;
+    text-align: center;
+    background-color: #ADA7C9;
+}
+.tagFour {
+    /*display: inline-block;*/
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 2px solid white;
+    text-align: center;
+    background-color: #90A8C3;
+}
+.tagFive {
+    /*display: inline-block;*/
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 2px solid white;
+    text-align: center;
+    background-color: #64A6BD;
+}
+/*Fairy Tale (pink) : #F4CAE0 
+    ~ Thistle (light purple) : #D7B9D5 
+    ~ Rose quartz (dark purple) : #ADA7C9 
+    ~ Powder blue (dull blue) : #90A8C3 
+    ~ Moonstone (turquoise) : #64A6BD*/
 /* ---------------------- CREATE TIMER PAGES A100 ---------------------- */
 /* page 1 (back, create, view past timers) */
 .createTimerMainContent {
@@ -3369,6 +3430,19 @@ table {
         width: 10%;
         height: 48px;
     }
+
+    /* calendar pages */
+    .createEventMainContent {
+        margin: 3em 3em 3em 3em;
+    }
+
+        .createEventMainContent .eventTitleTagSection {
+            padding: 4% 0 9.25% 0;
+        }
+
+            .createEventMainContent .eventTitleTagSection .rightSection table td {
+                padding: 2.8vh 0;
+            }
 
     /* timer pages */
     .createTimerMainContent {

@@ -15,12 +15,12 @@ public partial class Default2 : System.Web.UI.Page
         {
             if (Session["timerTitle"] != null)
             {
-                txtTitle.Text = Session["timerTitle"].ToString();
+                txtEventTitle.Text = Session["timerTitle"].ToString();
             }
 
             if (Session["timerTag"] != null)
             {
-                dropdownTag.SelectedValue = Session["timerTag"].ToString();
+                dropdownEventTag.SelectedValue = Session["timerTag"].ToString();
             }
         }
     }
@@ -31,8 +31,8 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnAdd_Click(object sender, EventArgs e)
     {
-        String desc = txtTitle.Text;
-        int tag = int.Parse(dropdownTag.SelectedValue);
+        String desc = txtEventTitle.Text;
+        int tag = int.Parse(dropdownEventTag.SelectedValue);
         int userID = Convert.ToInt32(Session["userID"]);
 
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -49,5 +49,9 @@ public partial class Default2 : System.Web.UI.Page
         }
 
         Response.Redirect("B1600_View-dashboard.aspx");
+    }
+    protected void btnAddTag_Click(object sender, EventArgs e)
+    {
+        ScriptManager.RegisterStartupScript(this, GetType(), "showPopup", "showPopup();", true);
     }
 }

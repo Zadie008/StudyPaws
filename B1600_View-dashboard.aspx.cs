@@ -19,10 +19,9 @@ public partial class Default2 : System.Web.UI.Page
     {
         if (Session["userID"]!=null)
         {
+            LoadTasks();
             ddlFilter.Visible = IsToDoFilterVisible;
             userIDHidden.Value = Convert.ToString(Session["userID"]);
-
-            //ddlFilter.CssClass = IsFilterVisible ? "toDoFilterDropDownList" : "toDoFilterDropDownList hidden";
 
             if (!IsPostBack)
             {
@@ -289,21 +288,6 @@ public partial class Default2 : System.Web.UI.Page
             }
             Response.Redirect(Request.RawUrl);
         }
-        //else if (e.CommandName == "Edit")
-        //{
-        //    TextBox txt = (TextBox)e.Item.FindControl("txtEditDesc");
-        //    string newDesc = txt.Text.Trim();
-
-        //    using (OleDbConnection conn = new OleDbConnection(connString))
-        //    {
-        //        conn.Open();
-        //        string sql = "UPDATE ToDoListTask SET taskDesc = ? WHERE taskID = ?";
-        //        OleDbCommand cmd = new OleDbCommand(sql, conn);
-        //        cmd.Parameters.AddWithValue("?", newDesc);
-        //        cmd.Parameters.AddWithValue("?", taskID);
-        //        cmd.ExecuteNonQuery();
-        //    }
-        //}
         else if(e.CommandName == "ShowControls")
         {
             showTaskControls = !showTaskControls;
@@ -322,22 +306,34 @@ public partial class Default2 : System.Web.UI.Page
         IsToDoFilterVisible = !IsToDoFilterVisible;
         ddlFilter.Visible= IsToDoFilterVisible;
     }
-    protected void rptTasks_ItemDataBound(object sender, RepeaterItemEventArgs e)
-    {
-        if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-        {
-            TextBox txt = (TextBox)e.Item.FindControl("txtEditDesc");
-            ImageButton editBtn = (ImageButton)e.Item.FindControl("editBtn");
-
-            if (Request.Form[editBtn.UniqueID] != null)
-            {
-                txt.ReadOnly = false;
-                txt.Focus();
-            }
-        }
-    }
     protected void txtNewTask_TextChanged(object sender, EventArgs e)
     {
         btnAdd_Click(sender, e);
+    }
+    protected void txtEditDesc_TextChanged(object sender, EventArgs e)
+    {
+        TextBox txtTaskDesc = (TextBox)sender;
+        RepeaterItem item = (RepeaterItem)txtTaskDesc.NamingContainer;
+        HiddenField taskIDHidden = (HiddenField)item.FindControl("taskIDHidden");
+
+        if (taskIDHidden == null || string.IsNullOrWhiteSpace(taskIDHidden.Value))
+            return;
+
+        int taskID = Convert.ToInt32(taskIDHidden.Value);
+        string newTaskDesc = txtTaskDesc.Text.Trim();
+        if (newTaskDesc == "")
+            return;
+
+        using (OleDbConnection conn = new OleDbConnection(connString))
+        {
+            conn.Open();
+            string sql = "UPDATE ToDoListTask SET taskDesc = ? WHERE taskID = ?";
+            OleDbCommand cmd = new OleDbCommand(sql, conn);
+            cmd.Parameters.AddWithValue("?", newTaskDesc);
+            cmd.Parameters.AddWithValue("?", taskID);
+            cmd.ExecuteNonQuery();
+        }
+
+        LoadTasks();
     }
 }

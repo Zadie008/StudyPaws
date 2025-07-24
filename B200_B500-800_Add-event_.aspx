@@ -75,20 +75,20 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-    <div class="createTimer2MainContent">
-    <div class="titleTagSection">
+    <div class="createEventMainContent">
+    <div class="eventTitleTagSection">
         <div class="leftSection">
         </div>
         <div class="middleSection">
             <table>
                 <tr>
-                    <td><asp:Label ID="lblTitle" class="label" runat="server" Text="Title"></asp:Label></td>
-                    <td><asp:TextBox ID="txtTitle" class="textbox" runat="server"></asp:TextBox></td>
+                    <td><asp:Label ID="lblEventTitle" class="label" runat="server" Text="Title"></asp:Label></td>
+                    <td><asp:TextBox ID="txtEventTitle" class="textbox" runat="server"></asp:TextBox></td>
                 </tr>
                 <tr>
-                    <td><asp:Label ID="lblTag" class="label" runat="server" Text="Tag"></asp:Label></td>
+                    <td><asp:Label ID="lblEventTag" class="label" runat="server" Text="Tag"></asp:Label></td>
                     <td>
-                        <asp:DropDownList ID="dropdownTag" ClientIDMode="Static" class="dropDownList" runat="server" BackColor="#446791" DataTextField="tagName" DataValueField="tagID">
+                        <asp:DropDownList ID="dropdownEventTag" ClientIDMode="Static" class="dropDownList" runat="server" BackColor="#446791" DataTextField="tagName" DataValueField="tagID">
                         <asp:ListItem></asp:ListItem>
                         <asp:ListItem>Studying</asp:ListItem>
                         <asp:ListItem>Assignments</asp:ListItem>
@@ -102,11 +102,12 @@
         <div class="rightSection">
             <table>
                 <tr>
-                    <td><asp:RequiredFieldValidator ID="errorTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title for your Timer" EnableClientScript="true" ControlToValidate="txtTitle"></asp:RequiredFieldValidator></td>
+                    <td></td>
+                    <td><asp:RequiredFieldValidator ID="errorTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title" EnableClientScript="true" ControlToValidate="txtEventTitle"></asp:RequiredFieldValidator></td>
                 </tr>
                 <tr>
-                    <td><asp:ImageButton ID="btnAddTag" runat="server" CommandName="AddTag" class="addTagBtn" OnClick="btnAddTag_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png" /></td>
-                    <td><asp:RequiredFieldValidator ID="errorDropDown" class="validationError" runat="server" ErrorMessage="Please select a Tag for your Timer" EnableClientScript="true" ControlToValidate="dropdownTag"></asp:RequiredFieldValidator></td>
+                    <td><asp:ImageButton ID="btnAddTag" runat="server" CommandName="AddTag" CausesValidation="false" class="addTagBtn" OnClick="btnAddTag_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png" /></td>
+                    <td><asp:RequiredFieldValidator ID="errorDropDown" class="validationError" runat="server" ErrorMessage="Please select a Tag" EnableClientScript="true" ControlToValidate="dropdownEventTag"></asp:RequiredFieldValidator></td>
                 </tr>
             </table>
         </div>
@@ -122,7 +123,48 @@
             <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
         </div>
     </div>
+
+         <div id="popup" class="simple-popup" style="display: none;">
+    <div class="popup-pink-box">
+        <table id="popupSellPriceTable">
+            <tr>
+                <td><asp:Label ID="lblTagTitle" class="label" runat="server" Text="Tag Title"></asp:Label></td>
+                <td colspan="5"><asp:TextBox ID="txtTagTitle" class="textbox" runat="server"></asp:TextBox></td>
+            </tr>
+            <tr>
+                <td><asp:Label ID="lblTagColour" class="label" runat="server" Text="Tag Colour"></asp:Label></td>
+                <td><asp:Button ID="tagColourOne" class="tagOne" runat="server" Text="" /></td>
+                <td><asp:Button ID="tagColourTwo" class="tagTwo" runat="server" Text="" /></td>
+                <td><asp:Button ID="tagColourThree" class="tagThree" runat="server" Text="" /></td>
+                <td><asp:Button ID="tagColourFour" class="tagFour" runat="server" Text="" /></td>
+                <td><asp:Button ID="tagColourFive" class="tagFive" runat="server" Text="" /></td>
+            </tr>
+        </table>
+
+        <div class="buttonSection">
+            <asp:Button ID="btnBackNewTag" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="False" OnClientClick="hidePopup(); return false;" />
+            <asp:Button ID="btnAddNewTag" class="button" runat="server" Text="Add" OnClick="btnAdd_Click" OnClientClick="return addNewTag();"/>
+        </div>
+    </div>
+
+             <script type="text/javascript">
+    function showPopup() {
+        document.getElementById('popup').style.display = 'flex';
+    }
+
+    function hidePopup() {
+        document.getElementById('popup').style.display = 'none';
+    }
+
+    function addNewTag() {
+        hidePopup();
+        return true;
+    }
+             </script>
 </div>
+</div>
+
+
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
