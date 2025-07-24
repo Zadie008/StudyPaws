@@ -20,6 +20,26 @@ document.querySelectorAll('.navbar a').forEach(link => {
     });
 });
 
+// z-index fixes for nav bar
+const nav = document.querySelector("nav");
+
+nav.addEventListener("mouseenter", () => {
+    nav.classList.add("nav-active");
+});
+
+nav.addEventListener("mouseleave", () => {
+    setTimeout(() => {
+        nav.classList.remove("nav-active");
+        document.body.focus();
+        const event = new MouseEvent("mousemove", {
+            view: window,
+            bubbles: true,
+            cancelable: true
+        });
+        document.body.dispatchEvent(event);
+    }, 300);
+});
+
 // NOTIFICATIONS ON HOME PAGE
 function showNotificationPopup(hasNotifications) {
     if (hasNotifications)

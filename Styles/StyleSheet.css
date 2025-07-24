@@ -491,6 +491,12 @@ nav {
     z-index: 1;
     width: 100%;
     position: fixed;
+    transition: z-index 0.3s ease;
+    pointer-events: auto;
+}
+
+nav.nav-active {
+    z-index: 1000;
 }
 
 nav:hover {
@@ -805,10 +811,9 @@ body.page-exit .welcomeBackTextDiv {
 .dashboardContainer{
     display: flex;
     gap: 15px;
-    padding-left: 100px;
-    padding-right:100px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    margin: 4em 4em 4em 4em;
+    position: relative;
+    z-index: 20;
 }
 
 /* NOTIFICATION POPUP */
@@ -1181,23 +1186,29 @@ body.page-exit .welcomeBackTextDiv {
 
 .toDoListControls {
     display: flex;
-    align-items:center;
+    flex-direction: column;
+    margin: 1.1em 0.8em 1.7em 0.8em;
+    position: relative;
+    z-index: 2;
+}
+
+.toDoListHeaderRow {
+    display: flex;
+    align-items: center;
     justify-content: space-between;
-    margin: 20px 15px 25px 15px;
-    position:relative;
-    z-index:2;
-    line-height:34px;
+    gap: 10px;
+    flex-wrap: wrap;
 }
-.toDoListControls .toDoListHeading {
+
+.toDoListHeading {
     font-family: 'Lilita One', sans-serif;
-    font-weight: 400;
-    font-size: 26px;
-    flex: 45%;
-    text-align:left;
-    margin-bottom: 5px;
+    font-size: 1.8rem;
+    margin: 0;
     text-shadow: 2px 2px #5B548A;
-    line-height: 34px;
+    color: white;
+    flex-shrink: 0;
 }
+
 .toDoListControls .toDoListFilters{
     flex:55%;
     display:flex;
@@ -1209,39 +1220,26 @@ body.page-exit .welcomeBackTextDiv {
     flex-grow:1;
     z-index:20;
 }
-    .toDoListControls .toDoListFilters .toDoFilterBtn {
-        flex: 1;
-        width: 2.5vw;
-        max-width: 30px;
-        border: none;
-        background: transparent;
-        gap: 10px;
-        cursor: pointer;
-        vertical-align: central;
-        z-index:100;
-    }
-
-        .toDoListControls .toDoListFilters .toDoFilterBtn img {
-            max-width: 30px;
-            cursor: pointer;
-        }
-.toDoListControls .toDoListFilters .toDoFilterDropDownList{
-    flex:4;
-    cursor:pointer;
-    height:32px;
+.toDoFilterBtn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+.toDoListControls .toDoListFilters .toDoFilterBtn img {
+    max-width: 30px;
+    cursor: pointer;
+}
+.toDoFilterDropDownList {
+    height: 32px;
     line-height: 32px;
-    vertical-align:central;
-    align-items:center;
-    position:relative;
-    z-index:20;
-
     border-radius: 2rem;
     border: 2px solid white;
     background-color: transparent;
-    -webkit-appearance: none;
-    appearance: none; /* removes default arrow */
-    background-image: url('../Icons/icons8-expand-arrow-white-96.png'); /* down arrow */
-    transition: background-image 0.2s ease;
+    background-image: url('../Icons/icons8-expand-arrow-white-96.png');
     background-repeat: no-repeat;
     background-position: right 0.5em center;
     background-size: 20px;
@@ -1251,13 +1249,14 @@ body.page-exit .welcomeBackTextDiv {
     font-family: 'Gilda Display', serif;
     font-weight: 200;
     outline: none;
-    margin: 1vh auto;
-    text-align: left;
-    width: 100%;
+    width: 200px;
     max-width: 300px;
+    margin: 0;
     box-sizing: border-box;
-    display:block;
+    appearance: none;
+    cursor: pointer;
 }
+
 .scrollableTasksContainer {
     margin: 5px 0px 5px 3px;
     padding: 0;
@@ -1524,6 +1523,7 @@ body.page-exit .welcomeBackTextDiv {
     ~ Rose quartz (dark purple) : #ADA7C9 
     ~ Powder blue (dull blue) : #90A8C3 
     ~ Moonstone (turquoise) : #64A6BD*/
+
 /* ---------------------- CREATE TIMER PAGES A100 ---------------------- */
 /* page 1 (back, create, view past timers) */
 .createTimerMainContent {
@@ -1988,15 +1988,19 @@ body.page-exit .welcomeBackTextDiv {
     position: absolute;
     top: 100%;
     left: 50%;
-    width: 100%;
+    width: 95%;
     transform: translateX(-50%);
     background-color: #90A8C3; /*dull blue*/
     border-radius: 3em;
-    padding: 1em 1em 0 1em;
+    padding: 1em 0.5em 0 0.5em;
     z-index: 10;
     display: flex;
     gap: 0.5em;
     align-items: center;
+}
+
+.filterControls .label {
+    padding: 0 1em 0 1em;
 }
 
 .filterControls .dropDownList {

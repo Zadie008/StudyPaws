@@ -125,14 +125,16 @@
 
         <div class="toDoListDashboard">
             <div class="toDoListControls">
-                <p class="toDoListHeading">To Do List</p>
-                <div class="toDoListFilters">
-                    <asp:DropDownList ID="ddlFilter" BackColor="#ADA7C9" runat="server" AutoPostBack="true" class="toDoFilterDropDownList" OnSelectedIndexChanged="ddlFilter_SelectedIndexChanged">
-                        <asp:ListItem Text="All Tasks" Value="All" />
-                        <asp:ListItem Text="In Progress" Value="InProgress" />
-                        <asp:ListItem Text="Completed" Value="Completed" />
-                    </asp:DropDownList>
-                    <asp:ImageButton ID="filterButton" runat="server" class="toDoFilterBtn" ClientIDMode="Static" ImageUrl="~/Icons/icons8-filter-bars-white-96.png" OnClick="toDoFilterBtn_Click"/>
+                <div class="toDoListHeaderRow">
+                    <p class="toDoListHeading">To Do List</p>
+                    <div class="toDoListFilters">
+                        <asp:DropDownList ID="ddlFilter" BackColor="#ADA7C9" runat="server" AutoPostBack="true" class="toDoFilterDropDownList" OnSelectedIndexChanged="ddlFilter_SelectedIndexChanged">
+                            <asp:ListItem Text="All Tasks" Value="All" />
+                            <asp:ListItem Text="In Progress" Value="InProgress" />
+                            <asp:ListItem Text="Completed" Value="Completed" />
+                        </asp:DropDownList>
+                        <asp:ImageButton ID="filterButton" runat="server" class="toDoFilterBtn" ClientIDMode="Static" ImageUrl="~/Icons/icons8-filter-bars-white-96.png" OnClick="toDoFilterBtn_Click"/>
+                    </div>
                 </div>
             </div>
             <div class="newTaskContainer">
