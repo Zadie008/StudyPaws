@@ -115,6 +115,18 @@
                 </div>
             </div>
         </div>
+
+        <div id="popup" class="simple-popup" style="display: none;">
+            <div class="popup-pink-box">
+                <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
+                <p>Study Session has started!</p>
+                <img src="Images/Notification%20Happy.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
+                </div>
+            </div>
+        </div>
     </div>
 </asp:Content>
 

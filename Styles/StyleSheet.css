@@ -794,6 +794,10 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 /* NOTIFICATION POPUP */
+#defaultMainContent #popup p {
+    font-size: 2.5rem;
+}
+
 #defaultMainContent .popup-pink-box table tr td p {
     text-align: left;
     padding: 0 0.2em 0 0.2em;
@@ -1723,11 +1727,11 @@ body.page-exit .welcomeBackTextDiv {
 
 /* ---------------------- VIEW TIMER PAGE A200 ---------------------- */
 .viewTimerMainContent {
-    margin: 4em 4em 4em 4em;
+    margin: 4em 4em 0em 4em;
 }
 
 .viewTimerMainContent .timeSection {
-    padding: 2% 0 2% 0;
+    padding: 2% 0 2.9% 0;
     text-align: center;
     display: flex;
 }

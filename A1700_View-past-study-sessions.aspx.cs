@@ -24,14 +24,15 @@ public partial class Default2 : System.Web.UI.Page
 
                 using (OleDbConnection con = new OleDbConnection(cs))
                 {
-                    string command = "SELECT [timerDateCreated] AS [Date Created], [timerTitle] AS Title, [timerTag] AS Tag, [timerDuration] AS Duration FROM [Timer] WHERE userID = @id ORDER BY [timerDateCreated] DESC";
+                    string command = "SELECT StudySession.sessionStart AS [Start Time], StudySession.sessionTitle AS Title, StudySession.sessionTag AS Tag, StudySession.sessionDuration AS Duration FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = ? ORDER BY StudySession.sessionStart DESC";
 
                     OleDbCommand cmd = new OleDbCommand(command, con);
-                    cmd.Parameters.AddWithValue("@id", Session["userID"]);
+                    cmd.Parameters.AddWithValue("?", Convert.ToInt32(Session["userID"]));
+                    //cmd.Parameters.AddWithValue("?", DateTime.Now);
 
                     con.Open();
-                    OleDbDataReader collection = cmd.ExecuteReader();
-                    GridView1.DataSource = collection;
+                    OleDbDataReader reader = cmd.ExecuteReader();
+                    GridView1.DataSource = reader;
                     GridView1.DataBind();
                 }
             }
@@ -74,31 +75,32 @@ public partial class Default2 : System.Web.UI.Page
         List<string> conditions = new List<string>();
         List<OleDbParameter> parameters = new List<OleDbParameter>();
 
-        // Always filter by userID
-        conditions.Add("userID = ?");
-        parameters.Add(new OleDbParameter("userID", userID));
+        conditions.Add("StudySessionParticipants.userID = ?");
+        parameters.Add(new OleDbParameter("userID", Convert.ToInt32(userID)));
 
-        // Optional: Date filter
+        //conditions.Add("StudySession.sessionEnd < ?");
+        //parameters.Add(new OleDbParameter("sessionEnd", DateTime.Now));
+
         if (!string.IsNullOrEmpty(dateFilter))
         {
-            conditions.Add("Format(timerDateCreated, 'yyyy-mm-dd') = ?");
-            parameters.Add(new OleDbParameter("timerDateCreated", dateFilter));
+            string formattedDate = DateTime.Parse(dateFilter).ToString("yyyy-MM-dd");
+            conditions.Add("Format(StudySession.sessionStart, 'yyyy-mm-dd') = ?");
+            parameters.Add(new OleDbParameter("sessionDate", formattedDate));
         }
 
-        // Optional: Tag filter
         if (!string.IsNullOrEmpty(tagFilter))
         {
-            conditions.Add("timerTag = ?");
-            parameters.Add(new OleDbParameter("timerTag", tagFilter));
+            conditions.Add("StudySession.sessionTag = ?");
+            parameters.Add(new OleDbParameter("sessionTag", tagFilter));
         }
 
         string whereClause = string.Join(" AND ", conditions);
 
         using (OleDbConnection con = new OleDbConnection(cs))
         {
-            string command = "SELECT timerDateCreated AS [Date Created], timerTitle AS Title, timerTag AS Tag, timerDuration AS Duration FROM Timer WHERE " + whereClause + " ORDER BY timerDateCreated DESC";
+            string query = "SELECT StudySession.sessionStart AS [Start Time], StudySession.sessionTitle AS Title, StudySession.sessionTag AS Tag, StudySession.sessionDuration AS Duration FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE " + whereClause + " ORDER BY StudySession.sessionStart DESC";
 
-            OleDbCommand cmd = new OleDbCommand(command, con);
+            OleDbCommand cmd = new OleDbCommand(query, con);
 
             foreach (var param in parameters)
             {

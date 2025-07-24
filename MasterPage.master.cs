@@ -23,9 +23,9 @@ public partial class MasterPage : System.Web.UI.MasterPage
             // fetch all sessions starting in 10 minutes
             string selectQuery = "SELECT sessionID FROM StudySession WHERE sessionStart BETWEEN ? AND ? ";
 
-            // checking for study session starting between 10-11 minutes (1 minute window)
-            DateTime startWindowBegin = DateTime.Now.AddMinutes(10);
-            DateTime startWindowEnd = DateTime.Now.AddMinutes(11);
+            // checking for study session starting between 0-10 minutes
+            DateTime startWindowBegin = DateTime.Now.AddMinutes(0);
+            DateTime startWindowEnd = DateTime.Now.AddMinutes(10);
 
             using (OleDbCommand cmd = new OleDbCommand(selectQuery, conn))
             {

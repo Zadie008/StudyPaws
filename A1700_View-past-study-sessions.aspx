@@ -107,7 +107,7 @@
             <div class="scrollableTableContainer">
                 <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="pastTimerTable" AutoGenerateColumns="False">
                     <Columns>
-                        <asp:BoundField DataField="Date Created" HeaderText="Date" DataFormatString="{0:yyyy-MM-dd HH:mm}" />
+                        <asp:BoundField DataField="Start Time" HeaderText="Date" DataFormatString="{0:yyyy-MM-dd HH:mm}" />
                         <asp:BoundField DataField="Title" HeaderText="Title" />
                         <asp:BoundField DataField="Tag" HeaderText="Tag" />
                         <asp:TemplateField HeaderText="Duration">

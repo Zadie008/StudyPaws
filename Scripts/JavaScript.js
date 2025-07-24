@@ -103,6 +103,27 @@ function hidePopup() {
     document.getElementById("popup").style.display = "none";
 }
 
+// check for sessions starting every second
+function checkForSessionStart() {
+    if (!window.upcomingSessions) return;
+
+    const now = new Date();
+    for (let i = 0; i < upcomingSessions.length; i++) {
+        const session = upcomingSessions[i];
+        const sessionTime = new Date(session.time);
+        const diff = sessionTime - now;
+
+        if (diff <= 0 && diff > -60000) { // if current time is within 1 minute past the session start
+            document.getElementById("popup").style.display = "flex";
+            document.getElementById("hiddenJoinSessionID").value = session.sessionID;
+            upcomingSessions.splice(i, 1);
+            break;
+        }
+    }
+}
+
+setInterval(checkForSessionStart, 1000);
+
 // drop down list arrows
 document.addEventListener('DOMContentLoaded', function () {
     const dropdown = document.getElementById('dropdownTag');

@@ -17,6 +17,7 @@ public partial class _Default : System.Web.UI.Page
             if (!IsPostBack)
             {
                 LoadPendingInvitesFromDB();
+                LoadUpcomingSessions();
             }
 
             ShowNextInvite(); // always show latest invite
@@ -173,6 +174,52 @@ public partial class _Default : System.Web.UI.Page
             }
             Session["PendingInvites"] = invites;
             ShowNextInvite(); // recursively show all the invites
+        }
+    }
+
+    private void LoadUpcomingSessions()
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string query = "SELECT StudySession.sessionID, StudySession.sessionStart FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = ? AND StudySessionParticipants.replied = true AND StudySessionParticipants.sessionStatus = 'Accepted'";
+
+        List<string> jsSessionTimes = new List<string>();
+
+        using (OleDbConnection conn = new OleDbConnection(cs))
+        using (OleDbCommand cmd = new OleDbCommand(query, conn))
+        {
+            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            conn.Open();
+            using (OleDbDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    int foundSessionID = Convert.ToInt32(reader["sessionID"]);
+                    DateTime sessionStart = Convert.ToDateTime(reader["sessionStart"]);
+
+                    string jsObject = "{ sessionID: " + foundSessionID + ", time: '" + sessionStart.ToString("yyyy-MM-ddTHH:mm:ss") + "' }";
+                    jsSessionTimes.Add(jsObject);
+
+                    TimeSpan timeUntilStart = sessionStart - DateTime.Now;
+                    if (timeUntilStart.TotalMinutes >= 0 && timeUntilStart.TotalMinutes <= 10)
+                    {
+                        Session["sessionID"] = foundSessionID;
+                    }
+                }
+            }
+        }
+
+        if (jsSessionTimes.Count > 0)
+        {
+            string jsArray = "[" + string.Join(",", jsSessionTimes.ToArray()) + "]";
+            ClientScript.RegisterStartupScript(this.GetType(), "registerSessions", "var upcomingSessions = " + jsArray + ";", true);
+        }
+    }
+
+    protected void btnJoin_Click(object sender, EventArgs e)
+    {
+        if (Session["sessionID"] != null)
+        {
+            Response.Redirect("A1400_View-study-session.aspx");
         }
     }
     // Lea's code to copy ends here

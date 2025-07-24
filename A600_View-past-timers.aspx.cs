@@ -74,18 +74,15 @@ public partial class Default2 : System.Web.UI.Page
         List<string> conditions = new List<string>();
         List<OleDbParameter> parameters = new List<OleDbParameter>();
 
-        // Always filter by userID
         conditions.Add("userID = ?");
         parameters.Add(new OleDbParameter("userID", userID));
 
-        // Optional: Date filter
         if (!string.IsNullOrEmpty(dateFilter))
         {
             conditions.Add("Format(timerDateCreated, 'yyyy-mm-dd') = ?");
             parameters.Add(new OleDbParameter("timerDateCreated", dateFilter));
         }
 
-        // Optional: Tag filter
         if (!string.IsNullOrEmpty(tagFilter))
         {
             conditions.Add("timerTag = ?");

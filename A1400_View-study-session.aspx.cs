@@ -11,33 +11,56 @@ public partial class View_study_session : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection con = new OleDbConnection(cs))
+        if (Session["sessionID"] == null)
         {
-            string selectCommand = "SELECT sessionDuration FROM [StudySession] WHERE [userID] = ? AND [sessionID] = ? INNER JOIN ON [sessionID] FROM [StudySessionParticipants]";
-            using (OleDbCommand cmd = new OleDbCommand(selectCommand, con))
+            Response.Redirect("Default.aspx");
+            return;
+        }
+
+        int sessionID = (int)Session["sessionID"];
+
+        if (!IsPostBack)
+        {
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            using (OleDbConnection con = new OleDbConnection(cs))
             {
-                //save sessionID in session var
-                //save sessionTitle in session var
-                //save sessionDuration in session var
-            }
+                string query = "SELECT StudySession.sessionTitle, StudySession.sessionDuration FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySession.sessionID = ?";
 
-            int totalSeconds = Convert.ToInt32(Session["sessionDuration"]);
-            int hours = totalSeconds / 3600;
-            int minutes = (totalSeconds % 3600) / 60;
-            int seconds = totalSeconds % 60;
+                using (OleDbCommand cmd = new OleDbCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("?", sessionID);
+                    con.Open();
+                    using (OleDbDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            string sessionTitle = reader["sessionTitle"].ToString();
+                            int totalSeconds = Convert.ToInt32(reader["sessionDuration"]);
 
-            string formattedTime = hours.ToString("D2") + ":" + minutes.ToString("D2") + ":" + seconds.ToString("D2");
+                            txtSessionTitle.Text = sessionTitle;
 
-            txtSessionTitle.Text = Session["sessionTitle"].ToString();
+                            Session["sessionTitle"] = sessionTitle;
+                            Session["sessionDuration"] = totalSeconds;
 
-            ClientScript.RegisterStartupScript(this.GetType(), "timerDurationScript", string.Format("var initialTime = {0};", totalSeconds), true); // should timerDurationScript be sessionDurationScript?
+                            int hours = totalSeconds / 3600;
+                            int minutes = (totalSeconds % 3600) / 60;
+                            int seconds = totalSeconds % 60;
 
-            ClientScript.RegisterStartupScript(this.GetType(), "initialCountdownText", string.Format("document.addEventListener('DOMContentLoaded', function() {{ document.getElementById('mainContentPlaceHolder_lblCountdown').textContent = '{0}'; }});", formattedTime), true);
+                            string formattedTime = hours.ToString("D2") + ":" + minutes.ToString("D2") + ":" + seconds.ToString("D2");
 
-            if (Session["EquippedPetImagePath"] != null)
-            {
-                pet.ImageUrl = Session["EquippedPetImagePath"].ToString();
+                            ClientScript.RegisterStartupScript(this.GetType(), "timerDurationScript", "var initialTime = " + totalSeconds + ";", true);
+
+                            string countdownScript = "document.addEventListener('DOMContentLoaded', function() {" + " document.getElementById('mainContentPlaceHolder_lblCountdown').textContent = '" + formattedTime + "';" + " });";
+
+                            ClientScript.RegisterStartupScript(this.GetType(), "initialCountdownText", countdownScript, true);
+                        }
+                    }
+                }
+
+                if (Session["EquippedPetImagePath"] != null)
+                {
+                    pet.ImageUrl = Session["EquippedPetImagePath"].ToString();
+                }
             }
         }
     }
