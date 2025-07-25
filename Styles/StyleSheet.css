@@ -1110,6 +1110,8 @@ body.page-exit .welcomeBackTextDiv {
     gap: 5px;
     z-index: 20;
     flex-direction:row;
+    padding-right:50px;
+    position:relative;
 }
 .checkbox {
     order:1;
@@ -1136,6 +1138,12 @@ body.page-exit .welcomeBackTextDiv {
     background-color:transparent;
     border:none;
     flex: 0 0 30px;
+}
+.readonly{
+    cursor:default;
+}
+.editable{
+    cursor:text;
 }
 .taskCompleted {
     text-decoration: line-through;
@@ -1164,19 +1172,6 @@ body.page-exit .welcomeBackTextDiv {
     box-shadow: none;
     order:2;
 }
-.openControlsBtn{
-    flex:0 0 5px;
-    max-width:5px;
-    border:none;
-    background:none;
-    cursor:pointer;
-    z-index:20;
-    font-size:25px;
-    font-weight:bold;
-    color:white;
-    vertical-align:central;
-    height:30px;
-}
 .deleteBtn {
     flex: 0 0 24px;
     max-width: 24px;
@@ -1186,6 +1181,19 @@ body.page-exit .welcomeBackTextDiv {
     z-index:100;
 }
     .deleteBtn img {
+        max-width: 24px;
+    }
+
+.editBtn {
+    flex: 0 0 24px;
+    max-width: 24px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    z-index: 100;
+}
+
+    .editBtn img {
         max-width: 24px;
     }
 
@@ -1308,7 +1316,7 @@ body.page-exit .welcomeBackTextDiv {
     gap: 5.5px;
     z-index: 20;
     color: white;
-    margin: 5px;
+    margin: 3.5px;
 }
 
 .newTaskContainer .addTaskBtn {
@@ -1320,7 +1328,6 @@ body.page-exit .welcomeBackTextDiv {
     gap: 5px;
     cursor: pointer;
     flex: 0 0 35px;
-    margin-left:7.5px;
 }
     .newTaskContainer .addTaskBtn img {
         width: 2.5vw;
@@ -1352,8 +1359,12 @@ body.page-exit .welcomeBackTextDiv {
     z-index:100;
     flex:0 0 auto;
     order:0;
+    position:absolute;
+    right:5px;
+    top:50%;
+    transform:translateY(-50%);
 }
-    .taskControls.show {
+    .task:hover .taskControls {
         display: flex;        
     }
 

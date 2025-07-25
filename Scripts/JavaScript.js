@@ -572,4 +572,20 @@ if (window.location.pathname.toLowerCase().includes("c100_register.aspx")) {
         }
     });
 }
-
+function makeEditable(textboxID) {
+    var textbox = document.getElementById(textboxID);
+    if (textbox) {
+        textbox.readOnly = false;
+        textbox.classList.remove('readonly');
+        textbox.classList.add('editable');
+        textbox.focus();
+    }
+}
+function makeReadonly(textboxID) {
+    var textbox = document.getElementById(textboxID);
+    if (textbox) {
+        textbox.readOnly = true;
+        textbox.classList.remove('editable');
+        textbox.classList.add('readonly');
+    }
+}

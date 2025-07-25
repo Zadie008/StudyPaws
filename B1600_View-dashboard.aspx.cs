@@ -19,7 +19,7 @@ public partial class Default2 : System.Web.UI.Page
     {
         if (Session["userID"]!=null)
         {
-            LoadTasks();
+            //LoadTasks();
             ddlFilter.Visible = IsToDoFilterVisible;
             userIDHidden.Value = Convert.ToString(Session["userID"]);
 
@@ -57,17 +57,6 @@ public partial class Default2 : System.Web.UI.Page
         set
         {
             ViewState["FilterVisible"] = value;
-        }
-    }
-    protected bool showTaskControls
-    {
-        get
-        {
-            return ViewState["ShowTaskControls"] != null && (bool)ViewState["ShowTaskControls"];
-        }
-        set
-        {
-            ViewState["ShowTaskControls"]= value;  
         }
     }
     private void LoadCalendar(int year, int month)
@@ -288,10 +277,9 @@ public partial class Default2 : System.Web.UI.Page
             }
             Response.Redirect(Request.RawUrl);
         }
-        else if(e.CommandName == "ShowControls")
+        else if (e.CommandName == "Edit")
         {
-            showTaskControls = !showTaskControls;
-            LoadTasks();
+            ViewState["EditingTaskID"] = e.CommandArgument.ToString();
         }
     }
 
@@ -333,7 +321,42 @@ public partial class Default2 : System.Web.UI.Page
             cmd.Parameters.AddWithValue("?", taskID);
             cmd.ExecuteNonQuery();
         }
+        ViewState["EditingTaskID"] = null;
 
+
+        string script = "makeReadonly('" + txtTaskDesc.ClientID + "');";
+        ScriptManager.RegisterStartupScript(this, this.GetType(), "restoreReadonly", script, true);
         LoadTasks();
+    }
+    protected void rptTasks_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+        {
+            TextBox txtDesc = (TextBox)e.Item.FindControl("txtEditDesc");
+            ImageButton editBtn = (ImageButton)e.Item.FindControl("editBtn");
+            HiddenField taskIDHidden = (HiddenField)e.Item.FindControl("taskIDHidden");
+
+            if (txtDesc != null && editBtn != null && taskIDHidden!=null)
+            {
+                string editingTaskID = Convert.ToString(ViewState["EditingTaskID"]);
+
+                DataRowView row = (DataRowView)e.Item.DataItem;
+                bool taskStatus = Convert.ToBoolean(row["taskStatus"]);
+
+                if (editingTaskID == taskIDHidden.Value)
+                {
+                    txtDesc.ReadOnly = false;
+                    txtDesc.CssClass = taskStatus ? "taskCompleted editable" : "taskUncompleted editable";
+                    txtDesc.Focus();
+                }
+                else
+                {
+                    txtDesc.ReadOnly = true;
+                    txtDesc.CssClass = taskStatus ? "taskCompleted readonly" : "taskUncompleted readonly";
+                }
+                string js = "makeEditable('" + txtDesc.ClientID + "'); return false;";
+                editBtn.OnClientClick = js;
+            }
+        }
     }
 }
