@@ -1,6 +1,5 @@
-﻿/*
-    ---------------------- COLOUR PALETTE ----------------------
-
+﻿/* ---------------------- COLOUR PALETTE ---------------------- */
+/*
     LIGHT MODE
     ~ Fairy Tale (pink) : #F4CAE0
     ~ Thistle (light purple) : #D7B9D5
@@ -16,11 +15,9 @@
     ~ African Violet (light purple) : #9F86C0
     ~ Ultra Violet (medium purple) : #5E548E
     ~ Russian violet (dark purple) : #231942
-
 */
 
 /* ---------------------- FONTS ---------------------- */
-
 @import url('StyleSheet.css');
 @font-face {
     font-family: 'Lilita One';
@@ -43,7 +40,6 @@
 }
 
 /* ---------------------- ALL PAGES ---------------------- */
-
 * {
     padding: 0;
     box-sizing: border-box;
@@ -109,7 +105,7 @@ p {
 .popup-pink-box {
     background-color: #D7B9D5; /*pink*/
     padding: 1.5em;
-    border-radius: 10px;
+    border-radius: 3em;
     border: 5px solid white;
     width: 40%;
     max-width: 1500px;
@@ -136,7 +132,7 @@ p {
 .popup-blue-box {
     background-color: #90A8C3; /*blue*/
     padding: 1.5em;
-    border-radius: 10px;
+    border-radius: 3em;
     border: 5px solid white;
     width: 40%;
     max-width: 1500px;
@@ -163,8 +159,8 @@ p {
 /* worse button option */
 .popup-button {
     background-color: transparent;
-    border: 4px solid white;
-    border-radius: 1rem;
+    border: 3px solid white;
+    border-radius: 3em;
     color: white;
     padding: 1vh 2vw;
     font-size: clamp(1.2rem, 2.5vw, 2.7rem);
@@ -183,8 +179,8 @@ p {
 /* best button option */
 .popup-button-best-blue {
     background-color: white;
-    border: 2px solid white;
-    border-radius: 1rem;
+    border: 3px solid white;
+    border-radius: 3em;
     color: #90A8C3; /*blue*/
     padding: 1vh 2vw;
     font-size: clamp(1.2rem, 2.5vw, 2.7rem);
@@ -202,8 +198,8 @@ p {
 
 .popup-button-best-pink {
     background-color: white;
-    border: 2px solid white;
-    border-radius: 1rem;
+    border: 3px solid white;
+    border-radius: 3em;
     color: #D7B9D5; /*pink*/
     padding: 1vh 2vw;
     font-size: clamp(1.2rem, 2.5vw, 2.7rem);
@@ -309,6 +305,10 @@ h2 {
     font-size: clamp(0.5rem, 2vw, 2rem);
 }
 
+.curved-header h2 a {
+    text-decoration: none;
+}
+
 .curved-header a:visited {
     color: white;
 }
@@ -353,7 +353,7 @@ h2 {
 }
 
 .profileIcon img {
-    margin-top: 3%;
+    margin-top: 5%;
     max-width: 90%;
     max-height: 90%;
 }
@@ -371,25 +371,17 @@ h2 {
     pointer-events: none;
 }
 
-.profileIcon img#profilePet {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    z-index: 1; 
-}
-
 .profileIcon #profileCircle {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #F4CAE0;
+    border: 3px solid white;
     border-radius: 50%;
     width: 100%;
     height: 100%;
-    z-index: -1;  
+    z-index: -1;
 }
 
 /* level, xp and paw currency on left side of screen */
@@ -452,6 +444,34 @@ h2 {
     width: 100%;
 }
 
+/* notifications on left side of screen */
+.notificationDetails {
+    position: relative;
+    width: 50px; /*same width*/
+    height: 50px;
+}
+
+.notificationIcon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px; /*same width*/
+    height: 50px;
+    cursor: pointer;
+}
+
+.notificationBadge {
+    position: absolute;
+    right: -2px;
+    width: 25px;
+    height: 25px;
+    background-color: #FF369E; /*Rose Bonbon*/
+    border-radius: 50%;
+    border: 3px solid white;
+    z-index: 10;
+    cursor: pointer;
+}
+
 /* date and time on right side of screen */
 .timeDateDiv {
     text-align: right;
@@ -471,6 +491,12 @@ nav {
     z-index: 1;
     width: 100%;
     position: fixed;
+    transition: z-index 0.3s ease;
+    pointer-events: auto;
+}
+
+nav.nav-active {
+    z-index: 1000;
 }
 
 nav:hover {
@@ -508,6 +534,7 @@ nav:hover {
     text-decoration: none;
     font-family: 'Lilita One', sans-serif;
     font-size: 3.5em;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
     letter-spacing: 0.05em;
     color: white;
     border-radius: 0.65em;
@@ -712,7 +739,7 @@ body.page-exit .collapsedNav .navbar .nav-right {
     position: relative;
     width: min(90vw, 500px);
     aspect-ratio: 1;
-    margin: 0 auto;
+    margin: 2em auto 0 auto;
 }
 
 .homePagePet img {
@@ -742,7 +769,7 @@ body.page-exit .homePagePet {
 /* USER WELCOME BACK TEXT */
 .welcomeBackTextDiv {
     text-align: center;
-    margin-top: -3em;
+    margin-top: -2em;
 }
 
 .welcomeBackTextDiv h2 {
@@ -759,327 +786,794 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .username-header {
-    letter-spacing: 0.1em; 
-    font-size: 3.5em; 
+    letter-spacing: 0.1em;
+    font-size: 3.5em;
     font-family: 'Lilita One';
     display: block;
-    margin-top: 0; 
-    margin-bottom: 0; 
+    margin-top: -0.3em;
+    margin-bottom: 0;
+}
+
+/* NOTIFICATION POPUP */
+#defaultMainContent #popup p {
+    font-size: 2.5rem;
+}
+
+#defaultMainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+#defaultMainContent .popup-pink-box p {
+    font-size: 2.2rem;
+}
+
+#defaultMainContent img {
+    margin: -2em 0 -2em 0;
 }
 
 /* ---------------------- DASHBOARD PAGE ---------------------- */
 .dashboardContainer{
     display: flex;
     gap: 15px;
-    padding-left: 100px;
-    padding-right:100px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    margin: 4em 4em 4em 4em;
+    position: relative;
+    z-index: 20;
+}
+
+/* NOTIFICATION POPUP */
+.dashboardContainer .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+.dashboardContainer .popup-pink-box p {
+    font-size: 2.2rem;
 }
 /* ---------------------- CALENDAR PAGES ---------------------- */
-.calendarDashboard {
-    flex: 75%;
+.calendarDashboard { 
+    flex: 72%;
     background: #D7B9D5; 
     border-radius: 30px;
     padding: 10px;
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); /*fix this*/
-    /*add height*/
 }
-.calendarHeader {
+.calendarCell {
+    position: relative;
+    padding: 5px;
+    vertical-align: top;
+    z-index:10;
+    height: 50px; /*make this relative*/
+    box-sizing: border-box;
+}
+.scrollableEvents {
+    max-height: 30px; /* adjust based on your needs */
+    overflow-y: auto;
+    margin-top: 5px;
+    font-size: 12px;
+}
+.dayNumber {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.events {
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+.eventItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+    font-size:12px;
+}
+
+.eventDot {
+    width: 6px;
+    height: 6px;
+    background-color: #7FC8F8;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+}
+.addEventBtn {
+    display: none;
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    text-decoration:none;
+    width:20px;
+    height:20px;
+    /*background-color: transparent;*/
+    /*-webkit-appearance: none;*/
+    /*appearance: none;*/ /* removes default arrow */
+    /*background-image: url('../Icons/icons8-add-new-white-96.png'); 
+    transition: background-image 0.2s ease;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 20px;
+    line-height:20px;*/
+}
+.addEventBtn img.addEventBtnImg{
+    width:20px;
+    height:20px;
+    cursor:pointer;
+    opacity:0.8;
+    transition:opacity 0.2s;
+}
+.addEventBtn img.addEventBtnImg:hover{
+    opacity:1;
+}
+/*.addEventBtn {
+    display: none;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background-color: #E6D6E5;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}*/
+
+.calendarCell:hover .addEventBtn {
+    display: block;
+}
+.calendarHeader { 
     display: flex;
     justify-content: space-between;
     font-size: 22px;
-    margin: 20px;
+    margin: 15px 20px 20px 20px;
     margin-bottom: 5px;
+    align-items:center;
 }
 .calendarTitle {
-    flex: 60%;
-    font-family: 'Lilita One', sans-serif;
-    font-weight: bold;
-    font-size: 22px;
-    text-shadow: 1px 1px #5B548A;
-    margin: 0;
+    flex: 30%;
     margin-bottom: 5px;
     text-align: left;
-}
-.controlsCalendar{
-    flex:40%;
-    font-size: 22px;
-    display: flex;
-    align-content: space-between;
-}
-.controlsCalendar .calendarFilters{
-    flex:1;
-    width: 2.5vw;
-    max-width: 30px;
-    border:none;
-    background:transparent;
-    gap: 10px;
-    cursor:pointer;
-}
-.controlsCalendar .calendarFilters img{
-    width:2.5vw;
-    max-width:30px;
-}
-    .controlsCalendar .prevMonth {
-        flex: 1;
-        width: 2.5vw;
-        max-width: 30px;
-        border: none;
-        background: transparent;
-        gap: 10px;
-        cursor: pointer;
-    }
-.controlsCalendar .prevMonth img {
-    width: 2.5vw;
-    max-width: 30px;
-}
-    .controlsCalendar .nextMonth {
-        flex: 1;
-        width: 2.5vw;
-        max-width: 30px;
-        border: none;
-        background: transparent;
-        gap: 10px;
-        cursor: pointer;
-    }
-.controlsCalendar .nextMonth img {
-    width: 2.5vw;
-    max-width: 30px;
-}
-.controlsCalendar .dateCalendar{
-    flex:1;
-    font-size: 22px;
-    gap: 10px;
-    cursor: text;
-    text-align:center;
-}
-.calendarBox{
-    /*padding: 10px;
-    display:flex;
-    text-align:center;*/
-    border-collapse: collapse;
-    width:100%;
-    /*max-width: 800px;*/
-    margin: 20px auto;
-}
-.calendarBox th, .calendarBox td{
-    border: 3px solid white;
-    width: 14.28%;
-    height:75px;
-    text-align:right;
-    vertical-align: top;
-    padding: 5px;
-}
-    .calendarBox th .weeks {
-        background: #D7B9D5;
-    }
-
-.weeks {
-    background: #D7B9D5;
-}
-.today {
-    background-color: #446791;
-    font-weight: bold;
-}
-.calendarBox ul{
-    display: flex;
-    list-style:none;
-    flex-wrap: wrap;
-}
-.calendarBox ul li{
-    width: calc(100%/7);
-}
-.calendarBox .weeks th {
-    background: #D7B9D5;
-    color:white;
-    font-weight:bold;
-    text-align:center;
-    padding: 10px 0;
-    border: solid 2px white;
-}
-.calendarBox .days{
-    margin-bottom: 20px;
-}
-.calendarBox .days li {
-    margin-top: 30px;
-    text-align:center;
-    line-height:40px;
-    height:40px;
-    font-size:14px;
-    cursor: pointer;
-    border: solid 2px white;
-}
-.calendarBox .days li .noncurrentMonth {
-    background: #446791;
-}
-.calendarTitle {
     font-family: 'Lilita One', sans-serif;
     font-weight: 400;
     font-size: 28px;
-    text-shadow: 2px 2px #5B548A;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
     margin: 0;
 }
-.controlsCalendar {
-    height:38px;
-    width:38px;
-    line-height: 38px;
+.controlsCalendar{
+    flex:70%;
+    font-size: 22px;
+    display: flex;
+    align-content: space-between;
+    gap:5px;
+    align-items:center;
+}
+    .controlsCalendar .calendarDropDownList {
+        cursor: pointer;
+        height: 30px;
+        line-height: 30px;
+        vertical-align: central;
+        align-items: center;
+        position: relative;
+        z-index: 10;
+        border-radius: 2rem;
+        border: 2px solid white;
+        background-color: transparent;
+        -webkit-appearance: none;
+        appearance: none; /* removes default arrow */
+        background-image: url('../Icons/icons8-expand-arrow-white-96.png'); /* down arrow */
+        transition: background-image 0.2s ease;
+        background-repeat: no-repeat;
+        background-position: right 0.5em center;
+        background-size: 20px;
+        padding: 0 2em 0 1em;
+        /*padding: 0.2em 2em 0.2em 1em;*/
+        color: white;
+        font-size: 20px;
+        font-family: 'Gilda Display', serif;
+        font-weight: 200;
+        outline: none;
+        margin: 1vh auto;
+        text-align: left;
+        width: 100%;
+        max-width: 300px;
+        box-sizing: border-box;
+        display: block;
+    }
+.controlsCalendar .calendarFilters{
+    flex:1;
+    /*width: 2.5vw;*/
+    width: 32px;
+    height:32px;
+    max-width:32px;
+    border:none;
+    background:transparent;
+    gap: 10px;
     cursor:pointer;
-    margin: 0 1px;
-    border-radius:50%;
 }
-.controlsCalendar span:hover {
-    background: #D7B9D5;
+/*.controlsCalendar .calendarFilters img{*/
+   /* width:2.5vw;*/
+    /*max-width:30px;
+}*/
+    .controlsCalendar .prevMonth {
+        flex: 1;
+        width: 32px;
+        height:32px;
+        max-width: 32px;
+        border: none;
+        background: transparent;
+        gap: 10px;
+        cursor: pointer;
+    }
+
+    .controlsCalendar .nextMonth {
+        flex: 1;
+        width: 32px;
+        height:32px;
+        max-width: 32px;
+        border: none;
+        background: transparent;
+        gap: 10px;
+        cursor: pointer;
+    }
+
+    .controlsCalendar .dateCalendar {
+        flex: 1;
+        font-size: 20px;
+        text-align: center;
+        background-color: #D7B9D5;
+        border: 2.3px solid white;
+        border-radius: 1rem;
+        color: white;
+        height: 27px;
+        font-family: 'Lilita One', sans-serif;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        text-decoration: none;
+        margin-top: 3px;
+        transition: background-color 0.3s ease;
+    }
+        .controlsCalendar .dateCalendar:hover {
+            background-color: #cca6c9;
+        }
+.calendarBox{
+    border-collapse: collapse;
+    width:100%;
+    height:auto;
+    margin: 20px auto;
 }
+    .calendarBox th {
+        border: 3px solid white;
+        width: 14.28%;
+        height: 75px;
+        text-align: center;
+        vertical-align: middle;
+        padding: 5px;
+        
+    }
+    .calendarBox td {
+        border: 3px solid white;
+        width: 14.28%;
+        height: 75px;
+        text-align: right;
+        vertical-align: top;
+        padding: 5px;
+    }
+
+.weeks {
+    background-color: #446791;
+    font-size: 22px;
+}
+.today {
+    display: inline-block;
+    width: 25px;
+    height:25px;
+    border-radius: 50%;
+    border: 2px solid white;
+    text-align:center;
+    background-color: #446791;
+}
+.otherMonth {
+    background-color: #cca6c9;
+}
+
+/* NOTIFICATION POPUP */
+.calendarDashboard .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+.calendarDashboard .popup-pink-box p {
+    font-size: 2.2rem;
+}
+
 /* ---------------------- TO DO LIST PAGES ---------------------- */
 .toDoListDashboard {
-    flex: 25%;
+    flex: 28%;
     background: #ADA7C9;
     border-radius: 30px;
     padding: 10px;
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);/*fix this*/
-    height:auto; /*fix this*/
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+    height:auto; 
+    color: white;
 }
+
+.task {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    gap: 5px;
+    z-index: 20;
+    flex-direction:row;
+    padding-right:50px;
+    position:relative;
+}
+.checkbox {
+    order:1;
+    background-image: url('../Icons/icons8-unchecked-checkbox-white-96.png');
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 30px;
+    background-color:transparent;
+    border:none;
+    flex: 0 0 30px;
+}
+.checkbox.checked{
+    order:1;
+    background-image: url('../Icons/icons8-check-white-96.png');
+    width:30px;
+    height:30px;
+    cursor:pointer;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 30px;
+    background-color:transparent;
+    border:none;
+    flex: 0 0 30px;
+}
+.readonly{
+    cursor:default;
+}
+.editable{
+    cursor:text;
+}
+.taskCompleted {
+    text-decoration: line-through;
+    color: white;
+    font-size: 16px;
+    text-align: left;
+    line-height: 30px;
+    vertical-align: bottom;
+    border: none;
+    background: none;
+    flex: 1;
+    outline: none;
+    box-shadow: none;
+    order:2;
+}
+.taskUncompleted {
+    color: white;
+    font-size: 16px;
+    text-align: left;
+    line-height: 30px;
+    vertical-align: bottom;
+    border: none;
+    background: none;
+    flex: 1;
+    outline: none;
+    box-shadow: none;
+    order:2;
+}
+.deleteBtn {
+    flex: 0 0 24px;
+    max-width: 24px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    z-index:100;
+}
+    .deleteBtn img {
+        max-width: 24px;
+    }
+
+.editBtn {
+    flex: 0 0 24px;
+    max-width: 24px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    z-index: 100;
+}
+
+    .editBtn img {
+        max-width: 24px;
+    }
+
 .toDoListControls {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 5px;
-    /*edit padding at top*/
-    font-size: 22px;
-    margin: 15px;
+    flex-direction: column;
+    margin: 1.1em 0.8em 1.7em 0.8em;
+    position: relative;
+    z-index: 2;
 }
-.toDoListControls .toDoListHeading {
-    font-family: 'Lilita One', sans-serif;
-    font-weight: bold;
-    font-size: 22px;
-    text-shadow: 1px 1px #5B548A;
-    flex: 90%;
-    text-align:left;
-    /*add shadow and letter spacing*/
-}
-.toDoListControls .toDoListFilters{
-    flex:10%;
-    /*display:flex;
-    gap:16px;
-    justify-content: flex-start;
-    padding: 0;*/
-}
-    .toDoListControls .toDoListFilters .toDoFilterBtn {
-        width: 2.5vw;
-        max-width: 30px;
-        border: none;
-        background: transparent;
-        gap: 5px;
-        cursor:pointer;
-    }
 
-        .toDoListControls .toDoListFilters .toDoFilterBtn img {
-            width: 2.5vw;
-            max-width: 30px;
-        }
-.toDoListFilters .filterBtn{
-    cursor: pointer;
-    font-size: 14px;
-    background:none;
-    border:none;
-    color:white;
-    font-weight:normal;
-    padding: 4px 10px;
-    border-radius: 8px;
-}
-.toDoListFilters .filterBtn:hover, .toDoListFilters .filterBtn.active {
-    color: #5B548A;
-    font-weight:bold;
-    background-color:#D7B9D5;
-}
-.taskBox{
-    margin: 0;
-    padding:0;
-    list-style:none;
-}
-/*.taskBox .task{
-    display:flex;
-    align-items: center;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    padding-left: 10px;
-}*/
-.task{
+.toDoListHeaderRow {
     display: flex;
-    align-items:center;
-    margin-bottom: 15px;
-    padding-left: 5px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
 }
-.task input[type="checkbox"]{
-    transform: scale(1.5);
-    margin-right:12px;
-    accent-color:white;
+
+.toDoListHeading {
+    font-family: 'Lilita One', sans-serif;
+    font-size: 1.8rem;
+    margin: 0;
+    /*text-shadow: 2px 2px #5B548A; old text shadow*/
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
+    color: white;
+    flex-shrink: 0;
 }
-.taskText{
-    font-size:18px;
-    color:white;
-    letter-spacing:0.5px;
-}
-.newTask{
+
+.toDoListControls .toDoListFilters{
+    flex:55%;
     display:flex;
-    padding: 5px 10px;
+    gap:5px;
+    justify-content: flex-end;
+    line-height:32px;
+    vertical-align:central;
+    align-items:center;
+    flex-grow:1;
+    z-index:20;
 }
-.newTask #addTaskBtn {
-    width: 2.5vw;
-        max-width: 30px;
-        border: none;
-        background: transparent;
-        gap: 5px;
-        cursor:pointer;
+.toDoFilterBtn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
 }
-    .newTask #addTaskBtn img {
+.toDoListControls .toDoListFilters .toDoFilterBtn img {
+    max-width: 30px;
+    cursor: pointer;
+}
+.toDoFilterDropDownList {
+    height: 32px;
+    line-height: 32px;
+    border-radius: 2rem;
+    border: 2px solid white;
+    background-color: transparent;
+    background-image: url('../Icons/icons8-expand-arrow-white-96.png');
+    background-repeat: no-repeat;
+    background-position: right 0.5em center;
+    background-size: 20px;
+    padding: 0 2em 0 1em;
+    color: white;
+    font-size: 16px;
+    font-family: 'Gilda Display', serif;
+    font-weight: 200;
+    outline: none;
+    width: 200px;
+    max-width: 300px;
+    margin: 0;
+    box-sizing: border-box;
+    appearance: none;
+    cursor: pointer;
+}
+
+.scrollableTasksContainer {
+    margin: 5px 0px 5px 3px;
+    padding: 0;
+    z-index: 100;
+    max-height: 40vh; /*make this relative*/
+    overflow-y: auto;
+    height: auto;
+    overflow-x: hidden;
+    min-width: 75%;
+    max-width: 98%;
+    /*margin-left: auto;*/
+    margin-right: auto;
+    z-index: 20;
+}
+.toDoListDashBoard .scrollableTasksContainer {
+    max-height: 49vh;
+    min-width: 97%;
+    max-width: 97%;
+}
+
+.scrollableTasksContainer::-webkit-scrollbar {
+    width: 0.7em;
+}
+
+.scrollableTasksContainer::-webkit-scrollbar-track {
+    background: white;
+    border-radius: 100px;
+}
+
+.scrollableTasksContainer::-webkit-scrollbar-thumb {
+    background-color: #446791;
+    border-radius: 100px;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
+}
+.newTaskContainer {
+    display: flex;
+    width: 98%;
+    height: 40px;
+    text-align: center;
+    align-items: center;
+    border-bottom: 1px white solid;
+    border-top: 1px white solid;
+    gap: 5.5px;
+    z-index: 20;
+    color: white;
+    margin: 3.5px;
+}
+
+.newTaskContainer .addTaskBtn {
+    width: 30px;
+    height: 30px;
+    max-width: 30px;
+    border: none;
+    background: transparent;
+    gap: 5px;
+    cursor: pointer;
+    flex: 0 0 35px;
+}
+    .newTaskContainer .addTaskBtn img {
         width: 2.5vw;
         max-width: 30px;
     }
-.newTask #txtNewTask{
-
-}
-.taskInput {
-    flex-grow: 1;
-    height: 35px;
-    border-radius: 8px;
+.newTaskContainer .addTaskText{
+    flex:1;
+    color:white;
+    font-size:16px;
+    text-align:left;
+    line-height:30px;
     border: none;
-    outline: none;
-    padding: 0 10px;
-    font-size: 16px;
-    color: #5B548A;
-    background:transparent;
+    background:none;
+    z-index:20;
+    cursor:text;
+    width:100%;
+    outline:none;
+    box-shadow:none;
 }
-.taskText.done{
-    text-decoration:line-through;
-    color: #ddd;
+    .newTaskContainer .addTaskText::placeholder {
+        color: white;
+    }
+
+.taskControls{
+    text-align:right;
+    display:none;
+    flex-direction:row;
+    gap:3px;
+    z-index:100;
+    flex:0 0 auto;
+    order:0;
+    position:absolute;
+    right:5px;
+    top:50%;
+    transform:translateY(-50%);
 }
+    .task:hover .taskControls {
+        display: flex;        
+    }
+
+/* NOTIFICATION POPUP */
+.toDoListDashboard .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+.toDoListDashboard .popup-pink-box p {
+    font-size: 2.2rem;
+}
+/*----------------------- CREATE EVENT PAGE B200 and B500-B800 -----------------------*/
+.createEventMainContent {
+    margin: 4em 4em 4em 4em;
+}
+
+    .createEventMainContent .eventTitleTagSection {
+        padding: 6% 0 10.85% 0;
+        display: flex;
+    }
+
+        .createEventMainContent .eventTitleTagSection .leftSection {
+            flex: 1;
+        }
+
+        .createEventMainContent .eventTitleTagSection .middleSection {
+            flex: 1;
+        }
+
+        .createEventMainContent .eventTitleTagSection .rightSection {
+            flex: 1;
+        }
+
+            .createEventMainContent .eventTitleTagSection .rightSection table {
+                padding: 0;
+                margin: 0;
+                /*width: auto;*/
+                align-items:center;
+                vertical-align:middle;
+            }
+
+                .createEventMainContent .eventTitleTagSection .rightSection table td {
+                    padding: 3vh 0;
+                    gap:2px;
+                    vertical-align:middle;
+                }
+
+                    .createEventMainContent .eventTitleTagSection .rightSection table td .validationError {
+                        text-align: left;
+                        font-size: 1.5em;
+                    }
+
+.eventTitleTagSection table {
+    width: auto;
+}
+
+    .eventTitleTagSection table tr {
+        padding: 0.1em;
+    }
+
+    .eventTitleTagSection table td {
+        vertical-align: middle;
+        padding: 0.1em 1em;
+    }
+
+        .eventTitleTagSection table td:first-child {
+            text-align: left;
+        }
+
+        .eventTitleTagSection table td:last-child {
+            text-align: right;
+        }
+
+.eventTitleTagSection .textbox {
+    text-align: left;
+    max-width: 350px;
+}
+
+.eventTitleTagSection .dropDownList {
+    max-width: 350px;
+}
+
+.createEventMainContent .buttonSection {
+    display: flex;
+}
+
+    .createEventMainContent .buttonSection .leftSection {
+        z-index: 10;
+        flex: 1;
+    }
+
+    .createEventMainContent .buttonSection .middleSection {
+        z-index: 10;
+        flex: 1;
+    }
+
+    .createEventMainContent .buttonSection .rightSection {
+        z-index: 10;
+        flex: 1;
+    }
+.createEventMainContent .eventTitleTagSection .rightSection .addTagBtn {
+    width: 40px;
+    height: 40px;
+    max-width: 40px;
+    border: none;
+    background: transparent;
+    gap: 5px;
+    cursor: pointer;
+    margin: 0 8px 8px 0;
+}
+    .createEventMainContent .eventTitleTagSection .rightSection .addTagBtn img {
+        width: 2.5vw;
+        max-width: 40px;
+    }
+    
+    /* NOTIFICATION POPUP */
+    .createEventMainContent .popup-pink-box table tr td p {
+        text-align: left;
+        padding: 0 0.2em 0 0.2em;
+    }
+
+.createEventMainContent .popup-pink-box p {
+    font-size: 2.2rem;
+}
+.tagOne {
+    /*display: inline-block;*/
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 2px solid white;
+    text-align: center;
+    background-color: #F4CAE0;
+}
+.tagTwo {
+    /*display: inline-block;*/
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 2px solid white;
+    text-align: center;
+    background-color: #D7B9D5;
+}
+.tagThree {
+    /*display: inline-block;*/
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 2px solid white;
+    text-align: center;
+    background-color: #ADA7C9;
+}
+.tagFour {
+    /*display: inline-block;*/
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 2px solid white;
+    text-align: center;
+    background-color: #90A8C3;
+}
+.tagFive {
+    /*display: inline-block;*/
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 2px solid white;
+    text-align: center;
+    background-color: #64A6BD;
+}
+/*Fairy Tale (pink) : #F4CAE0 
+    ~ Thistle (light purple) : #D7B9D5 
+    ~ Rose quartz (dark purple) : #ADA7C9 
+    ~ Powder blue (dull blue) : #90A8C3 
+    ~ Moonstone (turquoise) : #64A6BD*/
 
 /* ---------------------- CREATE TIMER PAGES A100 ---------------------- */
 /* page 1 (back, create, view past timers) */
 .createTimerMainContent {
-    margin: 4em 4em 4em 4em;
+    margin: 1em 4em 4em 4em;
+    position: relative;
+    z-index: 20;
 }
 
 .createTimerMainContent .buttonSection {
-    margin-top: 32%;
+    margin-top: 32.9%;
     display: flex;
 }
 
 .createTimerMainContent .buttonSection .leftSection {
-    z-index: 10;
     flex: 1;
 }
 
 .createTimerMainContent .buttonSection .middleSection {
-    z-index: 10;
     flex: 1;
 }
 
 .createTimerMainContent .buttonSection .rightSection {
-    z-index: 10;
     flex: 1;
+}
+
+/* NOTIFICATION POPUP */
+.createTimerMainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+.createTimerMainContent .popup-pink-box p {
+    font-size: 2.2rem;
 }
 
 /* page 2 (title, tag, back, continue) */
@@ -1088,7 +1582,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .createTimer2MainContent .titleTagSection {
-    padding: 6% 0 10.85% 0;
+    padding: 6.6% 0 11.1% 0;
     display: flex;
 }
 
@@ -1168,13 +1662,23 @@ body.page-exit .welcomeBackTextDiv {
     flex: 1;
 }
 
+/* NOTIFICATION POPUP */
+.createTimer2MainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+.createTimer2MainContent .popup-pink-box p {
+    font-size: 2.2rem;
+}
+
 /* page 3 (time, back, start) */
 .createTimer3MainContent {
     margin: 4em 4em 4em 4em;
 }
 
 .createTimer3MainContent .timeSection {
-    padding: 5% 0 1.9% 0;
+    padding: 5% 0 2.7% 0;
     text-align: center;
 }
 
@@ -1224,13 +1728,23 @@ body.page-exit .welcomeBackTextDiv {
     flex: 1;
 }
 
+/* NOTIFICATION POPUP */
+.createTimer3MainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+.createTimer3MainContent .popup-pink-box p {
+    font-size: 2.2rem;
+}
+
 /* ---------------------- VIEW TIMER PAGE A200 ---------------------- */
 .viewTimerMainContent {
-    margin: 4em 4em 4em 4em;
+    margin: 4em 4em 0em 4em;
 }
 
 .viewTimerMainContent .timeSection {
-    padding: 2% 0 2% 0;
+    padding: 2% 0 2.9% 0;
     text-align: center;
     display: flex;
 }
@@ -1467,7 +1981,7 @@ body.page-exit .welcomeBackTextDiv {
     max-height: 55.5vh;
     height: auto;
     margin-top: -1%;
-    background-color: #90A8C3;
+    background-color: #90A8C3; /*dull blue*/
     border-radius: 3em;
     min-width: 75%;
     max-width: 75%;
@@ -1484,6 +1998,29 @@ body.page-exit .welcomeBackTextDiv {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.filterControls {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 95%;
+    transform: translateX(-50%);
+    background-color: #90A8C3; /*dull blue*/
+    border-radius: 3em;
+    padding: 1em 0.5em 0 0.5em;
+    z-index: 10;
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+}
+
+.filterControls .label {
+    padding: 0 1em 0 1em;
+}
+
+.filterControls .dropDownList {
+    max-width: 350px;
 }
 
 .viewPastTimersHeading .leftSection {
@@ -1515,6 +2052,7 @@ body.page-exit .welcomeBackTextDiv {
 .pastTimerStudySessionTableSection h2 {
     font-size: 2.5rem;
     margin-bottom: 0;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
 
 .scrollableTableContainer {
@@ -1573,10 +2111,28 @@ body.page-exit .welcomeBackTextDiv {
     border-top: 1px solid white;
 }
 
+/* NOTIFICATION POPUP */
+.viewPastTimersMainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+.viewPastTimersMainContent .popup-pink-box p {
+    font-size: 2.2rem;
+}
+
 /* ---------------------- CREATE STUDY SESSION PAGES A700 ---------------------- */
 #createSession3MainContent {
-    margin: 0;
+    margin: -1em 0 0 0;
     padding: 0;
+}
+
+#createSession3MainContent h2 {
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
+}
+
+#createSession3MainContent .timeSection {
+    padding-bottom: 3.57%;
 }
 
 #inviteFriendsToSession {
@@ -1609,15 +2165,103 @@ body.page-exit .welcomeBackTextDiv {
     color: #64A6BD;
 }
 
+#inviteFriendsToSession .scrollableTableContainer {
+    height: 25vh;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+}
+
 #createSession3MainContent .buttonSection {
     margin: 0;
     padding: 0;
     padding-top: 0.5%;
 }
 
+#searchSection {
+    display: flex;
+}
+
+.friendRow {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    margin: 1em;
+    font-family: 'Gilda Display', serif;
+    font-size: clamp(1.2rem, 2vw, 2.5rem);
+    width: 100%;
+    margin: 1vh auto;
+    text-align: left;
+}
+
+.friendProfileIcon {
+    position: relative;
+    width: 2.2em;
+    aspect-ratio: 1;
+}
+
+.friendProfileCircle {
+    position: relative;
+    background-color: #F4CAE0; /* colour has to change depending on iconNum */
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.friendProfileImage {
+    max-width: 90%;
+    max-height: 90%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    position: absolute;
+    z-index: 2;
+}
+
+.friendProfileIconLink {
+    text-decoration: none;
+    display: block;
+    position: relative;
+}
+
+.friendUsername {
+    color: white;
+    min-width: 6em;
+    display: inline-block;
+}
+
+.addFriendBtn {
+    width: 4em;
+    height: 4em;
+    background-color: transparent;
+    border: none;
+}
+
+/* NOTIFICATION POPUP */
+#createSession3MainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+#createSession3MainContent .popup-pink-box p {
+    font-size: 2.2rem;
+}
+
 /* ---------------------- PET SHOP PAGE ---------------------- */
 #viewShopMainContent {
-    margin: 4em 4em 4em 4em;
+    margin: 1em 4em 4em 4em;
+}
+
+#viewShopMainContent h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.1em;
+    margin-top: 0;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
 
 #viewShopMainContent .backgroundColorContainer {
@@ -1627,8 +2271,18 @@ body.page-exit .welcomeBackTextDiv {
     min-width: 85%;
     max-width: 85%;
     height: 63vh;
-    border-radius: 2em;
+    border-radius: 3em;
     padding: 0.5em;
+}
+
+/* NOTIFICATION POPUP */
+#viewShopMainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+#viewShopMainContent .popup-pink-box p {
+    font-size: 2.2rem;
 }
 
 /* ---------------------- INVENTORY PAGE ---------------------- */
@@ -1640,6 +2294,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 2.5rem;
     margin-bottom: 0.1em;
     margin-top: 0;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
 
 #viewInventoryMainContent .backgroundColorContainer {
@@ -1649,7 +2304,7 @@ body.page-exit .welcomeBackTextDiv {
     min-width: 85%;
     max-width: 85%;
     height: 63vh;
-    border-radius: 2em;
+    border-radius: 3em;
     padding: 0.5em;
     display: flex;
 }
@@ -1678,10 +2333,11 @@ body.page-exit .welcomeBackTextDiv {
 
 #viewInventoryMainContent .leftCategorySection .button {
     background-color: transparent;
-    border: 2px solid white;
+    border: 3px solid white;
     border-radius: 2rem;
     width: 6em;
     padding: 0.3em;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
 
 /* SELECTED CATEGORY BUTTON */
@@ -1693,9 +2349,6 @@ body.page-exit .welcomeBackTextDiv {
     width: auto;
 }
 
-#viewInventoryMainContent table td {
-}
-
 #viewInventoryMainContent .rightPetsSection {
     flex: 4;
     z-index: 12;
@@ -1705,7 +2358,7 @@ body.page-exit .welcomeBackTextDiv {
 
 #viewInventoryMainContent .rightPetsSection .button {
     background-color: transparent;
-    border: 2px solid white;
+    border: 3px solid white;
     border-radius: 2rem;
     width: 8vw;
     max-width: 147px;
@@ -1713,6 +2366,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 1.8rem;
     text-align: center;
     margin: 0.5em 1em;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
 
 /* SELECTED PET BUTTON */
@@ -1723,7 +2377,7 @@ body.page-exit .welcomeBackTextDiv {
 .petIcon {
     position: relative;
     width: 8vw;
-    max-width: 147px;
+    max-width: auto;
     aspect-ratio: 1;
     flex-direction: row;
     margin: 0 1.7em;
@@ -1750,7 +2404,7 @@ body.page-exit .welcomeBackTextDiv {
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #90A8C3; /*dull blue*/
-    border: 2px solid white;
+    border: 3px solid white;
     border-radius: 50%;
     width: 100%;
     height: 100%;
@@ -1758,13 +2412,89 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 /* WHEN PET IS EQUIPPED */
-.petIcon .petCircle .equipped {
+.petCircle.equipped {
     background-color: #446791; /*dark blue*/
+}
+
+/* SELL POP UP */
+#viewInventoryMainContent #popup .buttonSection {
+    align-content: center;
+    margin: 0;
+}
+
+#viewInventoryMainContent #popup .buttonSection .popup-button {
+    font-size: clamp(1rem, 2vw, 2rem);
+    width: 100%;
+}
+
+#viewInventoryMainContent #popup .buttonSection .popup-button-best-blue {
+    font-size: clamp(1rem, 2vw, 2rem);
+    width: 100%;
+}
+
+#popupSellPriceTable {
+    margin: -1em auto -0.5em auto;
+    padding: 0;
+    font-size: 40px;
+}
+
+#popupSellPriceTable td {
+    padding: 3px;
+}
+
+#popupSellPriceTable .pawIcon {
+    position: relative;
+    min-width: 4vw;
+    aspect-ratio: 1;
+}
+
+#popupSellPriceTable .pawIcon img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#popupSellPriceTable .pawIcon .paw {
+    z-index: 1;
+    width: 35%;
+}
+
+#popupSellPriceTable .pawIcon .circle {
+    z-index: 0;
+    width: 100%;
+}
+
+/* CAT 1 POP UP */
+#viewInventoryMainContent #popupCannotSell .buttonSection {
+    align-content: center;
+    margin: 0;
+}
+
+#viewInventoryMainContent #popupCannotSell .buttonSection .popup-button {
+    font-size: clamp(1rem, 2vw, 2rem);
+}
+
+/* NOTIFICATION POPUP */
+#viewInventoryMainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+#viewInventoryMainContent .popup-pink-box p {
+    font-size: 2.2rem;
 }
 
 /* ---------------------- VIEW FRIEND LIST PAGE ---------------------- */
 #viewFriendListMainContent {
-    margin: 4em 4em 4em 4em;
+    margin: 1em 4em 4em 4em;
+}
+
+#viewFriendListMainContent h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.1em;
+    margin-top: 0;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
 
 #viewFriendListMainContent .backgroundColorContainer {
@@ -1774,20 +2504,33 @@ body.page-exit .welcomeBackTextDiv {
     min-width: 85%;
     max-width: 85%;
     height: 63vh;
-    border-radius: 2em;
+    border-radius: 3em;
     padding: 0.5em;
+}
+
+/* NOTIFICATION POPUP */
+#viewFriendListMainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+#viewFriendListMainContent .popup-pink-box p {
+    font-size: 2.2rem;
 }
 
 /* ---------------------- BADGES PAGE ---------------------- */
 #badgesMainContent {
-    margin: 2em;
+    margin: 1em 4em 4em 4em;
     height: 67vh;
-    overflow: hidden; 
+    overflow: hidden;
+    position: relative;
+    z-index: 20;
 }
 
 #badgesMainContent h2 {
     margin-bottom: 0.1em;
     font-size: 2.5rem;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
 
 #badgesMainContent .backgroundColorContainer {
@@ -1815,6 +2558,15 @@ body.page-exit .welcomeBackTextDiv {
     padding-right: 0.2em;
 }
 
+/*.badges-scroll-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    width: 100%;
+    padding-right: 10px; 
+    margin-top: 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: #446791 #e0e0e0;
+}*/
 .badges-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* 4 per row */
@@ -1854,7 +2606,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 1.1rem;
     margin-top: 0.6rem;
     padding: 0.3rem 0.7rem;
-    border: 2px solid #ccc;
+    border: 2px solid white;
     border-radius: 1.5rem;
     background-color: #90a8c3;
 }
@@ -1866,48 +2618,40 @@ body.page-exit .welcomeBackTextDiv {
     margin-top: 0.3rem;
 }
 
-.stars {
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-    position: relative;
-    height: 40px;
+/* NOTIFICATION POPUP */
+#badgesMainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
 }
 
-.star-icon {
-    width: 45px;
-    height: 45px;
-    transform-origin: bottom center;
+#badgesMainContent .popup-pink-box p {
+    font-size: 2.2rem;
 }
 
-.stars .star-icon:nth-child(1) { /*first star*/
-    transform: translateY(-12px) rotate(15deg);
-}
-
-.stars .star-icon:nth-child(2) { /*middle star*/
-    transform: translateY(0px) rotate(0deg);
-}
-
-.stars .star-icon:nth-child(3) { /*Last star*/
-    transform: translateY(-12px) rotate(15deg);
-}
 /* ---------------------- ABOUT PAGE ---------------------- */
-/* PALETTE WIDGET FROM "COOLERS" IN ABOUT PAGE? */
-/*<!-- Coolors Palette Widget -->
-<script src="https://coolors.co/palette-widget/widget.js" > </script >
-<script data-id="000813941576946653" > new CoolorsPaletteWidget("000813941576946653", ["446791","64A6BD","90A8C3","ADA7C9","D7B9D5","F4CAE0"]); </script >*/
 #aboutMainContent{
-    margin: 4em 4em 4em 4em;
+    margin: 1em 4em 4em 4em;
+}
+
+#aboutMainContent h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.1em;
+    margin-top: 0;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
+}
+
+#aboutMainContent p {
+    font-size: 1.5rem;
 }
 
 #aboutMainContent .backgroundColorContainer {
     align-items: center;
     margin: auto;
     background-color: #64A6BD; /*turquoise*/
-    min-width: 85%;
-    max-width: 85%;
+    min-width: 50%;
+    max-width: 50%;
     height: 63vh;
-    border-radius: 2em;
+    border-radius: 3em;
     padding: 0.5em;
 }
 
@@ -1917,6 +2661,82 @@ body.page-exit .welcomeBackTextDiv {
 
 #aboutMainContent a {
     color: white;
+}
+
+#coffeeTable {
+    padding-bottom: 0.5em;
+}
+
+#coffeeTable img {
+    width: 50px;
+}
+
+#madeByTable {
+    padding-bottom: 1.5em;
+    width: 80%;
+    min-width: 600px;
+}
+
+#madeByTable td {
+    padding: 0 0 0 1em;
+}
+
+#madeByTable tr:first-child td:nth-child(1) {
+    border-right: 2px solid white;
+    width: 160px;
+}
+
+#madeByTable h2 {
+    font-size: 2rem;
+    text-align: left;
+}
+
+#madeByTable p {
+    font-size: 1.5rem;
+    text-align: left;
+}
+
+#madeByTable img {
+    width: 160px;
+}
+
+#creditsTable {
+    padding-bottom: 1em;
+    width: 80%;
+    min-width: 600px;
+}
+
+#creditsTable td {
+    padding: 0 0 0 1em;
+}
+
+#creditsTable tr:first-child td:nth-child(1) {
+    border-right: 2px solid white;
+    width: 160px;
+}
+
+#creditsTable h2 {
+    font-size: 2rem;
+    text-align: left;
+}
+
+#creditsTable p {
+    font-size: 1.5rem;
+    text-align: left;
+}
+
+#creditsTable img {
+    width: 160px;
+}
+
+/* NOTIFICATION POPUP */
+#aboutMainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+#aboutMainContent .popup-pink-box p {
+    font-size: 2.2rem;
 }
 
 /* ---------------------- FOOTER ---------------------- */
@@ -2021,14 +2841,14 @@ footer p {
 
 /* ---------------------- PROFILE PAGE ---------------------- */
 #profileMainContent {
-    margin: 0 1em;
+    margin: 1em 4em 4em 4em;
 }
 
 .profileHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 1em;
+    padding: 1vh 2vw;
 }
 
 .headerLeft {
@@ -2070,10 +2890,6 @@ footer p {
     flex: 1;
     display: flex;
     justify-content: flex-end;
-}
-
-.timeDateDiv table {
-    text-align: right;
 }
 
 .profileForm {
@@ -2202,7 +3018,7 @@ input:checked + .slider:before {
 }
 /* -------------------- PROFILE ICON SELECTION PAGE -------------------- */
 #changeProfilePhotoPage {
-    margin: 1em;
+    margin: 1em 4em 4em 4em;
 }
 
 .iconLayoutWrapper {
@@ -2228,7 +3044,7 @@ input:checked + .slider:before {
     justify-content: center;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    border: 4px solid White; 
+    border: 3px solid white;
     transition: all 0.2s ease;
     cursor: pointer;
 }
@@ -2239,10 +3055,13 @@ input:checked + .slider:before {
 }
 
 .iconItem img {
-    max-width: 80%;
-    max-height: 80%;
+    max-width: 90%;
+    max-height: 90%;
     object-fit: contain;
+    max-width: 147px;
+    aspect-ratio: 1;
 }
+
 .circle-cat {
     background-color: #64A6BD; 
 }
@@ -2261,25 +3080,6 @@ input:checked + .slider:before {
 
 .circle-unicorn {
     background-color: #D7B9D5; 
-}
-
-
-/* Responsive tweaks */
-@media (max-width: 768px) {
-    .iconRowBottom {
-        transform: translateX(30px);
-        gap: 30px;
-    }
-
-    .iconSelectItem {
-        width: 100px;
-        height: 100px;
-    }
-
-        .iconSelectItem .profileImageContainer {
-            width: 100px;
-            height: 100px;
-        }
 }
 
 /* ---------------------- OTHER ---------------------- */
@@ -2343,7 +3143,6 @@ input:checked + .slider:before {
 
 
 /* ---------------------- TEXTBOXES ---------------------- */
-
 .textbox {
     border-radius: 2rem;
     border: 2px solid white;
@@ -2359,6 +3158,12 @@ input:checked + .slider:before {
     max-width: 300px;
     box-sizing: border-box;
     display: block;
+}
+
+input.textbox:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+    -webkit-text-fill-color: white !important;
+    transition: background-color 5000s ease-in-out 0s;
 }
 
 /* ---------------------- DROP DOWN LISTS ---------------------- */
@@ -2390,6 +3195,42 @@ input:checked + .slider:before {
 .dropDownList.open {
     background-image: url('../Icons/icons8-collapse-arrow-up-white-96.png'); /* up arrow */
     transition: background-image 0.2s ease;
+}
+
+/* ---------------------- DATE AND TIME BOX ---------------------- */
+.filterDateBox {
+    width: 300px;
+    padding: 0.2em 0.5em 0.2em 0.5em;
+    font-family: 'Gilda Display', serif;
+    font-size: 2.2rem;
+    border: 2px solid white;
+    border-radius: 2em;
+    background-color: transparent;
+    color: white;
+}
+
+.filterDateBox::-webkit-calendar-picker-indicator { /* browser calendar icon */
+    opacity: 0;
+    cursor: pointer;
+}
+
+.customDateWrapper { /* custom calendar icon */
+    position: relative;
+    display: inline-block;
+}
+
+.customDateWrapper::after {
+    content: "";
+    background-image: url('../Icons/icons8-calendar-96.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 2em;
+    height: 2em;
+    position: absolute;
+    right: 1em;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
 }
 
 /* ---------------------- TABLES ---------------------- */
@@ -2530,9 +3371,43 @@ table {
     footer {
         bottom: 0;
     }
+
+    .iconRowBottom {
+        transform: translateX(30px);
+        gap: 30px;
+    }
+
+    .iconSelectItem {
+        width: 100px;
+        height: 100px;
+    }
+
+    .iconSelectItem .profileImageContainer {
+        width: 100px;
+        height: 100px;
+    }
 }
 
-@media (max-width: 1800px) {
+@media (max-width: 1900px) {
+    /* ---------------------- POP-UPS ---------------------- */
+    .popup-pink-box p {
+        font-size: 1.5rem;
+    }
+
+    .popup-pink-box img {
+        max-width: 60%;
+        width: 220px;
+    }
+
+    .popup-blue-box p {
+        font-size: 1.5rem;
+    }
+
+    .popup-blue-box img {
+        max-width: 60%;
+        width: 220px;
+    }
+
     .curved-header h2 {
         margin-top: clamp(-5rem, -4vw, -3rem);
     }
@@ -2606,6 +3481,21 @@ table {
         width: min(90vw, 350px);
     }
 
+    /* USER WELCOME BACK TEXT */
+    .welcomeBackTextDiv {
+        margin-top: 0;
+    }
+
+    .username-header {
+        font-size: 3em;
+        margin-top: -0.5em;
+    }
+
+    /* NOTIFICATION POPUP */
+    #defaultMainContent .popup-pink-box p {
+        font-size: 1.5rem;
+    }
+
     /* register page */
     #registerPageDiv {
         margin-top: 15%;
@@ -2615,6 +3505,39 @@ table {
     #loginPageDiv {
         margin-top: 15%;
     }
+
+    /* dashboard pages */
+    .dashboardContainer {
+        margin: 0em 4em 0em 4em;
+        height: 70vh;
+    }
+
+    .toDoFilterDropDownList {
+        width: 150px;
+    }
+
+    .calendarBox th {
+        width: 10%;
+        height: 48px;
+    }
+
+    .calendarBox td {
+        width: 10%;
+        height: 48px;
+    }
+
+    /* calendar pages */
+    .createEventMainContent {
+        margin: 3em 3em 3em 3em;
+    }
+
+        .createEventMainContent .eventTitleTagSection {
+            padding: 4% 0 9.25% 0;
+        }
+
+            .createEventMainContent .eventTitleTagSection .rightSection table td {
+                padding: 2.8vh 0;
+            }
 
     /* timer pages */
     .createTimerMainContent {
@@ -2637,12 +3560,28 @@ table {
         padding: 2.8vh 0;
     }
 
+    .createTimer2MainContent .titleTagSection .rightSection table td .validationError {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
     .createTimer3MainContent {
         margin: 3em 3em 3em 3em;
     }
 
     .createTimer3MainContent .timeSection {
         padding: 2% 0 1% 0;
+    }
+
+    #inviteFriendsToSession .textbox {
+        padding: 0em 1em;
+        margin: 1vh auto;
+        max-width: 600px;
+    }
+
+    #inviteFriendsToSession .scrollableTableContainer {
+        height: 23vh;
     }
 
     .validationErrorSection {
@@ -2678,9 +3617,177 @@ table {
         font-size: 1.5rem;
     }
 
+    .filterControls {
+        padding: 0.99em 1em 0 1em;
+        width: 94%;
+    }
+
+    .filterControls .label {
+        font-size: 1.6rem;
+    }
+
+    .filterControls .dropDownList {
+        max-width: 325px;
+        padding-left: 0.6em;
+    }
+
+    .filterDateBox {
+        width: 275px;
+        padding: 0.2em 0.5em 0.2em 0.5em;
+        font-size: 1.8rem;
+    }
+
+    .viewPastTimersMainContent .scrollableTableContainer {
+        max-height: 46vh;
+    }
+
+    .viewTimerMainContent {
+        margin: 2em 4em 0em 4em;
+    }
+
+    .viewTimerMainContent .buttonSection {
+        margin-top: 0em;
+        margin-bottom: 0em;
+    }
+
+    .buttonRow {
+        margin-top: 0em;
+        margin-bottom: 0em;
+    }
+
+    .extraTimeRow {
+        top: 77%;
+    }
+
+    /* ---------------------- PET SHOP PAGE ---------------------- */
+    #viewShopMainContent {
+        margin: -0.1em 4em 0em 4em;
+    }
+
+    #viewShopMainContent .buttonSection {
+        margin: -5.5em 0 0 0;
+    }
+
+    /* ---------------------- INVENTORY PAGE ---------------------- */
+    #viewInventoryMainContent {
+        margin: -0.1em 4em 4em 4em;
+    }
+
+    #viewInventoryMainContent .buttonSection {
+        margin: -5.5em 0 0 0;
+    }
+
+    /* ---------------------- BADGES PAGE ---------------------- */
+    #badgesMainContent {
+        margin: 0 4em 4em 4em;
+        height: 67.5vh;
+    }
+
+    #badgesMainContent .scrollableTableContainer {
+        max-height: 57vh;
+        min-width: 97%;
+        max-width: 97%;
+    }
+
+    /* ---------------------- ABOUT PAGE ---------------------- */
+    #aboutMainContent {
+        margin: 0em 4em 4em 4em;
+        height: 67vh;
+    }
+
+    #aboutMainContent h2 {
+        font-size: 1.6rem;
+    }
+
+    #aboutMainContent p {
+        font-size: 1.2rem;
+    }
+
+    #coffeeTable {
+        padding-bottom: 0em;
+    }
+
+    #coffeeTable img {
+        width: 30px;
+    }
+
+    #madeByTable {
+        padding-bottom: 0em;
+    }
+
+    #madeByTable h2 {
+        font-size: 1.6rem;
+    }
+
+    #madeByTable p {
+        font-size: 1.2rem;
+    }
+
+    #madeByTable img {
+        width: 120px;
+    }
+
+    #creditsTable {
+        padding-bottom: 0em;
+    }
+
+    #creditsTable h2 {
+        font-size: 1.6rem;
+    }
+
+    #creditsTable p {
+        font-size: 1.2rem;
+    }
+
+    #creditsTable img {
+        width: 120px;
+    }
+
+    /* POPUPS */
+    .popup-pink-box {
+        width: 40%;
+    }
+
+    .popup-pink-box .buttonSection {
+        margin-top: 3vh;
+        gap: 0.1em;
+    }
+
+    .popup-blue-box {
+        width: 40%;
+    }
+
+    .popup-blue-box .buttonSection {
+        margin-top: 3vh;
+        gap: 0.1em;
+    }
+
+    /* LANDING PAGE */
+    #landingPageDiv img {
+        width: 200px;
+        margin-bottom: -1em;
+    }
+
+    /* PROFILE PAGE */
+    #profileMainContent {
+        margin: 1em 4em 2em 4em;
+    }
+
+    #changeProfilePhotoPage {
+        margin: 0 4em 1em 4em;
+    }
+
+    .iconLayoutWrapper {
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .iconRow {
+        gap: 20px;
+    }
+
     footer {
         max-height: 35px;
         bottom: 0;
     }
 }
-/*BADGES PAGE*/

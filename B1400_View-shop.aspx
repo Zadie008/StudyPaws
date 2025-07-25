@@ -98,6 +98,7 @@
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div id="viewShopMainContent">
+        <h2>Welcome to the Pet Shop!</h2>
         <div class="backgroundColorContainer">
             
         </div>

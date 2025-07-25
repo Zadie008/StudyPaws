@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Data.OleDb;
 using System.Web.UI;
@@ -11,6 +13,14 @@ public partial class _Default : System.Web.UI.Page
         {
             lblLoggedInUserName.Text = Session["Username"].ToString() + "!";
             LoadUserData(Session["Username"].ToString());
+
+            if (!IsPostBack)
+            {
+                LoadPendingInvitesFromDB();
+                LoadUpcomingSessions();
+            }
+
+            ShowNextInvite(); // always show latest invite
         }
         else
         {
@@ -21,6 +31,198 @@ public partial class _Default : System.Web.UI.Page
             lblLevelNumber.Text = "N/A";
         }
     }
+
+    // Lea's code to copy starts here
+    private void LoadPendingInvitesFromDB()
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        List<SessionInvite> pendingInvites = new List<SessionInvite>();
+        string query = "SELECT StudySession.sessionID, StudySession.sessionTitle, StudySession.sessionTag, StudySession.sessionStart, StudySession.sessionEnd, Users.username FROM (StudySessionParticipants INNER JOIN StudySession ON StudySessionParticipants.sessionID = StudySession.sessionID) INNER JOIN Users ON StudySession.leaderID = Users.userID WHERE StudySessionParticipants.userID = ? AND StudySessionParticipants.replied = false ORDER BY StudySession.sessionID ASC";
+
+        using (OleDbConnection conn = new OleDbConnection(cs))
+        using (OleDbCommand cmd = new OleDbCommand(query, conn))
+        {
+            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            conn.Open();
+            using (OleDbDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    pendingInvites.Add(new SessionInvite
+                    {
+                        sessionID = Convert.ToInt32(reader["sessionID"]),
+                        leaderUsername = reader["username"].ToString(),
+                        title = reader["sessionTitle"].ToString(),
+                        tag = reader["sessionTag"].ToString(),
+                        startTime = Convert.ToDateTime(reader["sessionStart"]),
+                        endTime = Convert.ToDateTime(reader["sessionEnd"])
+                    });
+                }
+            }
+        }
+
+        Session["PendingInvites"] = pendingInvites;
+    }
+
+    private void ShowNextInvite()
+    {
+        List<SessionInvite> invites = Session["PendingInvites"] as List<SessionInvite>;
+        if (invites != null && invites.Count > 0)
+        {
+            var invite = invites[0];
+
+            litNotificationText.Text = "<p><span style='text-decoration:underline;'>Study session invitation</span></p><table><tr><td><p>From:</p></td><td><p><span style='font-weight:bold;'>" + invite.leaderUsername + "</span></p></td></tr>" + "<tr><td><p>Title:</p></td><td><p><span style='font-weight:bold;'>" + invite.title + "</span></p></td></tr>" + "<tr><td><p>Tag:</p></td><td><p><span style='font-weight:bold;'>" + invite.tag + "</span></p></td></tr>" + "<tr><td><p>Starts:</p></td><td><p><span style='font-weight:bold;'>" + invite.startTime.ToString("dddd, dd MMMM yyyy @ HH:mm") + "</span></p></td></tr><tr><td><p>Ends:</p></td><td><p><span style='font-weight:bold;'>" + invite.endTime.ToString("dddd, dd MMMM yyyy @ HH:mm") + "</span></p></td></tr></table>";
+
+            hiddenSessionID.Value = invite.sessionID.ToString();
+
+            imgNotificationRinging.Visible = true;
+            imgNotificationNormal.Visible = false;
+            notificationBadge.Visible = true;
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "showNotificationPopup();", true);
+        }
+        else
+        {
+            imgNotificationRinging.Visible = false;
+            imgNotificationNormal.Visible = true;
+            notificationBadge.Visible = false;
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopupNone", "showNotificationPopup(false);", true);
+        }
+    }
+
+    protected void btnYes_Click(object sender, EventArgs e)
+    {
+        // 1. update StudySessionParticipants table
+        int sessionID = int.Parse(hiddenSessionID.Value);
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string updateQuery = "UPDATE StudySessionParticipants SET replied = true, sessionStatus = 'Accepted' WHERE sessionID = ? AND userID = ?";
+        using (OleDbConnection conn = new OleDbConnection(cs))
+        using (OleDbCommand cmd = new OleDbCommand(updateQuery, conn))
+        {
+            cmd.Parameters.AddWithValue("?", sessionID);
+            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+
+        // 2. add in CalendarEvent table
+        List<SessionInvite> invites = Session["PendingInvites"] as List<SessionInvite>;
+        SessionInvite invite = null;
+
+        if (invites != null)
+        {
+            foreach (SessionInvite i in invites)
+            {
+                if (i.sessionID == sessionID)
+                {
+                    invite = i;
+                    break;
+                }
+            }
+        }
+
+        if (invite != null)
+        {
+            string insertQuery = "INSERT INTO CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (?, ?, ?, ?)";
+            using (OleDbConnection conn = new OleDbConnection(cs))
+            using (OleDbCommand cmd2 = new OleDbCommand(insertQuery, conn))
+            {
+                string eventDesc = invite.title + " (From: " + invite.leaderUsername + ")";
+                DateTime eventDate = invite.startTime;
+                int tagID = 1; // Study Session tag
+                int userID = Convert.ToInt32(Session["userID"]);
+
+                cmd2.Parameters.AddWithValue("?", eventDesc);
+                cmd2.Parameters.AddWithValue("?", eventDate);
+                cmd2.Parameters.AddWithValue("?", tagID);
+                cmd2.Parameters.AddWithValue("?", userID);
+
+                conn.Open();
+                cmd2.ExecuteNonQuery();
+            }
+        }
+
+        RemoveInviteAndShowNext(sessionID);
+    }
+
+    protected void btnNo_Click(object sender, EventArgs e)
+    {
+        int sessionID = int.Parse(hiddenSessionID.Value);
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = ? AND userID = ? AND replied = false";
+        using (OleDbConnection conn = new OleDbConnection(cs))
+        using (OleDbCommand cmd = new OleDbCommand(deleteQuery, conn))
+        {
+            cmd.Parameters.AddWithValue("?", sessionID);
+            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+        RemoveInviteAndShowNext(sessionID);
+    }
+
+    private void RemoveInviteAndShowNext(int sessionID)
+    {
+        List<SessionInvite> invites = Session["PendingInvites"] as List<SessionInvite>;
+        if (invites != null)
+        {
+            var currentInvite = invites.Find(i => i.sessionID == sessionID);
+            if (currentInvite != null)
+            {
+                invites.Remove(currentInvite);
+            }
+            Session["PendingInvites"] = invites;
+            ShowNextInvite(); // recursively show all the invites
+        }
+    }
+
+    private void LoadUpcomingSessions()
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string query = "SELECT StudySession.sessionID, StudySession.sessionStart FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = ? AND StudySessionParticipants.replied = true AND StudySessionParticipants.sessionStatus = 'Accepted'";
+
+        List<string> jsSessionTimes = new List<string>();
+
+        using (OleDbConnection conn = new OleDbConnection(cs))
+        using (OleDbCommand cmd = new OleDbCommand(query, conn))
+        {
+            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            conn.Open();
+            using (OleDbDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    int foundSessionID = Convert.ToInt32(reader["sessionID"]);
+                    DateTime sessionStart = Convert.ToDateTime(reader["sessionStart"]);
+
+                    string jsObject = "{ sessionID: " + foundSessionID + ", time: '" + sessionStart.ToString("yyyy-MM-ddTHH:mm:ss") + "' }";
+                    jsSessionTimes.Add(jsObject);
+
+                    TimeSpan timeUntilStart = sessionStart - DateTime.Now;
+                    if (timeUntilStart.TotalMinutes >= 0 && timeUntilStart.TotalMinutes <= 10)
+                    {
+                        Session["sessionID"] = foundSessionID;
+                    }
+                }
+            }
+        }
+
+        if (jsSessionTimes.Count > 0)
+        {
+            string jsArray = "[" + string.Join(",", jsSessionTimes.ToArray()) + "]";
+            ClientScript.RegisterStartupScript(this.GetType(), "registerSessions", "var upcomingSessions = " + jsArray + ";", true);
+        }
+    }
+
+    protected void btnJoin_Click(object sender, EventArgs e)
+    {
+        if (Session["sessionID"] != null)
+        {
+            Response.Redirect("A1400_View-study-session.aspx");
+        }
+    }
+    // Lea's code to copy ends here
 
     private void LoadUserData(string username)
     {
@@ -151,12 +353,12 @@ public partial class _Default : System.Web.UI.Page
     {
         switch (iconNum)
         {
-            case 1: return "~/ProfilePictures/CatPfp.png";
-            case 2: return "~/ProfilePictures/DogPfp.png";
-            case 3: return "~/ProfilePictures/BunnyPfp.png";
-            case 4: return "~/ProfilePictures/CowPfp.png";
-            case 5: return "~/ProfilePictures/UnicornPfp.png";
-            default: return "~/ProfilePictures/CatPfp.png";
+            case 1: return "~/Images/ProfilePictures/CatPfp.png";
+            case 2: return "~/Images/ProfilePictures/DogPfp.png";
+            case 3: return "~/Images/ProfilePictures/BunnyPfp.png";
+            case 4: return "~/Images/ProfilePictures/CowPfp.png";
+            case 5: return "~/Images/ProfilePictures/UnicornPfp.png";
+            default: return "~/Images/ProfilePictures/CatPfp.png";
         }
     }
 
@@ -199,6 +401,6 @@ public partial class _Default : System.Web.UI.Page
 
     private string GetPetImagePath(string petType, int colourNum)
     {
-        return string.Format("~/Images/{0} {1}.png", petType, colourNum);
+        return string.Format("~/Images/{0} {1}.png", petType, colourNum); // png / gif
     }
 }

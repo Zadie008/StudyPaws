@@ -63,4 +63,49 @@ public partial class Default2 : System.Web.UI.Page
 
         return "00:00:00";
     }
+
+    protected void btnApplyFilters_Click(object sender, EventArgs e)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string userID = Session["userID"].ToString();
+        string dateFilter = txtFilterDate.Text;
+        string tagFilter = ddlFilterTag.SelectedValue;
+
+        List<string> conditions = new List<string>();
+        List<OleDbParameter> parameters = new List<OleDbParameter>();
+
+        conditions.Add("userID = ?");
+        parameters.Add(new OleDbParameter("userID", userID));
+
+        if (!string.IsNullOrEmpty(dateFilter))
+        {
+            conditions.Add("Format(timerDateCreated, 'yyyy-mm-dd') = ?");
+            parameters.Add(new OleDbParameter("timerDateCreated", dateFilter));
+        }
+
+        if (!string.IsNullOrEmpty(tagFilter))
+        {
+            conditions.Add("timerTag = ?");
+            parameters.Add(new OleDbParameter("timerTag", tagFilter));
+        }
+
+        string whereClause = string.Join(" AND ", conditions);
+
+        using (OleDbConnection con = new OleDbConnection(cs))
+        {
+            string command = "SELECT timerDateCreated AS [Date Created], timerTitle AS Title, timerTag AS Tag, timerDuration AS Duration FROM Timer WHERE " + whereClause + " ORDER BY timerDateCreated DESC";
+
+            OleDbCommand cmd = new OleDbCommand(command, con);
+
+            foreach (var param in parameters)
+            {
+                cmd.Parameters.Add(param);
+            }
+
+            con.Open();
+            OleDbDataReader reader = cmd.ExecuteReader();
+            GridView1.DataSource = reader;
+            GridView1.DataBind();
+        }
+    }
 }

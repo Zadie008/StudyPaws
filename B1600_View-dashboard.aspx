@@ -100,127 +100,71 @@
     <div class="dashboardContainer">
         <div class="calendarDashboard">
             <div class="calendarHeader">
-                <p class="calendarTitle">Calendar</p>
+                <asp:Label ID="lblMonthYear" runat="server" Text="" CssClass="calendarTitle"></asp:Label>
                 <div class="controlsCalendar">
-                    <button class="calendarFilters"><img src="Icons/icons8-filter-bars-white-96.png" /></button>
-                    <button class="prevMonth"><img src="Icons/icons8-arrow-left-white-96.png" /></button>
-                    <asp:Label ID="lblMonthYear" runat="server" Text="" CssClass="dateCalendar"></asp:Label>
-                    <!--<p class="dateCalendar">Month</p>-->
-                    <button class="nextMonth"><img src="Icons/icons8-arrow-right-white-96.png" /></button>
+                    <asp:DropDownList ID="calendarDropDown" ClientIDMode="Static" class="calendarDropDownList" runat="server" BackColor="#D7B9D5">
+                        <asp:ListItem></asp:ListItem>
+                        <asp:ListItem>Test</asp:ListItem>
+                        <asp:ListItem>Exam</asp:ListItem>
+                        <asp:ListItem>Birthday</asp:ListItem>
+                    </asp:DropDownList>
+
+                    <asp:ImageButton ID="calendarFilterBtn" runat="server" class="calendarFilters" ImageUrl="~/Icons/icons8-filter-bars-white-96.png" OnClick="calendarFilterBtn_Click"/>
+                    <asp:ImageButton ID="btnPrevMonth" class="prevMonth" runat="server" OnClick="btnPrevMonth_Click" ImageUrl ="~/Icons/icons8-arrow-left-white-96.png" />
+                    <asp:Button ID="btnToday" class="dateCalendar" runat="server" Text="Today" OnClick="btnToday_Click" />
+                    <asp:ImageButton ID="btnNextMonth" class="nextMonth" runat="server" OnClick="btnNextMonth_Click" ImageUrl="~/Icons/icons8-arrow-right-white-96.png" />
+                    <asp:HiddenField ID="hfYear" runat="server" />
+                    <asp:HiddenField ID="hfMonth" runat="server" />
                 </div>
             </div>
             
             <div class="calendarBox">
-                <!--<div class="weeks">
-                    <div>Mon</div>
-                    <div>Tue</div>
-                    <div>Wed</div>
-                    <div>Thu</div>
-                    <div>Fri</div>
-                    <div>Sat</div>
-                    <div>Sun</div>
-                </div>-->
                 <asp:Literal ID="literalCalendar" runat="server"></asp:Literal>
-                <!--<ul class="weeks">
-                    <li>Mon</li>
-                    <li>Tue</li>
-                    <li>Wed</li>
-                    <li>Thu</li>
-                    <li>Fri</li>
-                    <li>Sat</li>
-                    <li>Sun</li>
-                </ul>
-                <ul class="days">
-                    <li class="noncurrentMonth">31</li>
-                    <li>1</li>
-                    <li>2</li>
-                    <li>3</li>
-                    <li>4</li>
-                    <li>5</li>
-                    <li>6</li>
-                    <li>7</li>
-                    <li>8</li>
-                    <li>9</li>
-                    <li>10</li>
-                    <li>11</li>
-                    <li>12</li>
-                    <li>13</li>
-                    <li>14</li>
-                    <li>15</li>
-                    <li>16</li>
-                    <li>17</li>
-                    <li>18</li>
-                    <li>19</li>
-                    <li>20</li>
-                    <li>21</li>
-                    <li>22</li>
-                    <li>23</li>
-                    <li>24</li>
-                    <li>25</li>
-                    <li>26</li>
-                    <li>27</li>
-                    <li>28</li>
-                    <li>29</li>
-                    <li>30</li>
-                    <li class="noncurrentMonth">1</li>
-                    <li class="noncurrentMonth">2</li>
-                    <li class="noncurrentMonth">3</li>
-                    <li class="noncurrentMonth">4</li>
-
-                </ul> -->
             </div>
         </div>
 
         <div class="toDoListDashboard">
             <div class="toDoListControls">
-                <p class="toDoListHeading">To-do List</p>
-                <div class ="toDoListFilters">
-                    <button class="toDoFilterBtn"><img src="Icons/icons8-filter-bars-white-96.png" /></button>
-                    <!--<asp:LinkButton ID="btnAll" runat="server" CssClass="filterBtn" OnClick="filter_Click">All</asp:LinkButton>
-                    <asp:LinkButton ID="btnProgress" runat="server" CssClass="filterBtn" OnClick="filter_Click">In Progress</asp:LinkButton>
-                    <asp:LinkButton ID="btnCompleted" runat="server" CssClass="filterBtn" OnClick="filter_Click">Completed</asp:LinkButton>  --> 
+                <div class="toDoListHeaderRow">
+                    <p class="toDoListHeading">To Do List</p>
+                    <div class="toDoListFilters">
+                        <asp:DropDownList ID="ddlFilter" BackColor="#ADA7C9" runat="server" AutoPostBack="true" class="toDoFilterDropDownList" OnSelectedIndexChanged="ddlFilter_SelectedIndexChanged">
+                            <asp:ListItem Text="All Tasks" Value="All" />
+                            <asp:ListItem Text="In Progress" Value="InProgress" />
+                            <asp:ListItem Text="Completed" Value="Completed" />
+                        </asp:DropDownList>
+                        <asp:ImageButton ID="filterButton" runat="server" class="toDoFilterBtn" ClientIDMode="Static" ImageUrl="~/Icons/icons8-filter-bars-white-96.png" OnClick="toDoFilterBtn_Click"/>
+                    </div>
                 </div>
             </div>
-
-            <asp:Repeater ID="rptTasks" runat="server">
-                <ItemTemplate>
-                    <li class="task">
-                        <asp:CheckBox ID="chkComplete" runat="server" AutoPostBack="true" OnCheckedChanged="chkComplete_CheckedChange" 
-                            Checked='<%# Convert.ToBoolean(Eval("taskStatus"))%>'
-                            ToolTip='<%# Eval("taskID")%>' />
-                        <span class="taskText <%# Eval("taskStatus").ToString() == "Completed" ?"done":"" %>">
-                            <%# Eval("taskDesc") %>
-                            </span>
-                    </li>
-                </ItemTemplate>
-            </asp:Repeater>
-
-             <div class="newTask">
-                 <button ID="addTaskBtn" onclick="btnAddTask_Click"><img src="Icons/icons8-add-new-white-96.png" /></button>
-                 <asp:TextBox ID="txtNewTask" runat="server" CssClass="taskInput"></asp:TextBox>
-             </div>
-            <!--<ul class="taskBox">
-                <li class="task">
-                    <label>
-                        <input type="checkbox" />
-                        <span class="taskText">study maths</span>
-                    </label>
-            <div class="taskListSettings">
-                <i class="dotdotdot"></i>
-                <ul class="taskEditMenu">
-                    <li><i class="editTask"></i>Edit</li>
-                    <li><i class="deleteTask"></i>Delete</li>
-                </ul>
+            <div class="newTaskContainer">
+                <asp:ImageButton ID="btnAdd" runat="server" CommandName="Add" class="addTaskBtn" OnClick="btnAdd_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png"/>
+                <asp:TextBox ID="txtNewTask" runat="server" CssClass="addTaskText" AutoPostBack="true" OnTextChanged="txtNewTask_TextChanged" Placeholder="Add a new task..."></asp:TextBox>
             </div>
-                </li>-->
-            <!--</ul>-->
+            <div class="scrollableTasksContainer">
+                
+                <asp:Repeater ID="rptTasks" runat="server" OnItemCommand="rptTasks_ItemCommand" OnItemDataBound="rptTasks_ItemDataBound">
+                    <ItemTemplate>
+                        <div class="task">
+                            <asp:Button runat="server" CommandName="Toggle" CommandArgument='<%# Eval("taskID") %>' CssClass='<%# (bool)Eval("taskStatus") ? "checkbox checked" : "checkbox" %>' Text=" " />
+                            <asp:TextBox ID="txtEditDesc" runat="server"  ReadOnly="true" AutoPostBack="true" OnTextChanged="txtEditDesc_TextChanged" Text='<%# Eval("taskDesc") %>' CssClass='<%# (bool)Eval("taskStatus") ? "taskCompleted readonly" : "taskUncompleted readonly" %>' />
+                            <div class="taskControls">
+                                <asp:ImageButton ID="editBtn" runat="server" class="editBtn" CommandName="Edit" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-edit-white-96.png" />
+                                <asp:ImageButton ID="deleteBtn" runat="server" class="deleteBtn" CommandName="Delete" CommandArgument='<%# Eval("taskID") %>' ImageUrl="~/Icons/icons8-delete-white-96.png"/>
+                            </div>
+                            <asp:HiddenField ID="taskIDHidden" runat="server" Value='<%# Eval("taskID") %>' />
+                        </div>
+                    </ItemTemplate>
+                </asp:Repeater>
+                <asp:HiddenField ID="userIDHidden" runat="server" />
+            </div>
         </div>
     </div>
-    
     
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
 
 </asp:Content>
+
 

@@ -1,32 +1,74 @@
-﻿using Microsoft.SqlServer.Server;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.OleDb;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Script.Serialization;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
 public partial class Default2 : System.Web.UI.Page
 {
+    string connString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (!IsPostBack)
+        if (Session["userID"]!=null)
         {
-            LoadTasks("All");
-            //Session["Tasks"] = new List<TaskItem>();
-            //Calendar.SelectedDate = DateTime.Today;
-            //UpdateEventList();
+            //LoadTasks();
+            ddlFilter.Visible = IsToDoFilterVisible;
+            userIDHidden.Value = Convert.ToString(Session["userID"]);
+
+            if (!IsPostBack)
+            {
+                ViewState["SelectedFilter"] = "All";
+                ddlFilter.SelectedValue = "All";
+                LoadTasks();
+
+                DateTime currentDate = DateTime.Today;
+                hfYear.Value = currentDate.Year.ToString();
+                hfMonth.Value = DateTime.Today.Month.ToString();
+                LoadCalendar(currentDate.Year, currentDate.Month);
+            }
+            else
+            {
+                LoadTasks();
+
+                int year = int.Parse(hfYear.Value);
+                int month = int.Parse(hfMonth.Value);
+                LoadCalendar(year, month);
+            }
         }
-        DateTime currentDate = DateTime.Today;
-        int year = currentDate.Year;
-        int month = currentDate.Month;
-        lblMonthYear.Text = currentDate.ToString("MMMM yyyy");
+        else
+        {
+            Response.Redirect("Login.aspx");
+        }
+    }
+    private bool IsToDoFilterVisible
+    {
+        get
+        {
+            return ViewState["FilterVisible"] != null && (bool)ViewState["FilterVisible"];
+        }
+        set
+        {
+            ViewState["FilterVisible"] = value;
+        }
+    }
+    private void LoadCalendar(int year, int month)
+    {
+        lblMonthYear.Text = new DateTime(year, month, 1).ToString("MMMM yyyy");
         literalCalendar.Text = GenerateCalendar(year, month);
+        hfYear.Value = year.ToString();
+        hfMonth.Value = month.ToString();
+    }
+    protected void calendarFilterBtn_Click(object sender, EventArgs e)
+    {
+        System.Diagnostics.Debug.WriteLine("Button clicked");
     }
     private String GenerateCalendar(int year, int month)
     {
@@ -34,7 +76,6 @@ public partial class Default2 : System.Web.UI.Page
         DateTime firstDayOfMonth = new DateTime(year, month, 1);
         int daysInMonth = DateTime.DaysInMonth(year, month);
 
-        // Adjust so Monday = 0, Sunday = 6
         int adjustedStartDay = ((int)firstDayOfMonth.DayOfWeek + 6) % 7;
 
         sb.Append("<table class='calendarBox'>");
@@ -48,180 +89,274 @@ public partial class Default2 : System.Web.UI.Page
 
         int currentDay = 1;
 
-        // Loop through rows (weeks)
-        for (int week = 0; currentDay <= daysInMonth; week++)
+        DateTime prevMonth = firstDayOfMonth.AddMonths(-1);
+        int daysInPrevMonth = DateTime.DaysInMonth(prevMonth.Year, prevMonth.Month);
+
+        DateTime nextMonth = firstDayOfMonth.AddMonths(1);
+        int week = 0;
+
+        while (currentDay <= daysInMonth)
         {
             sb.Append("<tr>");
 
             for (int dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++)
             {
-                // First row: add empty cells before the 1st day
+            
                 if (week == 0 && dayOfWeek < adjustedStartDay)
                 {
-                    sb.Append("<td></td>");
+                    int prevDay = daysInPrevMonth - (adjustedStartDay - dayOfWeek-1);
+                    sb.Append(string.Format("<td class='otherMonth'>{0}</td>", prevDay));
                 }
                 else if (currentDay <= daysInMonth)
                 {
                     DateTime thisDay = new DateTime(year, month, currentDay);
-                    string cssClass = thisDay.Date == DateTime.Today ? "today" : "";
-                    sb.Append(string.Format("<td class='{0}'>{1}</td>", cssClass, currentDay));
+                    bool isToday = thisDay.Date == DateTime.Today;
+
+                    List<string> events = GetEventsForDay(thisDay);
+
+                    sb.Append("<td class='calendarCell'>");
+
+                    // Day number
+                    sb.Append("<div class='dayNumber'>");
+                    if (isToday)
+                    {
+                        sb.AppendFormat("<span class='today'>{0}</span>", currentDay);
+                    }
+                    else
+                    {
+                        sb.AppendFormat("{0}", currentDay);
+                    }
+                    sb.Append("</div>");
+
+                    // Events
+                    sb.Append("<div class='events scrollableEvents'>");
+                    foreach (string ev in events)
+                    {
+                        sb.Append("<div class='eventItem'><span class='eventDot'></span>");
+                        sb.Append(HttpUtility.HtmlEncode(ev));
+                        sb.Append("</div>");
+                    }
+                    sb.Append("</div>");
+
+                    // '+' Button
+                    sb.AppendFormat(
+                        "<a class='addEventBtn' href='B200_B500-800_Add-event_.aspx?date={0}'>" + "<img src='Icons/icons8-add-new-white-96.png' class='addEventBtnImg' />" + "</a>",
+                        thisDay.ToString("yyyy-MM-dd")
+                    );
+
+                    sb.Append("</td>");
                     currentDay++;
+
                 }
                 else
                 {
-                    sb.Append("<td></td>");
+                    int nextDay = (currentDay - daysInMonth);
+                    sb.Append(string.Format("<td class='otherMonth'>{0}</td>", nextDay));
+                    currentDay++;
                 }
             }
 
             sb.Append("</tr>");
+            week++;
         }
 
         sb.Append("</table>");
         return sb.ToString();
-        /*StringBuilder sb = new StringBuilder();
-        DateTime firstDayOfMonth = new DateTime(year, month, 1);
-        int daysInMonth = DateTime.DaysInMonth(year, month);
-        int startDayOfWeek = ((int)firstDayOfMonth.DayOfWeek+6)%7;
-
-        sb.Append("<table class='calendarBox'>");
-        sb.Append("<tr>");
-        string[] dayNames = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
-
-        foreach (string dayName in dayNames)
-        {
-            sb.Append(string.Format("<th>{0}</th>", dayName)); 
-        }
-        sb.Append("</tr>");
-
-        int currentDay = 1;
-
-        for (int week = 0; currentDay <= daysInMonth; week++) 
-            {
-            if (week == 0 && DayOfWeek < 7; day)
-            sb.Append("<td></td>");
-            }
-
-        for (int day = 1; day <= daysInMonth; day++)
-        {
-            DateTime thisDay = new DateTime(year, month, day);
-            string cssClass = thisDay.Date == DateTime.Today ? "today" : "";
-            int currentCol = startDayOfWeek;
-
-            sb.Append(string.Format("<td class='{0}'>{1}</td>", cssClass, day)); 
-
-            if (currentCol == 6)
-            {
-                sb.Append("</tr>");
-                if (day != daysInMonth)
-                {
-                    sb.Append("<tr>");
-                }
-            }
-        }
-        int endDayOfWeek = ((int)new DateTime(year, month, daysInMonth).DayOfWeek+1);
-        for (int i = endDayOfWeek + 1; i <= 6; i++)
-        {
-            sb.Append("<td></td>");
-        }
-
-        sb.Append("</tr></table>");
-        return sb.ToString();
-        */
+        
     }
-    private void UpdateEventList()
+    private List<string> GetEventsForDay(DateTime day)
     {
-        /*DateTime selectedDate = calendar.SelectedDate;
-        lblSelectedDate.Text = $"Events for {selectedDate.ToLongDateString()}";
-        listEevents.Items.Clear();
+        // Simulated data for now
+        var sampleEvents = new Dictionary<string, List<string>>()
+    {
+        { "2025-07-01", new List<string> { "WRPV Assignment" } },
+        { "2025-07-10", new List<string> { "WRAV Assignment" } },
+        { "2025-07-18", new List<string> { "FS Document", "UI Designs" } }
+    };
 
-        if (EventStore.ContainsKey(selectedDate))
-        {
-            foreach (String ev in EventDtore[selectedDate])
-            {
-                listEvents.Items.Add(new ListItem(ev));
-            }
-        }*/
+        string key = day.ToString("yyyy-MM-dd");
+        return sampleEvents.ContainsKey(key) ? sampleEvents[key] : new List<string>();
     }
 
-    protected void btnAddTask_Click(object sender, EventArgs e)
+    protected void btnPrevMonth_Click(Object sender, EventArgs e)
     {
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection con = new OleDbConnection(cs))
-        {
-            String query = "INSERT INTO ToDoListTask (taskDesc, taskStatus, userID) VALUES (@desc, 0, @userID)";
-            OleDbCommand cmd = new OleDbCommand(query, con);
-            cmd.Parameters.AddWithValue("@desc", txtNewTask.Text.Trim());
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
-            con.Open();
-            cmd.ExecuteNonQuery();
-        }
-        txtNewTask.Text = "";
-        LoadTasks("All");
+        int year = int.Parse(hfYear.Value);
+        int month = int.Parse(hfMonth.Value);
+
+        DateTime prevMonth = new DateTime(year, month, 1).AddMonths(-1);
+        LoadCalendar(prevMonth.Year, prevMonth.Month);
     }
-    protected void chkComplete_CheckedChange(object sender, EventArgs e)
+    protected void btnNextMonth_Click(Object sender, EventArgs e)
     {
-        CheckBox chk = (CheckBox)sender;
-        RepeaterItem item = (RepeaterItem)chk.NamingContainer;
-        string taskID = chk.ToolTip;
+        int year = int.Parse(hfYear.Value);
+        int month = int.Parse(hfMonth.Value);
 
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection con = new OleDbConnection(cs))
-        {
-            bool isChecked = chk.Checked;
-            String query = "UPDATE [ToDoListTask] SET taskStatus = @status WHERE taskID = @id";
-            OleDbCommand cmd = new OleDbCommand(query, con);
-            cmd.Parameters.AddWithValue("@status", isChecked);
-            cmd.Parameters.AddWithValue("@id", taskID);
-            con.Open();
-            cmd.ExecuteNonQuery();
-        }
-        LoadTasks("All");
+        DateTime nextMonth = new DateTime(year, month, 1).AddMonths(1);
+        LoadCalendar(nextMonth.Year, nextMonth.Month);
     }
-    private void LoadTasks(String filter)
+    protected void btnToday_Click(Object sender, EventArgs e)
     {
-        List<TaskItem> tasks = new List<TaskItem>();
+        DateTime today = DateTime.Today;
+        hfYear.Value = today.Year.ToString();
+        hfMonth.Value = today.Month.ToString();
+        LoadCalendar(today.Year, today.Month);
+    }
 
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection con = new OleDbConnection(cs))
+    private void LoadTasks()
+    {
+        string filter = ddlFilter.SelectedValue ?? "All";
+        ViewState["SelectedFilter"] = filter;
+
+        string whereClause = "";
+
+        if (filter == "Completed")
+            whereClause = "AND taskStatus = True";
+        else if (filter == "InProgress")
+            whereClause = "AND taskStatus = False";
+
+        DataTable dt = new DataTable();
+
+        using (OleDbConnection conn = new OleDbConnection(connString))
         {
-            /*String query = "SELECT * FROM [ToDoListTask] WHERE userID = @userID";
-
-            if (filter == "All")
-                query += " AND taskStatus = 1";
-            else if (filter == "In Porgress")
-                query += " AND taskStatus =0";
-
-            OleDbCommand cmd = new OleDbCommand(query, con);
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
-            if (filter != "All")
-                cmd.Parameters.AddWithValue("@filter", filter);
-
-            con.Open();
-            OleDbDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                tasks.Add(new TaskItem
-                {
-                    taskID = Convert.ToInt32(reader["taskID"]),
-                    taskDesc = reader["taskDesc"].ToString(),
-                    taskStatus = Convert.ToBoolean(reader["taskStatus"])
-                });
-            }*/
+            conn.Open();
+            string sql = "SELECT * FROM ToDoListTask WHERE userID = ? " + whereClause + " ORDER BY taskStatus DESC";
+            OleDbCommand cmd = new OleDbCommand(sql, conn);
+            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            dt.Load(cmd.ExecuteReader());
         }
-        var sorted = tasks.OrderBy(t => t.taskStatus == false).ToList();
-        rptTasks.DataSource = sorted;
+
+        rptTasks.DataSource = dt;
         rptTasks.DataBind();
     }
-    public class TaskItem
+
+    protected void btnAdd_Click(object sender, EventArgs e)
     {
-        public int taskID { get; set; }
-        public string taskDesc { get; set; }
-        public bool taskStatus { get; set; }
+        string taskDesc = txtNewTask.Text.Trim();
+        if (taskDesc == "")
+            return;
+
+        using (OleDbConnection conn = new OleDbConnection(connString))
+        {
+            conn.Open();
+            string sql = "INSERT into [ToDoListTask] ([taskDesc], [taskStatus], [userID]) VALUES (?, False, ?)";
+            OleDbCommand cmd = new OleDbCommand(sql, conn);
+            cmd.Parameters.AddWithValue("?", taskDesc);
+            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            cmd.ExecuteNonQuery();
+        }
+
+        txtNewTask.Text = "";
+        LoadTasks();
     }
 
-    protected void filter_Click(object sender, EventArgs e)
+    protected void rptTasks_ItemCommand(object source, RepeaterCommandEventArgs e)
     {
-        String filter = ((LinkButton)sender).Text;
-        LoadTasks(filter);
+        int taskID = Convert.ToInt32(e.CommandArgument);
+
+        if (e.CommandName == "Toggle")
+        {
+            using (OleDbConnection conn = new OleDbConnection(connString))
+            {
+                conn.Open();
+                string sql = "UPDATE ToDoListTask SET taskStatus = NOT taskStatus WHERE taskID = ?";
+                OleDbCommand cmd = new OleDbCommand(sql, conn);
+                cmd.Parameters.AddWithValue("?", taskID);
+                cmd.ExecuteNonQuery();
+            }
+            Response.Redirect(Request.RawUrl);
+        }
+        else if (e.CommandName == "Delete")
+        {
+            using (OleDbConnection conn = new OleDbConnection(connString))
+            {
+                conn.Open();
+                string sql = "DELETE FROM ToDoListTask WHERE taskID = ?";
+                OleDbCommand cmd = new OleDbCommand(sql, conn);
+                cmd.Parameters.AddWithValue("?", taskID);
+                cmd.ExecuteNonQuery();
+            }
+            Response.Redirect(Request.RawUrl);
+        }
+        else if (e.CommandName == "Edit")
+        {
+            ViewState["EditingTaskID"] = e.CommandArgument.ToString();
+        }
+    }
+
+    protected void ddlFilter_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        string selectedFilter = ddlFilter.SelectedValue;
+        ViewState["SelectedFilter"] = selectedFilter;
+        LoadTasks();
+    }
+    protected void toDoFilterBtn_Click(object sender, EventArgs e)
+    {
+        IsToDoFilterVisible = !IsToDoFilterVisible;
+        ddlFilter.Visible= IsToDoFilterVisible;
+    }
+    protected void txtNewTask_TextChanged(object sender, EventArgs e)
+    {
+        btnAdd_Click(sender, e);
+    }
+    protected void txtEditDesc_TextChanged(object sender, EventArgs e)
+    {
+        TextBox txtTaskDesc = (TextBox)sender;
+        RepeaterItem item = (RepeaterItem)txtTaskDesc.NamingContainer;
+        HiddenField taskIDHidden = (HiddenField)item.FindControl("taskIDHidden");
+
+        if (taskIDHidden == null || string.IsNullOrWhiteSpace(taskIDHidden.Value))
+            return;
+
+        int taskID = Convert.ToInt32(taskIDHidden.Value);
+        string newTaskDesc = txtTaskDesc.Text.Trim();
+        if (newTaskDesc == "")
+            return;
+
+        using (OleDbConnection conn = new OleDbConnection(connString))
+        {
+            conn.Open();
+            string sql = "UPDATE ToDoListTask SET taskDesc = ? WHERE taskID = ?";
+            OleDbCommand cmd = new OleDbCommand(sql, conn);
+            cmd.Parameters.AddWithValue("?", newTaskDesc);
+            cmd.Parameters.AddWithValue("?", taskID);
+            cmd.ExecuteNonQuery();
+        }
+        ViewState["EditingTaskID"] = null;
+
+
+        string script = "makeReadonly('" + txtTaskDesc.ClientID + "');";
+        ScriptManager.RegisterStartupScript(this, this.GetType(), "restoreReadonly", script, true);
+        LoadTasks();
+    }
+    protected void rptTasks_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+        {
+            TextBox txtDesc = (TextBox)e.Item.FindControl("txtEditDesc");
+            ImageButton editBtn = (ImageButton)e.Item.FindControl("editBtn");
+            HiddenField taskIDHidden = (HiddenField)e.Item.FindControl("taskIDHidden");
+
+            if (txtDesc != null && editBtn != null && taskIDHidden!=null)
+            {
+                string editingTaskID = Convert.ToString(ViewState["EditingTaskID"]);
+
+                DataRowView row = (DataRowView)e.Item.DataItem;
+                bool taskStatus = Convert.ToBoolean(row["taskStatus"]);
+
+                if (editingTaskID == taskIDHidden.Value)
+                {
+                    txtDesc.ReadOnly = false;
+                    txtDesc.CssClass = taskStatus ? "taskCompleted editable" : "taskUncompleted editable";
+                    txtDesc.Focus();
+                }
+                else
+                {
+                    txtDesc.ReadOnly = true;
+                    txtDesc.CssClass = taskStatus ? "taskCompleted readonly" : "taskUncompleted readonly";
+                }
+                string js = "makeEditable('" + txtDesc.ClientID + "'); return false;";
+                editBtn.OnClientClick = js;
+            }
+        }
     }
 }

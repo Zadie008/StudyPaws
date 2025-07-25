@@ -75,20 +75,20 @@ public partial class Default2 : System.Web.UI.Page
     {
         switch(badgeImageID)
         {
-            case 1: return "~/Badges/Axolotl.png";
-            case 2: return "~/Badges/Blobfish.png";
-            case 3: return "~/Badges/ChillGuy.png";
-            case 4: return "~/Badges/Hyrax.png";
-            case 5: return "~/Badges/KoiFish.png";
-            case 6: return "~/Badges/Marmot.png";
-            case 7: return "~/Badges/MooDeng.png";
-            case 8: return "~/Badges/Narwal.png";
-            case 9: return "~/Badges/PelicanAndCapy.png";
-            case 10: return "~/Badges/Pesto.png";
-            case 11: return "~/Badges/Pufferfish.png";
-            case 12: return "~/Badges/Sloth.png";
-            case 13: return "~/Badges/WesternCats.png";
-            default: return "~/Badges/WesternCats.png";
+            case 1: return "~/Images/Badges/Axolotl.png";
+            case 2: return "~/Images/Badges/Blobfish.png";
+            case 3: return "~/Images/Badges/ChillGuy.png";
+            case 4: return "~/Images/Badges/Hyrax.png";
+            case 5: return "~/Images/Badges/KoiFish.png";
+            case 6: return "~/Images/Badges/Marmot.png";
+            case 7: return "~/Images/Badges/MooDeng.png";
+            case 8: return "~/Images/Badges/Narwal.png";
+            case 9: return "~/Images/Badges/PelicanAndCapy.png";
+            case 10: return "~/Images/Badges/Pesto.png";
+            case 11: return "~/Images/Badges/Pufferfish.png";
+            case 12: return "~/Images/Badges/Sloth.png";
+            case 13: return "~/Images/Badges/WesternCats.png";
+            default: return "~/Images/Badges/WesternCats.png";
         }
     }
     protected string GetStarHtml(string badgeType)

@@ -20,6 +20,46 @@ document.querySelectorAll('.navbar a').forEach(link => {
     });
 });
 
+// z-index fixes for nav bar
+const nav = document.querySelector("nav");
+
+nav.addEventListener("mouseenter", () => {
+    nav.classList.add("nav-active");
+});
+
+nav.addEventListener("mouseleave", () => {
+    setTimeout(() => {
+        nav.classList.remove("nav-active");
+        document.body.focus();
+        const event = new MouseEvent("mousemove", {
+            view: window,
+            bubbles: true,
+            cancelable: true
+        });
+        document.body.dispatchEvent(event);
+    }, 300);
+});
+
+// NOTIFICATIONS ON HOME PAGE
+function showNotificationPopup(hasNotifications) {
+    if (hasNotifications)
+    {
+        document.getElementById("popupHasNotifications").style.display = "flex";
+    }
+    else
+    {
+        document.getElementById("popupNoNotifications").style.display = "flex";
+    }
+}
+
+function hideNotificationPopup() {
+    const noPopup = document.getElementById("popupNoNotifications");
+    const hasPopup = document.getElementById("popupHasNotifications");
+
+    if (noPopup) noPopup.style.display = "none";
+    if (hasPopup) hasPopup.style.display = "none";
+}
+
 // date and time in top right corner of header
 function updateTimeAndDate() {
     const timeLabel = document.getElementById("headerContentPlaceHolder_lblTime");
@@ -52,7 +92,7 @@ function updateTimeAndDate() {
 window.addEventListener("DOMContentLoaded", updateTimeAndDate);
 
 // update time every second
-setInterval(updateTimeAndDate, 6000);
+setInterval(updateTimeAndDate, 1000);
 
 // pop-ups
 function showPopup() {
@@ -62,6 +102,27 @@ function showPopup() {
 function hidePopup() {
     document.getElementById("popup").style.display = "none";
 }
+
+// check for sessions starting every second
+function checkForSessionStart() {
+    if (!window.upcomingSessions) return;
+
+    const now = new Date();
+    for (let i = 0; i < upcomingSessions.length; i++) {
+        const session = upcomingSessions[i];
+        const sessionTime = new Date(session.time);
+        const diff = sessionTime - now;
+
+        if (diff <= 0 && diff > -60000) { // if current time is within 1 minute past the session start
+            document.getElementById("popup").style.display = "flex";
+            document.getElementById("hiddenJoinSessionID").value = session.sessionID;
+            upcomingSessions.splice(i, 1);
+            break;
+        }
+    }
+}
+
+setInterval(checkForSessionStart, 1000);
 
 // drop down list arrows
 document.addEventListener('DOMContentLoaded', function () {
@@ -158,7 +219,7 @@ window.addEventListener('DOMContentLoaded', function () {
     const startSound = document.getElementById('timerStartSound');
     if (startSound) {
         startSound.play().catch(err => {
-            console.warn("Start sound not played automatically (likely due to autoplay restrictions):", err);
+            console.warn("Start sound not played automatically:", err);
         });
     }
 
@@ -293,6 +354,18 @@ function hideTimeUpPopup() {
     window.location.href = "Default.aspx";
 }
 
+// ---- VIEW PAST TIMER PAGE ---- //
+document.addEventListener("DOMContentLoaded", function () {
+    var icon = document.getElementById("filterIcon");
+    var controls = document.getElementById("filterControls");
+
+    if (icon && controls) {
+        icon.addEventListener("click", function () {
+            controls.style.display = (controls.style.display === "none" || controls.style.display === "") ? "flex" : "none";
+        });
+    }
+});
+
 // ---- INVENTORY PAGES ---- //
 document.addEventListener('DOMContentLoaded', function () {
     const selectButtons = [
@@ -313,25 +386,125 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', () => {
             const isSelected = button.classList.contains('buttonSelected');
 
-            // unselecting all buttons:
+            // unselect all
             selectButtons.forEach(otherId => {
                 const otherBtn = document.getElementById(otherId);
                 if (otherBtn) otherBtn.classList.remove('buttonSelected');
             });
 
-            // toggling the current button:
             if (!isSelected) {
                 button.classList.add('buttonSelected');
-                btnSell.style.display = 'block';
-                btnEquip.style.display = 'block';
-            } else {
+
+
+                const colourNum = button.getAttribute('data-colour');
+
+
+                document.getElementById('mainContentPlaceHolder_hfSelectedColourNum').value = colourNum;
+
+                btnSell.style.display = 'inline-block';
+                btnEquip.style.display = 'inline-block';
+            }
+            else
+            {
                 button.classList.remove('buttonSelected');
+                document.getElementById('mainContentPlaceHolder_hfSelectedColourNum').value = "";
+
                 btnSell.style.display = 'none';
                 btnEquip.style.display = 'none';
             }
         });
     });
 });
+
+function playEquipSound(button) {
+    const audio = document.getElementById("equipSound");
+    if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(err => {
+            console.warn("Audio play failed:", err);
+        });
+    }
+
+    const selectedColour = document.getElementById('mainContentPlaceHolder_hfSelectedColourNum').value;
+    const circles = document.querySelectorAll('.petCircle');
+    circles.forEach(circle => circle.classList.remove('equipped'));
+
+    const selectedCircle = document.getElementById(`mainContentPlaceHolder_circle${selectedColour}`);
+    if (selectedCircle) {
+        selectedCircle.classList.add('equipped');
+    }
+
+    setTimeout(() => {
+        __doPostBack(button.name || button.id, '');
+    }, 200);
+    return false;
+}
+
+// OLD playEquipSound method:
+/*function playEquipSound(button) {
+    const audio = document.getElementById("equipSound");
+    // SHOW BACKGROUND CHANGE OF EQUIPPED PET HAPPEN BEFORE FUNCTIONALITY
+    const selectedColour = document.getElementById("mainContentPlaceHolder_hfSelectedColourNum").value;
+
+    for (let i = 1; i <= 5; i++) {
+        const circle = document.getElementById("circle" + i);
+        if (circle) circle.classList.remove("equipped");
+    }
+
+    if (selectedColour) {
+        const selectedCircle = document.getElementById("circle" + selectedColour);
+        if (selectedCircle) selectedCircle.classList.add("equipped");
+    }
+
+    if (!audio) return false;
+
+    try {
+        audio.currentTime = 0;
+        const playPromise = audio.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                console.log("Equip sound played");
+
+                // WAIT FOR SOUND TO FINISH BEFORE POSTBACK
+                audio.onended = function () {
+                    __doPostBack(button.name || button.id, '');
+                };
+            }).catch((err) => { // PROCEED WITH POSTBACK ANYWAY
+                console.warn("Audio play failed:", err);
+                __doPostBack(button.name || button.id, '');
+            });
+        } else {
+            __doPostBack(button.name || button.id, '');
+        }
+    } catch (err) {
+        console.warn("Error playing sound:", err);
+        __doPostBack(button.name || button.id, '');
+    }
+
+    return false; // prevent default submit
+}
+*/
+
+function showEquipSellButtons(colourNum) {
+    document.getElementById('hfSelectedColourNum').value = colourNum;
+    document.getElementById('<%= btnEquip.ClientID %>').style.display = 'inline-block';
+    document.getElementById('<%= btnSell.ClientID %>').style.display = 'inline-block';
+}
+
+function sellPet() {
+    const colourNum = document.getElementById('mainContentPlaceHolder_hfSelectedColourNum').value;
+
+    __doPostBack('FetchSellPrice', colourNum); // a postback fetch of the sellPrice
+
+    showPopup();
+    return false; // don't allow postback
+}
+
+function confirmSell() {
+    hidePopup();
+    return true; // allow postback
+}
 
 // ---  REGISTRATION PAGE  ---
 if (window.location.pathname.toLowerCase().includes("c100_register.aspx")) {
@@ -398,4 +571,21 @@ if (window.location.pathname.toLowerCase().includes("c100_register.aspx")) {
             }
         }
     });
+}
+function makeEditable(textboxID) {
+    var textbox = document.getElementById(textboxID);
+    if (textbox) {
+        textbox.readOnly = false;
+        textbox.classList.remove('readonly');
+        textbox.classList.add('editable');
+        textbox.focus();
+    }
+}
+function makeReadonly(textboxID) {
+    var textbox = document.getElementById(textboxID);
+    if (textbox) {
+        textbox.readOnly = true;
+        textbox.classList.remove('editable');
+        textbox.classList.add('readonly');
+    }
 }

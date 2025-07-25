@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="A1800_View-pets-farm.aspx.cs" Inherits="Default2" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="A1800_View-pets-farm.aspx.cs" Inherits="View_Pets_farm" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
     Inventory
@@ -98,70 +98,111 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-        <div id="viewInventoryMainContent">
-        <h2>Your inventory</h2>
-        <div class="backgroundColorContainer">
-            <div class="leftCategorySection">
-                <asp:Button ID="btnCats" runat="server" CssClass="button" Text="Cats" OnClick="btnCats_Click" />
-                <asp:Button ID="btnDogs" runat="server" CssClass="button" Text="Dogs" OnClick="btnDogs_Click" />
-                <asp:Button ID="btnFuzzy" runat="server" CssClass="button" Text="Fuzzy" OnClick="btnFuzzy_Click" />
-                <asp:Button ID="btnFarm" runat="server" CssClass="button buttonSelected" Text="Farm" OnClick="btnFarm_Click" />
-                <asp:Button ID="btnSpecial" runat="server" CssClass="button" Text="Special" OnClick="btnSpecial_Click" />
-            </div>
-            <div class="rightPetsSection">
-                <table>
-                    <tr>
-                        <td><div class="petIcon">
-                                <div class="petCircle"></div>
-                                <img class="petImage" src="Images/Farm 1.png" width="120"/>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="petIcon">
-                                <div class="petCircle"></div>
-                                <img class="petImage" src="Images/Farm 2.png" width="120"/>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="petIcon">
-                                <div class="petCircle"></div>
-                                <img class="petImage" src="Images/Farm 3.png" width="120"/>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="petIcon">
-                                <div class="petCircle"></div>
-                                <img class="petImage" src="Images/Farm 4.png" width="120"/>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="petIcon">
-                                <div class="petCircle"></div>
-                                <img class="petImage" src="Images/Farm 5.png" width="120"/>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><asp:Button ID="btnSelect1" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
-                        <td><asp:Button ID="btnSelect2" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
-                        <td><asp:Button ID="btnSelect3" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
-                        <td><asp:Button ID="btnSelect4" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
-                        <td><asp:Button ID="btnSelect5" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
-                    </tr>
-                </table>
-            </div>
+<div id="viewInventoryMainContent">
+    <h2>Your inventory</h2>
+    <div class="backgroundColorContainer">
+        <div class="leftCategorySection">
+            <asp:Button ID="btnCats" runat="server" CssClass="button" Text="Cats" OnClick="btnCats_Click" />
+            <asp:Button ID="btnDogs" runat="server" CssClass="button" Text="Dogs" OnClick="btnDogs_Click" />
+            <asp:Button ID="btnFuzzy" runat="server" CssClass="button" Text="Fuzzy" OnClick="btnFuzzy_Click" />
+            <asp:Button ID="btnFarm" runat="server" CssClass="button buttonSelected" Text="Farm" OnClick="btnFarm_Click" />
+            <asp:Button ID="btnSpecial" runat="server" CssClass="button" Text="Special" OnClick="btnSpecial_Click" />
         </div>
-        <div class="buttonSection">
-            <div class="leftSection">
-            </div>
-            <div class="middleSection buttonRow">
-                <asp:Button ID="btnSell" class="button" runat="server" Text="Sell" Style="display: none;" />
-                <asp:Button ID="btnEquip" class="button" runat="server" Text="Equip" Style="display: none;" />
-            </div>
-            <div class="rightSection">
+        <div class="rightPetsSection">
+            <table>
+                <tr>
+                    <td><div class="petIcon">
+                            <div id="circle1" class="petCircle" runat="server"></div>
+                            <asp:Image ID="imgPet1" runat="server" CssClass="petImage" ImageUrl="Images/Farm 1.png" Width="130" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="petIcon">
+                            <div id="circle2" class="petCircle" runat="server"></div>
+                            <asp:Image ID="imgPet2" runat="server" CssClass="petImage" ImageUrl="Images/Farm 2.png" Width="130" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="petIcon">
+                            <div id="circle3" class="petCircle" runat="server"></div>
+                            <asp:Image ID="imgPet3" runat="server" CssClass="petImage" ImageUrl="Images/Farm 3.png" Width="130" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="petIcon">
+                            <div id="circle4" class="petCircle" runat="server"></div>
+                            <asp:Image ID="imgPet4" runat="server" CssClass="petImage" ImageUrl="Images/Farm 4.png" Width="130" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="petIcon">
+                            <div id="circle5" class="petCircle" runat="server"></div>
+                            <asp:Image ID="imgPet5" runat="server" CssClass="petImage" ImageUrl="Images/Farm 5.png" Width="130" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><asp:Button ID="btnSelect1" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
+                    <td><asp:Button ID="btnSelect2" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
+                    <td><asp:Button ID="btnSelect3" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
+                    <td><asp:Button ID="btnSelect4" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
+                    <td><asp:Button ID="btnSelect5" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+            <div class="buttonSection">
+        <div class="leftSection">
+        </div>
+        <div class="middleSection buttonRow">
+            <asp:Button ID="btnSell" class="button" runat="server" Text="Sell" Style="display: none;" OnClick="btnSell_Click" />
+            <asp:HiddenField ID="hfSelectedColourNum" runat="server" />
+            <asp:Button ID="btnEquip" class="button" runat="server" Text="Equip" Style="display: none;" UseSubmitBehavior="false" OnClientClick="return playEquipSound(this);" />
+        </div>
+        <div class="rightSection">
+        </div>
+    </div>
+
+     <div id="popup" class="simple-popup" style="display: none;">
+        <div class="popup-blue-box">
+            <p>Are you sure you want to sell this pet for</p>
+            <table id="popupSellPriceTable">
+                <tr>
+                    <td>
+                        <div class="pawIcon">
+                            <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
+                            <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
+                        </div>
+                    </td>
+                    <td><asp:Label ID="lblSellPrice" runat="server" Text="0"></asp:Label></td>
+                    <td>?</td>
+                </tr>
+            </table>
+            <img src="Images/Notification%20Sad%20Hamster.png" />
+
+            <div class="buttonSection">
+                <asp:Button ID="btnYes" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnYes_Click" OnClientClick="return confirmSell();" />
+                <asp:Button ID="btnNo" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClientClick="hidePopup(); return false;" />
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+        function showPopup() {
+            document.getElementById('popup').style.display = 'flex';
+        }
+
+        function hidePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        function confirmSell() {
+            hidePopup();
+            return true;
+        }
+    </script>
+    <audio id="equipSound" src="Audio/soundEffectPop_1.mp3" preload="auto"></audio>
+</div>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

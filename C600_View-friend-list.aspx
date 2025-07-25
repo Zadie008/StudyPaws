@@ -105,7 +105,7 @@
             </div>
 
             <div class="middleSection">
-                <h2 class="viewFriendTitle">Your friends</h2>
+                <h2>Your friends</h2>
             </div>
 
             <div class="rightSection viewFriendshipsMessages">

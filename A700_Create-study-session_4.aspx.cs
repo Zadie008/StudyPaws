@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+public partial class Default2 : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+
+    }
+
+    protected void btnBack_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("A700_Create-study-session_3.aspx");
+    }
+
+    protected void btnSchedule_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("A700_Create-study-session_3.aspx");
+    }
+}

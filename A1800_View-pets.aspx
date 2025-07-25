@@ -1,11 +1,11 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="A1800_View-pets.aspx.cs" Inherits="Default2" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="A1800_View-pets.aspx.cs" Inherits="View_pets" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
     Inventory
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-                    <!--account info to copy and paste-->
+<!--account info to copy and paste-->
 <div class="accountInfoDiv">
     <div class="profileDiv">
         <a href="C100-C500_Profile.aspx" class="profileIconLink">
@@ -111,32 +111,32 @@
                 <table>
                     <tr>
                         <td><div class="petIcon">
-                                <div class="petCircle"></div>
-                                <img class="petImage" src="Images/Cat 1.png" width="120" />
+                                <div id="circle1" class="petCircle" runat="server"></div>
+                                <asp:Image ID="imgPet1" runat="server" CssClass="petImage" ImageUrl="Images/Cat 1.png" Width="130" />
                             </div>
                         </td>
                         <td>
                             <div class="petIcon">
-                                <div class="petCircle"></div>
-                                <img class="petImage" src="Images/Cat 2.png" width="120"/>
+                                <div id="circle2" class="petCircle" runat="server"></div>
+                                <asp:Image ID="imgPet2" runat="server" CssClass="petImage" ImageUrl="Images/Cat 2.png" Width="130" />
                             </div>
                         </td>
                         <td>
                             <div class="petIcon">
-                                <div class="petCircle"></div>
-                                <img class="petImage" src="Images/Cat 3.png" width="120"/>
+                                <div id="circle3" class="petCircle" runat="server"></div>
+                                <asp:Image ID="imgPet3" runat="server" CssClass="petImage" ImageUrl="Images/Cat 3.png" Width="130" />
                             </div>
                         </td>
                         <td>
                             <div class="petIcon">
-                                <div class="petCircle"></div>
-                                <img class="petImage" src="Images/Cat 4.png" width="120"/>
+                                <div id="circle4" class="petCircle" runat="server"></div>
+                                <asp:Image ID="imgPet4" runat="server" CssClass="petImage" ImageUrl="Images/Cat 4.png" Width="130" />
                             </div>
                         </td>
                         <td>
                             <div class="petIcon">
-                                <div class="petCircle"></div>
-                                <img class="petImage" src="Images/Cat 5.png" width="120"/>
+                                <div id="circle5" class="petCircle" runat="server"></div>
+                                <asp:Image ID="imgPet5" runat="server" CssClass="petImage" ImageUrl="Images/Cat 5.png" Width="130" />
                             </div>
                         </td>
                     </tr>
@@ -154,13 +154,73 @@
             <div class="leftSection">
             </div>
             <div class="middleSection buttonRow">
-                <asp:Button ID="btnSell" class="button" runat="server" Text="Sell" Style="display: none;" />
-                <asp:Button ID="btnEquip" class="button" runat="server" Text="Equip" Style="display: none;" />
+                <asp:Button ID="btnSell" class="button" runat="server" Text="Sell" Style="display: none;" OnClick="btnSell_Click" />
+                <asp:HiddenField ID="hfSelectedColourNum" runat="server" />
+                <asp:Button ID="btnEquip" class="button" runat="server" Text="Equip" Style="display: none;" UseSubmitBehavior="false" OnClientClick="return playEquipSound(this);" />
             </div>
             <div class="rightSection">
             </div>
         </div>
+
+         <div id="popup" class="simple-popup" style="display: none;">
+            <div class="popup-blue-box">
+                <p>Are you sure you want to sell this pet for</p>
+                <table id="popupSellPriceTable">
+                    <tr>
+                        <td>
+                            <div class="pawIcon">
+                                <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
+                                <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
+                            </div>
+                        </td>
+                        <td><asp:Label ID="lblSellPrice" runat="server" Text="0"></asp:Label></td>
+                        <td>?</td>
+                    </tr>
+                </table>
+                <img src="Images/Notification%20Sad%20Hamster.png" />
+
+                <div class="buttonSection">
+                    <asp:Button ID="btnYes" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnYes_Click" OnClientClick="return confirmSell();" />
+                    <asp:Button ID="btnNo" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClientClick="hidePopup(); return false;" />
+                </div>
+            </div>
+        </div>
+
+         <div id="popupCannotSell" class="simple-popup" style="display: none;">
+            <div class="popup-blue-box">
+                <p>Sorry!<br />You can't sell this pet.</p>
+                <img src="Images/Notification%20Sad%20Hamster.png" />
+
+                <div class="buttonSection">
+                    <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideCannotSellPopup(); return false;" />
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            function showPopup() {
+                document.getElementById('popup').style.display = 'flex';
+            }
+
+            function hidePopup() {
+                document.getElementById('popup').style.display = 'none';
+            }
+
+            function confirmSell() {
+                hidePopup();
+                return true;
+            }
+
+            function showCannotSellPopup() {
+                document.getElementById('popupCannotSell').style.display = 'flex';
+            }
+
+            function hideCannotSellPopup() {
+                document.getElementById('popupCannotSell').style.display = 'none';
+            }
+        </script>
     </div>
+    <audio id="equipSound" src="Audio/soundEffectPop_1.mp3" preload="auto"></audio>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

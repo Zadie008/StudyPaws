@@ -83,7 +83,24 @@
                     <h2>Past timers</h2>
                 </div>
                 <div class="rightSection">
-                    <img src="Icons/icons8-filter-bars-white-96.png" />
+                    <img id="filterIcon" src="Icons/icons8-filter-bars-white-96.png" style="cursor:pointer;" />
+                </div>
+                <div class="filterControls" id="filterControls" style="display: none;">
+                    <asp:Label ID="lblFilterDate" for="txtFilterDate" runat="server" CssClass="label" Text="Date:"></asp:Label>
+                    <div class="customDateWrapper">
+                        <asp:TextBox ID="txtFilterDate" runat="server" CssClass="filterDateBox" TextMode="Date"></asp:TextBox>
+                    </div>
+
+                    <asp:Label ID="lblFilterTag" for="ddlFilterTag" runat="server" CssClass="label" Text="Tag:"></asp:Label>
+                    <asp:DropDownList ID="ddlFilterTag" runat="server" CssClass="dropDownList" BackColor="#90A8C3">
+                        <asp:ListItem></asp:ListItem>
+                        <asp:ListItem>Studying</asp:ListItem>
+                        <asp:ListItem>Assignments</asp:ListItem>
+                        <asp:ListItem>Reading</asp:ListItem>
+                        <asp:ListItem>Break</asp:ListItem>
+                    </asp:DropDownList>
+
+                    <asp:Button ID="btnApplyFilters" runat="server" Text="Apply" OnClick="btnApplyFilters_Click" CssClass="button" />
                 </div>
             </div>
             <div class="scrollableTableContainer">

@@ -76,7 +76,7 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-        <div class="createTimer2MainContent">
+    <div class="createTimer2MainContent">
         <div class="titleTagSection">
             <div class="leftSection">
             </div>

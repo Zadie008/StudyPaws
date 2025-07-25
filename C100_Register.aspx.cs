@@ -104,10 +104,12 @@ public partial class C100_Register : System.Web.UI.Page
                     return; 
                 }
 
-                string insertQuery = "INSERT INTO [Users] ([username], [password]) VALUES (?, ?)";
+                string insertQuery = "INSERT INTO [Users] ([username], [password], [iconNum], [collectedPets]) VALUES (?, ?, ?, ?)";
                 OleDbCommand insertCmd = new OleDbCommand(insertQuery, con);
                 insertCmd.Parameters.AddWithValue("?", username);
                 insertCmd.Parameters.AddWithValue("?", hashedPassword);
+                insertCmd.Parameters.AddWithValue("?", 1); // iconNum
+                insertCmd.Parameters.AddWithValue("?", 1); // user always starts with 1 collected pet
 
                 int rowsAffected = insertCmd.ExecuteNonQuery();
 
@@ -115,11 +117,34 @@ public partial class C100_Register : System.Web.UI.Page
                 {
                     pnlConfirm.Visible = true;
                     pnlTut.Visible = false;
-                    pnlProfileExists.Visible = false; 
+                    pnlProfileExists.Visible = false;
                 }
                 else
                 {
                     ScriptManager.RegisterStartupScript(this, GetType(), "registerFail", "alert('Something went wrong during registration. Please try again.');", true);
+                }
+
+                // fetch userID
+                string getUserIdQuery = "SELECT userID FROM [Users] WHERE [username] = ?";
+                OleDbCommand getUserIdCmd = new OleDbCommand(getUserIdQuery, con);
+                getUserIdCmd.Parameters.AddWithValue("?", username);
+
+                object result = getUserIdCmd.ExecuteScalar();
+                if (result != null)
+                {
+                    int userID = Convert.ToInt32(result);
+
+                    string petQuery = "INSERT INTO [UserPets] ([userID], [petID], [equippedStatus]) VALUES (?, ?, ?)";
+                    OleDbCommand insertCmd2 = new OleDbCommand(petQuery, con);
+                    insertCmd2.Parameters.AddWithValue("?", userID);
+                    insertCmd2.Parameters.AddWithValue("?", 1); // give them Cat 1
+                    insertCmd2.Parameters.AddWithValue("?", true); // equip Cat 1
+
+                    insertCmd2.ExecuteNonQuery();
+                }
+                else
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "userIdError", "alert('Could not retrieve userID for new user.');", true);
                 }
             }
             catch (Exception ex)
