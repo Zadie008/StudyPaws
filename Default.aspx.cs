@@ -224,6 +224,28 @@ public partial class _Default : System.Web.UI.Page
     }
     // Lea's code to copy ends here
 
+
+    private string GetUserID(string username, string connectionString)
+    {
+        string query = "SELECT userID FROM Users WHERE username = @username";
+        using (OleDbConnection con = new OleDbConnection(connectionString))
+        using (OleDbCommand cmd = new OleDbCommand(query, con))
+        {
+            cmd.Parameters.AddWithValue("@username", username);
+            try
+            {
+                con.Open();
+                object result = cmd.ExecuteScalar();
+                return result != null ? result.ToString() : null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting user ID: " + ex.Message);
+                return null;
+            }
+        }
+    }
+
     private void LoadUserData(string username)
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -236,35 +258,38 @@ public partial class _Default : System.Web.UI.Page
             lblLevelNumber.Text = "N/A";
             return;
         }
-
+        int userXP = GetUserXP(cs, userID);
+        lblXPAmount.Text = userXP.ToString(); 
         GetLevelInformation(cs, userID);
         GetUserStats(cs, userID);
         GetUserProfileIcon(cs, userID);
         LoadEquippedPet(cs, userID);
     }
 
-    private string GetUserID(string username, string connectionString)
+    private int GetUserXP(string connectionString, string userID)
     {
-        string query = "SELECT userID FROM Users WHERE username = @username";
-        string userID = null;
+        string query = "SELECT userXP FROM Users WHERE userID = @userID";
+        int userXP = 0;
 
         using (OleDbConnection con = new OleDbConnection(connectionString))
         using (OleDbCommand cmd = new OleDbCommand(query, con))
         {
-            cmd.Parameters.AddWithValue("@username", username);
+            cmd.Parameters.AddWithValue("@userID", userID);
             try
             {
                 con.Open();
                 object result = cmd.ExecuteScalar();
-                if (result != null)
-                    userID = result.ToString();
+                if (result != null && int.TryParse(result.ToString(), out userXP))
+                {
+                    // XP successfully retrieved and parsed
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error getting userID: " + ex.Message);
+                Console.WriteLine("Error getting user XP: " + ex.Message);
             }
         }
-        return userID;
+        return userXP;
     }
 
     private void GetLevelInformation(string connectionString, string userID)
@@ -283,15 +308,14 @@ public partial class _Default : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                lblLevelNumber.Text = "ERR";
-                Console.WriteLine("Error getting level: " + ex.Message);
+                lblLevelNumber.Text = ex.Message; 
             }
         }
     }
 
     private void GetUserStats(string connectionString, string userID)
     {
-        string query = "SELECT userXP, userCoinCount FROM Users WHERE userID = @userID";
+        string query = "SELECT userCoinCount FROM Users WHERE userID = @userID";
 
         using (OleDbConnection con = new OleDbConnection(connectionString))
         using (OleDbCommand cmd = new OleDbCommand(query, con))
@@ -304,19 +328,19 @@ public partial class _Default : System.Web.UI.Page
                 {
                     if (reader.Read())
                     {
-                        lblXPAmount.Text = reader["userXP"] != DBNull.Value ? reader["userXP"].ToString() : "0";
+                        
                         lblPaws.Text = reader["userCoinCount"] != DBNull.Value ? reader["userCoinCount"].ToString() : "0";
                     }
                     else
                     {
-                        lblXPAmount.Text = "N/A";
+                        
                         lblPaws.Text = "N/A";
                     }
                 }
             }
             catch (Exception ex)
             {
-                lblXPAmount.Text = "ERR";
+                
                 lblPaws.Text = "ERR";
                 Console.WriteLine("Error getting user data: " + ex.Message);
             }
@@ -339,7 +363,9 @@ public partial class _Default : System.Web.UI.Page
                 if (result != null && int.TryParse(result.ToString(), out iconNum))
                 {
                     string iconPath = GetProfileImagePath(iconNum);
+                    string circleClass = GetCircleColorClass(iconNum);
                     profilePet.ImageUrl = iconPath;
+                    profileCircle.Attributes["class"] = "profileCircle " + circleClass;
                 }
             }
             catch (Exception ex)
@@ -359,6 +385,19 @@ public partial class _Default : System.Web.UI.Page
             case 4: return "~/Images/ProfilePictures/CowPfp.png";
             case 5: return "~/Images/ProfilePictures/UnicornPfp.png";
             default: return "~/Images/ProfilePictures/CatPfp.png";
+        }
+    }
+
+    private string GetCircleColorClass(int iconNum)
+    {
+        switch (iconNum)
+        {
+            case 1: return "circle-cat";
+            case 2: return "circle-dog";
+            case 3: return "circle-bunny";
+            case 4: return "circle-cow";
+            case 5: return "circle-unicorn";
+            default: return "circle-cat"; 
         }
     }
 
@@ -403,4 +442,7 @@ public partial class _Default : System.Web.UI.Page
     {
         return string.Format("~/Images/{0} {1}.png", petType, colourNum); // png / gif
     }
+
+
+
 }

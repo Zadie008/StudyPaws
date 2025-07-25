@@ -115,7 +115,7 @@ public partial class Default2 : System.Web.UI.Page
         }
         else
         {
-            selected = null; // Explicitly set to null if the ViewState entry is null
+            selected = null; // ViewState entry is null
         }
 
         switch (selected)
@@ -144,7 +144,11 @@ public partial class Default2 : System.Web.UI.Page
                 if (result != null && int.TryParse(result.ToString(), out iconNum))
                 {
                     string iconPath = GetProfileImagePath(iconNum);
+                    string circleClass = GetCircleClass(iconNum);
+
                     profilePet.ImageUrl = ResolveUrl(iconPath);
+                    profileCircle.Attributes["class"] = "profileCircle " + circleClass;
+
                     ViewState["SelectedIcon"] = iconNum.ToString();
                 }
             }
@@ -167,6 +171,16 @@ public partial class Default2 : System.Web.UI.Page
             default: return "~/Images/ProfilePictures/CatPfp.png";
         }
     }
-
-
+    private string GetCircleClass(int iconNum)
+    {
+        switch (iconNum)
+        {
+            case 1: return "circle-cat";
+            case 2: return "circle-dog";
+            case 3: return "circle-bunny";
+            case 4: return "circle-cow";
+            case 5: return "circle-unicorn";
+            default: return "circle-cat";
+        }
+    }
 }

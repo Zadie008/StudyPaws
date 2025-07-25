@@ -328,20 +328,24 @@ public partial class Default2 : System.Web.UI.Page
                 if (result != null && int.TryParse(result.ToString(), out iconNum))
                 {
                     string imageUrl = GetProfileImagePath(iconNum);
+                    string circleClass = GetCircleClass(iconNum);
+
                     profilePet.ImageUrl = imageUrl;
+                    profileCircle.Attributes["class"] = "profileCircle " + circleClass;
                 }
                 else
                 {
-                    profilePet.ImageUrl = "~/Images/ProfilePictures/CatPfp.png"; // Default fallback
+                    profilePet.ImageUrl = "~/Images/ProfilePictures/CatPfp.png";
+                    profileCircle.Attributes["class"] = "profileCircle circle-cat";
                 }
             }
             catch
             {
                 profilePet.ImageUrl = "~/Images/ProfilePictures/CatPfp.png";
+                profileCircle.Attributes["class"] = "profileCircle circle-cat";
             }
         }
     }
-
     private string GetProfileImagePath(int iconNum)
     {
         switch (iconNum)
@@ -352,6 +356,18 @@ public partial class Default2 : System.Web.UI.Page
             case 4: return "~/Images/ProfilePictures/CowPfp.png";
             case 5: return "~/Images/ProfilePictures/UnicornPfp.png";
             default: return "~/Images/ProfilePictures/CatPfp.png";
+        }
+    }
+    private string GetCircleClass(int iconNum)
+    {
+        switch (iconNum)
+        {
+            case 1: return "circle-cat";
+            case 2: return "circle-dog";
+            case 3: return "circle-bunny";
+            case 4: return "circle-cow";
+            case 5: return "circle-unicorn";
+            default: return "circle-cat";
         }
     }
 }

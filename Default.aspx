@@ -8,12 +8,14 @@
     <!--account info to copy and paste-->
     <div class="accountInfoDiv">
         <div class="profileDiv">
+         
             <a href="C100-C500_Profile.aspx" class="profileIconLink">
                 <div class="profileIcon">
-                    <div id="profileCircle"></div>
-                    <asp:Image ID="profilePet" runat="server" ImageUrl="~/Images/Cat 1.png" />
+                    <div id="profileCircle" runat="server" ClientIDMode="Static"></div>
+                   <asp:Image ID="profilePet" runat="server" />
                 </div>
             </a>
+
             <div class="profileDetails">
                 <table>
                     <tr>

@@ -15,7 +15,7 @@
          <div class="headerCenter">
             <div class="profileIcon">
                 <div class="profileImageContainer">
-                    <div id="profileCircle"></div>
+                   <div id="profileCircle" runat="server" ClientIDMode="Static"></div>
                     <asp:Image ID="profilePet" runat="server" />
                 </div>
             </div>
