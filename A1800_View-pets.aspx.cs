@@ -19,11 +19,9 @@ public partial class View_pets : System.Web.UI.Page
             {
                 string username = Session["Username"].ToString();
                 userID = LoadUserData(username);
-                if (userID != null)
-                {
-                    LoadOwnedPets(userID);
-                }
+
             }
+          
         }
     }
 
@@ -491,4 +489,6 @@ public partial class View_pets : System.Web.UI.Page
             }
         }
     }
+    
+    
 }

@@ -29,6 +29,8 @@ public partial class A200_View_timer : System.Web.UI.Page
         {
             pet.ImageUrl = Session["EquippedPetImagePath"].ToString();
         }
+
+        
     }
 
     // COMPLETE TIMER (COUNTDOWN ENDS) - for Zadie~~~~~~~~~~~~~~~~~~~~
@@ -97,4 +99,5 @@ public partial class A200_View_timer : System.Web.UI.Page
             }
         }
     }
+    
 }

@@ -62,6 +62,8 @@ public partial class View_study_session : System.Web.UI.Page
                     pet.ImageUrl = Session["EquippedPetImagePath"].ToString();
                 }
             }
+
+           
         }
     }
 
@@ -94,4 +96,5 @@ public partial class View_study_session : System.Web.UI.Page
             }
         }
     }
+    
 }
