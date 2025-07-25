@@ -107,6 +107,7 @@
                         <asp:ListItem>Test</asp:ListItem>
                         <asp:ListItem>Exam</asp:ListItem>
                         <asp:ListItem>Birthday</asp:ListItem>
+                        <asp:ListItem>Another tag</asp:ListItem>
                     </asp:DropDownList>
 
                     <asp:ImageButton ID="calendarFilterBtn" runat="server" class="calendarFilters" ImageUrl="~/Icons/icons8-filter-bars-white-96.png" OnClick="calendarFilterBtn_Click"/>
