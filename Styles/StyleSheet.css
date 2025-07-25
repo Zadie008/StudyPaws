@@ -3549,6 +3549,12 @@ table {
         padding: 2.8vh 0;
     }
 
+    .createTimer2MainContent .titleTagSection .rightSection table td .validationError {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
     .createTimer3MainContent {
         margin: 3em 3em 3em 3em;
     }
