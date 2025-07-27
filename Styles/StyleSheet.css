@@ -3408,6 +3408,19 @@ table {
         width: 220px;
     }
 
+    .popup-button {
+        font-size: 1.8rem;
+    }
+
+    /* best button option */
+    .popup-button-best-blue {
+        font-size: 1.8rem;
+    }
+
+    .popup-button-best-pink {
+        font-size: 1.8rem;
+    }
+
     .curved-header h2 {
         margin-top: clamp(-5rem, -4vw, -3rem);
     }

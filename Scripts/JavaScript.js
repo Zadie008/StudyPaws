@@ -60,6 +60,42 @@ function hideNotificationPopup() {
     if (hasPopup) hasPopup.style.display = "none";
 }
 
+function showCalendarPopup() {
+    document.getElementById("popupCalendar").style.display = "flex";
+}
+
+window.addEventListener('load', function () {
+    var calendarFlag = document.getElementById("mainContentPlaceHolder_hiddenShowCalendar");
+    if (calendarFlag && calendarFlag.value === "true") {
+        showCalendarPopup();
+        calendarFlag.value = "false";
+    }
+});
+
+function showConfirmDeclinePopup() {
+    document.getElementById("popupConfirmDecline").style.display = "flex";
+}
+
+window.addEventListener('load', function () {
+    var confirmFlag = document.getElementById("mainContentPlaceHolder_hiddenShowConfirmation");
+    if (confirmFlag && confirmFlag.value === "true") {
+        showConfirmDeclinePopup();
+        confirmFlag.value = "false";
+    }
+});
+
+function showDeclinedPopup() {
+    document.getElementById("popupIsDeclined").style.display = "flex";
+}
+
+window.addEventListener('load', function () {
+    var declineFlag = document.getElementById("mainContentPlaceHolder_hiddenShowDeclineConfirmed");
+    if (declineFlag && declineFlag.value === "true") {
+        showDeclinedPopup();
+        declineFlag.value = "false";
+    }
+});
+
 // date and time in top right corner of header
 function updateTimeAndDate() {
     const timeLabel = document.getElementById("headerContentPlaceHolder_lblTime");

@@ -116,6 +116,44 @@
             </div>
         </div>
 
+        <div id="popupCalendar" class="simple-popup" style="display: none;">
+            <div class="popup-pink-box">
+                <asp:HiddenField ID="hiddenShowCalendar" runat="server" />
+                <p>Study Session has been added to your calendar!</p>
+                <img src="Images/Notification%20Happy.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnCalendar" CssClass="popup-button-best-pink" runat="server" Text="Calendar, GO!" OnClick="btnCalendar_Click" />
+                    <asp:Button ID="btnOk" CssClass="popup-button" runat="server" Text="Okay, thanks!" OnClick="btnOk_Click" />
+                </div>
+            </div>
+        </div>
+
+        <div id="popupConfirmDecline" class="simple-popup" style="display: none;">
+            <div class="popup-blue-box">
+                <asp:HiddenField ID="hiddenShowConfirmation" runat="server" />
+                <p>Are you sure you want to decline the Study Session invitation?</p>
+                <img src="Images/Notification%20Sad%20Hamster.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnSure" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnSure_Click" />
+                    <asp:Button ID="btnNotSure" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnNotSure_Click" />
+                </div>
+            </div>
+        </div>
+
+        <div id="popupIsDeclined" class="simple-popup" style="display: none;">
+            <div class="popup-blue-box">
+                <asp:HiddenField ID="hiddenShowDeclineConfirmed" runat="server" />
+                <p>Study Session has been declined!</p>
+                <img src="Images/Notification%20Sad%20Hamster.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnOkayDeclined" CssClass="popup-button" runat="server" Text="Okay!" OnClick="btnOkayDeclined_Click" />
+                </div>
+            </div>
+        </div>
+
         <div id="popup" class="simple-popup" style="display: none;">
             <div class="popup-pink-box">
                 <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
