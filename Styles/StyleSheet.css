@@ -1546,6 +1546,315 @@ body.page-exit .welcomeBackTextDiv {
     ~ Powder blue (dull blue) : #90A8C3 
     ~ Moonstone (turquoise) : #64A6BD*/
 
+/*----------------------- TO DO LIST PAGE B900 ---------------------*/
+.toDoListPage {
+    background-color: #ADA7C9;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+    color: white;
+    margin: auto;
+    min-width: 35%;
+    max-width: 35%;
+    height: 68vh;
+    border-radius: 2em;
+    padding: 1em;
+}
+.task {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    gap: 5px;
+    z-index: 20;
+    flex-direction: row;
+    padding-right: 50px;
+    position: relative;
+}
+
+.checkbox {
+    order: 1;
+    background-image: url('../Icons/icons8-unchecked-checkbox-white-96.png');
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 30px;
+    background-color: transparent;
+    border: none;
+    flex: 0 0 30px;
+}
+
+    .checkbox.checked {
+        order: 1;
+        background-image: url('../Icons/icons8-check-white-96.png');
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 30px;
+        background-color: transparent;
+        border: none;
+        flex: 0 0 30px;
+    }
+
+.taskCompleted {
+    text-decoration: line-through;
+    color: white;
+    font-size: 16px;
+    text-align: left;
+    line-height: 30px;
+    vertical-align: bottom;
+    border: none;
+    background: none;
+    flex: 1;
+    outline: none;
+    box-shadow: none;
+    order: 2;
+}
+
+.taskUncompleted {
+    color: white;
+    font-size: 16px;
+    text-align: left;
+    line-height: 30px;
+    vertical-align: bottom;
+    border: none;
+    background: none;
+    flex: 1;
+    outline: none;
+    box-shadow: none;
+    order: 2;
+}
+
+.deleteBtn {
+    flex: 0 0 24px;
+    max-width: 24px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    z-index: 100;
+}
+
+    .deleteBtn img {
+        max-width: 24px;
+    }
+
+.editBtn {
+    flex: 0 0 24px;
+    max-width: 24px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    z-index: 100;
+}
+
+    .editBtn img {
+        max-width: 24px;
+    }
+
+.saveEditBtn {
+    flex: 0 0 24px;
+    max-width: 24px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    z-index: 100;
+}
+
+    .saveEditBtn img {
+        max-width: 24px;
+    }
+
+.toDoListControls {
+    display: flex;
+    flex-direction: column;
+    margin: 1.1em 0.8em 1.7em 0.8em;
+    position: relative;
+    z-index: 2;
+}
+
+.toDoListHeaderRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.toDoListHeading {
+    font-family: 'Lilita One', sans-serif;
+    font-size: 1.8rem;
+    margin: 0;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
+    color: white;
+    flex-shrink: 0;
+}
+
+.toDoListControls .toDoListFilters {
+    flex: 55%;
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+    line-height: 32px;
+    vertical-align: central;
+    align-items: center;
+    flex-grow: 1;
+    z-index: 20;
+}
+
+.toDoFilterBtn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+
+.toDoListControls .toDoListFilters .toDoFilterBtn img {
+    max-width: 30px;
+    cursor: pointer;
+}
+
+.toDoFilterDropDownList {
+    height: 32px;
+    line-height: 32px;
+    border-radius: 2rem;
+    border: 2px solid white;
+    background-color: transparent;
+    background-image: url('../Icons/icons8-expand-arrow-white-96.png');
+    background-repeat: no-repeat;
+    background-position: right 0.5em center;
+    background-size: 20px;
+    padding: 0 2em 0 1em;
+    color: white;
+    font-size: 16px;
+    font-family: 'Gilda Display', serif;
+    font-weight: 200;
+    outline: none;
+    width: 200px;
+    max-width: 300px;
+    margin: 0;
+    box-sizing: border-box;
+    appearance: none;
+    cursor: pointer;
+}
+
+.scrollableTasksContainer {
+    margin: 5px 0px 5px 3px;
+    padding: 0;
+    z-index: 100;
+    max-height: 40vh; /*make this relative*/
+    overflow-y: auto;
+    height: auto;
+    overflow-x: hidden;
+    min-width: 75%;
+    max-width: 98%;
+    /*margin-left: auto;*/
+    margin-right: auto;
+    z-index: 20;
+}
+
+.toDoListPage .scrollableTasksContainer {
+    max-height: 39vh;
+    min-width: 97%;
+    max-width: 97%;
+}
+
+.scrollableTasksContainer::-webkit-scrollbar {
+    width: 0.7em;
+}
+
+.scrollableTasksContainer::-webkit-scrollbar-track {
+    background: white;
+    border-radius: 100px;
+}
+
+.scrollableTasksContainer::-webkit-scrollbar-thumb {
+    background-color: #446791;
+    border-radius: 100px;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+.newTaskContainer {
+    display: flex;
+    width: 98%;
+    height: 40px;
+    text-align: center;
+    align-items: center;
+    border-bottom: 1px white solid;
+    border-top: 1px white solid;
+    gap: 5.5px;
+    z-index: 20;
+    color: white;
+    margin: 3.5px;
+}
+
+    .newTaskContainer .addTaskBtn {
+        width: 30px;
+        height: 30px;
+        max-width: 30px;
+        border: none;
+        background: transparent;
+        gap: 5px;
+        cursor: pointer;
+        flex: 0 0 35px;
+    }
+
+        .newTaskContainer .addTaskBtn img {
+            width: 2.5vw;
+            max-width: 30px;
+        }
+
+    .newTaskContainer .addTaskText {
+        flex: 1;
+        color: white;
+        font-size: 16px;
+        text-align: left;
+        line-height: 30px;
+        border: none;
+        background: none;
+        z-index: 20;
+        cursor: text;
+        width: 100%;
+        outline: none;
+        box-shadow: none;
+    }
+
+        .newTaskContainer .addTaskText::placeholder {
+            color: white;
+        }
+
+.taskControls {
+    text-align: right;
+    display: none;
+    flex-direction: row;
+    gap: 3px;
+    z-index: 100;
+    flex: 0 0 auto;
+    order: 0;
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.task:hover .taskControls {
+    display: flex;
+}
+
+/* NOTIFICATION POPUP */
+.toDoListPage .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+.toDoListPage .popup-pink-box p {
+    font-size: 2.2rem;
+}
 /* ---------------------- CREATE TIMER PAGES A100 ---------------------- */
 /* page 1 (back, create, view past timers) */
 .createTimerMainContent {
@@ -1874,8 +2183,39 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .viewTimerMainContent .timeSection .rightSection .toDoListSection {
-    width: 20vw;
+    flex:90%;
+    width: 22vw;
     margin-left: auto;
+    background-color: #ADA7C9;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+    color: white;
+    /*margin: auto;*/
+    /*min-width: 35%;
+    max-width: 35%;*/
+    height: 60vh;
+    border-radius: 2em;
+    padding: 0.5em;
+    transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
+    opacity:1;
+}
+.toDoListSection .scrollableTasksContainer {
+    max-height: 36vh;
+    min-width: 97%;
+    max-width: 97%;
+}
+
+.toggleToDoListBtn {
+    width: 30px;
+    height: 30px;
+    max-width: 30px;
+    border: none;
+    background: transparent;
+    /*gap: 5px;*/
+    cursor: pointer;
+    flex: 10%;
+}
+.toggleToDoListBtn img{
+    width:30px;
 }
 
 .viewTimerMainContent .buttonSection {
