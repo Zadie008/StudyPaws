@@ -289,9 +289,10 @@ public partial class _Default : System.Web.UI.Page
             lblLevelNumber.Text = "N/A";
             return;
         }
+
         int userXP = GetUserXP(cs, userID);
-        lblXPAmount.Text = userXP.ToString(); 
-        GetLevelInformation(cs, userID);
+        lblXPAmount.Text = userXP.ToString();
+        GetLevelInformation(cs, userID); 
         GetUserStats(cs, userID);
         GetUserProfileIcon(cs, userID);
         LoadEquippedPet(cs, userID);
@@ -325,24 +326,34 @@ public partial class _Default : System.Web.UI.Page
 
     private void GetLevelInformation(string connectionString, string userID)
     {
-        string query = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
+        string query = "SELECT levelID FROM CurrentLevel WHERE userID = ?";
 
         using (OleDbConnection con = new OleDbConnection(connectionString))
         using (OleDbCommand cmd = new OleDbCommand(query, con))
         {
-            cmd.Parameters.AddWithValue("@userID", userID);
+            cmd.Parameters.AddWithValue("?", userID);
+
             try
             {
                 con.Open();
                 object result = cmd.ExecuteScalar();
-                lblLevelNumber.Text = (result != null) ? result.ToString() : "N/A";
+
+                if (result != null)
+                {
+                    lblLevelNumber.Text = result.ToString();
+                }
+                else
+                {
+                    lblLevelNumber.Text = "No Level Found";  // clearer message
+                }
             }
             catch (Exception ex)
             {
-                lblLevelNumber.Text = ex.Message; 
+                lblLevelNumber.Text = "Error: " + ex.Message;
             }
         }
     }
+
 
     private void GetUserStats(string connectionString, string userID)
     {
@@ -471,7 +482,7 @@ public partial class _Default : System.Web.UI.Page
 
     private string GetPetImagePath(string petType, int colourNum)
     {
-        return string.Format("~/Images/{0} {1}.png", petType, colourNum); // png / gif
+        return string.Format("~/Images/{0} {1}.png", petType, colourNum); 
     }
 
 
