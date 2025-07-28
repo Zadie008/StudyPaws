@@ -344,7 +344,7 @@ public partial class _Default : System.Web.UI.Page
                 }
                 else
                 {
-                    lblLevelNumber.Text = "No Level Found";  // clearer message
+                   // lblLevelNumber.Text = "No Level Found";  THIS IS NOT HERE FOR TESING ON WEDNESDAY
                 }
             }
             catch (Exception ex)
