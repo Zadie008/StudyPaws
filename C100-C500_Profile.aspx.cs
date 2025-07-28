@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Activities.Expressions;
+using System.Activities.Statements;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.OleDb;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Security.Policy;
+using System.ServiceModel.Activities;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
@@ -255,12 +260,9 @@ public partial class Default2 : System.Web.UI.Page
     {
         Response.Redirect("Landing-page.aspx");
     }
-
     protected void deleteImageButton_Click(object sender, ImageClickEventArgs e)
     {
-       pnlDeleteProfile.Visible = true;
-
-       
+        pnlDeleteProfile.Visible = true;
     }
 
     protected void btnConfirmDeleteProfile_Click(object sender, EventArgs e)
@@ -274,32 +276,184 @@ public partial class Default2 : System.Web.UI.Page
 
         if (string.IsNullOrEmpty(username))
         {
-            return; 
+            Response.Write("<script>alert('Error: User session expired or not found.');</script>");
+            return;
         }
 
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         using (OleDbConnection con = new OleDbConnection(cs))
         {
-            string deleteQuery = "DELETE FROM [Users] WHERE [username] = ?";
-            OleDbCommand cmd = new OleDbCommand(deleteQuery, con);
-            cmd.Parameters.AddWithValue("?", username);
-
             con.Open();
-            int rowsAffected = cmd.ExecuteNonQuery();
-            con.Close();
+            OleDbTransaction transaction = null;
 
-            if (rowsAffected > 0)
+            try
             {
-                Session.Clear();
-                Session.Abandon();
-                Response.Redirect("Landing-page.aspx");
+                transaction = con.BeginTransaction();
+                Response.Write("Debug: Transaction started.<br/>");
+
+                int userID = -1;
+                string getUserIDQuery = "SELECT userID FROM [Users] WHERE [username] = ?";
+                using (OleDbCommand cmdGetID = new OleDbCommand(getUserIDQuery, con, transaction))
+                {
+                    cmdGetID.Parameters.AddWithValue("?", username);
+
+                    object result = cmdGetID.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        userID = Convert.ToInt32(result);
+                        Response.Write("Debug: Retrieved UserID: " + userID.ToString() + "<br/>");
+                    }
+                    else
+                    {
+                        Response.Write("Debug: UserID not found for username: " + username + "<br/>");
+                    }
+                }
+
+                if (userID == -1)
+                {
+                    Response.Write("<script>alert('Error: User not found in database for deletion. Nothing to delete.');</script>");
+                    transaction.Rollback();
+                    return;
+                }
+
+                // Delete FriendsList (as userIDfrom)
+                string deleteFriendsListQuery1 = "DELETE FROM [FriendsList] WHERE [userIDfrom] = ?";
+                using (OleDbCommand cmd = new OleDbCommand(deleteFriendsListQuery1, con, transaction))
+                {
+                    cmd.Parameters.AddWithValue("?", userID);
+                    int rows = cmd.ExecuteNonQuery();
+                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from FriendsList (userIDfrom).<br/>");
+                }
+
+                // Delete FriendsList (as userIDto)
+                string deleteFriendsListQuery2 = "DELETE FROM [FriendsList] WHERE [userIDto] = ?";
+                using (OleDbCommand cmd = new OleDbCommand(deleteFriendsListQuery2, con, transaction))
+                {
+                    cmd.Parameters.AddWithValue("?", userID);
+                    int rows = cmd.ExecuteNonQuery();
+                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from FriendsList (userIDto).<br/>");
+                }
+
+                // Delete FriendRequest (as userID)
+                string deleteFriendRequestQuery1 = "DELETE FROM [FriendRequest] WHERE [userID] = ?";
+                using (OleDbCommand cmd = new OleDbCommand(deleteFriendRequestQuery1, con, transaction))
+                {
+                    cmd.Parameters.AddWithValue("?", userID);
+                    int rows = cmd.ExecuteNonQuery();
+                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from FriendRequest (userID).<br/>");
+                }
+
+                // Delete UserBadge
+                string deleteUserBadgeQuery = "DELETE FROM [UserBadge] WHERE [userID] = ?";
+                using (OleDbCommand cmd = new OleDbCommand(deleteUserBadgeQuery, con, transaction))
+                {
+                    cmd.Parameters.AddWithValue("?", userID);
+                    int rows = cmd.ExecuteNonQuery();
+                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from UserBadge.<br/>");
+                }
+
+                // Delete UserPets
+                string deleteUserPetsQuery = "DELETE FROM [UserPets] WHERE [userID] = ?";
+                using (OleDbCommand cmd = new OleDbCommand(deleteUserPetsQuery, con, transaction))
+                {
+                    cmd.Parameters.AddWithValue("?", userID);
+                    int rows = cmd.ExecuteNonQuery();
+                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from UserPets.<br/>");
+                }
+
+                // Delete CurrentLevel
+                string deleteCurrentLevelQuery = "DELETE FROM [CurrentLevel] WHERE [userID] = ?";
+                using (OleDbCommand cmd = new OleDbCommand(deleteCurrentLevelQuery, con, transaction))
+                {
+                    cmd.Parameters.AddWithValue("?", userID);
+                    int rows = cmd.ExecuteNonQuery();
+                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from CurrentLevel.<br/>");
+                }
+
+                // Delete CalendarEvent
+                string deleteCalendarEventQuery = "DELETE FROM [CalendarEvent] WHERE [userID] = ?";
+                using (OleDbCommand cmd = new OleDbCommand(deleteCalendarEventQuery, con, transaction))
+                {
+                    cmd.Parameters.AddWithValue("?", userID);
+                    int rows = cmd.ExecuteNonQuery();
+                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from CalendarEvent.<br/>");
+                }
+
+                // Delete  StudySessionParticipants
+                string deleteStudySessionParticipationQuery = "DELETE FROM [StudySessionParticipants] WHERE [userID] = ?";
+                using (OleDbCommand cmd = new OleDbCommand(deleteStudySessionParticipationQuery, con, transaction))
+                {
+                    cmd.Parameters.AddWithValue("?", userID);
+                    int rows = cmd.ExecuteNonQuery();
+                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from StudySessionParticipa...<br/>");
+                }
+
+                // Delete Timer
+                string deleteTimerQuery = "DELETE FROM [Timer] WHERE [userID] = ?";
+                using (OleDbCommand cmd = new OleDbCommand(deleteTimerQuery, con, transaction))
+                {
+                    cmd.Parameters.AddWithValue("?", userID);
+                    int rows = cmd.ExecuteNonQuery();
+                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from Timer.<br/>");
+                }
+
+                // Delete ToDoListTask
+                string deleteToDoListTaskQuery = "DELETE FROM [ToDoListTask] WHERE [userID] = ?";
+                using (OleDbCommand cmd = new OleDbCommand(deleteToDoListTaskQuery, con, transaction))
+                {
+                    cmd.Parameters.AddWithValue("?", userID);
+                    int rows = cmd.ExecuteNonQuery();
+                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from ToDoListTask.<br/>");
+                }
+
+                //  delete  Users
+                string deleteUserQuery = "DELETE FROM [Users] WHERE [userID] = ?";
+                using (OleDbCommand cmdDeleteUser = new OleDbCommand(deleteUserQuery, con, transaction))
+                {
+                    cmdDeleteUser.Parameters.AddWithValue("?", userID);
+
+                    int rowsAffected = cmdDeleteUser.ExecuteNonQuery();
+                    Response.Write("Debug: Deleted " + rowsAffected.ToString() + " rows from Users table.<br/>");
+
+                    if (rowsAffected > 0)
+                    {
+                        transaction.Commit();
+                        Response.Write("Debug: Transaction committed successfully.<br/>");
+
+                        Session.Clear();
+                        Session.Abandon();
+                        FormsAuthentication.SignOut();
+                        Response.Redirect("Landing-page.aspx");
+                    }
+                    else
+                    {
+                        Response.Write("<script>alert('Error: User record not found in Users table for deletion. Transaction rolled back.');</script>");
+                        transaction.Rollback();
+                    }
+                }
             }
-            else
+            catch (Exception ex)
             {
-               
+                Response.Write("<script>alert('An error occurred during profile deletion: " + ex.Message.Replace("'", "\\'") + "');</script>");
+                Response.Write("Debug: Full Error: " + ex.ToString() + "<br/>");
+
+                if (transaction != null)
+                {
+                    transaction.Rollback();
+                    Response.Write("Debug: Transaction rolled back due to error.<br/>");
+                }
+            }
+            finally
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                    Response.Write("Debug: Connection closed.<br/>");
+                }
             }
         }
     }
+
     protected void btnCancelDelete_Click(object sender, EventArgs e)
     {
         pnlDeleteProfile.Visible = false;
