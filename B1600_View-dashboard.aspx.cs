@@ -19,7 +19,6 @@ public partial class Default2 : System.Web.UI.Page
     {
         if (Session["userID"]!=null)
         {
-            //LoadTasks();
             ddlFilter.Visible = IsToDoFilterVisible;
             userIDHidden.Value = Convert.ToString(Session["userID"]);
 
@@ -42,6 +41,7 @@ public partial class Default2 : System.Web.UI.Page
                 int month = int.Parse(hfMonth.Value);
                 LoadCalendar(year, month);
             }
+            //LoadTasks();
         }
         else
         {
@@ -228,7 +228,10 @@ public partial class Default2 : System.Web.UI.Page
         rptTasks.DataSource = dt;
         rptTasks.DataBind();
     }
-
+    protected void txtNewTask_TextChanged(object sender, EventArgs e)
+    {
+        btnAdd_Click(sender, e);
+    }
     protected void btnAdd_Click(object sender, EventArgs e)
     {
         string taskDesc = txtNewTask.Text.Trim();
@@ -246,7 +249,7 @@ public partial class Default2 : System.Web.UI.Page
         }
 
         txtNewTask.Text = "";
-        LoadTasks();
+        Response.Redirect(Request.RawUrl);
     }
 
     protected void rptTasks_ItemCommand(object source, RepeaterCommandEventArgs e)
@@ -258,8 +261,8 @@ public partial class Default2 : System.Web.UI.Page
             using (OleDbConnection conn = new OleDbConnection(connString))
             {
                 conn.Open();
-                string sql = "UPDATE ToDoListTask SET taskStatus = NOT taskStatus WHERE taskID = ?";
-                OleDbCommand cmd = new OleDbCommand(sql, conn);
+                string query = "UPDATE ToDoListTask SET taskStatus = NOT taskStatus WHERE taskID = ?";
+                OleDbCommand cmd = new OleDbCommand(query, conn);
                 cmd.Parameters.AddWithValue("?", taskID);
                 cmd.ExecuteNonQuery();
             }
@@ -270,8 +273,8 @@ public partial class Default2 : System.Web.UI.Page
             using (OleDbConnection conn = new OleDbConnection(connString))
             {
                 conn.Open();
-                string sql = "DELETE FROM ToDoListTask WHERE taskID = ?";
-                OleDbCommand cmd = new OleDbCommand(sql, conn);
+                string query = "DELETE FROM ToDoListTask WHERE taskID = ?";
+                OleDbCommand cmd = new OleDbCommand(query, conn);
                 cmd.Parameters.AddWithValue("?", taskID);
                 cmd.ExecuteNonQuery();
             }
@@ -280,6 +283,26 @@ public partial class Default2 : System.Web.UI.Page
         else if (e.CommandName == "Edit")
         {
             ViewState["EditingTaskID"] = e.CommandArgument.ToString();
+            LoadTasks();
+        }
+        else if (e.CommandName == "Save")
+        {
+            TextBox txtEditDesc = (TextBox)e.Item.FindControl("txtEditDesc");
+            string newDesc = txtEditDesc.Text.Trim();
+            if (string.IsNullOrWhiteSpace(newDesc))
+                return;
+
+            using (OleDbConnection conn = new OleDbConnection(connString))
+            {
+                conn.Open();
+                string query = "UPDATE ToDoListTask SET taskDesc = ? WHERE taskID = ?";
+                OleDbCommand cmd = new OleDbCommand (query, conn);
+                cmd.Parameters.AddWithValue ("?", newDesc);
+                cmd.Parameters.AddWithValue("?", taskID);
+                cmd.ExecuteNonQuery();
+            }
+            ViewState["EditingTaskID"] = null;
+            LoadTasks();
         }
     }
 
@@ -294,68 +317,33 @@ public partial class Default2 : System.Web.UI.Page
         IsToDoFilterVisible = !IsToDoFilterVisible;
         ddlFilter.Visible= IsToDoFilterVisible;
     }
-    protected void txtNewTask_TextChanged(object sender, EventArgs e)
-    {
-        btnAdd_Click(sender, e);
-    }
-    protected void txtEditDesc_TextChanged(object sender, EventArgs e)
-    {
-        TextBox txtTaskDesc = (TextBox)sender;
-        RepeaterItem item = (RepeaterItem)txtTaskDesc.NamingContainer;
-        HiddenField taskIDHidden = (HiddenField)item.FindControl("taskIDHidden");
-
-        if (taskIDHidden == null || string.IsNullOrWhiteSpace(taskIDHidden.Value))
-            return;
-
-        int taskID = Convert.ToInt32(taskIDHidden.Value);
-        string newTaskDesc = txtTaskDesc.Text.Trim();
-        if (newTaskDesc == "")
-            return;
-
-        using (OleDbConnection conn = new OleDbConnection(connString))
-        {
-            conn.Open();
-            string sql = "UPDATE ToDoListTask SET taskDesc = ? WHERE taskID = ?";
-            OleDbCommand cmd = new OleDbCommand(sql, conn);
-            cmd.Parameters.AddWithValue("?", newTaskDesc);
-            cmd.Parameters.AddWithValue("?", taskID);
-            cmd.ExecuteNonQuery();
-        }
-        ViewState["EditingTaskID"] = null;
-
-
-        string script = "makeReadonly('" + txtTaskDesc.ClientID + "');";
-        ScriptManager.RegisterStartupScript(this, this.GetType(), "restoreReadonly", script, true);
-        LoadTasks();
-    }
     protected void rptTasks_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
         if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
         {
             TextBox txtDesc = (TextBox)e.Item.FindControl("txtEditDesc");
             ImageButton editBtn = (ImageButton)e.Item.FindControl("editBtn");
+            ImageButton saveBtn = (ImageButton)e.Item.FindControl("saveEditBtn");
             HiddenField taskIDHidden = (HiddenField)e.Item.FindControl("taskIDHidden");
 
-            if (txtDesc != null && editBtn != null && taskIDHidden!=null)
+            if (txtDesc != null && editBtn != null &&saveBtn!=null && taskIDHidden!=null)
             {
                 string editingTaskID = Convert.ToString(ViewState["EditingTaskID"]);
 
-                DataRowView row = (DataRowView)e.Item.DataItem;
-                bool taskStatus = Convert.ToBoolean(row["taskStatus"]);
 
                 if (editingTaskID == taskIDHidden.Value)
                 {
                     txtDesc.ReadOnly = false;
-                    txtDesc.CssClass = taskStatus ? "taskCompleted editable" : "taskUncompleted editable";
+                    editBtn.Visible = false;
+                    saveBtn.Visible = true;
                     txtDesc.Focus();
                 }
                 else
                 {
                     txtDesc.ReadOnly = true;
-                    txtDesc.CssClass = taskStatus ? "taskCompleted readonly" : "taskUncompleted readonly";
+                    editBtn.Visible = true;
+                    saveBtn.Visible = false;
                 }
-                string js = "makeEditable('" + txtDesc.ClientID + "'); return false;";
-                editBtn.OnClientClick = js;
             }
         }
     }

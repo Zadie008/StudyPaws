@@ -85,6 +85,7 @@
         <div class="timeSection">
             <div class="leftSection">
             </div>
+
             <div class="middleSection">
                 <div class="timerCircleWrapper">
                     <svg class="progress-ring" width="350" height="350">
@@ -101,10 +102,50 @@
                     </div>
                 </div>
             </div>
+
             <div class="rightSection">
-                <div class="toDoListSection">
-                    <h1>To-do List</h1>
+                        <asp:ImageButton ID="toggleToDoList" runat="server" OnClick="toggleToDoList_Click" class="toggleToDoListBtn"/>
+    <asp:Panel ID="toDoListPanel" runat="server" CssClass="toDoListSection" Visible="true" >
+            <div class="toDoListControls">
+                <div class="toDoListHeaderRow">
+                    <p class="toDoListHeading">To Do List</p>
+                    <div class="toDoListFilters">
+                        <asp:DropDownList ID="ddlFilter" BackColor="#ADA7C9" runat="server" AutoPostBack="true" class="toDoFilterDropDownList" OnSelectedIndexChanged="ddlFilter_SelectedIndexChanged">
+                            <asp:ListItem Text="All Tasks" Value="All" />
+                            <asp:ListItem Text="In Progress" Value="InProgress" />
+                            <asp:ListItem Text="Completed" Value="Completed" />
+                        </asp:DropDownList>
+                        <asp:ImageButton ID="filterButton" runat="server" class="toDoFilterBtn" ClientIDMode="Static" ImageUrl="~/Icons/icons8-filter-bars-white-96.png" OnClick="toDoFilterBtn_Click"/>
+                    </div>
                 </div>
+            </div>
+        
+        <div class="newTaskContainer">
+            <asp:ImageButton ID="btnAdd" runat="server" CommandName="Add" class="addTaskBtn" OnClick="btnAdd_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png"/>
+            <asp:TextBox ID="txtNewTask" runat="server" CssClass="addTaskText" AutoPostBack="true" OnTextChanged="txtNewTask_TextChanged" Placeholder="Add a new task..."></asp:TextBox>
+        </div>
+        
+        <div class="scrollableTasksContainer">
+            <asp:Repeater ID="rptTasks" runat="server" EnableViewState="false" OnItemCommand="rptTasks_ItemCommand" OnItemDataBound="rptTasks_ItemDataBound">
+                <ItemTemplate>
+                    <div class="task">
+                        <asp:Button runat="server" CommandName="Toggle" CommandArgument='<%# Eval("taskID") %>' CssClass='<%# (bool)Eval("taskStatus") ? "checkbox checked" : "checkbox" %>' Text=" " />
+                        <asp:TextBox ID="txtEditDesc" runat="server"  ReadOnly="true" Text='<%# Eval("taskDesc") %>' CssClass='<%# (bool)Eval("taskStatus") ? "taskCompleted" : "taskUncompleted" %>' />
+                        <div class="taskControls">
+                            <asp:ImageButton ID="editBtn" runat="server" class="editBtn" CommandName="Edit" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-edit-white-96.png" />
+                            <asp:ImageButton ID="saveEditBtn" runat="server" visible="false" class="saveEditBtn" CommandName="Save" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-check-white-96.png"/>
+                            <asp:ImageButton ID="deleteBtn" runat="server" class="deleteBtn" CommandName="Delete" CommandArgument='<%# Eval("taskID") %>' ImageUrl="~/Icons/icons8-delete-white-96.png"/>
+                        </div>
+                        <asp:HiddenField ID="taskIDHidden" runat="server" Value='<%# Eval("taskID") %>' />
+                    </div>
+                </ItemTemplate>
+            </asp:Repeater>
+            <asp:HiddenField ID="userIDHidden" runat="server" />
+        </div>
+    </asp:Panel>
+
+          
+                
             </div>
         </div>
         <div class="buttonSection">

@@ -143,23 +143,14 @@ public partial class _Default : System.Web.UI.Page
             }
         }
 
+        hiddenShowCalendar.Value = "true";
+
         RemoveInviteAndShowNext(sessionID);
     }
 
     protected void btnNo_Click(object sender, EventArgs e)
     {
-        int sessionID = int.Parse(hiddenSessionID.Value);
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = ? AND userID = ? AND replied = false";
-        using (OleDbConnection conn = new OleDbConnection(cs))
-        using (OleDbCommand cmd = new OleDbCommand(deleteQuery, conn))
-        {
-            cmd.Parameters.AddWithValue("?", sessionID);
-            cmd.Parameters.AddWithValue("?", Session["userID"]);
-            conn.Open();
-            cmd.ExecuteNonQuery();
-        }
-        RemoveInviteAndShowNext(sessionID);
+        hiddenShowConfirmation.Value = "true"; // call confirmation popup
     }
 
     private void RemoveInviteAndShowNext(int sessionID)
@@ -213,6 +204,46 @@ public partial class _Default : System.Web.UI.Page
             string jsArray = "[" + string.Join(",", jsSessionTimes.ToArray()) + "]";
             ClientScript.RegisterStartupScript(this.GetType(), "registerSessions", "var upcomingSessions = " + jsArray + ";", true);
         }
+    }
+
+    protected void btnCalendar_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("B100_View-calendar.aspx");
+    }
+
+    protected void btnOk_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("Default.aspx");
+    }
+
+    // declined invite:
+    protected void btnSure_Click(object sender, EventArgs e)
+    {
+        int sessionID = int.Parse(hiddenSessionID.Value);
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = ? AND userID = ? AND replied = false";
+        using (OleDbConnection conn = new OleDbConnection(cs))
+        using (OleDbCommand cmd = new OleDbCommand(deleteQuery, conn))
+        {
+            cmd.Parameters.AddWithValue("?", sessionID);
+            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+
+        hiddenShowDeclineConfirmed.Value = "true";
+
+        RemoveInviteAndShowNext(sessionID);
+    }
+
+    protected void btnNotSure_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("Default.aspx");
+    }
+
+    protected void btnOkayDeclined_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("Default.aspx");
     }
 
     protected void btnJoin_Click(object sender, EventArgs e)
