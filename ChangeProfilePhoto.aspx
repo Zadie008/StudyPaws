@@ -25,6 +25,7 @@
         <div class="headerRight">
             <div class="timeDateDiv">
                 <table>
+
                     <tr>
                         <td colspan="2"><asp:Label ID="lblTime" CssClass="accountInfoLabel" runat="server" Text="--:--" Font-Size="65"></asp:Label></td>
                         <td></td>
