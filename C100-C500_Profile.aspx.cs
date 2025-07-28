@@ -269,6 +269,7 @@ public partial class Default2 : System.Web.UI.Page
         if (Session["Username"] != null)
         {
             username = Session["Username"].ToString();
+
         }
 
         if (string.IsNullOrEmpty(username))
