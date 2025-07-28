@@ -130,7 +130,7 @@ public partial class Default2 : System.Web.UI.Page
 
     private void GetUserProfileIcon(string connectionString, string userID)
     {
-        string query = "SELECT iconNum FROM Users WHERE userID = @userID";
+        string query = "SELECT iconNum FROM Users WHERE userID = ?";
 
         using (OleDbConnection con = new OleDbConnection(connectionString))
         using (OleDbCommand cmd = new OleDbCommand(query, con))

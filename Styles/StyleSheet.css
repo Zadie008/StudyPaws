@@ -371,17 +371,31 @@ h2 {
     pointer-events: none;
 }
 
-.profileIcon #profileCircle {
+#profileCircle {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #F4CAE0;
     border: 3px solid white;
     border-radius: 50%;
     width: 100%;
     height: 100%;
     z-index: -1;
+}
+#profileCircle.circle-cat {
+    background-color: #64A6BD;
+}
+#profileCircle.circle-dog {
+    background-color: #90A8C3;
+}
+#profileCircle.circle-bunny {
+    background-color: #ADA7C9;
+}
+#profileCircle.circle-cow {
+    background-color: #F4CAE0;
+}
+#profileCircle.circle-unicorn {
+    background-color: #D7B9D5;
 }
 
 /* level, xp and paw currency on left side of screen */
@@ -3246,7 +3260,7 @@ footer p {
     text-align: center;
 }
 
-.profileImageContainer {
+/*.profileImageContainer {
     position: relative;
     width: 150px;
     height: 150px;
@@ -3262,7 +3276,7 @@ footer p {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-}
+}*/
 
 .headerRight {
     flex: 1;
