@@ -73,26 +73,25 @@ public partial class Default2 : System.Web.UI.Page
 
     private string GetBadgeImagePath(int badgeImageID)
     {
-        switch(badgeImageID)
+        switch (badgeImageID)
         {
             case 1: return "~/Images/Badges/BusyBee.png";
-            case 3: return "~/Images/Badges/LoneWoof.png";
-            case 4: return "~/Images/Badges/EarlyBird.png";
-            case 5: return "~/Images/Badges/NightOwl.png";
-            case 20: return "~/Images/Badges/SlothingOnTheJob.png";
-            case 21: return "~/Images/Badges/DreamTeam.png";
-            case 22: return "~/Images/Badges/RingLeader.png";
-            case 23: return "~/Images/Badges/Cancelotl.png";
-            case 24: return "~/Images/Badges/NotMyBloblem.png";
-            case 25: return "~/Images/Badges/AcademicWeapon.png";
-            case 26: return "~/Images/Badges/Collector.png";
-            case 27: return "~/Images/Badges/Meanie.png";
-            case 28: return "~/Images/Badges/FriendsPurever.png";
-            case 29: return "~/Images/Badges/PeskyPelican.png";
-            case 30: return "~/Images/Badges/PuffingPopular.png";
-            case 31: return "~/Images/Badges/RisingStar.png";
-          
-            default: return "~/Images/Badges/WesternCats.png";
+            case 2: return "~/Images/Badges/LoneWoof.png";
+            case 3: return "~/Images/Badges/EarlyBird.png";
+            case 4: return "~/Images/Badges/NightOwl.png";
+            case 5: return "~/Images/Badges/SlothingOnTheJob.png";
+            case 6: return "~/Images/Badges/DreamTeam.png";
+            case 7: return "~/Images/Badges/RignLeader.png";
+            case 8: return "~/Images/Badges/Cancelotl.png";
+            case 9: return "~/Images/Badges/NotMyBloblem.png";
+            case 10: return "~/Images/Badges/AcademicWeapon.png";
+            case 11: return "~/Images/Badges/11_Collector.png";
+            case 12: return "~/Images/Badges/Meanie.png";
+            case 13: return "~/Images/Badges/FriendsPurrever.png";
+            case 14: return "~/Images/Badges/PeskyPelican.png";
+            case 15: return "~/Images/Badges/PuffingPopular.png";
+            case 16: return "~/Images/Badges/RisingStar.png";
+            default: return "~/Images/Badges/PeskyPelican.png";
         }
     }
     protected string GetStarHtml(string badgeType)
