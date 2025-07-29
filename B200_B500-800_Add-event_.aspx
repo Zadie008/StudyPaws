@@ -126,7 +126,7 @@
 
          <div id="popup" class="simple-popup" style="display: none;">
     <div class="popup-pink-box">
-        <table id="popupSellPriceTable">
+        <table class="popupTagEditing">
             <tr>
                 <td><asp:Label ID="lblTagTitle" class="label" runat="server" Text="Tag Title"></asp:Label></td>
                 <td colspan="5"><asp:TextBox ID="txtTagTitle" class="textbox" runat="server"></asp:TextBox></td>

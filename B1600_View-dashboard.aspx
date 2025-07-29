@@ -161,6 +161,47 @@
                 <asp:HiddenField ID="userIDHidden" runat="server" />
             </div>
         </div>
+
+        <div id="popupTaskComplete" class="simple-popup" style="display: none;">
+    <div class="popup-pink-box">
+        <p>Congrats! You earned:</p> 
+        <table id="popupTimeUpTable">
+            <tr>
+                <td>XP</td>
+                <td>+10</td>
+            </tr>
+        </table>
+        <img src="Images/Notification%20Happy.png" />
+        <br />
+        <div class="buttonSection">
+            <asp:Button ID="btnThankYou" CssClass="popup-button" runat="server" Text="Thank you!" OnClientClick="hideTimeUpPopup(); return false;" />
+        </div>
+    </div>
+</div>
+
+        <div id="popup" class="simple-popup" style="display: none;">
+    <div class="popup-blue-box">
+        <p>Are you sure you want to delete this task?</p>
+        <img src="Images/Notification%20Sad%20Hamster.png" />
+        <br />
+        <div class="buttonSection">
+            <asp:Button ID="btnYesDelete" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnYesDelete_Click" OnClientClick="return confirmStop();" />
+            <asp:Button ID="btnNo" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClientClick="hidePopup(); return false;" />
+        </div>
+    </div>
+</div>
+        <%--<asp:Button ID="btnYesDelete" runat="server" Text="Yes" OnClick="btnYesDelete_Click" class="popupYesBtn"/>
+        <asp:Button ID="btnNoDelete" runat="server" Text="No" OnClick="btnNoDelete_Click" CssClass="popupNoBtn"/>--%>
+             <script type="text/javascript">
+                 function showPopup() {
+                     document.getElementById('popupTaskComplete').style.display = 'flex';
+                 }
+
+                 function hidePopup() {
+                     document.getElementById('popupTaskComplete').style.display = 'none';
+                 }
+
+             </script>
     </div>
     
 </asp:Content>
