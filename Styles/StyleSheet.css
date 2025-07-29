@@ -1396,6 +1396,35 @@ body.page-exit .welcomeBackTextDiv {
 .toDoListDashboard .popup-pink-box p {
     font-size: 2.2rem;
 }
+.popup-pink-boxSmaller{
+    background-color: #D7B9D5; /*pink*/
+    padding: 1.2em;
+    border-radius: 3em;
+    border: 5px solid white;
+    width: 35%;
+    max-width: 1300px;
+    max-height:400px;
+    min-height: 150px;
+    text-align: center;
+}
+.popup-pink-boxSmaller img {
+    max-width: 60%;
+    width: 200px;
+}
+.popup-pink-boxSmaller p{
+    margin:0.2em;
+    font-size:28px;
+}
+.popup-pink-boxSmaller .buttonSection {
+    text-align: center;
+    margin-top: 1.5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2em;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
 /*----------------------- CREATE EVENT PAGE B200 and B500-B800 -----------------------*/
 .createEventMainContent {
     margin: 4em 4em 4em 4em;

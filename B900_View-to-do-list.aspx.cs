@@ -101,27 +101,30 @@ public partial class Default2 : System.Web.UI.Page
 
         if (e.CommandName == "Toggle")
         {
-            using (OleDbConnection conn = new OleDbConnection(connString))
+            HiddenField taskIDHidden = (HiddenField)e.Item.FindControl("taskIDHidden");
+            bool currentStatus = GetTaskStatus(taskID);
+
+            if (!currentStatus)
             {
-                conn.Open();
-                string query = "UPDATE ToDoListTask SET taskStatus = NOT taskStatus WHERE taskID = ?";
-                OleDbCommand cmd = new OleDbCommand(query, conn);
-                cmd.Parameters.AddWithValue("?", taskID);
-                cmd.ExecuteNonQuery();
+                ViewState["PendingAction"] = "Toggle";
+                ViewState["PendingTaskID"] = taskID;
+                ScriptManager.RegisterStartupScript(this, GetType(), "showTogglePopup", "showPopup();", true);
             }
-            Response.Redirect(Request.RawUrl);
+            else
+            {
+                ToggleTaskStatus(taskID);
+                LoadTasks();
+            }
+
+
         }
         else if (e.CommandName == "Delete")
         {
-            using (OleDbConnection conn = new OleDbConnection(connString))
-            {
-                conn.Open();
-                string query = "DELETE FROM ToDoListTask WHERE taskID = ?";
-                OleDbCommand cmd = new OleDbCommand(query, conn);
-                cmd.Parameters.AddWithValue("?", taskID);
-                cmd.ExecuteNonQuery();
-            }
-            Response.Redirect(Request.RawUrl);
+            ViewState["PendingAction"] = "Delete";
+            ViewState["PendingTaskID"] = taskID;
+
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDeletePopup", "showPopupDelete();", true);
+
         }
         else if (e.CommandName == "Edit")
         {
@@ -188,6 +191,67 @@ public partial class Default2 : System.Web.UI.Page
                     saveBtn.Visible = false;
                 }
             }
+        }
+    }
+    protected void btnYesDelete_Click(object sender, EventArgs e)
+    {
+        string action = ViewState["PendingAction"] as string;
+        int taskID = Convert.ToInt32(ViewState["PendingTaskID"]);
+
+        if (action == "Delete")
+        {
+            using (OleDbConnection conn = new OleDbConnection(connString))
+            {
+                conn.Open();
+                string query = "DELETE FROM ToDoListTask WHERE taskID = ?";
+                OleDbCommand cmd = new OleDbCommand(query, conn);
+                cmd.Parameters.AddWithValue("?", taskID);
+                cmd.ExecuteNonQuery();
+            }
+            Response.Redirect(Request.RawUrl);
+            ViewState["PendingAction"] = null;
+            ViewState["PendingTaskID"] = null;
+        }
+    }
+    protected void btnNoDelete_Click(Object sender, EventArgs e)
+    {
+        ViewState["PendingAction"] = null;
+        ViewState["PendingTaskID"] = null;
+        LoadTasks();
+    }
+    private bool GetTaskStatus(int taskID)
+    {
+        using (OleDbConnection conn = new OleDbConnection(connString))
+        {
+            conn.Open();
+            string query = "SELECT taskStatus FROM ToDoListTask WHERE taskID = ?";
+            OleDbCommand cmd = new OleDbCommand(query, conn);
+            cmd.Parameters.AddWithValue("?", taskID);
+            var result = cmd.ExecuteScalar();
+            return result != DBNull.Value && Convert.ToBoolean(result);
+        }
+    }
+    private void ToggleTaskStatus(int taskID)
+    {
+
+        using (OleDbConnection conn = new OleDbConnection(connString))
+        {
+            conn.Open();
+            string query = "UPDATE ToDoListTask SET taskStatus = NOT taskStatus WHERE taskID = ?";
+            OleDbCommand cmd = new OleDbCommand(query, conn);
+            cmd.Parameters.AddWithValue("?", taskID);
+            cmd.ExecuteNonQuery();
+        }
+        Response.Redirect(Request.RawUrl);
+        ViewState["PendingAction"] = null;
+        ViewState["PendingTaskID"] = null;
+    }
+    protected void btnThankYou_Click(object sender, EventArgs e)
+    {
+        if (ViewState["PendingAction"] != null && ViewState["PendingAction"].ToString() == "Toggle" && ViewState["PendingTaskID"] != null)
+        {
+            int taskID = Convert.ToInt32(ViewState["PendingTaskID"]);
+            ToggleTaskStatus(taskID);
         }
     }
 }

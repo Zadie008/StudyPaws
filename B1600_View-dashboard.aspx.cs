@@ -279,7 +279,8 @@ public partial class Default2 : System.Web.UI.Page
         {
             ViewState["PendingAction"] = "Delete";
             ViewState["PendingTaskID"] = taskID;
-            ScriptManager.RegisterStartupScript(this, GetType(), "showDeletePopup", "showPopup();", true);
+
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDeletePopup", "showPopupDelete();", true);
             
         }
         else if (e.CommandName == "Edit")
@@ -389,6 +390,7 @@ public partial class Default2 : System.Web.UI.Page
     }
     private void ToggleTaskStatus(int taskID)
     {
+
         using (OleDbConnection conn = new OleDbConnection(connString))
         {
             conn.Open();
@@ -398,5 +400,15 @@ public partial class Default2 : System.Web.UI.Page
             cmd.ExecuteNonQuery();
         }
         Response.Redirect(Request.RawUrl);
+        ViewState["PendingAction"] = null;
+        ViewState["PendingTaskID"] = null;
+    }
+    protected void btnThankYou_Click(object sender, EventArgs e)
+    {
+        if (ViewState["PendingAction"]!= null && ViewState["PendingAction"].ToString() == "Toggle" && ViewState["PendingTaskID"] != null)
+        {
+            int taskID = Convert.ToInt32(ViewState["PendingTaskID"]);
+            ToggleTaskStatus(taskID);
+        }
     }
 }

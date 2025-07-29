@@ -100,42 +100,81 @@
     <div class="toDoListPage">
 
         <div class="toDoListControls">
-            <div class="toDoListHeaderRow">
-            <p class="toDoListHeading">To Do List</p>
-                <div class="toDoListFilters">
-                    <asp:DropDownList ID="ddlFilter" BackColor="#ADA7C9" runat="server" AutoPostBack="true" class="toDoFilterDropDownList" OnSelectedIndexChanged="ddlFilter_SelectedIndexChanged">
-                        <asp:ListItem Text="All Tasks" Value="All" />
-                        <asp:ListItem Text="In Progress" Value="InProgress" />
-                        <asp:ListItem Text="Completed" Value="Completed" />
-                    </asp:DropDownList>
-                    <asp:ImageButton ID="filterButton" runat="server" class="toDoFilterBtn" ClientIDMode="Static" ImageUrl="~/Icons/icons8-filter-bars-white-96.png" OnClick="toDoFilterBtn_Click"/>
+    <div class="toDoListHeaderRow">
+        <p class="toDoListHeading">To Do List</p>
+        <div class="toDoListFilters">
+            <asp:DropDownList ID="ddlFilter" BackColor="#ADA7C9" runat="server" AutoPostBack="true" class="toDoFilterDropDownList" OnSelectedIndexChanged="ddlFilter_SelectedIndexChanged">
+                <asp:ListItem Text="All Tasks" Value="All" />
+                <asp:ListItem Text="In Progress" Value="InProgress" />
+                <asp:ListItem Text="Completed" Value="Completed" />
+            </asp:DropDownList>
+            <asp:ImageButton ID="filterButton" runat="server" class="toDoFilterBtn" ClientIDMode="Static" ImageUrl="~/Icons/icons8-filter-bars-white-96.png" OnClick="toDoFilterBtn_Click"/>
+        </div>
+    </div>
+</div>
+<div class="newTaskContainer">
+    <asp:ImageButton ID="btnAdd" runat="server" CommandName="Add" class="addTaskBtn" OnClick="btnAdd_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png"/>
+    <asp:TextBox ID="txtNewTask" runat="server" CssClass="addTaskText" AutoPostBack="true" OnTextChanged="txtNewTask_TextChanged" Placeholder="Add a new task..."></asp:TextBox>
+</div>
+<div class="scrollableTasksContainer">
+    
+    <asp:Repeater ID="rptTasks" runat="server" EnableViewState="false" OnItemCommand="rptTasks_ItemCommand" OnItemDataBound="rptTasks_ItemDataBound">
+        <ItemTemplate>
+            <div class="task">
+                <asp:Button runat="server" CommandName="Toggle" CommandArgument='<%# Eval("taskID") %>' CssClass='<%# (bool)Eval("taskStatus") ? "checkbox checked" : "checkbox" %>' Text=" " />
+                <asp:TextBox ID="txtEditDesc" runat="server"  ReadOnly="true" Text='<%# Eval("taskDesc") %>' CssClass='<%# (bool)Eval("taskStatus") ? "taskCompleted" : "taskUncompleted" %>' />
+                <div class="taskControls">
+                    <asp:ImageButton ID="editBtn" runat="server" class="editBtn" CommandName="Edit" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-edit-white-96.png" />
+                    <asp:ImageButton ID="saveEditBtn" runat="server" visible="false" class="saveEditBtn" CommandName="Save" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-check-white-96.png"/>
+                    <asp:ImageButton ID="deleteBtn" runat="server" class="deleteBtn" CommandName="Delete" CommandArgument='<%# Eval("taskID") %>' ImageUrl="~/Icons/icons8-delete-white-96.png"/>
                 </div>
+                <asp:HiddenField ID="taskIDHidden" runat="server" Value='<%# Eval("taskID") %>' />
             </div>
-        </div>
+        </ItemTemplate>
+    </asp:Repeater>
+    <asp:HiddenField ID="userIDHidden" runat="server" />
+</div>
 
-        <div class="newTaskContainer">
-            <asp:ImageButton ID="btnAdd" runat="server" CommandName="Add" class="addTaskBtn" OnClick="btnAdd_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png"/>
-            <asp:TextBox ID="txtNewTask" runat="server" CssClass="addTaskText" AutoPostBack="true" OnTextChanged="txtNewTask_TextChanged" Placeholder="Add a new task..."></asp:TextBox>
+                <div id="popupTaskComplete" class="simple-popup" style="display: none;">
+    <div class="popup-pink-boxSmaller">
+        <p>Congrats! You earned:</p> 
+        <p>XP   +10</p>
+        <img src="Images/Notification%20Happy.png" />
+        <br />
+        <div class="buttonSection">
+            <asp:Button ID="btnThankYou" CssClass="popup-button-best-pink" runat="server" Text="Thank you!" OnClick="btnThankYou_Click" />
         </div>
-        
-        <div class="scrollableTasksContainer">
-            <asp:Repeater ID="rptTasks" runat="server" EnableViewState="false" OnItemCommand="rptTasks_ItemCommand" OnItemDataBound="rptTasks_ItemDataBound">
-                <ItemTemplate>
-                    <div class="task">
-                        <asp:Button runat="server" CommandName="Toggle" CommandArgument='<%# Eval("taskID") %>' CssClass='<%# (bool)Eval("taskStatus") ? "checkbox checked" : "checkbox" %>' Text=" " />
-                        <asp:TextBox ID="txtEditDesc" runat="server"  ReadOnly="true" Text='<%# Eval("taskDesc") %>' CssClass='<%# (bool)Eval("taskStatus") ? "taskCompleted" : "taskUncompleted" %>' />
-                        <div class="taskControls">
-                            <asp:ImageButton ID="editBtn" runat="server" class="editBtn" CommandName="Edit" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-edit-white-96.png" />
-                            <asp:ImageButton ID="saveEditBtn" runat="server" visible="false" class="saveEditBtn" CommandName="Save" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-check-white-96.png"/>
-                            <asp:ImageButton ID="deleteBtn" runat="server" class="deleteBtn" CommandName="Delete" CommandArgument='<%# Eval("taskID") %>' ImageUrl="~/Icons/icons8-delete-white-96.png"/>
-                        </div>
-                        <asp:HiddenField ID="taskIDHidden" runat="server" Value='<%# Eval("taskID") %>' />
-                    </div>
-                </ItemTemplate>
-            </asp:Repeater>
-            <asp:HiddenField ID="userIDHidden" runat="server" />
-        </div>
+    </div>
+</div>
 
+        <div id="popupDeleteTask" class="simple-popup" style="display: none;">
+    <div class="popup-blue-box">
+        <p>Are you sure you want to delete this task?</p>
+        <img src="Images/Notification%20Sad%20Hamster.png" />
+        <br />
+        <div class="buttonSection">
+            <asp:Button ID="btnYesDelete" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnYesDelete_Click" />
+            <asp:Button ID="btnNo" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnNoDelete_Click"  />
+        </div>
+    </div>
+</div>
+
+             <script type="text/javascript">
+                 function showPopup() {
+                     document.getElementById('popupTaskComplete').style.display = 'flex';
+                 }
+
+                 function hidePopup() {
+                     document.getElementById('popupTaskComplete').style.display = 'none';
+                 }
+                 function showPopupDelete() {
+                     document.getElementById('popupDeleteTask').style.display = 'flex';
+                 }
+                 function hideDeletePopup() {
+                     document.getElementById('popupDeleteTask').style.display = 'none';
+                 }
+
+             </script>
     </div>
 </asp:Content>
 
