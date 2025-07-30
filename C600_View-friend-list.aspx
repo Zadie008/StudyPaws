@@ -5,43 +5,44 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-<div class="accountInfoDiv">
-    <div class="profileDiv">
-     
-        <a href="C100-C500_Profile.aspx" class="profileIconLink">
-            <div class="profileIcon">
-                <div id="profileCircle" runat="server" ClientIDMode="Static"></div>
-               <asp:Image ID="profilePet" runat="server" />
-            </div>
-        </a>
+       <!--account info to copy and paste-->
+    <div class="accountInfoDiv">
+        <div class="profileDiv">
+         
+            <a href="C100-C500_Profile.aspx" class="profileIconLink">
+                <div class="profileIcon">
+                    <div id="profileCircle" runat="server" ClientIDMode="Static"></div>
+                   <asp:Image ID="profilePet" runat="server" />
+                </div>
+            </a>
 
-        <div class="profileDetails">
-            <table>
-                <tr>
-                    <td><asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Level"></asp:Label></td>
-                    <td><asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server" Text="--"></asp:Label></td>
-                </tr>
-                <tr>
-                    <td><asp:Label ID="lblXP" CssClass="accountInfoTableLabel" runat="server" Text="XP"></asp:Label></td>
-                    <td><asp:Label ID="lblXPAmount" CssClass="accountInfoTableLabelRight" runat="server" Text="--"></asp:Label></td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="pawIcon">
-                            <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
-                            <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
-                        </div>
-                    </td>
-                <td><asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server" Text="---"></asp:Label></td>
-                </tr>
-            </table>
+            <div class="profileDetails">
+                <table>
+                    <tr>
+                        <td><asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Level"></asp:Label></td>
+                        <td><asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server" ></asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td><asp:Label ID="lblXP" CssClass="accountInfoTableLabel" runat="server" Text="XP"></asp:Label></td>
+                        <td><asp:Label ID="lblXPAmount" CssClass="accountInfoTableLabelRight" runat="server" Text="--"></asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="pawIcon">
+                                <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
+                                <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
+                            </div>
+                        </td>
+                    <td><asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server" Text="---"></asp:Label></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="notificationDetails">
+                <asp:ImageButton ID="imgNotificationRinging" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-ringing-white-96.png" OnClientClick="showNotificationPopup(true); return false;" />
+                <asp:ImageButton ID="imgNotificationNormal" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" OnClientClick="showNotificationPopup(false); return false;" />
+                <div id="notificationBadge" runat="server" class="notificationBadge"></div> <!--the coloured circle-->
+            </div>
         </div>
-        <div class="notificationDetails">
-            <asp:ImageButton ID="imgNotificationRinging" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-ringing-white-96.png" OnClientClick="showNotificationPopup(true); return false;" />
-            <asp:ImageButton ID="imgNotificationNormal" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" OnClientClick="showNotificationPopup(false); return false;" />
-            <div id="notificationBadge" runat="server" class="notificationBadge"></div> <!--the coloured circle-->
-        </div>
-    </div>
 
     <div class="timeDateDiv">
         <table>
@@ -72,8 +73,12 @@
         </text>
     </svg>
     <a href="Default.aspx"><img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" /></a>
-    <h2>purrfectly productive</h2>
+    <h2><a href="Default.aspx">purrfectly productive</a></h2>
 </div>
+
+    <script>
+        document.body.classList.add('is-default');
+    </script>
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
@@ -103,41 +108,83 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-      <%--Notification content for the bell--%>
-    <div id="popupNoNotifications" class="simple-popup" style="display: none;">
-        <div class="popup-blue-box">
-            <p>You do not have any notifications at the moment!</p>
-            <img src="Images/Notification%20Sad%20Hamster.png" />
-            <br />
-            <div class="buttonSection">
-                <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideNotificationPopup(); return false;" />
+    <div id="defaultMainContent">
+        <!--does not have notification-->
+        <div id="popupNoNotifications" class="simple-popup" style="display: none;">
+            <div class="popup-blue-box">
+                <p>You do not have any notifications at the moment!</p>
+                <img src="Images/Notification%20Sad%20Hamster.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideNotificationPopup(); return false;" />
+                </div>
+            </div>
+        </div>
+
+        <!--has notifications-->
+        <div id="popupHasNotifications" class="simple-popup" style="display: none;">
+            <div class="popup-pink-box">
+                <asp:HiddenField ID="hiddenSessionID" runat="server" />
+                <asp:Literal ID="litNotificationText" runat="server" />
+                <img src="Images/Notification%20Happy.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnYes" CssClass="popup-button-best-pink" runat="server" Text="Accept!" OnClick="btnYes_Click" />
+                    <asp:Button ID="btnNo" CssClass="popup-button" runat="server" Text="Decline!" OnClick="btnNo_Click" />
+                </div>
+            </div>
+        </div>
+
+        <div id="popupCalendar" class="simple-popup" style="display: none;">
+            <div class="popup-pink-box">
+                <asp:HiddenField ID="hiddenShowCalendar" runat="server" />
+                <p>Study Session has been added to your calendar!</p>
+                <img src="Images/Notification%20Happy.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnCalendar" CssClass="popup-button-best-pink" runat="server" Text="Calendar, GO!" OnClick="btnCalendar_Click" />
+                    <asp:Button ID="btnOk" CssClass="popup-button" runat="server" Text="Okay, thanks!" OnClick="btnOk_Click" />
+                </div>
+            </div>
+        </div>
+
+        <div id="popupConfirmDecline" class="simple-popup" style="display: none;">
+            <div class="popup-blue-box">
+                <asp:HiddenField ID="hiddenShowConfirmation" runat="server" />
+                <p>Are you sure you want to decline the Study Session invitation?</p>
+                <img src="Images/Notification%20Sad%20Hamster.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnSure" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnSure_Click" />
+                    <asp:Button ID="btnNotSure" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnNotSure_Click" />
+                </div>
+            </div>
+        </div>
+
+        <div id="popupIsDeclined" class="simple-popup" style="display: none;">
+            <div class="popup-blue-box">
+                <asp:HiddenField ID="hiddenShowDeclineConfirmed" runat="server" />
+                <p>Study Session has been declined!</p>
+                <img src="Images/Notification%20Sad%20Hamster.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnOkayDeclined" CssClass="popup-button" runat="server" Text="Okay!" OnClick="btnOkayDeclined_Click" />
+                </div>
+            </div>
+        </div>
+
+        <div id="popup" class="simple-popup" style="display: none;">
+            <div class="popup-pink-box">
+                <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
+                <p>Study Session has started!</p>
+                <img src="Images/Notification%20Happy.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
+                </div>
             </div>
         </div>
     </div>
-    <div id="popupHasNotifications" class="simple-popup" style="display: none;">
-        <div class="popup-pink-box">
-            <asp:HiddenField ID="hiddenSessionID" runat="server" />
-            <asp:Literal ID="litNotificationText" runat="server" />
-            <img src="Images/Notification%20Happy.png" />
-            <br />
-            <div class="buttonSection">
-                <asp:Button ID="btnYes" CssClass="popup-button-best-pink" runat="server" Text="Accept!" OnClick="btnYes_Click" />
-                <asp:Button ID="btnNo" CssClass="popup-button" runat="server" Text="Decline!" OnClick="btnNo_Click" />
-            </div>
-        </div>
-    </div>
-    <div id="popup" class="simple-popup" style="display: none;">
-        <div class="popup-pink-box">
-            <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
-            <p>Study Session has started!</p>
-            <img src="Images/Notification%20Happy.png" />
-            <br />
-            <div class="buttonSection">
-                <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
-            </div>
-        </div>
-    </div>
-        <%--end of notification code--%>
 
 
     <div id="viewFriendListMainContent">
