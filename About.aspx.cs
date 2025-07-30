@@ -13,6 +13,7 @@ public partial class Default2 : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
+
             if (Session["Username"] != null)
             {
                 string username = Session["Username"].ToString(); //need this on every page
@@ -30,7 +31,6 @@ public partial class Default2 : System.Web.UI.Page
                     GetUserProfileIcon(cs, userID);
                     LoadPendingInvitesFromDB();
                     LoadUpcomingSessions();
-
                 }
                 else
                 {
@@ -320,16 +320,11 @@ public partial class Default2 : System.Web.UI.Page
         using (OleDbCommand cmd = new OleDbCommand(query, con))
         {
             cmd.Parameters.AddWithValue("@userID", userID);
-            try
-            {
+            
                 con.Open();
                 object result = cmd.ExecuteScalar();
                 lblLevelNumber.Text = (result != null) ? result.ToString() : "N/A";
-            }
-            catch (Exception ex)
-            {
-                lblLevelNumber.Text = "ERR";
-            }
+            
         }
     }
 
@@ -341,8 +336,7 @@ public partial class Default2 : System.Web.UI.Page
         using (OleDbCommand cmd = new OleDbCommand(query, con))
         {
             cmd.Parameters.AddWithValue("@userID", userID);
-            try
-            {
+            
                 con.Open();
                 using (OleDbDataReader reader = cmd.ExecuteReader())
                 {
@@ -355,11 +349,6 @@ public partial class Default2 : System.Web.UI.Page
                         lblPaws.Text = "N/A";
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                lblPaws.Text = "ERR";
-            }
         }
     }
 
