@@ -324,7 +324,6 @@ h2 {
     width: 3rem;
 }
 
-/* ---------------------- HEADER ---------------------- */
 /* ---------------------- ACCOUNT INFO BAR ---------------------- */
 .accountInfoDiv {
     display: flex;
@@ -458,7 +457,7 @@ h2 {
     width: 100%;
 }
 
-/* notifications on left side of screen */
+/* notifications */
 .notificationDetails {
     position: relative;
     width: 50px; /*same width*/
@@ -466,9 +465,7 @@ h2 {
 }
 
 .notificationIcon {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: static; /* Changed from absolute to static */
     width: 50px; /*same width*/
     height: 50px;
     cursor: pointer;
@@ -477,6 +474,7 @@ h2 {
 .notificationBadge {
     position: absolute;
     right: -2px;
+    top: -2px; /* Adjusted top position */
     width: 25px;
     height: 25px;
     background-color: #FF369E; /*Rose Bonbon*/
@@ -487,17 +485,78 @@ h2 {
 }
 
 /* date and time on right side of screen */
+.rightInfoDiv {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
+.timeNotificationWrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 .timeDateDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
     text-align: right;
 }
 
-.timeDateDiv table tr:last-child td:nth-child(1) {
-    padding-right: 0.5em;
+.currentTime {
+    font-size: 75px; 
+    font-weight: 200; 
+    line-height: 1;
+    margin-bottom: 0.1em;
 }
 
-.timeDateDiv table tr:last-child td:nth-child(2) {
-    border-left: 2px solid white;
-    padding-left: 0.5em;
+.currentDate {
+    font-size: clamp(1.2rem, 2vw, 2.5rem);
+    font-weight: 200;
+}
+
+.dateContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.dateSeparator {
+    color: white;
+    font-size: clamp(1.2rem, 2vw, 2.5rem);
+    font-family: 'Gilda Display', serif;
+    font-weight: 200;
+}
+
+/* ---------------------- XP PROGRESS BAR ---------------------- */
+.xpProgressContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px; 
+}
+
+.progressBarBackground {
+    width: 100px; 
+    height: 25px; 
+    background-color: white; 
+    border-radius: 12.5px; 
+    overflow: hidden; 
+}
+
+.progressBarFill {
+    height: 100%;
+    background-color: #90A8C3;
+    width: 0%; 
+    border-radius: 12.5px;
+    transition: width 0.5s ease-in-out;
+}
+
+.xpPercentage {
+    font-size: clamp(1.2rem, 2vw, 2.5rem); 
+    color: white;
+    margin-left: 10px; 
 }
 
 /* ---------------------- NAVIGATION ---------------------- */
