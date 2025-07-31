@@ -3341,8 +3341,7 @@ footer p {
     vertical-align: middle;
 }
 
-/* ---------------------- PROFILE PAGE ---------------------- */
-#profileMainContent {
+/#profileMainContent {
     margin: 1em 4em 4em 4em;
 }
 
@@ -3366,27 +3365,17 @@ footer p {
     align-items: center;
 }
 
+
+.rightInfoDiv {
+    flex: 1; 
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
 .profileIcon {
     text-align: center;
 }
-
-/*.profileImageContainer {
-    position: relative;
-    width: 150px;
-    height: 150px;
-    background-color: white;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
-
-#profilePet {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-}*/
 
 .headerRight {
     flex: 1;

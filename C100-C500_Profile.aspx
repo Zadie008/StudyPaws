@@ -22,20 +22,18 @@
         </div>
         
         <!-- Time -->
-        <div class="headerRight">
-            <div class="timeDateDiv">
-                <table>
-                    <tr>
-                        <td colspan="2"><asp:Label ID="lblTime" CssClass="accountInfoLabel" runat="server" Text="--:--" Font-Size="65"></asp:Label></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><asp:Label ID="lblDay" CssClass="accountInfoLabel" runat="server" Text="Day"></asp:Label></td>
-                        <td><asp:Label ID="lblDate" CssClass="accountInfoLabel" runat="server" Text="Date"></asp:Label></td>
-                    </tr>
-                </table>
+       <div class="rightInfoDiv">
+    <div class="timeNotificationWrapper">
+        <div class="timeDateDiv">
+            <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="09:52"></asp:Label>
+            <div class="dateContainer">
+                <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Friday"></asp:Label>
+                <span class="dateSeparator">|</span>
+                <asp:Label ID="lblDate" CssClass="accountInfoLabel currentDate" runat="server" Text="18 April"></asp:Label>
             </div>
         </div>
+    </div>
+</div>
     </div>
 </asp:Content>
 

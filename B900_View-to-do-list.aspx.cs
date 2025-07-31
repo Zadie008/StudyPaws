@@ -25,12 +25,18 @@ public partial class Default2 : System.Web.UI.Page
                 ddlFilter.SelectedValue = "All";
                 LoadTasks();
                 int userXP = GetUserXP(connString, userID);
-                lblXPAmount.Text = userXP.ToString();
-                GetLevelInformation(connString, userID);
+                Tuple<int, int, int> levelInfo = GetLevelInformation(connString, userID);
+                int currentLevel = levelInfo.Item1;
+                int currentLevelXpAmount = levelInfo.Item2;
+                int nextLevelXpAmount = levelInfo.Item3;
+                lblLevelNumber.Text = currentLevel.ToString();
+                CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
+
                 GetUserStats(connString, userID);
                 GetUserProfileIcon(connString, userID);
                 LoadPendingInvitesFromDB();
                 LoadUpcomingSessions();
+               
             }
             else
             {
@@ -266,7 +272,7 @@ public partial class Default2 : System.Web.UI.Page
 
             // Refresh the updated XP and Level labels
             int updatedXP = GetUserXP(connString, userID);
-            lblXPAmount.Text = updatedXP.ToString();
+            //lblXPAmount.Text = updatedXP.ToString();
 
             GetLevelInformation(connString, userID);
         }
@@ -619,19 +625,85 @@ public partial class Default2 : System.Web.UI.Page
         return userXP;
     }
 
-    private void GetLevelInformation(string connectionString, string userID)
+    private Tuple<int, int, int> GetLevelInformation(string connectionString, string userID)
     {
-        string query = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
-
+        int currentLevel = 0;
+        int currentLevelXpAmount = 0;
+        int nextLevelXpAmount = 0;
+        string currentLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
         using (OleDbConnection con = new OleDbConnection(connectionString))
-        using (OleDbCommand cmd = new OleDbCommand(query, con))
+        using (OleDbCommand cmdCurrentLevel = new OleDbCommand(currentLevelQuery, con))
         {
-            cmd.Parameters.AddWithValue("@userID", userID);
-
+            cmdCurrentLevel.Parameters.AddWithValue("@userID", userID);
             con.Open();
-            object result = cmd.ExecuteScalar();
-            lblLevelNumber.Text = (result != null) ? result.ToString() : "N/A";
+            object result = cmdCurrentLevel.ExecuteScalar();
+            if (result != null && int.TryParse(result.ToString(), out currentLevel))
+            {
+                lblLevelNumber.Text = currentLevel.ToString();
+            }
+            else
+            {
+                lblLevelNumber.Text = "N/A";
+                return Tuple.Create(0, 0, 0);
+            }
+        }
+        string currentLevelXPQuery = "SELECT xpAmount FROM [Level] WHERE levelNum = @currentLevel";
+        using (OleDbConnection con = new OleDbConnection(connectionString))
+        using (OleDbCommand cmdCurrentXP = new OleDbCommand(currentLevelXPQuery, con))
+        {
+            cmdCurrentXP.Parameters.AddWithValue("@currentLevel", currentLevel);
+            con.Open();
+            object result = cmdCurrentXP.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                currentLevelXpAmount = Convert.ToInt32(result);
+            }
+        }
 
+        string nextLevelXPQuery = "SELECT xpAmount FROM [Level] WHERE levelNum = @nextLevel";
+        using (OleDbConnection con = new OleDbConnection(connectionString))
+        using (OleDbCommand cmdNextXP = new OleDbCommand(nextLevelXPQuery, con))
+        {
+            cmdNextXP.Parameters.AddWithValue("@nextLevel", currentLevel + 1);
+            con.Open();
+            object result = cmdNextXP.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                nextLevelXpAmount = Convert.ToInt32(result);
+            }
+            else
+            {
+                nextLevelXpAmount = currentLevelXpAmount;//when user reaches level 25
+            }
+        }
+
+        return Tuple.Create(currentLevel, currentLevelXpAmount, nextLevelXpAmount);
+    }
+
+    private void CalculateXPProgressBar(int userXP, int currentLevelXpAmount, int nextLevelXpAmount)
+    {
+        if (nextLevelXpAmount <= currentLevelXpAmount)
+        {
+            xpProgressBar.Style["width"] = "100%";
+            lblXPPercentage.Text = "100%";
+            return;
+        }
+        int xpToNextLevel = nextLevelXpAmount - currentLevelXpAmount;
+        int xpGainedInCurrentLevel = userXP - currentLevelXpAmount;
+
+        if (xpToNextLevel > 0)
+        {
+            double progress = (double)xpGainedInCurrentLevel / xpToNextLevel * 100;
+            if (progress < 0) progress = 0;
+            if (progress > 100) progress = 100;
+
+            xpProgressBar.Style["width"] = progress.ToString("F0") + "%";
+            lblXPPercentage.Text = progress.ToString("F0") + "%";
+        }
+        else
+        {
+            xpProgressBar.Style["width"] = "100%";
+            lblXPPercentage.Text = "100%";
         }
     }
 
