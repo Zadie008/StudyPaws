@@ -502,10 +502,11 @@ h2 {
     flex-direction: column;
     align-items: flex-end;
     text-align: right;
+    font-family: 'Gilda Display', serif;
 }
 
 .currentTime {
-    font-size: 75px; 
+    font-size: 65pt; 
     font-weight: 200; 
     line-height: 1;
     margin-bottom: 0.1em;
@@ -538,7 +539,7 @@ h2 {
 }
 
 .progressBarBackground {
-    width: 100px; 
+    width: 120px; 
     height: 25px; 
     background-color: white; 
     border-radius: 12.5px; 

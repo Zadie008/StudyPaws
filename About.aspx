@@ -5,7 +5,6 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-    <%-- Header section with profile, XP, notifications and time --%>
     <div class="accountInfoDiv">
         <div class="profileDiv">
             <a href="C100-C500_Profile.aspx" class="profileIconLink">
@@ -91,8 +90,8 @@
         document.body.classList.add('is-default');
     </script>
 </asp:Content>
-<%--please copy the above for the header--%>
-<%--use this page as a reference--%>
+<%--need to copy all of the above--%>
+<%--this contains all the information for the header--%>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
 <div class="collapsedNav">

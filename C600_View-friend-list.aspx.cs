@@ -26,20 +26,23 @@ public partial class Default2 : System.Web.UI.Page
                 if (!string.IsNullOrEmpty(userID))
                 {
                     int userXP = GetUserXP(cs, userID);
-                    lblXPAmount.Text = userXP.ToString();
+                    
                     GetLevelInformation(cs, userID);
                     GetUserStats(cs, userID);
                     GetUserProfileIcon(cs, userID);
                     LoadPendingInvitesFromDB();
                     LoadUpcomingSessions();
+                    Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
+                    int currentLevel = levelInfo.Item1;
+                    int currentLevelXpAmount = levelInfo.Item2; // XP needed to reach current level
+                    int nextLevelXpAmount = levelInfo.Item3; // XP needed to reach next level
 
+                    lblLevelNumber.Text = currentLevel.ToString();
+
+                    // Calculate progress for the progress bar
+                    CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
                 }
-                else
-                {
-                    lblLevelNumber.Text = "N/A";
-                    lblXPAmount.Text = "N/A";
-                    lblPaws.Text = "N/A";
-                }
+               
             }
             else
             {
@@ -50,6 +53,7 @@ public partial class Default2 : System.Web.UI.Page
     }
 
     //Please copy all of this code
+    //everyline of code until you see double lines of comments
     private void LoadPendingInvitesFromDB()
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -145,7 +149,7 @@ public partial class Default2 : System.Web.UI.Page
             {
                 string eventDesc = invite.title + " (From: " + invite.leaderUsername + ")";
                 DateTime eventDate = invite.startTime;
-                int tagID = 1; 
+                int tagID = 1;
                 int userID = Convert.ToInt32(Session["userID"]);
 
                 cmd2.Parameters.AddWithValue("?", eventDesc);
@@ -165,7 +169,7 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnNo_Click(object sender, EventArgs e)
     {
-        hiddenShowConfirmation.Value = "true"; 
+        hiddenShowConfirmation.Value = "true";
     }
 
     private void RemoveInviteAndShowNext(int sessionID)
@@ -179,7 +183,7 @@ public partial class Default2 : System.Web.UI.Page
                 invites.Remove(currentInvite);
             }
             Session["PendingInvites"] = invites;
-            ShowNextInvite(); 
+            ShowNextInvite();
         }
     }
 
@@ -314,24 +318,85 @@ public partial class Default2 : System.Web.UI.Page
         return userXP;
     }
 
-    private void GetLevelInformation(string connectionString, string userID)
+    private Tuple<int, int, int> GetLevelInformation(string connectionString, string userID)
     {
-        string query = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
-
+        int currentLevel = 0;
+        int currentLevelXpAmount = 0;
+        int nextLevelXpAmount = 0;
+        string currentLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
         using (OleDbConnection con = new OleDbConnection(connectionString))
-        using (OleDbCommand cmd = new OleDbCommand(query, con))
+        using (OleDbCommand cmdCurrentLevel = new OleDbCommand(currentLevelQuery, con))
         {
-            cmd.Parameters.AddWithValue("@userID", userID);
-            try
+            cmdCurrentLevel.Parameters.AddWithValue("@userID", userID);
+            con.Open();
+            object result = cmdCurrentLevel.ExecuteScalar();
+            if (result != null && int.TryParse(result.ToString(), out currentLevel))
             {
-                con.Open();
-                object result = cmd.ExecuteScalar();
-                lblLevelNumber.Text = (result != null) ? result.ToString() : "N/A";
+                lblLevelNumber.Text = currentLevel.ToString();
             }
-            catch (Exception ex)
+            else
             {
-                lblLevelNumber.Text = "ERR";
+                lblLevelNumber.Text = "N/A";
+                return Tuple.Create(0, 0, 0);
             }
+        }
+        string currentLevelXPQuery = "SELECT xpAmount FROM [Level] WHERE levelNum = @currentLevel";
+        using (OleDbConnection con = new OleDbConnection(connectionString))
+        using (OleDbCommand cmdCurrentXP = new OleDbCommand(currentLevelXPQuery, con))
+        {
+            cmdCurrentXP.Parameters.AddWithValue("@currentLevel", currentLevel);
+            con.Open();
+            object result = cmdCurrentXP.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                currentLevelXpAmount = Convert.ToInt32(result);
+            }
+        }
+
+        string nextLevelXPQuery = "SELECT xpAmount FROM [Level] WHERE levelNum = @nextLevel";
+        using (OleDbConnection con = new OleDbConnection(connectionString))
+        using (OleDbCommand cmdNextXP = new OleDbCommand(nextLevelXPQuery, con))
+        {
+            cmdNextXP.Parameters.AddWithValue("@nextLevel", currentLevel + 1);
+            con.Open();
+            object result = cmdNextXP.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                nextLevelXpAmount = Convert.ToInt32(result);
+            }
+            else
+            {
+                nextLevelXpAmount = currentLevelXpAmount;//when user reaches level 25
+            }
+        }
+
+        return Tuple.Create(currentLevel, currentLevelXpAmount, nextLevelXpAmount);
+    }
+
+    private void CalculateXPProgressBar(int userXP, int currentLevelXpAmount, int nextLevelXpAmount)
+    {
+        if (nextLevelXpAmount <= currentLevelXpAmount)
+        {
+            xpProgressBar.Style["width"] = "100%";
+            lblXPPercentage.Text = "100%";
+            return;
+        }
+        int xpToNextLevel = nextLevelXpAmount - currentLevelXpAmount;
+        int xpGainedInCurrentLevel = userXP - currentLevelXpAmount;
+
+        if (xpToNextLevel > 0)
+        {
+            double progress = (double)xpGainedInCurrentLevel / xpToNextLevel * 100;
+            if (progress < 0) progress = 0;
+            if (progress > 100) progress = 100;
+
+            xpProgressBar.Style["width"] = progress.ToString("F0") + "%";
+            lblXPPercentage.Text = progress.ToString("F0") + "%";
+        }
+        else
+        {
+            xpProgressBar.Style["width"] = "100%";
+            lblXPPercentage.Text = "100%";
         }
     }
 
@@ -343,24 +408,18 @@ public partial class Default2 : System.Web.UI.Page
         using (OleDbCommand cmd = new OleDbCommand(query, con))
         {
             cmd.Parameters.AddWithValue("@userID", userID);
-            try
+
+            con.Open();
+            using (OleDbDataReader reader = cmd.ExecuteReader())
             {
-                con.Open();
-                using (OleDbDataReader reader = cmd.ExecuteReader())
+                if (reader.Read())
                 {
-                    if (reader.Read())
-                    {
-                        lblPaws.Text = reader["userCoinCount"] != DBNull.Value ? reader["userCoinCount"].ToString() : "0";
-                    }
-                    else
-                    {
-                        lblPaws.Text = "N/A";
-                    }
+                    lblPaws.Text = reader["userCoinCount"] != DBNull.Value ? reader["userCoinCount"].ToString() : "0";
                 }
-            }
-            catch (Exception ex)
-            {
-                lblPaws.Text = "ERR";
+                else
+                {
+                    lblPaws.Text = "N/A";
+                }
             }
         }
     }
@@ -418,6 +477,7 @@ public partial class Default2 : System.Web.UI.Page
             default: return "circle-cat";
         }
     }
+    //please stop copying up until here
     //this seems to be the end
     protected void btnSearchFriends_Click(object sender, EventArgs e)
     {

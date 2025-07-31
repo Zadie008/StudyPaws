@@ -11,6 +11,8 @@ public partial class Default2 : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        //basically need every little detail here 
+        //since nothing is needed to load or calculate for the about page
         if (!IsPostBack)
         {
             if (Session["Username"] != null)
@@ -317,14 +319,11 @@ public partial class Default2 : System.Web.UI.Page
         return userXP;
     }
 
-    // CORRECTED: Enclosed 'Level' table name in square brackets for MS Access
     private Tuple<int, int, int> GetLevelInformation(string connectionString, string userID)
     {
         int currentLevel = 0;
         int currentLevelXpAmount = 0;
         int nextLevelXpAmount = 0;
-
-        // Get the user's current level
         string currentLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
         using (OleDbConnection con = new OleDbConnection(connectionString))
         using (OleDbCommand cmdCurrentLevel = new OleDbCommand(currentLevelQuery, con))
@@ -339,12 +338,9 @@ public partial class Default2 : System.Web.UI.Page
             else
             {
                 lblLevelNumber.Text = "N/A";
-                return Tuple.Create(0, 0, 0); // Return default values if current level not found
+                return Tuple.Create(0, 0, 0); 
             }
         }
-
-        // Query 1: Get XP amount for the current level
-        // Enclose 'Level' in square brackets
         string currentLevelXPQuery = "SELECT xpAmount FROM [Level] WHERE levelNum = @currentLevel";
         using (OleDbConnection con = new OleDbConnection(connectionString))
         using (OleDbCommand cmdCurrentXP = new OleDbCommand(currentLevelXPQuery, con))
@@ -358,13 +354,11 @@ public partial class Default2 : System.Web.UI.Page
             }
         }
 
-        // Query 2: Get XP amount for the next level
-        // Enclose 'Level' in square brackets
         string nextLevelXPQuery = "SELECT xpAmount FROM [Level] WHERE levelNum = @nextLevel";
         using (OleDbConnection con = new OleDbConnection(connectionString))
         using (OleDbCommand cmdNextXP = new OleDbCommand(nextLevelXPQuery, con))
         {
-            cmdNextXP.Parameters.AddWithValue("@nextLevel", currentLevel + 1); // Get XP for the next level
+            cmdNextXP.Parameters.AddWithValue("@nextLevel", currentLevel + 1);
             con.Open();
             object result = cmdNextXP.ExecuteScalar();
             if (result != null && result != DBNull.Value)
@@ -373,49 +367,39 @@ public partial class Default2 : System.Web.UI.Page
             }
             else
             {
-                // If no next level found, it means the user is at the maximum level.
-                // In this case, set nextLevelXpAmount to be the same as currentLevelXpAmount
-                // so the progress bar shows 100% or adjust as per your logic for max level.
-                nextLevelXpAmount = currentLevelXpAmount;
+                nextLevelXpAmount = currentLevelXpAmount;//when user reaches level 25
             }
         }
 
         return Tuple.Create(currentLevel, currentLevelXpAmount, nextLevelXpAmount);
     }
 
-    // New method to calculate and set the progress bar width
     private void CalculateXPProgressBar(int userXP, int currentLevelXpAmount, int nextLevelXpAmount)
     {
-        if (nextLevelXpAmount <= currentLevelXpAmount) // This means user is at max level or next level XP is not properly defined
+        if (nextLevelXpAmount <= currentLevelXpAmount)
         {
             xpProgressBar.Style["width"] = "100%";
             lblXPPercentage.Text = "100%";
             return;
         }
-
-        // XP needed to progress from current level to next
         int xpToNextLevel = nextLevelXpAmount - currentLevelXpAmount;
-        // XP gained within the current level
         int xpGainedInCurrentLevel = userXP - currentLevelXpAmount;
 
         if (xpToNextLevel > 0)
         {
             double progress = (double)xpGainedInCurrentLevel / xpToNextLevel * 100;
-            if (progress < 0) progress = 0; // Ensure progress is not negative
-            if (progress > 100) progress = 100; // Cap progress at 100%
+            if (progress < 0) progress = 0; 
+            if (progress > 100) progress = 100; 
 
-            xpProgressBar.Style["width"] = progress.ToString("F0") + "%"; // Format to 0 decimal places
-            lblXPPercentage.Text = progress.ToString("F0") + "%"; // Display percentage
+            xpProgressBar.Style["width"] = progress.ToString("F0") + "%"; 
+            lblXPPercentage.Text = progress.ToString("F0") + "%";
         }
         else
         {
-            // If xpToNextLevel is 0 or negative (shouldn't happen if levels are set correctly)
-            // or if userXP is already at or above nextLevelXpAmount, consider it 100%
             xpProgressBar.Style["width"] = "100%";
             lblXPPercentage.Text = "100%";
         }
     }
-
 
     private void GetUserStats(string connectionString, string userID)
     {
@@ -496,15 +480,4 @@ public partial class Default2 : System.Web.UI.Page
     }
     //please stop copying up until here
     //this seems to be the end
-}
-
-// SessionInvite class (if not already defined)
-public class SessionInvite
-{
-    public int sessionID { get; set; }
-    public string leaderUsername { get; set; }
-    public string title { get; set; }
-    public string tag { get; set; }
-    public DateTime startTime { get; set; }
-    public DateTime endTime { get; set; }
 }
