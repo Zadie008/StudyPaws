@@ -50,8 +50,29 @@ public partial class Default2 : System.Web.UI.Page
 
         Response.Redirect("B1600_View-dashboard.aspx");
     }
-    protected void btnAddTag_Click(object sender, EventArgs e)
+    protected void btnNewTag_Click(object sender, EventArgs e)
     {
         ScriptManager.RegisterStartupScript(this, GetType(), "showPopup", "showPopup();", true);
+    }
+    protected void btnAddTag_Click(Object sender, EventArgs e)
+    {
+        String desc = txtTagTitle.Text;
+        //int tag = int.Parse(dropdownEventTag.SelectedValue);
+        int userID = Convert.ToInt32(Session["userID"]);
+
+        //string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        //using (OleDbConnection conn = new OleDbConnection(cs))
+        //{
+        //    conn.Open();
+        //    string sql = "INSERT into [CalendarEvent] ([eventDesc], [eventDate], [tagID], [userID]) VALUES (?, ?, ?, ?)";
+        //    OleDbCommand cmd = new OleDbCommand(sql, conn);
+        //    cmd.Parameters.AddWithValue("?", desc);
+        //    cmd.Parameters.AddWithValue("?", DateTime.Today);
+        //    cmd.Parameters.AddWithValue("?", tag);
+        //    cmd.Parameters.AddWithValue("?", Session["userID"]);
+        //    cmd.ExecuteNonQuery();
+        //}
+
+        //Response.Redirect("B1600_View-dashboard.aspx");
     }
 }

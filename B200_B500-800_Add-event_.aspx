@@ -106,7 +106,7 @@
                     <td><asp:RequiredFieldValidator ID="errorTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title" EnableClientScript="true" ControlToValidate="txtEventTitle"></asp:RequiredFieldValidator></td>
                 </tr>
                 <tr>
-                    <td><asp:ImageButton ID="btnAddTag" runat="server" CommandName="AddTag" CausesValidation="false" class="addTagBtn" OnClick="btnAddTag_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png" /></td>
+                    <td><asp:ImageButton ID="btnAddTag" runat="server" CommandName="AddTag" CausesValidation="false" class="addTagBtn" OnClick="btnNewTag_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png" /></td>
                     <td><asp:RequiredFieldValidator ID="errorDropDown" class="validationError" runat="server" ErrorMessage="Please select a Tag" EnableClientScript="true" ControlToValidate="dropdownEventTag"></asp:RequiredFieldValidator></td>
                 </tr>
             </table>
@@ -125,11 +125,12 @@
     </div>
 
          <div id="popup" class="simple-popup" style="display: none;">
-    <div class="popup-pink-box">
+    <div class="popup-pink-boxTagEdit">
         <table class="popupTagEditing">
             <tr>
                 <td><asp:Label ID="lblTagTitle" class="label" runat="server" Text="Tag Title"></asp:Label></td>
                 <td colspan="5"><asp:TextBox ID="txtTagTitle" class="textbox" runat="server"></asp:TextBox></td>
+                <td><asp:RequiredFieldValidator ID="errorTagTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title" EnableClientScript="true" ControlToValidate="txtTagTitle"></asp:RequiredFieldValidator></td>
             </tr>
             <tr>
                 <td><asp:Label ID="lblTagColour" class="label" runat="server" Text="Tag Colour"></asp:Label></td>
@@ -143,7 +144,7 @@
 
         <div class="buttonSection">
             <asp:Button ID="btnBackNewTag" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="False" OnClientClick="hidePopup(); return false;" />
-            <asp:Button ID="btnAddNewTag" class="button" runat="server" Text="Add" OnClick="btnAdd_Click" OnClientClick="return addNewTag();"/>
+            <asp:Button ID="btnAddNewTag" class="button" runat="server" Text="Add" CausesValidation="true" OnClick="btnAddTag_Click" OnClientClick="return addNewTag();"/>
         </div>
     </div>
 
@@ -157,7 +158,7 @@
     }
 
     function addNewTag() {
-        hidePopup();
+        /*hidePopup();*/
         return true;
     }
              </script>

@@ -1538,10 +1538,36 @@ body.page-exit .welcomeBackTextDiv {
 .createEventMainContent .popup-pink-box p {
     font-size: 2.2rem;
 }
+popup-pink-boxTagEdit {
+    background: #D7B9D5;
+    background-color: #D7B9D5; /*pink*/
+    padding: 1.2em;
+    border-radius: 3em;
+    border: 5px solid white;
+    width: 65%;
+    max-width: 1300px;
+    max-height: 450px;
+    min-height: 150px;
+    /*text-align: center;*/
+}
+.popup-pink-boxTagEdit .buttonSection {
+    text-align: center;
+    margin-top: 1.5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2em;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+.popupTagEditing table tr td p{
+    text-align: left;
+    padding: 0 0.4em 0 0.4em;
+}
 .tagOne {
     /*display: inline-block;*/
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     border: 2px solid white;
     text-align: center;
@@ -1549,8 +1575,8 @@ body.page-exit .welcomeBackTextDiv {
 }
 .tagTwo {
     /*display: inline-block;*/
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     border: 2px solid white;
     text-align: center;
@@ -1558,8 +1584,8 @@ body.page-exit .welcomeBackTextDiv {
 }
 .tagThree {
     /*display: inline-block;*/
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     border: 2px solid white;
     text-align: center;
@@ -1567,8 +1593,8 @@ body.page-exit .welcomeBackTextDiv {
 }
 .tagFour {
     /*display: inline-block;*/
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     border: 2px solid white;
     text-align: center;
@@ -1576,18 +1602,13 @@ body.page-exit .welcomeBackTextDiv {
 }
 .tagFive {
     /*display: inline-block;*/
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     border: 2px solid white;
     text-align: center;
     background-color: #64A6BD;
 }
-/*Fairy Tale (pink) : #F4CAE0 
-    ~ Thistle (light purple) : #D7B9D5 
-    ~ Rose quartz (dark purple) : #ADA7C9 
-    ~ Powder blue (dull blue) : #90A8C3 
-    ~ Moonstone (turquoise) : #64A6BD*/
 
 /*----------------------- TO DO LIST PAGE B900 ---------------------*/
 .toDoListPage {
