@@ -42,6 +42,7 @@
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div id="profileMainContent">
+         <asp:Button ID="btnPress" CssClass="button" runat="server" Text="Press me" OnClick="btnPress_Click" />
             <div class="changeIconContainer">
         <asp:Button ID="btnChangeIcon" class="profilebutton" runat="server" Text="Change icon" OnClick="btnChangeIcon_Click" />
     </div>

@@ -154,6 +154,7 @@
         </ItemTemplate>
     </asp:Repeater>
     <asp:HiddenField ID="userIDHidden" runat="server" />
+    
 </div>
 
                 <div id="popupTaskComplete" class="simple-popup" style="display: none;">

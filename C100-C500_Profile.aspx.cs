@@ -525,4 +525,33 @@ public partial class Default2 : System.Web.UI.Page
             default: return "circle-cat";
         }
     }
+    protected void btnPress_Click(object sender, EventArgs e)
+    {
+        string username = Session["Username"] != null ? Session["Username"].ToString() : "";
+
+        if (string.IsNullOrEmpty(username))
+        {
+            Response.Write("<script>alert('Error: User session not found.');</script>");
+            return;
+        }
+
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (OleDbConnection con = new OleDbConnection(cs))
+        {
+                con.Open();
+                string selectQuery = "SELECT userXP FROM [Users] WHERE [username] = ?";
+                OleDbCommand selectCmd = new OleDbCommand(selectQuery, con);
+                selectCmd.Parameters.AddWithValue("?", username);
+
+                object xpObj = selectCmd.ExecuteScalar();
+                int currentXP = (xpObj != null && xpObj != DBNull.Value) ? Convert.ToInt32(xpObj) : 0;
+                int newXP = currentXP + 10;
+                // Update XP
+                string updateQuery = "UPDATE [Users] SET userXP = ? WHERE username = ?";
+                OleDbCommand updateCmd = new OleDbCommand(updateQuery, con);
+                updateCmd.Parameters.AddWithValue("?", newXP);
+                updateCmd.Parameters.AddWithValue("?", username);
+                updateCmd.ExecuteNonQuery();
+        }
+    }
 }
