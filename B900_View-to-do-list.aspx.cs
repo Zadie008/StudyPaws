@@ -269,6 +269,11 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnThankYou_Click(object sender, EventArgs e)
     {
+        //if (ViewState["PendingAction"] != null && ViewState["PendingAction"].ToString() == "Toggle" && ViewState["PendingTaskID"] != null)
+        //{
+        //    int taskID = Convert.ToInt32(ViewState["PendingTaskID"]);
+        //    ToggleTaskStatus(taskID);
+        //}
         string userID = userIDHidden.Value;
 
         if (string.IsNullOrEmpty(userID))
