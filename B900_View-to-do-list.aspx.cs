@@ -262,20 +262,18 @@ public partial class Default2 : System.Web.UI.Page
         ViewState["PendingTaskID"] = null;
     }
 
+    protected void btnYayLevelUp_Click(object sender, EventArgs e)
+    {
+        ScriptManager.RegisterStartupScript(this, GetType(), "showTogglePopup", "showPopup();", false);
+    }
 
     protected void btnThankYou_Click(object sender, EventArgs e)
     {
-        if (ViewState["PendingAction"] != null && ViewState["PendingAction"].ToString() == "Toggle" && ViewState["PendingTaskID"] != null)
-        {
-            int taskID = Convert.ToInt32(ViewState["PendingTaskID"]);
-            ToggleTaskStatus(taskID);
-        }
-        string username = Session["Username"] != null ? Session["Username"].ToString() : null;
         string userID = userIDHidden.Value;
 
-        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(userID))
+        if (string.IsNullOrEmpty(userID))
         {
-            Response.Write("<script>alert('Error: User not logged in.');</script>");
+            Response.Write("<script>alert('Error: User not found.');</script>");
             return;
         }
 
@@ -283,64 +281,71 @@ public partial class Default2 : System.Web.UI.Page
 
         using (OleDbConnection con = new OleDbConnection(cs))
         {
+            try
+            {
                 con.Open();
 
                 // Get current XP
-                string getXPQuery = "SELECT userXP FROM [Users] WHERE userID = ?";
-                OleDbCommand getXPCmd = new OleDbCommand(getXPQuery, con);
-                getXPCmd.Parameters.AddWithValue("?", userID);
+                string selectXPQuery = "SELECT userXP FROM [Users] WHERE userID = ?";
+                OleDbCommand selectXPCmd = new OleDbCommand(selectXPQuery, con);
+                selectXPCmd.Parameters.AddWithValue("?", userID);
 
-                int currentXP = 0;
-                object xpResult = getXPCmd.ExecuteScalar();
-                if (xpResult != null && xpResult != DBNull.Value)
-                    currentXP = Convert.ToInt32(xpResult);
-
-                // Add 10 XP
+                object xpObj = selectXPCmd.ExecuteScalar();
+                int currentXP = (xpObj != null && xpObj != DBNull.Value) ? Convert.ToInt32(xpObj) : 0;
                 int newXP = currentXP + 10;
 
-                // Update XP in Users table
+                // Update XP
                 string updateXPQuery = "UPDATE [Users] SET userXP = ? WHERE userID = ?";
                 OleDbCommand updateXPCmd = new OleDbCommand(updateXPQuery, con);
                 updateXPCmd.Parameters.AddWithValue("?", newXP);
                 updateXPCmd.Parameters.AddWithValue("?", userID);
                 updateXPCmd.ExecuteNonQuery();
 
-                // Get current level from CurrentLevel table
-                string getLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = ?";
-                OleDbCommand getLevelCmd = new OleDbCommand(getLevelQuery, con);
-                getLevelCmd.Parameters.AddWithValue("?", userID);
+                // Check new level
+                string getNewLevelQuery = "SELECT MAX(levelNum) FROM [Level] WHERE xpAmount <= ?";
+                OleDbCommand getNewLevelCmd = new OleDbCommand(getNewLevelQuery, con);
+                getNewLevelCmd.Parameters.AddWithValue("?", newXP);
 
-                int currentLevel = 1;
-                object levelResult = getLevelCmd.ExecuteScalar();
-                if (levelResult != null && levelResult != DBNull.Value)
-                    currentLevel = Convert.ToInt32(levelResult);
+                object newLevelObj = getNewLevelCmd.ExecuteScalar();
+                int newLevelNum = (newLevelObj != null && newLevelObj != DBNull.Value) ? Convert.ToInt32(newLevelObj) : 1;
 
-                // Check if user qualifies for next level
-                string getMaxLevelQuery = "SELECT MAX(LevelID) FROM [Level] WHERE xpAmount <= ?";
-                OleDbCommand getMaxLevelCmd = new OleDbCommand(getMaxLevelQuery, con);
-                getMaxLevelCmd.Parameters.AddWithValue("?", newXP);
+                // Get current level
+                string getCurrentLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = ?";
+                OleDbCommand getCurrentLevelCmd = new OleDbCommand(getCurrentLevelQuery, con);
+                getCurrentLevelCmd.Parameters.AddWithValue("?", userID);
 
-                object maxLevelResult = getMaxLevelCmd.ExecuteScalar();
-                int newLevel = (maxLevelResult != DBNull.Value) ? Convert.ToInt32(maxLevelResult) : currentLevel;
+                object currentLevelObj = getCurrentLevelCmd.ExecuteScalar();
+                int currentLevel = (currentLevelObj != null && currentLevelObj != DBNull.Value) ? Convert.ToInt32(currentLevelObj) : 1;
 
-                if (newLevel > currentLevel)
+                if (newLevelNum > currentLevel)
                 {
-                    // Update CurrentLevel table
+                    // Update level
                     string updateLevelQuery = "UPDATE CurrentLevel SET levelID = ? WHERE userID = ?";
                     OleDbCommand updateLevelCmd = new OleDbCommand(updateLevelQuery, con);
-                    updateLevelCmd.Parameters.AddWithValue("?", newLevel);
+                    updateLevelCmd.Parameters.AddWithValue("?", newLevelNum);
                     updateLevelCmd.Parameters.AddWithValue("?", userID);
                     updateLevelCmd.ExecuteNonQuery();
 
-                    Response.Write("<script>alert('XP added and you leveled up to Level " + newLevel + "!');</script>");
+                    // Show Level Up popup
+
+                    ClientScript.RegisterStartupScript(this.GetType(), "ShowLevelUp", "showLevelUp();", true);
                 }
                 else
                 {
-                    Response.Write("<script>alert('XP added!');</script>");
+                    
+                   // ScriptManager.RegisterStartupScript(this, GetType(), "xpAddedAlert", "alert('XP added!');", true);
                 }
+            }
+            catch (Exception ex)
+            {
+                Response.Write("<script>alert('An error occurred: " + ex.Message + "');</script>");
+            }
         }
+
+        LoadTasks();
         UpdateXPDisplay(userID);
     }
+
     private void UpdateXPDisplay(string userID)
     {
         int userXP = GetUserXP(connString, userID);

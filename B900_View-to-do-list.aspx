@@ -253,6 +253,16 @@
         </div>
     </div>
 </div>
+<div id="popupLevelUp" class="simple-popup" style="display: none;">
+    <div class="popup-pink-boxSmaller">
+        <p>Congrats! You earned:</p> 
+        <p>XP   +10</p>
+        <img src="Images/Notification%20Happy.png" />
+        <br />
+        <div class="buttonSection">
+            <asp:Button ID="btnYayLevelUp" CssClass="popup-button-best-pink" runat="server" Text="Thank you!" OnClick="btnYayLevelUp_Click" />
+        </div>
+    </div>
 </div>
 
              <script type="text/javascript">
@@ -269,7 +279,12 @@
                  function hideDeletePopup() {
                      document.getElementById('popupDeleteTask').style.display = 'none';
                  }
-
+                 function showLevelUp() {
+                     document.getElementById('popupLevelUp').style.display = 'flex';
+                 }
+                 function hideLevelUp() {
+                     doucment.getElementById('popupLevelUp').style.display = 'none';
+                 }
              </script>
     </div>
 </asp:Content>
