@@ -253,11 +253,11 @@
         </div>
     </div>
 </div>
+<%-- this is the code for the level up panel--%>
 <div id="popupLevelUp" class="simple-popup" style="display: none;">
     <div class="popup-pink-boxSmaller">
-        <p>Congrats! You earned:</p> 
-        <p>XP   +10</p>
-        <img src="Images/Notification%20Happy.png" />
+        <p>Congrats! You have leveled up!</p> 
+        <%--<img src="Images/Notification%20Happy.png" />--%>
         <br />
         <div class="buttonSection">
             <asp:Button ID="btnYayLevelUp" CssClass="popup-button-best-pink" runat="server" Text="Thank you!" OnClick="btnYayLevelUp_Click" />
@@ -279,11 +279,12 @@
                  function hideDeletePopup() {
                      document.getElementById('popupDeleteTask').style.display = 'none';
                  }
+                 <%-- this is the code for the level up panel--%>
                  function showLevelUp() {
                      document.getElementById('popupLevelUp').style.display = 'flex';
                  }
                  function hideLevelUp() {
-                     doucment.getElementById('popupLevelUp').style.display = 'none';
+                     document.getElementById('popupLevelUp').style.display = 'none';
                  }
              </script>
     </div>

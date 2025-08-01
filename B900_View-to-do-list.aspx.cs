@@ -328,7 +328,8 @@ public partial class Default2 : System.Web.UI.Page
 
                     // Show Level Up popup
 
-                    ClientScript.RegisterStartupScript(this.GetType(), "ShowLevelUp", "showLevelUp();", true);
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowLevelUp", "showLevelUp();", true);
+
                 }
                 else
                 {
