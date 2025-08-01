@@ -104,6 +104,7 @@ public partial class Default2 : System.Web.UI.Page
         btnEditEmail.Visible = false;
         btnSaveEmail.Visible = true;
         btnCancelEmail.Visible = true;
+       
     }
 
     protected void btnCancelEmail_Click(object sender, EventArgs e)
@@ -143,7 +144,59 @@ public partial class Default2 : System.Web.UI.Page
         btnSaveEmail.Visible = false;
         btnCancelEmail.Visible = false;
 
-        originalEmail = newEmail; 
+        originalEmail = newEmail;
+        emailBadge();
+    }
+    public void emailBadge() //user earns email badge
+    {
+        string username = "";
+        if (Session["Username"] != null)
+        {
+            username = Session["Username"].ToString();
+        }
+        if (string.IsNullOrEmpty(username)) return;
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (OleDbConnection con = new OleDbConnection(cs))
+        {
+            con.Open();
+            string getUserQuery = "SELECT userID, email FROM [Users] WHERE [username] = ?";
+            int userID = -1;
+            string userEmail = null;
+            using (OleDbCommand getUserCmd = new OleDbCommand(getUserQuery, con))
+            {
+                getUserCmd.Parameters.AddWithValue("?", username);
+                OleDbDataReader reader = getUserCmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    userID = Convert.ToInt32(reader["userID"]);
+                    userEmail = reader["email"].ToString();
+                }
+                reader.Close();
+            }
+            if (userID != -1 && !string.IsNullOrEmpty(userEmail))
+            {
+                string checkBadgeQuery = "SELECT COUNT(*) FROM [UserBadge] WHERE [userID] = ? AND [badgeID] = ?";
+                int badgeCount = 0;
+                using (OleDbCommand checkBadgeCmd = new OleDbCommand(checkBadgeQuery, con))
+                {
+                    checkBadgeCmd.Parameters.AddWithValue("?", userID);
+                    checkBadgeCmd.Parameters.AddWithValue("?", 15);
+                    badgeCount = (int)checkBadgeCmd.ExecuteScalar();
+                }
+                if (badgeCount == 0)
+                {
+                    string insertBadgeQuery = "INSERT INTO [UserBadge] ([userID], [badgeID], [badgeType]) VALUES (?, ?, ?)";
+                    using (OleDbCommand insertBadgeCmd = new OleDbCommand(insertBadgeQuery, con))
+                    {
+                        insertBadgeCmd.Parameters.AddWithValue("?", userID);
+                        insertBadgeCmd.Parameters.AddWithValue("?", 15);
+                        insertBadgeCmd.Parameters.AddWithValue("?", "Gold");
+                        insertBadgeCmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            con.Close();
+        }
     }
 
     protected void btnCancelUser_Click(object sender, EventArgs e)
@@ -525,33 +578,36 @@ public partial class Default2 : System.Web.UI.Page
             default: return "circle-cat";
         }
     }
-    protected void btnPress_Click(object sender, EventArgs e)
-    {
-        string username = Session["Username"] != null ? Session["Username"].ToString() : "";
 
-        if (string.IsNullOrEmpty(username))
-        {
-            Response.Write("<script>alert('Error: User session not found.');</script>");
-            return;
-        }
+   
 
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection con = new OleDbConnection(cs))
-        {
-                con.Open();
-                string selectQuery = "SELECT userXP FROM [Users] WHERE [username] = ?";
-                OleDbCommand selectCmd = new OleDbCommand(selectQuery, con);
-                selectCmd.Parameters.AddWithValue("?", username);
+    //protected void btnPress_Click(object sender, EventArgs e)
+    //{
+    //    string username = Session["Username"] != null ? Session["Username"].ToString() : "";
 
-                object xpObj = selectCmd.ExecuteScalar();
-                int currentXP = (xpObj != null && xpObj != DBNull.Value) ? Convert.ToInt32(xpObj) : 0;
-                int newXP = currentXP + 10;
-                // Update XP
-                string updateQuery = "UPDATE [Users] SET userXP = ? WHERE username = ?";
-                OleDbCommand updateCmd = new OleDbCommand(updateQuery, con);
-                updateCmd.Parameters.AddWithValue("?", newXP);
-                updateCmd.Parameters.AddWithValue("?", username);
-                updateCmd.ExecuteNonQuery();
-        }
-    }
+    //    if (string.IsNullOrEmpty(username))
+    //    {
+    //        Response.Write("<script>alert('Error: User session not found.');</script>");
+    //        return;
+    //    }
+
+    //    string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+    //    using (OleDbConnection con = new OleDbConnection(cs))
+    //    {
+    //            con.Open();
+    //            string selectQuery = "SELECT userXP FROM [Users] WHERE [username] = ?";
+    //            OleDbCommand selectCmd = new OleDbCommand(selectQuery, con);
+    //            selectCmd.Parameters.AddWithValue("?", username);
+
+    //            object xpObj = selectCmd.ExecuteScalar();
+    //            int currentXP = (xpObj != null && xpObj != DBNull.Value) ? Convert.ToInt32(xpObj) : 0;
+    //            int newXP = currentXP + 10;
+    //            // Update XP
+    //            string updateQuery = "UPDATE [Users] SET userXP = ? WHERE username = ?";
+    //            OleDbCommand updateCmd = new OleDbCommand(updateQuery, con);
+    //            updateCmd.Parameters.AddWithValue("?", newXP);
+    //            updateCmd.Parameters.AddWithValue("?", username);
+    //            updateCmd.ExecuteNonQuery();
+    //    }
+    //}
 }
