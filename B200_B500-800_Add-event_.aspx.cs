@@ -12,6 +12,7 @@ public partial class Default2 : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
+            LoadTags();
         {
             if (Session["timerTitle"] != null)
             {
@@ -52,27 +53,55 @@ public partial class Default2 : System.Web.UI.Page
     }
     protected void btnNewTag_Click(object sender, EventArgs e)
     {
+        txtTagTitle.Text = "";
         ScriptManager.RegisterStartupScript(this, GetType(), "showPopup", "showPopup();", true);
     }
     protected void btnAddTag_Click(Object sender, EventArgs e)
     {
-        String desc = txtTagTitle.Text;
-        //int tag = int.Parse(dropdownEventTag.SelectedValue);
-        int userID = Convert.ToInt32(Session["userID"]);
-
-        //string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        //using (OleDbConnection conn = new OleDbConnection(cs))
-        //{
-        //    conn.Open();
-        //    string sql = "INSERT into [CalendarEvent] ([eventDesc], [eventDate], [tagID], [userID]) VALUES (?, ?, ?, ?)";
-        //    OleDbCommand cmd = new OleDbCommand(sql, conn);
-        //    cmd.Parameters.AddWithValue("?", desc);
-        //    cmd.Parameters.AddWithValue("?", DateTime.Today);
-        //    cmd.Parameters.AddWithValue("?", tag);
-        //    cmd.Parameters.AddWithValue("?", Session["userID"]);
-        //    cmd.ExecuteNonQuery();
-        //}
-
-        //Response.Redirect("B1600_View-dashboard.aspx");
+        if (Page.IsValid)
+        {
+            String tagName = txtTagTitle.Text.Trim();
+            int tagColourNum = int.Parse(hfTagColourNum.Value);
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            using (OleDbConnection conn = new OleDbConnection(cs))
+            {
+                conn.Open();
+                string query = "INSERT into [CalendarEventTag] ([tagName], [tagColourNum]) VALUES (?, ?)";
+                OleDbCommand cmd = new OleDbCommand(query, conn);
+                cmd.Parameters.AddWithValue("?", tagName);
+                cmd.Parameters.AddWithValue("?", tagColourNum);
+                cmd.ExecuteNonQuery();
+            }
+        }
     }
+    protected void validatorTagColour_ServerValidate(object sender, ServerValidateEventArgs e)
+    {
+        e.IsValid = !string.IsNullOrEmpty(hfTagColourNum.Value);
+    }
+    protected void LoadTags()
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (OleDbConnection conn = new OleDbConnection(cs))
+        {
+            conn.Open();
+            string query = "SELECT tagID, tagName FROM [CalendarEventTag]";
+            OleDbCommand cmd = new OleDbCommand(query, conn);
+            using (OleDbDataReader reader = cmd.ExecuteReader())
+            {
+                dropdownEventTag.Items.Clear();
+                dropdownEventTag.Items.Add(new ListItem(""));
+
+                while (reader.Read())
+                {
+                    string tagName = reader["tagName"].ToString();
+                    int tagID = Convert.ToInt32(reader["tagID"]);
+
+                    if (tagID != 1)
+                    {
+                        dropdownEventTag.Items.Add(new ListItem(tagName));
+                    }
+                }
+            }
+        }
+    }   
 }

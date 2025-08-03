@@ -1600,15 +1600,15 @@ body.page-exit .welcomeBackTextDiv {
 .createEventMainContent .popup-pink-box p {
     font-size: 2.2rem;
 }
-popup-pink-boxTagEdit {
+.popup-pink-boxTagEdit {
     background: #D7B9D5;
     background-color: #D7B9D5; /*pink*/
-    padding: 1.2em;
+    padding: 1em;
     border-radius: 3em;
     border: 5px solid white;
-    width: 65%;
+    width: 55%;
     max-width: 1300px;
-    max-height: 450px;
+    max-height: 400vh;
     min-height: 150px;
     /*text-align: center;*/
 }
@@ -1618,59 +1618,116 @@ popup-pink-boxTagEdit {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2em;
+    gap: 1.5em;
     flex-wrap: nowrap;
     flex-direction: row;
 }
-.popupTagEditing table tr td p{
-    text-align: left;
-    padding: 0 0.4em 0 0.4em;
+.popupTagEditing{
+    width:90%;
+    padding: 0.5em 0.8em;
+    border-spacing: 0.5em;
+}
+.popupTagEditing table{
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0.5em;
+    
+}
+.tableLabel{
+    width: 50%;
+}
+.tableInput{
+    width:8%;
+}
+.tableValidation{
+    width: 50%;
+    text-align:right;
+    /*height:0.5em;*/
+    /*display:block;*/
+    padding:0;
+    /*display:flex;
+    justify-content:flex-end;*/
+}
+.popupTagEditing td{
+    padding: 0.3em 0.3em;
+    vertical-align:middle;
+    line-height:1.6;
 }
 .tagOne {
-    /*display: inline-block;*/
     width: 35px;
     height: 35px;
     border-radius: 50%;
     border: 2px solid white;
     text-align: center;
     background-color: #F4CAE0;
+    transition: transform 0.2s ease-in-out;
 }
+    .tagOne:hover {
+        transform: scale(1.15);
+        transition: transform 0.2s ease-in-out;
+        cursor:pointer;
+    }
 .tagTwo {
-    /*display: inline-block;*/
     width: 35px;
     height: 35px;
     border-radius: 50%;
     border: 2px solid white;
     text-align: center;
     background-color: #D7B9D5;
+    transition: transform 0.2s ease-in-out;
 }
+    .tagTwo:hover {
+        transform: scale(1.15);
+        transition: transform 0.2s ease-in-out;
+        cursor: pointer;
+    }
 .tagThree {
-    /*display: inline-block;*/
     width: 35px;
     height: 35px;
     border-radius: 50%;
     border: 2px solid white;
     text-align: center;
     background-color: #ADA7C9;
+    transition: transform 0.2s ease-in-out;
 }
+    .tagThree:hover {
+        transform: scale(1.15);
+        transition: transform 0.2s ease-in-out;
+        cursor: pointer;
+    }
 .tagFour {
-    /*display: inline-block;*/
     width: 35px;
     height: 35px;
     border-radius: 50%;
     border: 2px solid white;
     text-align: center;
     background-color: #90A8C3;
+    transition: transform 0.2s ease-in-out;
 }
+    .tagFour:hover {
+        transform: scale(1.15);
+        transition: transform 0.2s ease-in-out;
+        cursor: pointer;
+    }
 .tagFive {
-    /*display: inline-block;*/
     width: 35px;
     height: 35px;
     border-radius: 50%;
     border: 2px solid white;
     text-align: center;
     background-color: #64A6BD;
+    transition: transform 0.2s ease-in-out;
 }
+    .tagFive:hover {
+        transform: scale(1.15);
+        transition: transform 0.2s ease-in-out;
+        cursor: pointer;
+    }
+    .selectedTag{
+        transform: scale(1.15);
+        box-shadow: 0 0 10px 4px rgba(255, 255, 255, 0.6);
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
 
 /*----------------------- TO DO LIST PAGE B900 ---------------------*/
 .toDoListPage {

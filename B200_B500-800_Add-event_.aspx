@@ -89,11 +89,6 @@
                     <td><asp:Label ID="lblEventTag" class="label" runat="server" Text="Tag"></asp:Label></td>
                     <td>
                         <asp:DropDownList ID="dropdownEventTag" ClientIDMode="Static" class="dropDownList" runat="server" BackColor="#446791" DataTextField="tagName" DataValueField="tagID">
-                        <asp:ListItem></asp:ListItem>
-                        <asp:ListItem>Studying</asp:ListItem>
-                        <asp:ListItem>Assignments</asp:ListItem>
-                        <asp:ListItem>Reading</asp:ListItem>
-                        <asp:ListItem>Break</asp:ListItem>
                         </asp:DropDownList>
                     </td>
                 </tr>
@@ -124,43 +119,83 @@
         </div>
     </div>
 
-         <div id="popup" class="simple-popup" style="display: none;">
+    <div id="popup" class="simple-popup" style="display: none;">
     <div class="popup-pink-boxTagEdit">
         <table class="popupTagEditing">
             <tr>
-                <td><asp:Label ID="lblTagTitle" class="label" runat="server" Text="Tag Title"></asp:Label></td>
-                <td colspan="5"><asp:TextBox ID="txtTagTitle" class="textbox" runat="server"></asp:TextBox></td>
-                <td><asp:RequiredFieldValidator ID="errorTagTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title" EnableClientScript="true" ControlToValidate="txtTagTitle"></asp:RequiredFieldValidator></td>
+                <td class="tableLabel"><asp:Label ID="lblTagTitle" class="label" runat="server" Text="Tag Title"></asp:Label></td>
+                <td class="tableInput" colspan="5"><asp:TextBox ID="txtTagTitle" class="textbox" runat="server" ValidationGroup="tagPopup"></asp:TextBox></td>
             </tr>
             <tr>
-                <td><asp:Label ID="lblTagColour" class="label" runat="server" Text="Tag Colour"></asp:Label></td>
-                <td><asp:Button ID="tagColourOne" class="tagOne" runat="server" Text="" /></td>
-                <td><asp:Button ID="tagColourTwo" class="tagTwo" runat="server" Text="" /></td>
-                <td><asp:Button ID="tagColourThree" class="tagThree" runat="server" Text="" /></td>
-                <td><asp:Button ID="tagColourFour" class="tagFour" runat="server" Text="" /></td>
-                <td><asp:Button ID="tagColourFive" class="tagFive" runat="server" Text="" /></td>
+                <td></td>
+                <td class="tableValidation" colspan="5"><asp:RequiredFieldValidator ID="errorTagTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title" ValidationGroup="tagPopup" Display="Static" EnableClientScript="true" ControlToValidate="txtTagTitle"></asp:RequiredFieldValidator></td>
+            </tr>
+            <tr>
+                <asp:HiddenField ID="hfTagColourNum" runat="server" />
+                <td class="tableLabel"><asp:Label ID="lblTagColour" class="label" runat="server" Text="Tag Colour" UseSubmitBehaviour="false" OnClientClick="return false;"></asp:Label></td>
+                <td class="tableInput"><asp:Button ID="tagColourOne" class="tagOne" runat="server" Text="" UseSubmitBehaviour="false" OnClientClick="selectTagColour(1); return false;"/></td>
+                <td class="tableInput"><asp:Button ID="tagColourTwo" class="tagTwo" runat="server" Text="" UseSubmitBehaviour="false" OnClientClick="selectTagColour(2); return false;"/></td>
+                <td class="tableInput"><asp:Button ID="tagColourThree" class="tagThree" runat="server" Text="" UseSubmitBehaviour="false" OnClientClick="selectTagColour(3); return false;"/></td>
+                <td class="tableInput"><asp:Button ID="tagColourFour" class="tagFour" runat="server" Text="" UseSubmitBehaviour="false" OnClientClick="selectTagColour(4); return false;"/></td>
+                <td class="tableInput"><asp:Button ID="tagColourFive" class="tagFive" runat="server" Text="" UseSubmitBehaviour="false" OnClientClick=" selectTagColour(5);return false;"/></td>
+                
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td class="tableValidation" colspan="5"><asp:CustomValidator ID="validatorTagColour" runat="server" ErrorMessage="Please select a Tag Colour" ClientValidationFunction="validateTagColour" ValidationGroup="tagPopup" Display="Static" CssClass="validationError" OnServerValidate="validatorTagColour_ServerValidate"/></td>
             </tr>
         </table>
 
         <div class="buttonSection">
             <asp:Button ID="btnBackNewTag" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="False" OnClientClick="hidePopup(); return false;" />
-            <asp:Button ID="btnAddNewTag" class="button" runat="server" Text="Add" CausesValidation="true" OnClick="btnAddTag_Click" OnClientClick="return addNewTag();"/>
+            <asp:Button ID="btnAddNewTag" class="button" runat="server" Text="Add" CausesValidation="true" OnClick="btnAddTag_Click" ValidationGroup="tagPopup" />
         </div>
     </div>
+        <asp:HiddenField ID="hiddenSelectedTagColour" runat="server" />
 
              <script type="text/javascript">
-    function showPopup() {
-        document.getElementById('popup').style.display = 'flex';
-    }
+                 function showPopup()
+                 {
+                     document.getElementById('popup').style.display = 'flex';
+                     clearPopup();
+                 }
 
-    function hidePopup() {
-        document.getElementById('popup').style.display = 'none';
-    }
+                 function hidePopup()
+                 {
+                     document.getElementById('popup').style.display = 'none';
+                 }
 
-    function addNewTag() {
-        /*hidePopup();*/
-        return true;
-    }
+                 function clearPopup()
+                 {
+                     document.getElementById('<%=txtTagTitle.ClientID%>').value = "";
+                     const hiddenField = document.getElementById('<%= hiddenSelectedTagColour.ClientID %>');
+                     const tagButtons = document.querySelectorAll('.tagOne, .tagTwo, .tagThree, .tagFour, .tagFive');
+                     tagButtons.forEach(btn => {
+                         btn.classList.remove('selectedTag');
+                         hiddenField.value = "";
+                     });
+                 }
+                 window.addEventListener('DOMContentLoaded', function () {
+                     const tagButtons = document.querySelectorAll('.tagOne, .tagTwo, .tagThree, .tagFour, .tagFive');
+                     const hiddenField = document.getElementById('<%= hiddenSelectedTagColour.ClientID %>');
+                     tagButtons.forEach(btn => {
+                         btn.addEventListener('click', function () {
+                             tagButtons.forEach(b => b.classList.remove('selectedTag'));
+                             this.classList.add('selectedTag');
+                             hiddenField.value = this.id;
+                         });
+                     });
+                 });
+
+                 function validateTagColour(sender, args) {
+                     var selected = document.getElementById('<%=hiddenSelectedTagColour.ClientID%>').value;
+                     args.IsValid = selected !== "";
+                 }
+                 function selectTagColour(colourNum) {
+                     document.getElementById('<%= hfTagColourNum.ClientID%>').value = colourNum;
+                 }
+                 
              </script>
 </div>
 </div>
