@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.OleDb;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -123,16 +121,6 @@ public partial class Default2 : System.Web.UI.Page
     public string GetProfileImageUrl(object iconNum)
     {
         int num = Convert.ToInt32(iconNum);
-
-        if (num == 1)
-        {
-
-        }
-        else if (num == 2)
-        {
-
-        }
-
         switch (num)
         {
             case 1: return "Images/ProfilePictures/CatPfp.png";
@@ -150,18 +138,23 @@ public partial class Default2 : System.Web.UI.Page
         return list.Contains(username) ? "Icons/icons8-check-white-96.png" : "Icons/icons8-add-new-white-96.png";
     }
 
-    protected void btnContinue_Click(object sender, EventArgs e)
+    protected void ValidateFriendSelection(object source, ServerValidateEventArgs args)
     {
         List<string> invitedFriends = Session["invitedFriends"] as List<string>;
-        if (invitedFriends == null || invitedFriends.Count == 0)
+        args.IsValid = (invitedFriends != null && invitedFriends.Count > 0);
+    }
+
+    protected void btnContinue_Click(object sender, EventArgs e)
+    {
+        Page.Validate("friendValidation");
+        if (!Page.IsValid)
         {
-            // add validation!!
             return;
         }
 
+        List<string> invitedFriends = Session["invitedFriends"] as List<string>;
         Session["selectedFriends"] = invitedFriends;
-
-        // You can also generate the studySessionID here if needed
+        // can also generate the studySessionID here if needed
         Response.Redirect("A700_Create-study-session_4.aspx");
     }
 

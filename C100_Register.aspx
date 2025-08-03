@@ -79,9 +79,7 @@
                     <img src="Images/Notification%20Happy.png" />
                     <br />
                     <div class="buttonSection">
-                        <asp:Button ID="btnWatchtut" CssClass="popup-button" runat="server" Text="Yes, please!" OnClientClick="hidePanel(pnlTutClientID);" OnClick="btnWatchtut_Click" />
-                    </div>
-                    <div class="buttonSection">
+                        <asp:Button ID="btnWatchtut" CssClass="popup-button-best-pink" runat="server" Text="Yes, please!" OnClientClick="hidePanel(pnlTutClientID);" OnClick="btnWatchtut_Click" />
                         <asp:Button ID="BtnNotut" CssClass="popup-button" runat="server" Text="No, thank you!" OnClientClick="hidePanel(pnlTutClientID);" OnClick="BtnNotut_Click" />
                     </div>
                 </div>

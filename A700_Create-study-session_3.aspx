@@ -94,13 +94,13 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div id="createSession3MainContent" class="createTimer3MainContent">
         <div class="timeSection">
-            <h2>Invite your friends to study with you</h2>
             <div class="leftSection">
             </div>
             <div id="inviteFriendsToSession" class="middleSection">
+                <h2>Invite your friends to study with you</h2>
                 <div id="searchSection">
                     <asp:TextBox ID="txtSearch" ClientIDMode="Static" CssClass="textbox" runat="server" Placeholder="Search" OnTextChanged="txtSearch_TextChanged" AutoPostBack="true"></asp:TextBox>
-                    <asp:ImageButton ID="btnSearch" runat="server" ImageUrl="Icons/icons8-search-white-96.png" OnClick="btnSearch_Click" />
+                    <asp:ImageButton ID="btnSearch" CssClass="imageButton" runat="server" ImageUrl="Icons/icons8-search-white-96.png" OnClick="btnSearch_Click" Width="75" Height="75" />
                 </div>
                 <div class="scrollableTableContainer">
                     <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" AutoGenerateColumns="False" OnRowCommand="GridView1_RowCommand">
@@ -124,6 +124,7 @@
                 </div>
             </div>
             <div class="rightSection">
+                <asp:CustomValidator ID="cvFriendSelection" runat="server" CssClass="validationError" ErrorMessage="Please select at least 1 friend" OnServerValidate="ValidateFriendSelection" ClientValidationFunction="validateFriendSelection" Display="Dynamic" ValidationGroup="friendValidation"></asp:CustomValidator>
             </div>
         </div>
         <div class="buttonSection">
@@ -131,7 +132,7 @@
             </div>
             <div class="middleSection">
                 <asp:Button ID="btnBack" CssClass="button" runat="server" Text="Back" OnClick="btnBack_Click" />
-                <asp:Button ID="btnContinue" CssClass="button" runat="server" Text="Continue" OnClick="btnContinue_Click" />
+                <asp:Button ID="btnContinue" CssClass="button" runat="server" Text="Continue" OnClick="btnContinue_Click" CausesValidation="true" ValidationGroup="friendValidation" />
             </div>
             <div class="rightSection">
                 <asp:Button ID="btnViewPastTimers" CssClass="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
@@ -214,9 +215,43 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function setCircleColors() {
+            const profileImages = document.querySelectorAll('.friendProfileImage');
+    
+            profileImages.forEach(img => {
+                const circle = img.closest('.friendProfileIcon').querySelector('.friendProfileCircle');
+        
+                const src = img.getAttribute('src').toLowerCase();
+                let colorClass = 'circle-cat';
+        
+                if (src.includes('cat')) colorClass = 'circle-cat';
+                else if (src.includes('dog')) colorClass = 'circle-dog';
+                else if (src.includes('bunny')) colorClass = 'circle-bunny';
+                else if (src.includes('cow')) colorClass = 'circle-cow';
+                else if (src.includes('unicorn')) colorClass = 'circle-unicorn';
+        
+                circle.classList.add(colorClass);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', setCircleColors);
+        if (typeof Sys !== 'undefined') {
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(setCircleColors);
+        }
+
+        function validateFriendSelection(source, args) {
+            const invitedFriends = <%= Session["invitedFriends"] != null ? ((List<string>)Session["invitedFriends"]).Count : 0 %>;
+            args.IsValid = invitedFriends > 0;
+    
+            if (!args.IsValid) {
+                document.getElementById('<%= cvFriendSelection.ClientID %>').style.display = 'inline';
+            }
+        }
+    </script>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
 
 </asp:Content>
-
