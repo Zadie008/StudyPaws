@@ -20,28 +20,28 @@ public partial class Default2 : System.Web.UI.Page
                 string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
                 string userID = GetUserID(username, cs);
 
-                if (!string.IsNullOrEmpty(userID))
+                if (!IsPostBack)
                 {
                     int userXP = GetUserXP(cs, userID);
-                    lblXPAmount.Text = userXP.ToString();
-                    GetLevelInformation(cs, userID);
+                    Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
+                    int currentLevel = levelInfo.Item1;
+                    int currentLevelXpAmount = levelInfo.Item2;
+                    int nextLevelXpAmount = levelInfo.Item3;
+
+                    lblLevelNumber.Text = currentLevel.ToString();
+
+                    CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
                     GetUserStats(cs, userID);
                     GetUserProfileIcon(cs, userID);
                     LoadPendingInvitesFromDB();
                     LoadUpcomingSessions();
-
-                }
-                else
-                {
-                    lblLevelNumber.Text = "N/A";
-                    lblXPAmount.Text = "N/A";
-                    lblPaws.Text = "N/A";
                 }
             }
             else
             {
                 Response.Redirect("Landing-page.aspx");
             }
+
             ShowNextInvite();
         }
     }
@@ -55,7 +55,8 @@ public partial class Default2 : System.Web.UI.Page
     {
         Response.Redirect("A700_Create-study-session_3.aspx");
     }
-    //This is all the code for the header information
+
+    // start: header profile code
     private string GetUserID(string username, string connectionString)
     {
         string query = "SELECT userID FROM Users WHERE username = @username";
@@ -102,24 +103,85 @@ public partial class Default2 : System.Web.UI.Page
         return userXP;
     }
 
-    private void GetLevelInformation(string connectionString, string userID)
+    private Tuple<int, int, int> GetLevelInformation(string connectionString, string userID)
     {
-        string query = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
-
+        int currentLevel = 0;
+        int currentLevelXpAmount = 0;
+        int nextLevelXpAmount = 0;
+        string currentLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
         using (OleDbConnection con = new OleDbConnection(connectionString))
-        using (OleDbCommand cmd = new OleDbCommand(query, con))
+        using (OleDbCommand cmdCurrentLevel = new OleDbCommand(currentLevelQuery, con))
         {
-            cmd.Parameters.AddWithValue("@userID", userID);
-            try
+            cmdCurrentLevel.Parameters.AddWithValue("@userID", userID);
+            con.Open();
+            object result = cmdCurrentLevel.ExecuteScalar();
+            if (result != null && int.TryParse(result.ToString(), out currentLevel))
             {
-                con.Open();
-                object result = cmd.ExecuteScalar();
-                lblLevelNumber.Text = (result != null) ? result.ToString() : "N/A";
+                lblLevelNumber.Text = currentLevel.ToString();
             }
-            catch (Exception ex)
+            else
             {
-                lblLevelNumber.Text = "ERR";
+                lblLevelNumber.Text = "N/A";
+                return Tuple.Create(0, 0, 0);
             }
+        }
+        string currentLevelXPQuery = "SELECT xpAmount FROM [Level] WHERE levelNum = @currentLevel";
+        using (OleDbConnection con = new OleDbConnection(connectionString))
+        using (OleDbCommand cmdCurrentXP = new OleDbCommand(currentLevelXPQuery, con))
+        {
+            cmdCurrentXP.Parameters.AddWithValue("@currentLevel", currentLevel);
+            con.Open();
+            object result = cmdCurrentXP.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                currentLevelXpAmount = Convert.ToInt32(result);
+            }
+        }
+
+        string nextLevelXPQuery = "SELECT xpAmount FROM [Level] WHERE levelNum = @nextLevel";
+        using (OleDbConnection con = new OleDbConnection(connectionString))
+        using (OleDbCommand cmdNextXP = new OleDbCommand(nextLevelXPQuery, con))
+        {
+            cmdNextXP.Parameters.AddWithValue("@nextLevel", currentLevel + 1);
+            con.Open();
+            object result = cmdNextXP.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                nextLevelXpAmount = Convert.ToInt32(result);
+            }
+            else
+            {
+                nextLevelXpAmount = currentLevelXpAmount;//when user reaches level 25
+            }
+        }
+
+        return Tuple.Create(currentLevel, currentLevelXpAmount, nextLevelXpAmount);
+    }
+
+    private void CalculateXPProgressBar(int userXP, int currentLevelXpAmount, int nextLevelXpAmount)
+    {
+        if (nextLevelXpAmount <= currentLevelXpAmount)
+        {
+            xpProgressBar.Style["width"] = "100%";
+            lblXPPercentage.Text = "100%";
+            return;
+        }
+        int xpToNextLevel = nextLevelXpAmount - currentLevelXpAmount;
+        int xpGainedInCurrentLevel = userXP - currentLevelXpAmount;
+
+        if (xpToNextLevel > 0)
+        {
+            double progress = (double)xpGainedInCurrentLevel / xpToNextLevel * 100;
+            if (progress < 0) progress = 0;
+            if (progress > 100) progress = 100;
+
+            xpProgressBar.Style["width"] = progress.ToString("F0") + "%";
+            lblXPPercentage.Text = progress.ToString("F0") + "%";
+        }
+        else
+        {
+            xpProgressBar.Style["width"] = "100%";
+            lblXPPercentage.Text = "100%";
         }
     }
 
@@ -131,24 +193,18 @@ public partial class Default2 : System.Web.UI.Page
         using (OleDbCommand cmd = new OleDbCommand(query, con))
         {
             cmd.Parameters.AddWithValue("@userID", userID);
-            try
+
+            con.Open();
+            using (OleDbDataReader reader = cmd.ExecuteReader())
             {
-                con.Open();
-                using (OleDbDataReader reader = cmd.ExecuteReader())
+                if (reader.Read())
                 {
-                    if (reader.Read())
-                    {
-                        lblPaws.Text = reader["userCoinCount"] != DBNull.Value ? reader["userCoinCount"].ToString() : "0";
-                    }
-                    else
-                    {
-                        lblPaws.Text = "N/A";
-                    }
+                    lblPaws.Text = reader["userCoinCount"] != DBNull.Value ? reader["userCoinCount"].ToString() : "0";
                 }
-            }
-            catch (Exception ex)
-            {
-                lblPaws.Text = "ERR";
+                else
+                {
+                    lblPaws.Text = "N/A";
+                }
             }
         }
     }
@@ -206,8 +262,9 @@ public partial class Default2 : System.Web.UI.Page
             default: return "circle-cat";
         }
     }
+    // end: header profile code
 
-    // Lea's code to copy starts here
+    // start: notification bell code
     private void LoadPendingInvitesFromDB()
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -268,7 +325,6 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnYes_Click(object sender, EventArgs e)
     {
-        // 1. update StudySessionParticipants table
         int sessionID = int.Parse(hiddenSessionID.Value);
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         string updateQuery = "UPDATE StudySessionParticipants SET replied = true, sessionStatus = 'Accepted' WHERE sessionID = ? AND userID = ?";
@@ -281,7 +337,6 @@ public partial class Default2 : System.Web.UI.Page
             cmd.ExecuteNonQuery();
         }
 
-        // 2. add in CalendarEvent table
         List<SessionInvite> invites = Session["PendingInvites"] as List<SessionInvite>;
         SessionInvite invite = null;
 
@@ -305,7 +360,7 @@ public partial class Default2 : System.Web.UI.Page
             {
                 string eventDesc = invite.title + " (From: " + invite.leaderUsername + ")";
                 DateTime eventDate = invite.startTime;
-                int tagID = 1; // Study Session tag
+                int tagID = 1;
                 int userID = Convert.ToInt32(Session["userID"]);
 
                 cmd2.Parameters.AddWithValue("?", eventDesc);
@@ -318,23 +373,14 @@ public partial class Default2 : System.Web.UI.Page
             }
         }
 
+        hiddenShowCalendar.Value = "true";
+
         RemoveInviteAndShowNext(sessionID);
     }
 
     protected void btnNo_Click(object sender, EventArgs e)
     {
-        int sessionID = int.Parse(hiddenSessionID.Value);
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = ? AND userID = ? AND replied = false";
-        using (OleDbConnection conn = new OleDbConnection(cs))
-        using (OleDbCommand cmd = new OleDbCommand(deleteQuery, conn))
-        {
-            cmd.Parameters.AddWithValue("?", sessionID);
-            cmd.Parameters.AddWithValue("?", Session["userID"]);
-            conn.Open();
-            cmd.ExecuteNonQuery();
-        }
-        RemoveInviteAndShowNext(sessionID);
+        hiddenShowConfirmation.Value = "true";
     }
 
     private void RemoveInviteAndShowNext(int sessionID)
@@ -348,7 +394,7 @@ public partial class Default2 : System.Web.UI.Page
                 invites.Remove(currentInvite);
             }
             Session["PendingInvites"] = invites;
-            ShowNextInvite(); // recursively show all the invites
+            ShowNextInvite();
         }
     }
 
@@ -390,6 +436,45 @@ public partial class Default2 : System.Web.UI.Page
         }
     }
 
+    protected void btnCalendar_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("B100_View-calendar.aspx");
+    }
+
+    protected void btnOk_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("Default.aspx");
+    }
+
+    protected void btnSure_Click(object sender, EventArgs e)
+    {
+        int sessionID = int.Parse(hiddenSessionID.Value);
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = ? AND userID = ? AND replied = false";
+        using (OleDbConnection conn = new OleDbConnection(cs))
+        using (OleDbCommand cmd = new OleDbCommand(deleteQuery, conn))
+        {
+            cmd.Parameters.AddWithValue("?", sessionID);
+            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+
+        hiddenShowDeclineConfirmed.Value = "true";
+
+        RemoveInviteAndShowNext(sessionID);
+    }
+
+    protected void btnNotSure_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("Default.aspx");
+    }
+
+    protected void btnOkayDeclined_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("Default.aspx");
+    }
+
     protected void btnJoin_Click(object sender, EventArgs e)
     {
         if (Session["sessionID"] != null)
@@ -397,6 +482,5 @@ public partial class Default2 : System.Web.UI.Page
             Response.Redirect("A1400_View-study-session.aspx");
         }
     }
-    // Lea's code to copy ends here
-    //This is all the code for the header information
+    // end: notification bell code
 }

@@ -60,22 +60,13 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnContinue_Click(object sender, EventArgs e)
     {
+        Page.Validate("timerValidation");
+
         if (Page.IsValid)
         {
-            if (string.IsNullOrEmpty(txtTitle.Text))
-            {
-                errorTitle.IsValid = false;
-                return;
-            }
-
-            if (string.IsNullOrEmpty(dropdownTag.SelectedValue))
-            {
-                errorDropDown.IsValid = false;
-                return;
-            }
-
             Session["timerTitle"] = txtTitle.Text;
             Session["timerTag"] = dropdownTag.SelectedValue;
+
             Response.Redirect("A100_Create-timer_3.aspx");
         }
     }

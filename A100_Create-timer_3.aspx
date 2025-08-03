@@ -109,10 +109,21 @@
                 <asp:TextBox ID="txtTimeSeconds" ClientIDMode="Static" CssClass="textbox timerInput" runat="server" Text="00"></asp:TextBox>
                 <asp:TextBox ID="dummyInput" runat="server" CssClass="hiddenDummyInput" Style="display:none;"></asp:TextBox>
                 <div class="validationErrorSection">
-                    <asp:RangeValidator ID="errorHour" CssClass="validationError" runat="server" ErrorMessage="Hours have to be between 00 and 99" MinimumValue="0" MaximumValue="99" Type="Integer" Display="Dynamic" EnableClientScript="true" ControlToValidate="txtTimeHours" ValidationGroup="timerValidation"></asp:RangeValidator>
-                    <asp:RangeValidator ID="errorMinute" CssClass="validationError" runat="server" ErrorMessage="Minutes have to be between 00 and 59" MinimumValue="0" MaximumValue="59" Type="Integer" Display="Dynamic" EnableClientScript="true" ControlToValidate="txtTimeMinutes" ValidationGroup="timerValidation"></asp:RangeValidator>
-                    <asp:RangeValidator ID="errorSecond" CssClass="validationError" runat="server" ErrorMessage="Seconds have to be 00" MinimumValue="0" MaximumValue="0" Type="Integer" Display="Dynamic" EnableClientScript="true" ControlToValidate="txtTimeSeconds" ValidationGroup="timerValidation"></asp:RangeValidator>
-                    <asp:CustomValidator ID="minTotalTimeValidator" CssClass="validationErrorCustom" runat="server" ErrorMessage="Timer must be at least 1 minute" ClientValidationFunction="validateMinTime" EnableClientScript="true" Display="Dynamic" ValidationGroup="timerValidation"></asp:CustomValidator>
+                    <asp:RangeValidator ID="errorHour" CssClass="validationErrorCustom" runat="server" ControlToValidate="txtTimeHours" ErrorMessage="Hours have to be between 00 and 99" MinimumValue="0" MaximumValue="99" Type="Integer" Display="Dynamic" EnableClientScript="true" ValidationGroup="timerValidation" ValidateEmptyText="true" SetFocusOnError="true" />
+
+                    <asp:RangeValidator ID="errorMinute" CssClass="validationErrorCustom" runat="server" ControlToValidate="txtTimeMinutes" ErrorMessage="Minutes have to be between 00 and 59" MinimumValue="0" MaximumValue="59" Type="Integer" Display="Dynamic" EnableClientScript="true" ValidationGroup="timerValidation" ValidateEmptyText="true" SetFocusOnError="true" />
+
+                    <asp:RangeValidator ID="errorSecond" CssClass="validationErrorCustom" runat="server" ControlToValidate="txtTimeSeconds" ErrorMessage="Seconds have to be 00" MinimumValue="0" MaximumValue="0" Type="Integer" Display="Dynamic" EnableClientScript="true" ValidationGroup="timerValidation" ValidateEmptyText="true" SetFocusOnError="true" />
+
+                    <asp:CustomValidator ID="minTotalTimeValidator" CssClass="validationErrorCustom" runat="server" 
+                        ErrorMessage="Timer must be at least 1 minute" 
+                        ClientValidationFunction="validateMinTime" 
+                        EnableClientScript="true" 
+                        Display="Dynamic" 
+                        ValidationGroup="timerValidation"
+                        OnServerValidate="minTotalTimeValidator_ServerValidate"
+                        ValidateEmptyText="true"
+                        SetFocusOnError="true" />
                 </div>
             </div>
             <div class="rightSection">
@@ -123,7 +134,7 @@
             </div>
             <div class="middleSection">
                 <asp:Button ID="btnBack" CssClass="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="False" />
-                <asp:Button ID="btnStart" CssClass="button" runat="server" Text="Start" OnClick="btnStart_Click" CausesValidation="true" ValidationGroup="timerValidation" />
+                <asp:Button ID="btnStart" CssClass="button" runat="server" Text="Start" OnClick="btnStart_Click" CausesValidation="True" ValidationGroup="timerValidation" />
             </div>
             <div class="rightSection">
                 <asp:Button ID="btnViewPastTimers" CssClass="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
@@ -208,15 +219,83 @@
     </div>
 
     <script>
-    window.timerControlIds = {
-        hoursId: '<%= txtTimeHours.ClientID %>',
-        minutesId: '<%= txtTimeMinutes.ClientID %>',
-        secondsId: '<%= txtTimeSeconds.ClientID %>'
-    };
+        window.timerControlIds = {
+            hoursId: '<%= txtTimeHours.ClientID %>',
+            minutesId: '<%= txtTimeMinutes.ClientID %>',
+            secondsId: '<%= txtTimeSeconds.ClientID %>'
+        };
+        document.addEventListener('DOMContentLoaded', function () {
+            validateAllFields();
+
+            document.getElementById('<%= txtTimeHours.ClientID %>').addEventListener('input', validateAllFields);
+            document.getElementById('<%= txtTimeMinutes.ClientID %>').addEventListener('input', validateAllFields);
+            document.getElementById('<%= txtTimeSeconds.ClientID %>').addEventListener('input', validateAllFields);
+        });
+
+        function validateAllFields() {
+            if (typeof Page_ClientValidate === 'function') {
+                Page_ClientValidate('timerValidation');
+            }
+
+            validateMinTime(null, null);
+
+            showValidationErrors();
+        }
+
+        function showValidationErrors() {
+            const validators = [
+                '<%= errorHour.ClientID %>',
+                '<%= errorMinute.ClientID %>',
+                '<%= errorSecond.ClientID %>',
+                '<%= minTotalTimeValidator.ClientID %>'
+            ];
+    
+            validators.forEach(id => {
+                const validator = document.getElementById(id);
+                if (validator) {
+                    validator.style.display = validator.isvalid ? 'none' : 'inline';
+                }
+            });
+        }
+
+        function validateMinTime(source, args) {
+            // Always get values, even if they're "00"
+            var hours = parseInt(document.getElementById('<%= txtTimeHours.ClientID %>').value) || 0;
+            var minutes = parseInt(document.getElementById('<%= txtTimeMinutes.ClientID %>').value) || 0;
+            var seconds = parseInt(document.getElementById('<%= txtTimeSeconds.ClientID %>').value) || 0;
+
+            var totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+            var isValid = totalSeconds >= 60;
+    
+            // Always update the validator display
+            var validator = document.getElementById('<%= minTotalTimeValidator.ClientID %>');
+            if (validator) {
+                validator.style.display = isValid ? 'none' : 'inline';
+                validator.innerHTML = "Timer must be at least 1 minute";
+            }
+
+            if (args) {
+                args.IsValid = isValid;
+            }
+            return isValid;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            validateMinTime(null, null);
+
+            document.getElementById('<%= txtTimeHours.ClientID %>').addEventListener('input', function () {
+                validateMinTime(null, null);
+            });
+            document.getElementById('<%= txtTimeMinutes.ClientID %>').addEventListener('input', function() {
+            validateMinTime(null, null);
+        });
+            document.getElementById('<%= txtTimeSeconds.ClientID %>').addEventListener('input', function () {
+                validateMinTime(null, null);
+            });
+        });
     </script>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
 
 </asp:Content>
-

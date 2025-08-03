@@ -50,66 +50,79 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnStart_Click(object sender, EventArgs e)
     {
-        if (Page.IsValid)
+        Page.Validate("timerValidation");
+
+        minTotalTimeValidator.Validate();
+
+        if (!Page.IsValid)
         {
-            if (Session["userID"] != null)
+            minTotalTimeValidator.ErrorMessage = "Timer must be at least 1 minute";
+            minTotalTimeValidator.IsValid = false;
+
+            ScriptManager.RegisterStartupScript(this, GetType(), "showValidation", "document.getElementById('" + minTotalTimeValidator.ClientID + "').style.display = 'inline';", true);
+            return;
+        }
+
+        if (Session["userID"] != null)
+        {
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+            using (OleDbConnection con = new OleDbConnection(cs))
             {
-                string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+                string command = "INSERT INTO [Timer] ([timerTitle], [timerTag], [timerDuration], [userID]) VALUES (?, ?, ?, ?)";
+                OleDbCommand cmd = new OleDbCommand(command, con);
 
-                using (OleDbConnection con = new OleDbConnection(cs))
+                cmd.Parameters.AddWithValue("?", Session["timerTitle"]);
+                cmd.Parameters.AddWithValue("?", Session["timerTag"]);
+
+                int hours = int.Parse(txtTimeHours.Text);
+                int minutes = int.Parse(txtTimeMinutes.Text);
+                int seconds = int.Parse(txtTimeSeconds.Text);
+                int totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+
+                cmd.Parameters.AddWithValue("?", totalSeconds);
+                cmd.Parameters.AddWithValue("?", Convert.ToInt32(Session["userID"]));
+
+                con.Open();
+                int code = cmd.ExecuteNonQuery();
+
+                if (code > 0)
                 {
-                    string command = "INSERT INTO [Timer] ([timerTitle], [timerTag], [timerDuration], [userID]) VALUES (?, ?, ?, ?)";
-                    OleDbCommand cmd = new OleDbCommand(command, con);
+                    OleDbCommand cmdID = new OleDbCommand("SELECT @@IDENTITY", con);
+                    int newTimerID = Convert.ToInt32(cmdID.ExecuteScalar());
+                    Session["timerID"] = newTimerID;
 
-                    cmd.Parameters.AddWithValue("?", Session["timerTitle"]);
-                    cmd.Parameters.AddWithValue("?", Session["timerTag"]);
+                    Session["timerDuration"] = totalSeconds;
 
-                    int hours = int.Parse(txtTimeHours.Text);
-                    int minutes = int.Parse(txtTimeMinutes.Text);
-                    int seconds = int.Parse(txtTimeSeconds.Text);
-                    int totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
-                    
-                    cmd.Parameters.AddWithValue("?", totalSeconds);
-                    cmd.Parameters.AddWithValue("?", Convert.ToInt32(Session["userID"]));
+                    con.Close();
 
-                    con.Open();
-                    int code = cmd.ExecuteNonQuery();
-
-                    if (code > 0)
-                    {
-                        OleDbCommand cmdID = new OleDbCommand("SELECT @@IDENTITY", con);
-                        int newTimerID = Convert.ToInt32(cmdID.ExecuteScalar());
-                        Session["timerID"] = newTimerID;
-
-                        Session["timerDuration"] = totalSeconds;
-
-                        con.Close();
-
-                        Response.Redirect("A200-A500_View-timer.aspx");
-                    }
-                    else
-                    {
-                        con.Close();
-                    }
+                    Response.Redirect("A200-A500_View-timer.aspx");
+                }
+                else
+                {
+                    con.Close();
                 }
             }
-            else
-            {
-                Response.Redirect("Login.aspx");
-            }
+        }
+        else
+        {
+            Response.Redirect("Login.aspx");
         }
     }
 
     protected void minTotalTimeValidator_ServerValidate(object source, ServerValidateEventArgs args)
     {
-        int hours = 0, minutes = 0, seconds = 0;
-        bool parsed = int.TryParse(txtTimeHours.Text, out hours)
-            && int.TryParse(txtTimeMinutes.Text, out minutes)
-            && int.TryParse(txtTimeSeconds.Text, out seconds);
+        int hours = int.Parse(txtTimeHours.Text);
+        int minutes = int.Parse(txtTimeMinutes.Text);
+        int seconds = int.Parse(txtTimeSeconds.Text);
 
         int totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
-        args.IsValid = parsed && totalSeconds >= 60;
+        args.IsValid = totalSeconds >= 60;
+
+        minTotalTimeValidator.ErrorMessage = "Timer must be at least 1 minute";
+        minTotalTimeValidator.IsValid = args.IsValid;
     }
+
     // start: header profile code
     private string GetUserID(string username, string connectionString)
     {

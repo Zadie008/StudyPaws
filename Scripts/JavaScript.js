@@ -213,11 +213,11 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function validateMinTime(source, args) {
-    const hours = parseInt(document.getElementById('txtTimeHours').value) || 0;
-    const minutes = parseInt(document.getElementById('txtTimeMinutes').value) || 0;
-    const seconds = parseInt(document.getElementById('txtTimeSeconds').value) || 0;
+    var hours = parseInt(document.getElementById('<%= txtTimeHours.ClientID %>').value) || 0;
+    var minutes = parseInt(document.getElementById('<%= txtTimeMinutes.ClientID %>').value) || 0;
+    var seconds = parseInt(document.getElementById('<%= txtTimeSeconds.ClientID %>').value) || 0;
 
-    const totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+    var totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
     args.IsValid = totalSeconds >= 60;
 }
 

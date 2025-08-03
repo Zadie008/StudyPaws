@@ -63,11 +63,27 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnContinue_Click(object sender, EventArgs e)
     {
-        Session["sessionTitle"] = txtTitle.Text;
-        Session["sessionTag"] = dropdownTag.SelectedValue;
+        if (Page.IsValid)
+        {
+            if (string.IsNullOrEmpty(txtTitle.Text))
+            {
+                errorTitle.IsValid = false;
+                return;
+            }
 
-        Response.Redirect("A700_Create-study-session_3.aspx");
+            if (string.IsNullOrEmpty(dropdownTag.SelectedValue))
+            {
+                errorDropDown.IsValid = false;
+                return;
+            }
+
+            Session["sessionTitle"] = txtTitle.Text;
+            Session["sessionTag"] = dropdownTag.SelectedValue;
+
+            Response.Redirect("A700_Create-study-session_3.aspx");
+        }
     }
+
     //This is all the code for the header information
     private string GetUserID(string username, string connectionString)
     {
