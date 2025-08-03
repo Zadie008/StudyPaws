@@ -123,6 +123,16 @@ public partial class Default2 : System.Web.UI.Page
     public string GetProfileImageUrl(object iconNum)
     {
         int num = Convert.ToInt32(iconNum);
+
+        if (num == 1)
+        {
+
+        }
+        else if (num == 2)
+        {
+
+        }
+
         switch (num)
         {
             case 1: return "Images/ProfilePictures/CatPfp.png";

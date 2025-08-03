@@ -1,4 +1,4 @@
-﻿/* ---------------------- COLOUR PALETTE ---------------------- */
+﻿/* -------------------------------------------- COLOUR PALETTE -------------------------------------------- */
 /*
     LIGHT MODE
     ~ Fairy Tale (pink) : #F4CAE0
@@ -17,7 +17,7 @@
     ~ Russian violet (dark purple) : #231942
 */
 
-/* ---------------------- FONTS ---------------------- */
+/* -------------------------------------------- FONTS -------------------------------------------- */
 @import url('StyleSheet.css');
 @font-face {
     font-family: 'Lilita One';
@@ -39,7 +39,7 @@
     font-family: 'Gilda Display', serif;
 }
 
-/* ---------------------- ALL PAGES ---------------------- */
+/* -------------------------------------------- ALL PAGES -------------------------------------------- */
 * {
     padding: 0;
     box-sizing: border-box;
@@ -87,7 +87,7 @@ p {
     z-index: -1;
 }*/
 
-/* ---------------------- POP-UPS ---------------------- */
+/* -------------------------------------------- POP-UPS -------------------------------------------- */
 .simple-popup {
     display: none;
     position: fixed;
@@ -124,7 +124,7 @@ p {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2em;
+    gap: 0.1em;
     flex-wrap: nowrap;
     flex-direction: row;
 }
@@ -151,7 +151,7 @@ p {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2em;
+    gap: 0.1em;
     flex-wrap: nowrap;
     flex-direction: row;
 }
@@ -163,7 +163,7 @@ p {
     border-radius: 3em;
     color: white;
     padding: 1vh 2vw;
-    font-size: clamp(1.2rem, 2.5vw, 2.7rem);
+    font-size: 2.5rem;
     font-family: 'Lilita One', sans-serif;
     letter-spacing: 0.1em;
     cursor: pointer;
@@ -183,7 +183,7 @@ p {
     border-radius: 3em;
     color: #90A8C3; /*blue*/
     padding: 1vh 2vw;
-    font-size: clamp(1.2rem, 2.5vw, 2.7rem);
+    font-size: 2.5rem;
     font-family: 'Lilita One', sans-serif;
     letter-spacing: 0.1em;
     cursor: pointer;
@@ -202,7 +202,7 @@ p {
     border-radius: 3em;
     color: #D7B9D5; /*pink*/
     padding: 1vh 2vw;
-    font-size: clamp(1.2rem, 2.5vw, 2.7rem);
+    font-size: 2.5rem;
     font-family: 'Lilita One', sans-serif;
     letter-spacing: 0.1em;
     cursor: pointer;
@@ -215,7 +215,7 @@ p {
     text-decoration: none;
 }
 
-/* ---------------------- MASTER PAGE DIVS ---------------------- */
+/* -------------------------------------------- MASTER PAGE DIVS -------------------------------------------- */
 .page-wrapper {
     min-height: 100vh;
     max-height: 100%;
@@ -240,7 +240,7 @@ p {
     flex: 1;
 }
 
-/* ---------------------- HEADINGS ---------------------- */
+/* -------------------------------------------- HEADINGS -------------------------------------------- */
 header {
     text-align: center;
 }
@@ -324,7 +324,7 @@ h2 {
     width: 3rem;
 }
 
-/* ---------------------- ACCOUNT INFO BAR ---------------------- */
+/* -------------------------------------------- ACCOUNT INFO BAR -------------------------------------------- */
 .accountInfoDiv {
     display: flex;
     justify-content: space-between;
@@ -532,7 +532,7 @@ h2 {
     font-weight: 200;
 }
 
-/* ---------------------- XP PROGRESS BAR ---------------------- */
+/* -------------------------------------------- XP PROGRESS BAR -------------------------------------------- */
 .xpProgressContainer {
     display: flex;
     align-items: center;
@@ -562,7 +562,7 @@ h2 {
     margin-left: 10px; 
 }
 
-/* ---------------------- NAVIGATION ---------------------- */
+/* -------------------------------------------- NAVIGATION -------------------------------------------- */
 nav {
     z-index: 1;
     width: 100%;
@@ -809,7 +809,7 @@ body.page-exit .collapsedNav .navbar .nav-right {
     transition: transform 0.5s ease;
 }
 
-/* ---------------------- HOME PAGE ---------------------- */
+/* -------------------------------------------- HOME PAGE -------------------------------------------- */
 /* HOME PAGE PET */
 .homePagePet {
     position: relative;
@@ -888,7 +888,7 @@ body.page-exit .welcomeBackTextDiv {
     margin: -2em 0 -2em 0;
 }
 
-/* ---------------------- DASHBOARD PAGE ---------------------- */
+/* -------------------------------------------- DASHBOARD PAGE -------------------------------------------- */
 .dashboardContainer{
     display: flex;
     gap: 15px;
@@ -906,7 +906,7 @@ body.page-exit .welcomeBackTextDiv {
 .dashboardContainer .popup-pink-box p {
     font-size: 2.2rem;
 }
-/* ---------------------- CALENDAR PAGES ---------------------- */
+/* -------------------------------------------- CALENDAR PAGES -------------------------------------------- */
 .calendarDashboard { 
     flex: 72%;
     background: #D7B9D5; 
@@ -1166,7 +1166,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 2.2rem;
 }
 
-/* ---------------------- TO DO LIST PAGES ---------------------- */
+/* -------------------------------------------- TO DO LIST PAGES -------------------------------------------- */
 .toDoListDashboard {
     flex: 28%;
     background: #ADA7C9;
@@ -1487,7 +1487,7 @@ body.page-exit .welcomeBackTextDiv {
     flex-wrap: nowrap;
     flex-direction: row;
 }
-/*----------------------- CREATE EVENT PAGE B200 and B500-B800 -----------------------*/
+/*--------------------------------------------- CREATE EVENT PAGE B200 and B500-B800 ---------------------------------------------*/
 .createEventMainContent {
     margin: 4em 4em 4em 4em;
 }
@@ -1729,7 +1729,7 @@ body.page-exit .welcomeBackTextDiv {
         transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
     }
 
-/*----------------------- TO DO LIST PAGE B900 ---------------------*/
+/*--------------------------------------------- TO DO LIST PAGE B900 -------------------------------------------*/
 .toDoListPage {
     background-color: #ADA7C9;
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
@@ -2038,7 +2038,8 @@ body.page-exit .welcomeBackTextDiv {
 .toDoListPage .popup-pink-box p {
     font-size: 2.2rem;
 }
-/* ---------------------- CREATE TIMER PAGES A100 ---------------------- */
+
+/* -------------------------------------------- CREATE TIMER PAGES A100 -------------------------------------------- */
 /* page 1 (back, create, view past timers) */
 .createTimerMainContent {
     margin: 1em 4em 4em 4em;
@@ -2064,6 +2065,10 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 /* NOTIFICATION POPUP */
+.createTimerMainContent #popup p {
+    font-size: 2.5rem;
+}
+
 .createTimerMainContent .popup-pink-box table tr td p {
     text-align: left;
     padding: 0 0.2em 0 0.2em;
@@ -2071,6 +2076,10 @@ body.page-exit .welcomeBackTextDiv {
 
 .createTimerMainContent .popup-pink-box p {
     font-size: 2.2rem;
+}
+
+.createTimerMainContent img {
+    margin: -2em 0 -2em 0;
 }
 
 /* page 2 (title, tag, back, continue) */
@@ -2235,7 +2244,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 2.2rem;
 }
 
-/* ---------------------- VIEW TIMER PAGE A200 ---------------------- */
+/* -------------------------------------------- VIEW TIMER PAGE A200 -------------------------------------------- */
 .viewTimerMainContent {
     margin: 4em 4em 0em 4em;
 }
@@ -2499,7 +2508,7 @@ body.page-exit .welcomeBackTextDiv {
     width: 100%;
 }
 
-/* ---------------------- VIEW PAST TIMERS PAGE A600 ---------------------- */
+/* -------------------------------------------- VIEW PAST TIMERS PAGE A600 -------------------------------------------- */
 .viewPastTimersMainContent {
     margin: 4em 4em 4em 4em;
 }
@@ -2649,7 +2658,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 2.2rem;
 }
 
-/* ---------------------- CREATE STUDY SESSION PAGES A700 ---------------------- */
+/* -------------------------------------------- CREATE STUDY SESSION PAGES A700 -------------------------------------------- */
 #createSession3MainContent {
     margin: -1em 0 0 0;
     padding: 0;
@@ -2780,7 +2789,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 2.2rem;
 }
 
-/* ---------------------- PET SHOP PAGE ---------------------- */
+/* -------------------------------------------- PET SHOP PAGE -------------------------------------------- */
 #viewShopMainContent {
     margin: 1em 4em 4em 4em;
 }
@@ -2813,7 +2822,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 2.2rem;
 }
 
-/* ---------------------- INVENTORY PAGE ---------------------- */
+/* -------------------------------------------- INVENTORY PAGE -------------------------------------------- */
 #viewInventoryMainContent {
     margin: 1em 4em 4em 4em;
 }
@@ -3013,7 +3022,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 2.2rem;
 }
 
-/* ---------------------- VIEW FRIEND LIST PAGE ---------------------- */
+/* -------------------------------------------- VIEW FRIEND LIST PAGE -------------------------------------------- */
 #viewFriendListMainContent {
     margin: 1em 4em 4em 4em;
 }
@@ -3046,7 +3055,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 2.2rem;
 }
 
-/* ---------------------- BADGES PAGE ---------------------- */
+/* -------------------------------------------- BADGES PAGE -------------------------------------------- */
 #badgesMainContent {
     margin: 1em 4em 4em 4em;
     height: 67vh;
@@ -3189,7 +3198,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 2.2rem;
 }
 
-/* ---------------------- ABOUT PAGE ---------------------- */
+/* -------------------------------------------- ABOUT PAGE -------------------------------------------- */
 #aboutMainContent{
     margin: 1em 4em 4em 4em;
 }
@@ -3300,7 +3309,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 2.2rem;
 }
 
-/* ---------------------- FOOTER ---------------------- */
+/* -------------------------------------------- FOOTER -------------------------------------------- */
 footer {
     text-align: center;
     position: fixed;
@@ -3316,7 +3325,7 @@ footer p {
     font-size: clamp(1rem, 1.3vw, 1.3rem);
 }
 
-/* ---------------------- LANDING PAGE ---------------------- */
+/* -------------------------------------------- LANDING PAGE -------------------------------------------- */
 #landingPageDiv {
     margin-top: 17%;
     text-align: center;
@@ -3326,7 +3335,7 @@ footer p {
     width: 250px;
 }
 
-/* ---------------------- REGISTER PAGE ---------------------- */
+/* -------------------------------------------- REGISTER PAGE -------------------------------------------- */
 #registerPageDiv {
     margin-top: 17%;
     text-align: left;
@@ -3361,7 +3370,7 @@ footer p {
     font-size: 0.9rem;
     font-weight: 600;
 }
-/* ---------------------- LOGIN PAGE ---------------------- */
+/* -------------------------------------------- LOGIN PAGE -------------------------------------------- */
 #loginPageDiv {
     margin-top: 17%;
     text-align: left;
@@ -3400,7 +3409,7 @@ footer p {
     vertical-align: middle;
 }
 
-/#profileMainContent {
+#profileMainContent {
     margin: 1em 4em 4em 4em;
 }
 
@@ -3566,7 +3575,7 @@ input:checked + .slider:before {
     margin: 1vh;
     transition: background-color 0.3s ease;
 }
-/* -------------------- PROFILE ICON SELECTION PAGE -------------------- */
+/* ------------------------------------------ PROFILE ICON SELECTION PAGE ------------------------------------------ */
 #changeProfilePhotoPage {
     margin: 1em 4em 4em 4em;
 }
@@ -3632,15 +3641,15 @@ input:checked + .slider:before {
     background-color: #D7B9D5; 
 }
 
-/* ---------------------- OTHER ---------------------- */
-/* ---------------------- SMALL CONTAINER FOR MESSAGES ---------------------- */
+/* -------------------------------------------- OTHER -------------------------------------------- */
+/* -------------------------------------------- SMALL CONTAINER FOR MESSAGES -------------------------------------------- */
 .container {
     display: flex;
     justify-content: center;
     margin-top: 60px; /* for spacing from top */
 }
 
-/* ---------------------- LABELS ---------------------- */
+/* -------------------------------------------- LABELS -------------------------------------------- */
 
 .label {
     font-family: 'Gilda Display', serif;
@@ -3660,7 +3669,7 @@ input:checked + .slider:before {
     display: inline-block;
 }*/
 
-/* ---------------------- BUTTONS ---------------------- */
+/* -------------------------------------------- BUTTONS -------------------------------------------- */
 /* normal blue button */
 .buttonSection {
     text-align: center;
@@ -3692,7 +3701,7 @@ input:checked + .slider:before {
 }
 
 
-/* ---------------------- TEXTBOXES ---------------------- */
+/* -------------------------------------------- TEXTBOXES -------------------------------------------- */
 .textbox {
     border-radius: 2rem;
     border: 2px solid white;
@@ -3716,7 +3725,7 @@ input.textbox:-webkit-autofill {
     transition: background-color 5000s ease-in-out 0s;
 }
 
-/* ---------------------- DROP DOWN LISTS ---------------------- */
+/* -------------------------------------------- DROP DOWN LISTS -------------------------------------------- */
 .dropDownList {
     border-radius: 2rem;
     border: 2px solid white;
@@ -3747,7 +3756,7 @@ input.textbox:-webkit-autofill {
     transition: background-image 0.2s ease;
 }
 
-/* ---------------------- DATE AND TIME BOX ---------------------- */
+/* -------------------------------------------- DATE AND TIME BOX -------------------------------------------- */
 .filterDateBox {
     width: 300px;
     padding: 0.2em 0.5em 0.2em 0.5em;
@@ -3783,7 +3792,7 @@ input.textbox:-webkit-autofill {
     pointer-events: none;
 }
 
-/* ---------------------- TABLES ---------------------- */
+/* -------------------------------------------- TABLES -------------------------------------------- */
 table {
     margin-left: auto;
     margin-right: auto;
@@ -3825,7 +3834,7 @@ table {
     visibility: visible;
 }
 
-/* ---------------------- MEDIA QUERIES ---------------------- */
+/* -------------------------------------------- MEDIA QUERIES -------------------------------------------- */
 @media (max-width: 768px) {
     .curved-header {
         position: relative;
