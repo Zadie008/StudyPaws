@@ -90,6 +90,7 @@
                     <td>
                         <asp:DropDownList ID="dropdownEventTag" ClientIDMode="Static" class="dropDownList" runat="server" BackColor="#446791" DataTextField="tagName" DataValueField="tagID">
                         </asp:DropDownList>
+                        <asp:HiddenField ID="hiddenSelectedTagID" runat="server" />
                     </td>
                 </tr>
             </table>
@@ -102,6 +103,7 @@
                 </tr>
                 <tr>
                     <td><asp:ImageButton ID="btnAddTag" runat="server" CommandName="AddTag" CausesValidation="false" class="addTagBtn" OnClick="btnNewTag_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png" /></td>
+                    <td><asp:ImageButton ID="btnEditTag" runat="server" CausesValidation="false" CommandArgument='<%# Eval ("tagID") %>' CssClass="addTagBtn" ImageUrl="~/Icons/icons8-edit-white-96.png" OnClick="btnEditTag_Click"/></td>
                     <td><asp:RequiredFieldValidator ID="errorDropDown" class="validationError" runat="server" ErrorMessage="Please select a Tag" EnableClientScript="true" ControlToValidate="dropdownEventTag"></asp:RequiredFieldValidator></td>
                 </tr>
             </table>
@@ -119,7 +121,7 @@
         </div>
     </div>
 
-    <div id="popup" class="simple-popup" style="display: none;">
+    <div id="popup1" class="simple-popup" style="display: none;">
     <div class="popup-pink-boxTagEdit">
         <table class="popupTagEditing">
             <tr>
@@ -148,56 +150,130 @@
         </table>
 
         <div class="buttonSection">
-            <asp:Button ID="btnBackNewTag" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="False" OnClientClick="hidePopup(); return false;" />
+            <asp:Button ID="btnBackNewTag" class="button" runat="server" Text="Back" CausesValidation="False" OnClientClick="hidePopup(); return false;" />
             <asp:Button ID="btnAddNewTag" class="button" runat="server" Text="Add" CausesValidation="true" OnClick="btnAddTag_Click" ValidationGroup="tagPopup" />
         </div>
     </div>
-        <asp:HiddenField ID="hiddenSelectedTagColour" runat="server" />
-
-             <script type="text/javascript">
-                 function showPopup()
-                 {
-                     document.getElementById('popup').style.display = 'flex';
-                     clearPopup();
-                 }
-
-                 function hidePopup()
-                 {
-                     document.getElementById('popup').style.display = 'none';
-                 }
-
-                 function clearPopup()
-                 {
-                     document.getElementById('<%=txtTagTitle.ClientID%>').value = "";
-                     const hiddenField = document.getElementById('<%= hiddenSelectedTagColour.ClientID %>');
-                     const tagButtons = document.querySelectorAll('.tagOne, .tagTwo, .tagThree, .tagFour, .tagFive');
-                     tagButtons.forEach(btn => {
-                         btn.classList.remove('selectedTag');
-                         hiddenField.value = "";
-                     });
-                 }
-                 window.addEventListener('DOMContentLoaded', function () {
-                     const tagButtons = document.querySelectorAll('.tagOne, .tagTwo, .tagThree, .tagFour, .tagFive');
-                     const hiddenField = document.getElementById('<%= hiddenSelectedTagColour.ClientID %>');
-                     tagButtons.forEach(btn => {
-                         btn.addEventListener('click', function () {
-                             tagButtons.forEach(b => b.classList.remove('selectedTag'));
-                             this.classList.add('selectedTag');
-                             hiddenField.value = this.id;
-                         });
-                     });
-                 });
-
-                 function validateTagColour(sender, args) {
-                     var selected = document.getElementById('<%=hiddenSelectedTagColour.ClientID%>').value;
-                     args.IsValid = selected !== "";
-                 }
-                 function selectTagColour(colourNum) {
-                     document.getElementById('<%= hfTagColourNum.ClientID%>').value = colourNum;
-                 }
-                 
-             </script>
+        <asp:HiddenField ID="hiddenSelectedTagColour" runat="server" />     
 </div>
+
+        <!-- EDIT AND DELETE TAG POPUP-->
+            <div id="popup2" class="simple-popup" style="display: none;">
+                <div class="popup-pink-boxTagEdit">
+                    <table class="popupTagEditing">
+                        <tr>
+                            <td class="tableLabel"><asp:Label ID="lblTagTitleEdit" class="label" runat="server" Text="Tag Title"></asp:Label></td>
+                            <td class="tableInput" colspan="5"><asp:TextBox ID="txtTagTitleEdit" class="textbox" runat="server" ValidationGroup="tagPopup"></asp:TextBox></td>
+                        </tr>
+                        <tr>
+                            <td class="tabelLabel"></td>
+                            <td class="tableValidation" colspan="5"><asp:RequiredFieldValidator ID="errorTitleTagEdit" class="validationError" runat="server" ErrorMessage="Please enter a Title" ValidationGroup="tagPopup" Display="Static" EnableClientScript="true" ControlToValidate="txtTagTitle"></asp:RequiredFieldValidator></td>
+                        </tr>
+                        <tr>
+                            <asp:HiddenField ID="hfEditTagColourNum" runat="server" />
+                            <td class="tableLabel"><asp:Label ID="lblTagColourEdit" class="label" runat="server" Text="Tag Colour" UseSubmitBehaviour="false" OnClientClick="return false;"></asp:Label></td>
+                            <td class="tableInput"><asp:Button ID="tagColourOneEdit" class="tagOne" runat="server" Text="" UseSubmitBehaviour="false" OnClientClick="selectTagColour(1); return false;"/></td>
+                            <td class="tableInput"><asp:Button ID="tagColourTwoEdit" class="tagTwo" runat="server" Text="" UseSubmitBehaviour="false" OnClientClick="selectTagColour(2); return false;"/></td>
+                            <td class="tableInput"><asp:Button ID="tagColourThreeEdit" class="tagThree" runat="server" Text="" UseSubmitBehaviour="false" OnClientClick="selectTagColour(3); return false;"/></td>
+                            <td class="tableInput"><asp:Button ID="tagColourFourEdit" class="tagFour" runat="server" Text="" UseSubmitBehaviour="false" OnClientClick="selectTagColour(4); return false;"/></td>
+                            <td class="tableInput"><asp:Button ID="tagColourFiveEdit" class="tagFive" runat="server" Text="" UseSubmitBehaviour="false" OnClientClick=" selectTagColour(5);return false;"/></td>
+                        </tr>
+                        <tr>
+                            <td class="tabelLabel"></td>
+                            <td class="tableValidation" colspan="5"><asp:CustomValidator ID="validatorTagColourEdit" runat="server" ErrorMessage="Please select a Tag Colour" ClientValidationFunction="validateTagColour" ValidationGroup="tagPopup" Display="Static" CssClass="validationError" OnServerValidate="validatorTagColour_ServerValidate"/></td>
+                        </tr>
+                    </table>
+                    <div class="buttonSection">
+                        <asp:Button ID="btnBackEditTag" class="button" runat="server" Text="Back" CausesValidation="False" OnClientClick="hidePopup2(); return false;" />
+                        <asp:Button ID="btnDeleteTag" class="button" runat="server" Text="Delete" CausesValidation="false" OnClick="btnDeleteTag_Click" />
+                        <asp:Button ID="btnSaveEditTag" class="button" runat="server" Text="Save" CausesValidation="true" OnClick="btnAddTag_Click" ValidationGroup="tagPopup" />
+                    </div>
+                </div>
+                <asp:HiddenField ID="hiddenSelectedTagColourEdit" runat="server" />     
+            </div>
+
+        <!--DELETE TAG POP-UP-->
+        <div id="popupDeleteTag" class="simple-popup" style="display: none;">
+            <div class="popup-blue-box">
+                <p>Are you sure you want to delete this tag?</p>
+                <img src="Images/Notification%20Sad%20Hamster.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnYesDelete" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClientClick="hideDeletePopup(); return false;" OnClick="btnYesDelete_Click" />
+                    <asp:Button ID="btnNo" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClientClick="hideDeletePopup(); return false;"  />
+                </div>
+            </div>
+            </div>
+                    
+
+        <script type="text/javascript">
+            function showPopup1() {
+                document.getElementById('popup1').style.display = 'flex';
+                clearPopup();
+            }
+
+            function hidePopup() {
+                document.getElementById('popup').style.display = 'none';
+            }
+            function hidePopup2() {
+                document.getElementById('popup2').style.display = 'none';
+            }
+            function hideDeletePopup() {
+                document.getElementById('popupDeleteTag').style.display = 'none';
+            }
+            function clearPopup() {
+                document.getElementById('<%=txtTagTitle.ClientID%>').value = "";
+        const hiddenField = document.getElementById('<%= hiddenSelectedTagColour.ClientID %>');
+                const tagButtons = document.querySelectorAll('.tagOne, .tagTwo, .tagThree, .tagFour, .tagFive');
+                tagButtons.forEach(btn => {
+                    btn.classList.remove('selectedTag');
+                    hiddenField.value = "";
+                });
+            }
+            window.addEventListener('DOMContentLoaded', function () {
+                const tagButtons = document.querySelectorAll('.tagOne, .tagTwo, .tagThree, .tagFour, .tagFive');
+                const hiddenField = document.getElementById('<%= hiddenSelectedTagColour.ClientID %>');
+        tagButtons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                tagButtons.forEach(b => b.classList.remove('selectedTag'));
+                this.classList.add('selectedTag');
+                hiddenField.value = this.id;
+            });
+        });
+    });
+
+            function validateTagColour(sender, args) {
+                var selected = document.getElementById('<%=hiddenSelectedTagColour.ClientID%>').value;
+        args.IsValid = selected !== "";
+    }
+    function selectTagColour(colourNum) {
+        document.getElementById('<%= hfTagColourNum.ClientID%>').value = colourNum;
+    }
+    window.addEventListener('DOMContentLoaded', function () {
+        const dropdownList = document.getElementById('dropdownEventTag');
+        const btnAdd = document.getElementById('<%= btnAddTag.ClientID%>');
+        const btnEdit = document.getElementById('<%= btnEditTag.ClientID%>');
+
+        dropdownList.addEventListener('change', function () {
+            if (dropdownList.selectedIndex === 0 || dropdownList.value === "") {
+                btnAdd.style.display = 'inline-block';
+                btnEdit.style.display = 'none';
+            }
+            else {
+                btnAdd.style.display = 'none';
+                btnEdit.style.display = 'inline-block';
+            }
+        });
+        dropdownList.dispatchEvent(new Event('change'));
+    });
+            function showPopup2() {
+                document.getElementById('popup2').style.display = 'flex';
+            }
+            function showDeletePopup() {
+                document.getElementById('popupDeleteTag').style.display = 'flex';
+            }
+
+        </script>
 </div>
 
 

@@ -1582,9 +1582,9 @@ body.page-exit .welcomeBackTextDiv {
     max-width: 40px;
     border: none;
     background: transparent;
-    gap: 5px;
     cursor: pointer;
-    margin: 0 8px 8px 0;
+    margin: 0 4px 4px 0;
+    vertical-align:middle;
 }
     .createEventMainContent .eventTitleTagSection .rightSection .addTagBtn img {
         width: 2.5vw;

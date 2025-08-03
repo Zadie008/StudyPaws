@@ -128,7 +128,7 @@ public partial class Default2 : System.Web.UI.Page
             else
             {
                 ToggleTaskStatus(taskID);
-                LoadTasks();
+                //LoadTasks();
             }
 
 
@@ -257,14 +257,14 @@ public partial class Default2 : System.Web.UI.Page
             cmd.Parameters.AddWithValue("?", taskID);
             cmd.ExecuteNonQuery();
         }
-        Response.Redirect(Request.RawUrl);
+        //Response.Redirect(Request.RawUrl);
         ViewState["PendingAction"] = null;
         ViewState["PendingTaskID"] = null;
     }
 
     protected void btnYayLevelUp_Click(object sender, EventArgs e)
     {
-        ScriptManager.RegisterStartupScript(this, GetType(), "showTogglePopup", "showPopup();", false);
+        ScriptManager.RegisterStartupScript(this, GetType(), "hideLevelUp", "hideLevelUp();", false);
     }
 
     protected void btnThankYou_Click(object sender, EventArgs e)
@@ -324,6 +324,7 @@ public partial class Default2 : System.Web.UI.Page
 
                 if (newLevelNum > currentLevel)
                 {
+                    
                     // Update level
                     string updateLevelQuery = "UPDATE CurrentLevel SET levelID = ? WHERE userID = ?";
                     OleDbCommand updateLevelCmd = new OleDbCommand(updateLevelQuery, con);
@@ -332,8 +333,8 @@ public partial class Default2 : System.Web.UI.Page
                     updateLevelCmd.ExecuteNonQuery();
 
                     // Show Level Up popup
-
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowLevelUp", "showLevelUp();", true);
+
 
                 }
                 else
@@ -348,8 +349,9 @@ public partial class Default2 : System.Web.UI.Page
             }
         }
 
-        LoadTasks();
+        
         UpdateXPDisplay(userID);
+        LoadTasks();
     }
 
     private void UpdateXPDisplay(string userID)
