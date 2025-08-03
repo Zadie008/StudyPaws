@@ -40,7 +40,7 @@ nav.addEventListener("mouseleave", () => {
     }, 300);
 });
 
-// NOTIFICATIONS ON HOME PAGE
+// NOTIFICATIONS FOR STUDY SESSION INVITATIONS
 function showNotificationPopup(hasNotifications) {
     if (hasNotifications)
     {
@@ -222,15 +222,33 @@ function validateMinTime(source, args) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    const inputs = [
-        document.getElementById('txtTimeHours'),
-        document.getElementById('txtTimeMinutes'),
-        document.getElementById('txtTimeSeconds')
-    ];
+    const timerInputs = document.querySelectorAll('.timerInput');
 
-    inputs.forEach(input => {
+    timerInputs.forEach(function (input) {
+        input.addEventListener('blur', function () {
+            let value = input.value.trim();
+            if (value === '') {
+                input.value = '00';
+            } else if (!isNaN(value)) {
+                let num = parseInt(value, 10);
+                input.value = num < 10 ? '0' + num : num.toString();
+            } else {
+                input.value = '00';
+            }
+
+            // Trigger validation after formatting
+            const validator = document.getElementById('<%= minTotalTimeValidator.ClientID %>');
+            if (validator && typeof ValidatorValidate === 'function') {
+                ValidatorValidate(validator);
+            }
+        });
+
+        // Add real-time validation on input
         input.addEventListener('input', function () {
-            Page_ClientValidate('timerValidation');
+            const validator = document.getElementById('<%= minTotalTimeValidator.ClientID %>');
+            if (validator && typeof ValidatorValidate === 'function') {
+                ValidatorValidate(validator);
+            }
         });
     });
 });

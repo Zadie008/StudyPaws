@@ -5,6 +5,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
+    <%--COPY START: HEADER--%>
     <div class="accountInfoDiv">
         <div class="profileDiv">
             <a href="C100-C500_Profile.aspx" class="profileIconLink">
@@ -85,13 +86,12 @@
         <a href="Default.aspx"><img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" /></a>
         <h2><a href="Default.aspx">purrfectly productive</a></h2>
     </div>
+    <%--COPY END: HEADER--%>
 
     <script>
         document.body.classList.add('is-default');
     </script>
 </asp:Content>
-<%--need to copy all of the above--%>
-<%--this contains all the information for the header--%>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div id="defaultMainContent">
@@ -104,81 +104,83 @@
             <asp:Label ID="lblLoggedInUserName" runat="server" CssClass="username-header"></asp:Label>
         </div>
 
-        <!--does not have notification-->
-        <div id="popupNoNotifications" class="simple-popup" style="display: none;">
-            <div class="popup-blue-box">
-                <p>You do not have any notifications at the moment!</p>
-                <img src="Images/Notification%20Sad%20Hamster.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideNotificationPopup(); return false;" />
+        <!--COPY START: NOTIFICATION BELL POPUPS-->
+            <!--does not have notification-->
+            <div id="popupNoNotifications" class="simple-popup" style="display: none;">
+                <div class="popup-blue-box">
+                    <p>You do not have any notifications at the moment!</p>
+                    <img src="Images/Notification%20Sad%20Hamster.png" />
+                    <br />
+                    <div class="buttonSection">
+                        <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideNotificationPopup(); return false;" />
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!--has notifications-->
-        <div id="popupHasNotifications" class="simple-popup" style="display: none;">
-            <div class="popup-pink-box">
-                <asp:HiddenField ID="hiddenSessionID" runat="server" />
-                <asp:Literal ID="litNotificationText" runat="server" />
-                <img src="Images/Notification%20Happy.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnYes" CssClass="popup-button-best-pink" runat="server" Text="Accept!" OnClick="btnYes_Click" />
-                    <asp:Button ID="btnNo" CssClass="popup-button" runat="server" Text="Decline!" OnClick="btnNo_Click" />
+            <!--has notifications-->
+            <div id="popupHasNotifications" class="simple-popup" style="display: none;">
+                <div class="popup-pink-box">
+                    <asp:HiddenField ID="hiddenSessionID" runat="server" />
+                    <asp:Literal ID="litNotificationText" runat="server" />
+                    <img src="Images/Notification%20Happy.png" />
+                    <br />
+                    <div class="buttonSection">
+                        <asp:Button ID="btnYes" CssClass="popup-button-best-pink" runat="server" Text="Accept!" OnClick="btnYes_Click" />
+                        <asp:Button ID="btnNo" CssClass="popup-button" runat="server" Text="Decline!" OnClick="btnNo_Click" />
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="popupCalendar" class="simple-popup" style="display: none;">
-            <div class="popup-pink-box">
-                <asp:HiddenField ID="hiddenShowCalendar" runat="server" />
-                <p>Study Session has been added to your calendar!</p>
-                <img src="Images/Notification%20Happy.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnCalendar" CssClass="popup-button-best-pink" runat="server" Text="Calendar, GO!" OnClick="btnCalendar_Click" />
-                    <asp:Button ID="btnOk" CssClass="popup-button" runat="server" Text="Okay, thanks!" OnClick="btnOk_Click" />
+            <div id="popupCalendar" class="simple-popup" style="display: none;">
+                <div class="popup-pink-box">
+                    <asp:HiddenField ID="hiddenShowCalendar" runat="server" />
+                    <p>Study Session has been added to your calendar!</p>
+                    <img src="Images/Notification%20Happy.png" />
+                    <br />
+                    <div class="buttonSection">
+                        <asp:Button ID="btnCalendar" CssClass="popup-button-best-pink" runat="server" Text="Calendar, GO!" OnClick="btnCalendar_Click" />
+                        <asp:Button ID="btnOk" CssClass="popup-button" runat="server" Text="Okay, thanks!" OnClick="btnOk_Click" />
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="popupConfirmDecline" class="simple-popup" style="display: none;">
-            <div class="popup-blue-box">
-                <asp:HiddenField ID="hiddenShowConfirmation" runat="server" />
-                <p>Are you sure you want to decline the Study Session invitation?</p>
-                <img src="Images/Notification%20Sad%20Hamster.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnSure" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnSure_Click" />
-                    <asp:Button ID="btnNotSure" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnNotSure_Click" />
+            <div id="popupConfirmDecline" class="simple-popup" style="display: none;">
+                <div class="popup-blue-box">
+                    <asp:HiddenField ID="hiddenShowConfirmation" runat="server" />
+                    <p>Are you sure you want to decline the Study Session invitation?</p>
+                    <img src="Images/Notification%20Sad%20Hamster.png" />
+                    <br />
+                    <div class="buttonSection">
+                        <asp:Button ID="btnSure" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnSure_Click" />
+                        <asp:Button ID="btnNotSure" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnNotSure_Click" />
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="popupIsDeclined" class="simple-popup" style="display: none;">
-            <div class="popup-blue-box">
-                <asp:HiddenField ID="hiddenShowDeclineConfirmed" runat="server" />
-                <p>Study Session has been declined!</p>
-                <img src="Images/Notification%20Sad%20Hamster.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnOkayDeclined" CssClass="popup-button" runat="server" Text="Okay!" OnClick="btnOkayDeclined_Click" />
+            <div id="popupIsDeclined" class="simple-popup" style="display: none;">
+                <div class="popup-blue-box">
+                    <asp:HiddenField ID="hiddenShowDeclineConfirmed" runat="server" />
+                    <p>Study Session has been declined!</p>
+                    <img src="Images/Notification%20Sad%20Hamster.png" />
+                    <br />
+                    <div class="buttonSection">
+                        <asp:Button ID="btnOkayDeclined" CssClass="popup-button" runat="server" Text="Okay!" OnClick="btnOkayDeclined_Click" />
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="popup" class="simple-popup" style="display: none;">
-            <div class="popup-pink-box">
-                <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
-                <p>Study Session has started!</p>
-                <img src="Images/Notification%20Happy.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
+            <div id="popup" class="simple-popup" style="display: none;">
+                <div class="popup-pink-box">
+                    <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
+                    <p>Study Session has started!</p>
+                    <img src="Images/Notification%20Happy.png" />
+                    <br />
+                    <div class="buttonSection">
+                        <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
+                    </div>
                 </div>
             </div>
-        </div>
+        <!--COPY END: NOTIFICATION BELL POPUPS-->
     </div>
 </asp:Content>
 
