@@ -114,8 +114,7 @@ function updateTimeAndDate() {
     // format day and date
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const months = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+        "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
     ];
     const dayString = days[now.getDay()];
     const dateString = `${now.getDate()} ${months[now.getMonth()]}`;

@@ -46,37 +46,54 @@ public partial class MasterPage : System.Web.UI.MasterPage
 
     private void HandleSessionParticipants(int sessionID, OleDbConnection conn)
     {
-        // 1. delete users who have not replied (replied = false)
-        string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = ? AND replied = false";
-        using (OleDbCommand deleteCmd = new OleDbCommand(deleteQuery, conn))
+        // use a transaction to ensure atomic operations
+        using (OleDbTransaction transaction = conn.BeginTransaction())
         {
-            deleteCmd.Parameters.AddWithValue("?", sessionID);
-            deleteCmd.ExecuteNonQuery();
-        }
-
-        // 2. count how many participants remain for this session
-        string countQuery = "SELECT COUNT(*) FROM StudySessionParticipants WHERE sessionID = ?";
-        using (OleDbCommand countCmd = new OleDbCommand(countQuery, conn))
-        {
-            countCmd.Parameters.AddWithValue("?", sessionID);
-            int remaining = Convert.ToInt32(countCmd.ExecuteScalar());
-
-            if (remaining <= 1)
+            try
             {
-                string deleteQuery2 = "DELETE FROM StudySession WHERE sessionID = ?";
-                using (OleDbCommand deleteSessCmd = new OleDbCommand(deleteQuery2, conn))
+                // 1. delete all participants who haven't replied
+                string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = ? AND replied = false";
+                using (OleDbCommand deleteCmd = new OleDbCommand(deleteQuery, conn, transaction))
                 {
-                    deleteSessCmd.Parameters.AddWithValue("?", sessionID);
-                    deleteSessCmd.ExecuteNonQuery();
+                    deleteCmd.Parameters.AddWithValue("?", sessionID);
+                    deleteCmd.ExecuteNonQuery();
                 }
 
-                // delete all participants
-                string deleteAllParticipants = "DELETE FROM StudySessionParticipants WHERE sessionID = ?";
-                using (OleDbCommand delAllCmd = new OleDbCommand(deleteAllParticipants, conn))
+                // 2. count remaining participants
+                string countQuery = "SELECT COUNT(*) FROM StudySessionParticipants WHERE sessionID = ?";
+                int remaining;
+                using (OleDbCommand countCmd = new OleDbCommand(countQuery, conn, transaction))
                 {
-                    delAllCmd.Parameters.AddWithValue("?", sessionID);
-                    delAllCmd.ExecuteNonQuery();
+                    countCmd.Parameters.AddWithValue("?", sessionID);
+                    remaining = Convert.ToInt32(countCmd.ExecuteScalar());
                 }
+
+                if (remaining <= 1) // only leader or no one left
+                {
+                    // 3. first delete all remaining participants (child records)
+                    string deleteAllParticipants = "DELETE FROM StudySessionParticipants WHERE sessionID = ?";
+                    using (OleDbCommand delAllCmd = new OleDbCommand(deleteAllParticipants, conn, transaction))
+                    {
+                        delAllCmd.Parameters.AddWithValue("?", sessionID);
+                        delAllCmd.ExecuteNonQuery();
+                    }
+
+                    // 4. then delete the session itself (parent record)
+                    string deleteSessionQuery = "DELETE FROM StudySession WHERE sessionID = ?";
+                    using (OleDbCommand deleteSessCmd = new OleDbCommand(deleteSessionQuery, conn, transaction))
+                    {
+                        deleteSessCmd.Parameters.AddWithValue("?", sessionID);
+                        deleteSessCmd.ExecuteNonQuery();
+                    }
+                }
+
+                // commit if everything succeeded
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                System.Diagnostics.Debug.WriteLine("Error handling session participants: " + ex.Message);
             }
         }
     }

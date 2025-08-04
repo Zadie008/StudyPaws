@@ -53,7 +53,189 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnSchedule_Click(object sender, EventArgs e)
     {
-        Response.Redirect("A700_Create-study-session_3.aspx");
+        Page.Validate("timerValidation");
+        minTotalTimeValidator.Validate();
+
+        if (!Page.IsValid)
+        {
+            minTotalTimeValidator.ErrorMessage = "Study Session must be at least 1 minute";
+            minTotalTimeValidator.IsValid = false;
+            ScriptManager.RegisterStartupScript(this, GetType(), "showValidation",
+                "document.getElementById('" + minTotalTimeValidator.ClientID + "').style.display = 'inline';", true);
+            return;
+        }
+
+        if (Session["userID"] == null)
+        {
+            Response.Redirect("Login.aspx");
+            return;
+        }
+
+        // get invited friends from session
+        List<string> invitedFriends = Session["selectedFriends"] as List<string>;
+        if (invitedFriends == null)
+        {
+            invitedFriends = new List<string>();
+        }
+
+        try
+        {
+            // parse date and time values
+            DateTime sessionDate;
+            if (!DateTime.TryParse(txtFilterDate.Text, out sessionDate))
+            {
+                minTotalTimeValidator.ErrorMessage = "Please enter a valid date";
+                minTotalTimeValidator.IsValid = false;
+                return;
+            }
+
+            int startHours = int.Parse(txtStartTimeHours.Text);
+            int startMinutes = int.Parse(txtStartTimeMinutes.Text);
+            int endHours = int.Parse(txtEndTimeHours.Text);
+            int endMinutes = int.Parse(txtEndTimeMinutes.Text);
+
+            DateTime sessionStart = sessionDate.AddHours(startHours).AddMinutes(startMinutes);
+            DateTime sessionEnd = sessionDate.AddHours(endHours).AddMinutes(endMinutes);
+            TimeSpan duration = sessionEnd - sessionStart;
+            int totalSeconds = (int)duration.TotalSeconds;
+
+            if (totalSeconds < 60)
+            {
+                minTotalTimeValidator.ErrorMessage = "Study Session must be at least 1 minute";
+                minTotalTimeValidator.IsValid = false;
+                return;
+            }
+
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            using (OleDbConnection con = new OleDbConnection(cs))
+            {
+                con.Open();
+
+                // start transaction for atomic operations
+                using (OleDbTransaction transaction = con.BeginTransaction())
+                {
+                    try
+                    {
+                        // 1. insert the study session
+                        string sessionCommand = "INSERT INTO [StudySession] ([sessionTitle], [sessionTag], [sessionStart], [sessionEnd], [sessionDuration], [leaderID]) VALUES (?, ?, ?, ?, ?, ?)";
+
+                        using (OleDbCommand cmd = new OleDbCommand(sessionCommand, con, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("?", Session["sessionTitle"]);
+                            cmd.Parameters.AddWithValue("?", Session["sessionTag"]);
+                            cmd.Parameters.AddWithValue("?", sessionStart);
+                            cmd.Parameters.AddWithValue("?", sessionEnd);
+                            cmd.Parameters.AddWithValue("?", totalSeconds);
+                            cmd.Parameters.AddWithValue("?", Convert.ToInt32(Session["userID"]));
+
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // 2. get the new session ID
+                        int newSessionID;
+                        using (OleDbCommand cmdID = new OleDbCommand("SELECT @@IDENTITY", con, transaction))
+                        {
+                            newSessionID = Convert.ToInt32(cmdID.ExecuteScalar());
+                            Session["sessionID"] = newSessionID;
+                            Session["sessionDuration"] = totalSeconds;
+                        }
+
+                        // 3. insert the session creator as participant
+                        string creatorCommand = "INSERT INTO [StudySessionParticipants] ([sessionID], [userID], [replied], [sessionStatus]) VALUES (?, ?, ?, ?)";
+
+                        using (OleDbCommand cmdCreator = new OleDbCommand(creatorCommand, con, transaction))
+                        {
+                            cmdCreator.Parameters.AddWithValue("?", newSessionID);
+                            cmdCreator.Parameters.AddWithValue("?", Convert.ToInt32(Session["userID"]));
+                            cmdCreator.Parameters.AddWithValue("?", true); // replied by default
+                            cmdCreator.Parameters.AddWithValue("?", "Accepted"); // accepted by default
+                            cmdCreator.ExecuteNonQuery();
+                        }
+
+                        // 4. insert all invited friends as participants
+                        if (invitedFriends.Count > 0)
+                        {
+                            // get userIDs for all invited usernames
+                            Dictionary<string, int> usernameToIdMap = new Dictionary<string, int>();
+                            string getUserIdsCommand = "SELECT userID, username FROM Users WHERE username IN (" + string.Join(",", invitedFriends.Select(f => "?")) + ")";
+
+                            using (OleDbCommand cmdGetIds = new OleDbCommand(getUserIdsCommand, con, transaction))
+                            {
+                                for (int i = 0; i < invitedFriends.Count; i++)
+                                {
+                                    cmdGetIds.Parameters.AddWithValue("?", invitedFriends[i]);
+                                }
+
+                                using (OleDbDataReader reader = cmdGetIds.ExecuteReader())
+                                {
+                                    while (reader.Read())
+                                    {
+                                        usernameToIdMap.Add(reader["username"].ToString(), Convert.ToInt32(reader["userID"]));
+                                    }
+                                }
+                            }
+
+                            // insert all participants
+                            string friendCommand = @"INSERT INTO [StudySessionParticipants] ([sessionID], [userID], [replied], [sessionStatus]) VALUES (?, ?, ?, ?)";
+
+                            foreach (string friendUsername in invitedFriends)
+                            {
+                                int friendId;
+                                if (usernameToIdMap.TryGetValue(friendUsername, out friendId))
+                                {
+                                    using (OleDbCommand cmdFriend = new OleDbCommand(friendCommand, con, transaction))
+                                    {
+                                        cmdFriend.Parameters.AddWithValue("?", newSessionID);
+                                        cmdFriend.Parameters.AddWithValue("?", friendId);
+                                        cmdFriend.Parameters.AddWithValue("?", false); // not replied yet
+                                        cmdFriend.Parameters.AddWithValue("?", "Pending"); // pending status
+                                        cmdFriend.ExecuteNonQuery();
+                                    }
+                                }
+                            }
+                        }
+
+                        transaction.Commit();
+
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "showSuccessPopup();", true);
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        minTotalTimeValidator.ErrorMessage = "Error creating study session: " + ex.Message;
+                        minTotalTimeValidator.IsValid = false;
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            minTotalTimeValidator.ErrorMessage = "An error occurred: " + ex.Message;
+            minTotalTimeValidator.IsValid = false;
+        }
+    }
+
+    protected void minTotalTimeValidator_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        try
+        {
+            int startHours = int.Parse(txtStartTimeHours.Text);
+            int startMinutes = int.Parse(txtStartTimeMinutes.Text);
+            int endHours = int.Parse(txtEndTimeHours.Text);
+            int endMinutes = int.Parse(txtEndTimeMinutes.Text);
+
+            int startTotal = (startHours * 3600) + (startMinutes * 60);
+            int endTotal = (endHours * 3600) + (endMinutes * 60);
+            int duration = endTotal - startTotal;
+
+            args.IsValid = duration >= 60;
+            minTotalTimeValidator.ErrorMessage = args.IsValid ? "" : "Study Session must be at least 1 minute";
+        }
+        catch
+        {
+            args.IsValid = false;
+            minTotalTimeValidator.ErrorMessage = "Invalid time values";
+        }
     }
 
     // start: header profile code

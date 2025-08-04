@@ -154,7 +154,6 @@ public partial class Default2 : System.Web.UI.Page
 
         List<string> invitedFriends = Session["invitedFriends"] as List<string>;
         Session["selectedFriends"] = invitedFriends;
-        // can also generate the studySessionID here if needed
         Response.Redirect("A700_Create-study-session_4.aspx");
     }
 

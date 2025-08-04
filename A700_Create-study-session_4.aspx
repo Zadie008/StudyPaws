@@ -92,26 +92,61 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-    <div id="createSession3MainContent" class="createTimer3MainContent">
-        <div class="timeSection">
-            <h2>Schedule your study session</h2>
-            <div class="leftSection">
-            </div>
-            <div id="selectDateTimeSection" class="middleSection">
-            
-            </div>
-            <div class="rightSection">
-            </div>
+    <div id="createSession4MainContent" class="createTimer3MainContent">
+            <div class="timeSection">
+                <div class="leftSection">
+                </div>
+                <div id="selectDateTimeSection" class="middleSection">
+                    <h2>Schedule your study session</h2>
+                    <table>
+                        <tr>
+                            <td><asp:Label ID="lblFilterDate" for="txtFilterDate" runat="server" CssClass="label leftWords" Text="Date"></asp:Label></td>
+                            <td class="rightWords"><div class="customDateWrapper"><asp:TextBox ID="txtFilterDate" runat="server" CssClass="filterDateBox" TextMode="Date"></asp:TextBox></div></td>
+                        </tr>
+                        <tr>
+                            <td><asp:Label ID="lblStartTime" for="txtStartTimeHours" runat="server" CssClass="label leftWords" Text="Start Time"></asp:Label></td>
+                            <td class="rightWords"><asp:TextBox ID="txtStartTimeHours" runat="server" CssClass="textbox timerInput" Text="00"></asp:TextBox><asp:Label ID="lblColon1" runat="server" CssClass="label" Text=":"></asp:Label><asp:TextBox ID="txtStartTimeMinutes" runat="server" CssClass="textbox timerInput" Text="00"></asp:TextBox></td>
+                        </tr>
+                        <tr>
+                            <td><asp:Label ID="lblEndTime" for="txtEndTimeHours" runat="server" CssClass="label leftWords" Text="End Time"></asp:Label></td>
+                            <td class="rightWords"><asp:TextBox ID="txtEndTimeHours" runat="server" CssClass="textbox timerInput" Text="00"></asp:TextBox><asp:Label ID="lblColon2" runat="server" CssClass="label" Text=":"></asp:Label><asp:TextBox ID="txtEndTimeMinutes" runat="server" CssClass="textbox timerInput" Text="00"></asp:TextBox></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="rightSection">
+                    <div id="validationErrorStartSection" class="validationErrorSection">
+                        <asp:RangeValidator ID="errorStartHour" CssClass="validationErrorCustom" runat="server" ControlToValidate="txtStartTimeHours" ErrorMessage="Hours have to be between 00 and 24" MinimumValue="0" MaximumValue="24" Type="Integer" Display="Dynamic" EnableClientScript="true" ValidationGroup="timerValidation" ValidateEmptyText="true" SetFocusOnError="true" />
+
+                        <asp:RangeValidator ID="errorStartMinute" CssClass="validationErrorCustom" runat="server" ControlToValidate="txtStartTimeMinutes" ErrorMessage="Minutes have to be between 00 and 59" MinimumValue="0" MaximumValue="59" Type="Integer" Display="Dynamic" EnableClientScript="true" ValidationGroup="timerValidation" ValidateEmptyText="true" SetFocusOnError="true" />
+                    </div>
+                    <div id="validationErrorEndSection" class="validationErrorSection">
+                        <asp:RangeValidator ID="errorEndHour" CssClass="validationErrorCustom" runat="server" ControlToValidate="txtEndTimeHours" ErrorMessage="Hours have to be between 00 and 24" MinimumValue="0" MaximumValue="24" Type="Integer" Display="Dynamic" EnableClientScript="true" ValidationGroup="timerValidation" ValidateEmptyText="true" SetFocusOnError="true" />
+
+                        <asp:RangeValidator ID="errorEndMinute" CssClass="validationErrorCustom" runat="server" ControlToValidate="txtEndTimeMinutes" ErrorMessage="Minutes have to be between 00 and 59" MinimumValue="0" MaximumValue="59" Type="Integer" Display="Dynamic" EnableClientScript="true" ValidationGroup="timerValidation" ValidateEmptyText="true" SetFocusOnError="true" />
+
+                        <asp:CustomValidator ID="minTotalTimeValidator" CssClass="validationErrorCustom" runat="server" ErrorMessage="Study Session must be at least 1 minute" ClientValidationFunction="validateMinTime" EnableClientScript="true" Display="Dynamic" ValidationGroup="timerValidation" OnServerValidate="minTotalTimeValidator_ServerValidate" ValidateEmptyText="true" SetFocusOnError="true" />
+                    </div>
+                </div>
         </div>
-        <div class="buttonSection">
-            <div class="leftSection">
+            <div class="buttonSection">
+                <div class="leftSection"></div>
+                <div class="middleSection">
+                    <asp:Button ID="btnBack" CssClass="button" runat="server" Text="Back" OnClick="btnBack_Click" />
+                    <asp:Button ID="btnSchedule" CssClass="button" runat="server" Text="Schedule" OnClick="btnSchedule_Click" />
+                </div>
+                <div class="rightSection">
+                    <asp:Button ID="btnViewPastTimers" CssClass="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
+                </div>
             </div>
-            <div class="middleSection">
-                <asp:Button ID="btnBack" CssClass="button" runat="server" Text="Back" OnClick="btnBack_Click" />
-                <asp:Button ID="btnSchedule" CssClass="button" runat="server" Text="Schedule" OnClick="btnSchedule_Click" />
-            </div>
-            <div class="rightSection">
-                <asp:Button ID="btnViewPastTimers" CssClass="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
+
+        <div id="popupSuccess" class="simple-popup" style="display: none;">
+            <div class="popup-pink-box">
+                <p>Study Session scheduled!</p>
+                <img src="Images/Notification%20Happy.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnSuccess" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideSuccessPopup(); return false;" />
+                </div>
             </div>
         </div>
 
@@ -191,9 +226,19 @@
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+        function showSuccessPopup() {
+            document.getElementById('popupSuccess').style.display = 'flex';
+        }
+        function hideSuccessPopup() {
+            document.getElementById('popupSuccess').style.display = 'none';
+
+            window.location.href = 'Default.aspx';
+        }
+    </script>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
 
 </asp:Content>
-

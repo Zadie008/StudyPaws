@@ -115,15 +115,7 @@
 
                     <asp:RangeValidator ID="errorSecond" CssClass="validationErrorCustom" runat="server" ControlToValidate="txtTimeSeconds" ErrorMessage="Seconds have to be 00" MinimumValue="0" MaximumValue="0" Type="Integer" Display="Dynamic" EnableClientScript="true" ValidationGroup="timerValidation" ValidateEmptyText="true" SetFocusOnError="true" />
 
-                    <asp:CustomValidator ID="minTotalTimeValidator" CssClass="validationErrorCustom" runat="server" 
-                        ErrorMessage="Timer must be at least 1 minute" 
-                        ClientValidationFunction="validateMinTime" 
-                        EnableClientScript="true" 
-                        Display="Dynamic" 
-                        ValidationGroup="timerValidation"
-                        OnServerValidate="minTotalTimeValidator_ServerValidate"
-                        ValidateEmptyText="true"
-                        SetFocusOnError="true" />
+                    <asp:CustomValidator ID="minTotalTimeValidator" CssClass="validationErrorCustom" runat="server" ErrorMessage="Timer must be at least 1 minute" ClientValidationFunction="validateMinTime" EnableClientScript="true" Display="Dynamic" ValidationGroup="timerValidation" OnServerValidate="minTotalTimeValidator_ServerValidate" ValidateEmptyText="true" SetFocusOnError="true" />
                 </div>
             </div>
             <div class="rightSection">
