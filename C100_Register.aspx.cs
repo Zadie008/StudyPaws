@@ -17,7 +17,6 @@ public partial class C100_Register : System.Web.UI.Page
         
     }
 
-   
     [WebMethod]
     public static bool CheckUsernameExists(string username)
     {
