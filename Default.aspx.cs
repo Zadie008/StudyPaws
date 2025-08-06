@@ -261,7 +261,7 @@ public partial class _Default : System.Web.UI.Page
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         List<SessionInvite> pendingInvites = new List<SessionInvite>();
-        string query = "SELECT StudySession.sessionID, StudySession.sessionTitle, StudySession.sessionTag, StudySession.sessionStart, StudySession.sessionEnd, Users.username FROM (StudySessionParticipants INNER JOIN StudySession ON StudySessionParticipants.sessionID = StudySession.sessionID) INNER JOIN Users ON StudySession.leaderID = Users.userID WHERE StudySessionParticipants.userID = ? AND StudySessionParticipants.replied = false ORDER BY StudySession.sessionID ASC";
+        string query = "SELECT StudySession.sessionID, StudySession.sessionTitle, StudySession.sessionTag, StudySession.sessionStart, StudySession.sessionEnd, Users.username FROM (StudySessionParticipants INNER JOIN StudySession ON StudySessionParticipants.sessionID = StudySession.sessionID) INNER JOIN Users ON StudySession.leaderID = Users.userID WHERE StudySessionParticipants.userID = ? AND StudySessionParticipants.accepted = false ORDER BY StudySession.sessionID ASC";
 
         using (OleDbConnection conn = new OleDbConnection(cs))
         using (OleDbCommand cmd = new OleDbCommand(query, conn))
@@ -319,7 +319,7 @@ public partial class _Default : System.Web.UI.Page
     {
         int sessionID = int.Parse(hiddenSessionID.Value);
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string updateQuery = "UPDATE StudySessionParticipants SET replied = true, sessionStatus = 'Accepted' WHERE sessionID = ? AND userID = ?";
+        string updateQuery = "UPDATE StudySessionParticipants SET accepted = true WHERE sessionID = ? AND userID = ?";
         using (OleDbConnection conn = new OleDbConnection(cs))
         using (OleDbCommand cmd = new OleDbCommand(updateQuery, conn))
         {
@@ -393,7 +393,7 @@ public partial class _Default : System.Web.UI.Page
     private void LoadUpcomingSessions()
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string query = "SELECT StudySession.sessionID, StudySession.sessionStart FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = ? AND StudySessionParticipants.replied = true AND StudySessionParticipants.sessionStatus = 'Accepted'";
+        string query = "SELECT StudySession.sessionID, StudySession.sessionStart FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = ? AND StudySessionParticipants.accepted = true";
 
         List<string> jsSessionTimes = new List<string>();
 
@@ -442,7 +442,7 @@ public partial class _Default : System.Web.UI.Page
     {
         int sessionID = int.Parse(hiddenSessionID.Value);
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = ? AND userID = ? AND replied = false";
+        string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = ? AND userID = ? AND accepted = false";
         using (OleDbConnection conn = new OleDbConnection(cs))
         using (OleDbCommand cmd = new OleDbCommand(deleteQuery, conn))
         {
@@ -469,9 +469,27 @@ public partial class _Default : System.Web.UI.Page
 
     protected void btnJoin_Click(object sender, EventArgs e)
     {
-        if (Session["sessionID"] != null)
+        if (Session["sessionID"] != null && Session["userID"] != null)
         {
-            Response.Redirect("A1400_View-study-session.aspx");
+            int sessionID = Convert.ToInt32(Session["sessionID"]);
+            int userID = Convert.ToInt32(Session["userID"]);
+
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            string updateQuery = "UPDATE StudySessionParticipants SET joined = true WHERE sessionID = ? AND userID = ?";
+
+            using (OleDbConnection conn = new OleDbConnection(cs))
+            using (OleDbCommand cmd = new OleDbCommand(updateQuery, conn))
+            {
+                cmd.Parameters.AddWithValue("?", sessionID);
+                cmd.Parameters.AddWithValue("?", userID);
+                conn.Open();
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                if (rowsAffected > 0)
+                {
+                    Response.Redirect("A1400_View-study-session.aspx");
+                }
+            }
         }
     }
     // end: notification bell code

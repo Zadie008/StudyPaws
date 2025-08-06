@@ -96,5 +96,42 @@ public partial class View_study_session : System.Web.UI.Page
             }
         }
     }
-    
+
+    // COMPLETE STUDY SESSION (UPDATING COMPLETED ATTRIBUTE)
+    [System.Web.Services.WebMethod]
+    public static string MarkSessionAsCompleted()
+    {
+        try
+        {
+            if (HttpContext.Current.Session["sessionID"] != null && HttpContext.Current.Session["userID"] != null)
+            {
+                int sessionID = Convert.ToInt32(HttpContext.Current.Session["sessionID"]);
+                int userID = Convert.ToInt32(HttpContext.Current.Session["userID"]);
+
+                string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+                string updateQuery = "UPDATE StudySessionParticipants SET completed = true WHERE sessionID = ? AND userID = ?";
+
+                using (OleDbConnection conn = new OleDbConnection(cs))
+                using (OleDbCommand cmd = new OleDbCommand(updateQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("?", sessionID);
+                    cmd.Parameters.AddWithValue("?", userID);
+                    conn.Open();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                    {
+                        return "success";
+                    }
+                    return "no_rows_updated";
+                }
+            }
+            return "session_or_user_missing";
+        }
+        catch (Exception ex)
+        {
+            return "error: " + ex.Message;
+        }
+    }
+
 }

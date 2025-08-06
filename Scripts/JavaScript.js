@@ -400,6 +400,12 @@ function confirmStop() {
 
 function showTimeUpPopup() {
     document.getElementById("popupTimeUp").style.display = "flex";
+
+    PageMethods.MarkSessionAsCompleted(function (response) {
+        console.log("Session marked as completed:", response);
+    }, function (error) {
+        console.error("Error marking session as completed:", error);
+    });
 }
 
 function hideTimeUpPopup() {

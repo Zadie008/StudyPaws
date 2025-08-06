@@ -46,13 +46,12 @@ public partial class MasterPage : System.Web.UI.MasterPage
 
     private void HandleSessionParticipants(int sessionID, OleDbConnection conn)
     {
-        // use a transaction to ensure atomic operations
         using (OleDbTransaction transaction = conn.BeginTransaction())
         {
             try
             {
-                // 1. delete all participants who haven't replied
-                string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = ? AND replied = false";
+                // 1. delete all participants who haven't accepted
+                string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = ? AND accepted = false";
                 using (OleDbCommand deleteCmd = new OleDbCommand(deleteQuery, conn, transaction))
                 {
                     deleteCmd.Parameters.AddWithValue("?", sessionID);

@@ -140,6 +140,13 @@ public partial class C100_Register : System.Web.UI.Page
                     insertCmd2.Parameters.AddWithValue("?", true); // equip Cat 1
 
                     insertCmd2.ExecuteNonQuery();
+
+                    string levelQuery = "INSERT INTO [CurrentLevel] ([userID], [levelID]) VALUES (?, ?)";
+                    OleDbCommand insertCmd3 = new OleDbCommand(levelQuery, con);
+                    insertCmd3.Parameters.AddWithValue("?", userID);
+                    insertCmd3.Parameters.AddWithValue("?", 1); // level 1
+
+                    insertCmd3.ExecuteNonQuery();
                 }
                 else
                 {

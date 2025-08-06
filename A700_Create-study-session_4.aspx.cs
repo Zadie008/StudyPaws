@@ -111,7 +111,6 @@ public partial class Default2 : System.Web.UI.Page
             {
                 con.Open();
 
-                // start transaction for atomic operations
                 using (OleDbTransaction transaction = con.BeginTransaction())
                 {
                     try
@@ -141,14 +140,13 @@ public partial class Default2 : System.Web.UI.Page
                         }
 
                         // 3. insert the session creator as participant
-                        string creatorCommand = "INSERT INTO [StudySessionParticipants] ([sessionID], [userID], [replied], [sessionStatus]) VALUES (?, ?, ?, ?)";
+                        string creatorCommand = "INSERT INTO [StudySessionParticipants] ([sessionID], [userID], [accepted]) VALUES (?, ?, ?, ?)";
 
                         using (OleDbCommand cmdCreator = new OleDbCommand(creatorCommand, con, transaction))
                         {
                             cmdCreator.Parameters.AddWithValue("?", newSessionID);
                             cmdCreator.Parameters.AddWithValue("?", Convert.ToInt32(Session["userID"]));
-                            cmdCreator.Parameters.AddWithValue("?", true); // replied by default
-                            cmdCreator.Parameters.AddWithValue("?", "Accepted"); // accepted by default
+                            cmdCreator.Parameters.AddWithValue("?", true); // accepted by default
                             cmdCreator.ExecuteNonQuery();
                         }
 
@@ -176,7 +174,7 @@ public partial class Default2 : System.Web.UI.Page
                             }
 
                             // insert all participants
-                            string friendCommand = @"INSERT INTO [StudySessionParticipants] ([sessionID], [userID], [replied], [sessionStatus]) VALUES (?, ?, ?, ?)";
+                            string friendCommand = @"INSERT INTO [StudySessionParticipants] ([sessionID], [userID], [accepted]) VALUES (?, ?, ?, ?)";
 
                             foreach (string friendUsername in invitedFriends)
                             {
@@ -188,7 +186,6 @@ public partial class Default2 : System.Web.UI.Page
                                         cmdFriend.Parameters.AddWithValue("?", newSessionID);
                                         cmdFriend.Parameters.AddWithValue("?", friendId);
                                         cmdFriend.Parameters.AddWithValue("?", false); // not replied yet
-                                        cmdFriend.Parameters.AddWithValue("?", "Pending"); // pending status
                                         cmdFriend.ExecuteNonQuery();
                                     }
                                 }

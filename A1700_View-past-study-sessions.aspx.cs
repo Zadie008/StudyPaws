@@ -19,11 +19,10 @@ public partial class Default2 : System.Web.UI.Page
 
                 using (OleDbConnection con = new OleDbConnection(cs))
                 {
-                    string command = "SELECT StudySession.sessionStart AS [Start Time], StudySession.sessionTitle AS [Title], StudySession.sessionTag AS [Tag], StudySession.sessionDuration AS [Duration] FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = ? AND StudySession.sessionStart < ? ORDER BY StudySession.sessionStart DESC";
+                    string command = "SELECT StudySession.sessionStart AS [Start Time], StudySession.sessionTitle AS [Title], StudySession.sessionTag AS [Tag], StudySession.sessionDuration AS [Duration] FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = ? AND StudySession.completed = true ORDER BY StudySession.sessionStart DESC";
 
                     OleDbCommand cmd = new OleDbCommand(command, con);
                     cmd.Parameters.AddWithValue("?", Convert.ToInt32(Session["userID"]));
-                    cmd.Parameters.AddWithValue("?", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
 
                     con.Open();
                     OleDbDataReader reader = cmd.ExecuteReader();
