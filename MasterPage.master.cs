@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using MySql.Data.MySqlClient;
 
 public partial class MasterPage : System.Web.UI.MasterPage
 {
@@ -17,22 +18,22 @@ public partial class MasterPage : System.Web.UI.MasterPage
     private void CheckUpcomingStudySessions()
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection conn = new OleDbConnection(cs))
+        using (MySqlConnection conn = new MySqlConnection(cs))
         {
             conn.Open();
             // fetch all sessions starting in 10 minutes
-            string selectQuery = "SELECT sessionID FROM StudySession WHERE sessionStart BETWEEN ? AND ? ";
+            string selectQuery = "SELECT sessionID FROM StudySession WHERE sessionStart BETWEEN ?startWindowBegin AND ?startWindowEnd";
 
             // checking for study session starting between 0-10 minutes
             DateTime startWindowBegin = DateTime.Now.AddMinutes(0);
             DateTime startWindowEnd = DateTime.Now.AddMinutes(10);
 
-            using (OleDbCommand cmd = new OleDbCommand(selectQuery, conn))
+            using (MySqlCommand cmd = new MySqlCommand(selectQuery, conn))
             {
-                cmd.Parameters.Add("?", OleDbType.Date).Value = startWindowBegin;
-                cmd.Parameters.Add("?", OleDbType.Date).Value = startWindowEnd;
+                cmd.Parameters.AddWithValue("?startWindowBegin", startWindowBegin);
+                cmd.Parameters.AddWithValue("?startWindowEnd", startWindowEnd);
 
-                using (OleDbDataReader reader = cmd.ExecuteReader())
+                using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
@@ -44,44 +45,44 @@ public partial class MasterPage : System.Web.UI.MasterPage
         }
     }
 
-    private void HandleSessionParticipants(int sessionID, OleDbConnection conn)
+    private void HandleSessionParticipants(int sessionID, MySqlConnection conn)
     {
-        using (OleDbTransaction transaction = conn.BeginTransaction())
+        using (MySqlTransaction transaction = conn.BeginTransaction())
         {
             try
             {
                 // 1. delete all participants who haven't accepted
-                string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = ? AND accepted = false";
-                using (OleDbCommand deleteCmd = new OleDbCommand(deleteQuery, conn, transaction))
+                string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = ?sessionID AND accepted = false";
+                using (MySqlCommand deleteCmd = new MySqlCommand(deleteQuery, conn, transaction))
                 {
-                    deleteCmd.Parameters.AddWithValue("?", sessionID);
+                    deleteCmd.Parameters.AddWithValue("?sessionID", sessionID);
                     deleteCmd.ExecuteNonQuery();
                 }
 
                 // 2. count remaining participants
-                string countQuery = "SELECT COUNT(*) FROM StudySessionParticipants WHERE sessionID = ?";
+                string countQuery = "SELECT COUNT(*) FROM StudySessionParticipants WHERE sessionID = ?sessionID";
                 int remaining;
-                using (OleDbCommand countCmd = new OleDbCommand(countQuery, conn, transaction))
+                using (MySqlCommand countCmd = new MySqlCommand(countQuery, conn, transaction))
                 {
-                    countCmd.Parameters.AddWithValue("?", sessionID);
+                    countCmd.Parameters.AddWithValue("?sessionID", sessionID);
                     remaining = Convert.ToInt32(countCmd.ExecuteScalar());
                 }
 
                 if (remaining <= 1) // only leader or no one left
                 {
                     // 3. first delete all remaining participants (child records)
-                    string deleteAllParticipants = "DELETE FROM StudySessionParticipants WHERE sessionID = ?";
-                    using (OleDbCommand delAllCmd = new OleDbCommand(deleteAllParticipants, conn, transaction))
+                    string deleteAllParticipants = "DELETE FROM StudySessionParticipants WHERE sessionID = ?sessionID";
+                    using (MySqlCommand delAllCmd = new MySqlCommand(deleteAllParticipants, conn, transaction))
                     {
-                        delAllCmd.Parameters.AddWithValue("?", sessionID);
+                        delAllCmd.Parameters.AddWithValue("?sessionID", sessionID);
                         delAllCmd.ExecuteNonQuery();
                     }
 
                     // 4. then delete the session itself (parent record)
-                    string deleteSessionQuery = "DELETE FROM StudySession WHERE sessionID = ?";
-                    using (OleDbCommand deleteSessCmd = new OleDbCommand(deleteSessionQuery, conn, transaction))
+                    string deleteSessionQuery = "DELETE FROM StudySession WHERE sessionID = ?sessionID";
+                    using (MySqlCommand deleteSessCmd = new MySqlCommand(deleteSessionQuery, conn, transaction))
                     {
-                        deleteSessCmd.Parameters.AddWithValue("?", sessionID);
+                        deleteSessCmd.Parameters.AddWithValue("?sessionID", sessionID);
                         deleteSessCmd.ExecuteNonQuery();
                     }
                 }

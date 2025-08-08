@@ -1,14 +1,13 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.OleDb;
 using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Xml.Linq;
 
 public partial class Default2 : System.Web.UI.Page
 {
@@ -16,7 +15,6 @@ public partial class Default2 : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-
             if (Session["Username"] != null)
             {
                 string username = Session["Username"].ToString(); //need this on every page
@@ -26,9 +24,7 @@ public partial class Default2 : System.Web.UI.Page
 
                 if (!string.IsNullOrEmpty(userID))
                 {
-                    
                     int userXP = GetUserXP(cs, userID);
-                  
                     GetLevelInformation(cs, userID);
                     GetUserStats(cs, userID);
                     GetUserProfileIcon(cs, userID);
@@ -41,7 +37,6 @@ public partial class Default2 : System.Web.UI.Page
                     int nextLevelXpAmount = levelInfo.Item3;
                     CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
                 }
-                
             }
             else
             {
@@ -65,21 +60,20 @@ public partial class Default2 : System.Web.UI.Page
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         string query = @"
-                        SELECT b.badgeName, b.badgeDescBronze, b.badgeDescSilver, b.badgeDescGold, 
-                        b.badgeIconNum, ub.badgeType
-                        FROM Badges b
-                        LEFT JOIN UserBadge ub ON b.badgeID = ub.badgeID
-                        WHERE ub.userID = ? OR ub.userID IS NULL";
+            SELECT b.badgeName, b.badgeDescBronze, b.badgeDescSilver, b.badgeDescGold, 
+                   b.badgeIconNum, ub.badgeType
+            FROM Badges b
+            LEFT JOIN UserBadge ub ON b.badgeID = ub.badgeID AND ub.userID = @userID";
 
         List<BadgeIcon> badgeList = new List<BadgeIcon>();
 
-        using (OleDbConnection con = new OleDbConnection(cs))
-        using (OleDbCommand cmd = new OleDbCommand(query, con))
+        using (MySqlConnection con = new MySqlConnection(cs))
+        using (MySqlCommand cmd = new MySqlCommand(query, con))
         {
-            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
 
             con.Open();
-            using (OleDbDataReader reader = cmd.ExecuteReader())
+            using (MySqlDataReader reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
                 {
@@ -101,31 +95,34 @@ public partial class Default2 : System.Web.UI.Page
         rpPets.DataBind();
     }
 
-
     private string GetBadgeImagePath(int badgeImageID)
     {
         switch (badgeImageID)
         {
-            case 1: return "~/Images/Badges/BusyBee.png";
-            case 2: return "~/Images/Badges/LoneWoof.png";
-            case 3: return "~/Images/Badges/EarlyBird.png";
-            case 4: return "~/Images/Badges/NightOwl.png";
-            case 5: return "~/Images/Badges/SlothingOnTheJob.png";
-            case 6: return "~/Images/Badges/DreamTeam.png";
-            case 7: return "~/Images/Badges/RignLeader.png";
-            case 8: return "~/Images/Badges/Cancelotl.png";
-            case 9: return "~/Images/Badges/NotMyBloblem.png";
-            case 10: return "~/Images/Badges/AcademicWeapon.png";
+            case 1: return "~/Images/Badges/1_Busy-Bee.png";
+            case 2: return "~/Images/Badges/2_Lone-Woof.png";
+            case 3: return "~/Images/Badges/3_Early-Bird.png";
+            case 4: return "~/Images/Badges/4_Night-Owl.png";
+            case 5: return "~/Images/Badges/5_Slothing-On-The-Job.png";
+            case 6: return "~/Images/Badges/6_Country-Club.png";
+            case 7: return "~/Images/Badges/7_Ring-Leader.png";
+            case 8: return "~/Images/Badges/8_Cancelotl.png";
+            case 9: return "~/Images/Badges/9_Not-My-Bloblem.png";
+            case 10: return "~/Images/Badges/10_Academic-Weapon.png";
             case 11: return "~/Images/Badges/11_Collector.png";
-            case 12: return "~/Images/Badges/Meanie.png";
-            case 13: return "~/Images/Badges/FriendsPurrever.png";
-            case 14: return "~/Images/Badges/PeskyPelican.png";
-            case 15: return "~/Images/Badges/PuffingPopular.png";
-            case 16: return "~/Images/Badges/RisingStar.png";
-
-            default: return "~/Images/Badges/PeskyPelican.png";
+            case 12: return "~/Images/Badges/12_Meanie.png";
+            case 13: return "~/Images/Badges/13_Friends-Purrever.png";
+            case 14: return "~/Images/Badges/14_Pesky-Little-Pelican.png";
+            case 15: return "~/Images/Badges/15_Puffing-Popular.png";
+            case 16: return "~/Images/Badges/16_Rising-Star.png";
+            case 17: return "~/Images/Badges/17_In-Tentacles'-Reach.png";
+            case 18: return "~/Images/Badges/18_Whale-Hello-There!.png";
+            case 19: return "~/Images/Badges/19_Trick-or-Study.png";
+            case 20: return "~/Images/Badges/20_The-Study-Spirit.png";
+            default: return "~/Images/Badges/1_Busy-Bee.png";
         }
     }
+
     protected string GetStarHtml(string badgeType)
     {
         int stars = 0;
@@ -144,20 +141,228 @@ public partial class Default2 : System.Web.UI.Page
 
         return html;
     }
-    //Please copy all of this code
-    //everyline of code until you see double lines of comments
+
+    // start: header profile code
+    private string GetUserID(string username, string connectionString)
+    {
+        string query = "SELECT userID FROM Users WHERE username = @username";
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        using (MySqlCommand cmd = new MySqlCommand(query, con))
+        {
+            cmd.Parameters.AddWithValue("@username", username);
+            try
+            {
+                con.Open();
+                object result = cmd.ExecuteScalar();
+                return result != null ? result.ToString() : null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting user ID: " + ex.Message);
+                return null;
+            }
+        }
+    }
+
+    private int GetUserXP(string connectionString, string userID)
+    {
+        string query = "SELECT userXP FROM Users WHERE userID = @userID";
+        int userXP = 0;
+
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        using (MySqlCommand cmd = new MySqlCommand(query, con))
+        {
+            cmd.Parameters.AddWithValue("@userID", userID);
+            try
+            {
+                con.Open();
+                object result = cmd.ExecuteScalar();
+                if (result != null && int.TryParse(result.ToString(), out userXP))
+                {
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting user XP: " + ex.Message);
+            }
+        }
+        return userXP;
+    }
+
+    private Tuple<int, int, int> GetLevelInformation(string connectionString, string userID)
+    {
+        int currentLevel = 0;
+        int currentLevelXpAmount = 0;
+        int nextLevelXpAmount = 0;
+        string currentLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        using (MySqlCommand cmdCurrentLevel = new MySqlCommand(currentLevelQuery, con))
+        {
+            cmdCurrentLevel.Parameters.AddWithValue("@userID", userID);
+            con.Open();
+            object result = cmdCurrentLevel.ExecuteScalar();
+            if (result != null && int.TryParse(result.ToString(), out currentLevel))
+            {
+                lblLevelNumber.Text = currentLevel.ToString();
+            }
+            else
+            {
+                lblLevelNumber.Text = "N/A";
+                return Tuple.Create(0, 0, 0);
+            }
+        }
+        string currentLevelXPQuery = "SELECT xpAmount FROM Level WHERE levelNum = @currentLevel";
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        using (MySqlCommand cmdCurrentXP = new MySqlCommand(currentLevelXPQuery, con))
+        {
+            cmdCurrentXP.Parameters.AddWithValue("@currentLevel", currentLevel);
+            con.Open();
+            object result = cmdCurrentXP.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                currentLevelXpAmount = Convert.ToInt32(result);
+            }
+        }
+
+        string nextLevelXPQuery = "SELECT xpAmount FROM Level WHERE levelNum = @nextLevel";
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        using (MySqlCommand cmdNextXP = new MySqlCommand(nextLevelXPQuery, con))
+        {
+            cmdNextXP.Parameters.AddWithValue("@nextLevel", currentLevel + 1);
+            con.Open();
+            object result = cmdNextXP.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                nextLevelXpAmount = Convert.ToInt32(result);
+            }
+            else
+            {
+                nextLevelXpAmount = currentLevelXpAmount;//when user reaches level 25
+            }
+        }
+
+        return Tuple.Create(currentLevel, currentLevelXpAmount, nextLevelXpAmount);
+    }
+
+    private void CalculateXPProgressBar(int userXP, int currentLevelXpAmount, int nextLevelXpAmount)
+    {
+        if (nextLevelXpAmount <= currentLevelXpAmount)
+        {
+            xpProgressBar.Style["width"] = "100%";
+            lblXPPercentage.Text = "100%";
+            return;
+        }
+        int xpToNextLevel = nextLevelXpAmount - currentLevelXpAmount;
+        int xpGainedInCurrentLevel = userXP - currentLevelXpAmount;
+
+        if (xpToNextLevel > 0)
+        {
+            double progress = (double)xpGainedInCurrentLevel / xpToNextLevel * 100;
+            if (progress < 0) progress = 0;
+            if (progress > 100) progress = 100;
+
+            xpProgressBar.Style["width"] = progress.ToString("F0") + "%";
+            lblXPPercentage.Text = progress.ToString("F0") + "%";
+        }
+        else
+        {
+            xpProgressBar.Style["width"] = "100%";
+            lblXPPercentage.Text = "100%";
+        }
+    }
+
+    private void GetUserStats(string connectionString, string userID)
+    {
+        string query = "SELECT userCoinCount FROM Users WHERE userID = @userID";
+
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        using (MySqlCommand cmd = new MySqlCommand(query, con))
+        {
+            cmd.Parameters.AddWithValue("@userID", userID);
+
+            con.Open();
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    lblPaws.Text = reader["userCoinCount"] != DBNull.Value ? reader["userCoinCount"].ToString() : "0";
+                }
+                else
+                {
+                    lblPaws.Text = "N/A";
+                }
+            }
+        }
+    }
+
+    private void GetUserProfileIcon(string connectionString, string userID)
+    {
+        string query = "SELECT iconNum FROM Users WHERE userID = @userID";
+
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        using (MySqlCommand cmd = new MySqlCommand(query, con))
+        {
+            cmd.Parameters.AddWithValue("@userID", userID);
+            try
+            {
+                con.Open();
+                object result = cmd.ExecuteScalar();
+                int iconNum;
+                if (result != null && int.TryParse(result.ToString(), out iconNum))
+                {
+                    string iconPath = GetProfileImagePath(iconNum);
+                    string circleClass = GetCircleColorClass(iconNum);
+                    profilePet.ImageUrl = iconPath;
+                    profileCircle.Attributes["class"] = "profileCircle " + circleClass;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting profile icon: " + ex.Message);
+            }
+        }
+    }
+
+    private string GetProfileImagePath(int iconNum)
+    {
+        switch (iconNum)
+        {
+            case 1: return "~/Images/ProfilePictures/CatPfp.png";
+            case 2: return "~/Images/ProfilePictures/DogPfp.png";
+            case 3: return "~/Images/ProfilePictures/BunnyPfp.png";
+            case 4: return "~/Images/ProfilePictures/CowPfp.png";
+            case 5: return "~/Images/ProfilePictures/UnicornPfp.png";
+            default: return "~/Images/ProfilePictures/CatPfp.png";
+        }
+    }
+
+    private string GetCircleColorClass(int iconNum)
+    {
+        switch (iconNum)
+        {
+            case 1: return "circle-cat";
+            case 2: return "circle-dog";
+            case 3: return "circle-bunny";
+            case 4: return "circle-cow";
+            case 5: return "circle-unicorn";
+            default: return "circle-cat";
+        }
+    }
+    // end: header profile code
+
+    // start: notification bell code
     private void LoadPendingInvitesFromDB()
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         List<SessionInvite> pendingInvites = new List<SessionInvite>();
-        string query = "SELECT StudySession.sessionID, StudySession.sessionTitle, StudySession.sessionTag, StudySession.sessionStart, StudySession.sessionEnd, Users.username FROM (StudySessionParticipants INNER JOIN StudySession ON StudySessionParticipants.sessionID = StudySession.sessionID) INNER JOIN Users ON StudySession.leaderID = Users.userID WHERE StudySessionParticipants.userID = ? AND StudySessionParticipants.replied = false ORDER BY StudySession.sessionID ASC";
+        string query = "SELECT StudySession.sessionID, StudySession.sessionTitle, StudySession.sessionTag, StudySession.sessionStart, StudySession.sessionEnd, Users.username FROM (StudySessionParticipants INNER JOIN StudySession ON StudySessionParticipants.sessionID = StudySession.sessionID) INNER JOIN Users ON StudySession.leaderID = Users.userID WHERE StudySessionParticipants.userID = @userID AND StudySessionParticipants.accepted = false ORDER BY StudySession.sessionID ASC";
 
-        using (OleDbConnection conn = new OleDbConnection(cs))
-        using (OleDbCommand cmd = new OleDbCommand(query, conn))
+        using (MySqlConnection conn = new MySqlConnection(cs))
+        using (MySqlCommand cmd = new MySqlCommand(query, conn))
         {
-            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
             conn.Open();
-            using (OleDbDataReader reader = cmd.ExecuteReader())
+            using (MySqlDataReader reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
                 {
@@ -208,12 +413,12 @@ public partial class Default2 : System.Web.UI.Page
     {
         int sessionID = int.Parse(hiddenSessionID.Value);
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string updateQuery = "UPDATE StudySessionParticipants SET replied = true, sessionStatus = 'Accepted' WHERE sessionID = ? AND userID = ?";
-        using (OleDbConnection conn = new OleDbConnection(cs))
-        using (OleDbCommand cmd = new OleDbCommand(updateQuery, conn))
+        string updateQuery = "UPDATE StudySessionParticipants SET accepted = true WHERE sessionID = @sessionID AND userID = @userID";
+        using (MySqlConnection conn = new MySqlConnection(cs))
+        using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn))
         {
-            cmd.Parameters.AddWithValue("?", sessionID);
-            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            cmd.Parameters.AddWithValue("@sessionID", sessionID);
+            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
             conn.Open();
             cmd.ExecuteNonQuery();
         }
@@ -235,19 +440,19 @@ public partial class Default2 : System.Web.UI.Page
 
         if (invite != null)
         {
-            string insertQuery = "INSERT INTO CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (?, ?, ?, ?)";
-            using (OleDbConnection conn = new OleDbConnection(cs))
-            using (OleDbCommand cmd2 = new OleDbCommand(insertQuery, conn))
+            string insertQuery = "INSERT INTO CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (@eventDesc, @eventDate, @tagID, @userID)";
+            using (MySqlConnection conn = new MySqlConnection(cs))
+            using (MySqlCommand cmd2 = new MySqlCommand(insertQuery, conn))
             {
                 string eventDesc = invite.title + " (From: " + invite.leaderUsername + ")";
                 DateTime eventDate = invite.startTime;
                 int tagID = 1;
                 int userID = Convert.ToInt32(Session["userID"]);
 
-                cmd2.Parameters.AddWithValue("?", eventDesc);
-                cmd2.Parameters.AddWithValue("?", eventDate);
-                cmd2.Parameters.AddWithValue("?", tagID);
-                cmd2.Parameters.AddWithValue("?", userID);
+                cmd2.Parameters.AddWithValue("@eventDesc", eventDesc);
+                cmd2.Parameters.AddWithValue("@eventDate", eventDate);
+                cmd2.Parameters.AddWithValue("@tagID", tagID);
+                cmd2.Parameters.AddWithValue("@userID", userID);
 
                 conn.Open();
                 cmd2.ExecuteNonQuery();
@@ -282,16 +487,16 @@ public partial class Default2 : System.Web.UI.Page
     private void LoadUpcomingSessions()
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string query = "SELECT StudySession.sessionID, StudySession.sessionStart FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = ? AND StudySessionParticipants.replied = true AND StudySessionParticipants.sessionStatus = 'Accepted'";
+        string query = "SELECT StudySession.sessionID, StudySession.sessionStart FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = @userID AND StudySessionParticipants.accepted = true";
 
         List<string> jsSessionTimes = new List<string>();
 
-        using (OleDbConnection conn = new OleDbConnection(cs))
-        using (OleDbCommand cmd = new OleDbCommand(query, conn))
+        using (MySqlConnection conn = new MySqlConnection(cs))
+        using (MySqlCommand cmd = new MySqlCommand(query, conn))
         {
-            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
             conn.Open();
-            using (OleDbDataReader reader = cmd.ExecuteReader())
+            using (MySqlDataReader reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
                 {
@@ -331,12 +536,12 @@ public partial class Default2 : System.Web.UI.Page
     {
         int sessionID = int.Parse(hiddenSessionID.Value);
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = ? AND userID = ? AND replied = false";
-        using (OleDbConnection conn = new OleDbConnection(cs))
-        using (OleDbCommand cmd = new OleDbCommand(deleteQuery, conn))
+        string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = @sessionID AND userID = @userID AND accepted = false";
+        using (MySqlConnection conn = new MySqlConnection(cs))
+        using (MySqlCommand cmd = new MySqlCommand(deleteQuery, conn))
         {
-            cmd.Parameters.AddWithValue("?", sessionID);
-            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            cmd.Parameters.AddWithValue("@sessionID", sessionID);
+            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
             conn.Open();
             cmd.ExecuteNonQuery();
         }
@@ -358,217 +563,28 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnJoin_Click(object sender, EventArgs e)
     {
-        if (Session["sessionID"] != null)
+        if (Session["sessionID"] != null && Session["userID"] != null)
         {
-            Response.Redirect("A1400_View-study-session.aspx");
-        }
-    }
+            int sessionID = Convert.ToInt32(Session["sessionID"]);
+            int userID = Convert.ToInt32(Session["userID"]);
 
-    private string GetUserID(string username, string connectionString)
-    {
-        string query = "SELECT userID FROM Users WHERE username = @username";
-        using (OleDbConnection con = new OleDbConnection(connectionString))
-        using (OleDbCommand cmd = new OleDbCommand(query, con))
-        {
-            cmd.Parameters.AddWithValue("@username", username);
-            try
-            {
-                con.Open();
-                object result = cmd.ExecuteScalar();
-                return result != null ? result.ToString() : null;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error getting user ID: " + ex.Message);
-                return null;
-            }
-        }
-    }
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            string updateQuery = "UPDATE StudySessionParticipants SET joined = true WHERE sessionID = @sessionID AND userID = @userID";
 
-    private int GetUserXP(string connectionString, string userID)
-    {
-        string query = "SELECT userXP FROM Users WHERE userID = @userID";
-        int userXP = 0;
-
-        using (OleDbConnection con = new OleDbConnection(connectionString))
-        using (OleDbCommand cmd = new OleDbCommand(query, con))
-        {
-            cmd.Parameters.AddWithValue("@userID", userID);
-            try
+            using (MySqlConnection conn = new MySqlConnection(cs))
+            using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn))
             {
-                con.Open();
-                object result = cmd.ExecuteScalar();
-                if (result != null && int.TryParse(result.ToString(), out userXP))
+                cmd.Parameters.AddWithValue("@sessionID", sessionID);
+                cmd.Parameters.AddWithValue("@userID", userID);
+                conn.Open();
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                if (rowsAffected > 0)
                 {
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error getting user XP: " + ex.Message);
-            }
-        }
-        return userXP;
-    }
-
-    private Tuple<int, int, int> GetLevelInformation(string connectionString, string userID)
-    {
-        int currentLevel = 0;
-        int currentLevelXpAmount = 0;
-        int nextLevelXpAmount = 0;
-        string currentLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
-        using (OleDbConnection con = new OleDbConnection(connectionString))
-        using (OleDbCommand cmdCurrentLevel = new OleDbCommand(currentLevelQuery, con))
-        {
-            cmdCurrentLevel.Parameters.AddWithValue("@userID", userID);
-            con.Open();
-            object result = cmdCurrentLevel.ExecuteScalar();
-            if (result != null && int.TryParse(result.ToString(), out currentLevel))
-            {
-                lblLevelNumber.Text = currentLevel.ToString();
-            }
-            else
-            {
-                lblLevelNumber.Text = "N/A";
-                return Tuple.Create(0, 0, 0);
-            }
-        }
-        string currentLevelXPQuery = "SELECT xpAmount FROM [Level] WHERE levelNum = @currentLevel";
-        using (OleDbConnection con = new OleDbConnection(connectionString))
-        using (OleDbCommand cmdCurrentXP = new OleDbCommand(currentLevelXPQuery, con))
-        {
-            cmdCurrentXP.Parameters.AddWithValue("@currentLevel", currentLevel);
-            con.Open();
-            object result = cmdCurrentXP.ExecuteScalar();
-            if (result != null && result != DBNull.Value)
-            {
-                currentLevelXpAmount = Convert.ToInt32(result);
-            }
-        }
-
-        string nextLevelXPQuery = "SELECT xpAmount FROM [Level] WHERE levelNum = @nextLevel";
-        using (OleDbConnection con = new OleDbConnection(connectionString))
-        using (OleDbCommand cmdNextXP = new OleDbCommand(nextLevelXPQuery, con))
-        {
-            cmdNextXP.Parameters.AddWithValue("@nextLevel", currentLevel + 1);
-            con.Open();
-            object result = cmdNextXP.ExecuteScalar();
-            if (result != null && result != DBNull.Value)
-            {
-                nextLevelXpAmount = Convert.ToInt32(result);
-            }
-            else
-            {
-                nextLevelXpAmount = currentLevelXpAmount;//when user reaches level 25
-            }
-        }
-
-        return Tuple.Create(currentLevel, currentLevelXpAmount, nextLevelXpAmount);
-    }
-
-    private void CalculateXPProgressBar(int userXP, int currentLevelXpAmount, int nextLevelXpAmount)
-    {
-        if (nextLevelXpAmount <= currentLevelXpAmount)
-        {
-            xpProgressBar.Style["width"] = "100%";
-            lblXPPercentage.Text = "100%";
-            return;
-        }
-        int xpToNextLevel = nextLevelXpAmount - currentLevelXpAmount;
-        int xpGainedInCurrentLevel = userXP - currentLevelXpAmount;
-
-        if (xpToNextLevel > 0)
-        {
-            double progress = (double)xpGainedInCurrentLevel / xpToNextLevel * 100;
-            if (progress < 0) progress = 0;
-            if (progress > 100) progress = 100;
-
-            xpProgressBar.Style["width"] = progress.ToString("F0") + "%";
-            lblXPPercentage.Text = progress.ToString("F0") + "%";
-        }
-        else
-        {
-            xpProgressBar.Style["width"] = "100%";
-            lblXPPercentage.Text = "100%";
-        }
-    }
-
-    private void GetUserStats(string connectionString, string userID)
-    {
-        string query = "SELECT userCoinCount FROM Users WHERE userID = @userID";
-
-        using (OleDbConnection con = new OleDbConnection(connectionString))
-        using (OleDbCommand cmd = new OleDbCommand(query, con))
-        {
-            cmd.Parameters.AddWithValue("@userID", userID);
-
-            con.Open();
-            using (OleDbDataReader reader = cmd.ExecuteReader())
-            {
-                if (reader.Read())
-                {
-                    lblPaws.Text = reader["userCoinCount"] != DBNull.Value ? reader["userCoinCount"].ToString() : "0";
-                }
-                else
-                {
-                    lblPaws.Text = "N/A";
+                    Response.Redirect("A1400_View-study-session.aspx");
                 }
             }
         }
     }
-
-    private void GetUserProfileIcon(string connectionString, string userID)
-    {
-        string query = "SELECT iconNum FROM Users WHERE userID = @userID";
-
-        using (OleDbConnection con = new OleDbConnection(connectionString))
-        using (OleDbCommand cmd = new OleDbCommand(query, con))
-        {
-            cmd.Parameters.AddWithValue("@userID", userID);
-            try
-            {
-                con.Open();
-                object result = cmd.ExecuteScalar();
-                int iconNum;
-                if (result != null && int.TryParse(result.ToString(), out iconNum))
-                {
-                    string iconPath = GetProfileImagePath(iconNum);
-                    string circleClass = GetCircleColorClass(iconNum);
-                    profilePet.ImageUrl = iconPath;
-                    profileCircle.Attributes["class"] = "profileCircle " + circleClass;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error getting profile icon: " + ex.Message);
-            }
-        }
-    }
-
-    private string GetProfileImagePath(int iconNum)
-    {
-        switch (iconNum)
-        {
-            case 1: return "~/Images/ProfilePictures/CatPfp.png";
-            case 2: return "~/Images/ProfilePictures/DogPfp.png";
-            case 3: return "~/Images/ProfilePictures/BunnyPfp.png";
-            case 4: return "~/Images/ProfilePictures/CowPfp.png";
-            case 5: return "~/Images/ProfilePictures/UnicornPfp.png";
-            default: return "~/Images/ProfilePictures/CatPfp.png";
-        }
-    }
-
-    private string GetCircleColorClass(int iconNum)
-    {
-        switch (iconNum)
-        {
-            case 1: return "circle-cat";
-            case 2: return "circle-dog";
-            case 3: return "circle-bunny";
-            case 4: return "circle-cow";
-            case 5: return "circle-unicorn";
-            default: return "circle-cat";
-        }
-    }
-    //please stop copying up until here
-    //this seems to be the end
+    // end: notification bell code
 }

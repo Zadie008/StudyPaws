@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.Data.OleDb;
 using System.Drawing;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using MySql.Data.MySqlClient;
 
 public partial class A200_View_timer : System.Web.UI.Page
 {
@@ -39,25 +39,7 @@ public partial class A200_View_timer : System.Web.UI.Page
         ViewState["SelectedFilter"] = "All";
         ddlFilter.SelectedValue = "All";
         LoadTasks();
-
-        //if (!IsPostBack)
-        //{
-        //    ViewState["ToDoListVisible"] = true;
-        //    toggleToDoList.ImageUrl = "~/Icons/icons8-double-right-white-96.png";
-        //    ViewState["SelectedFilter"] = "All";
-        //    ddlFilter.SelectedValue = "All";
-        //    LoadTasks();
-        //}
-        //else
-        //{
-        //    bool isToDoVisible = ViewState["ToDoListVisible"] != null && (bool)ViewState["ToDoListVisible"];
-        //    toggleToDoList.ImageUrl = isToDoVisible ? "~/Icons/icons8-double-right-white-96.png" : "~/Icons/icons8-double-left-white-96.png";
-        //    LoadTasks();
-        //}
     }
-
-    // COMPLETE TIMER (COUNTDOWN ENDS) - for Zadie~~~~~~~~~~~~~~~~~~~~
-
 
     // EDIT TIMER (ADD MINUTES)
     [System.Web.Services.WebMethod]
@@ -73,12 +55,12 @@ public partial class A200_View_timer : System.Web.UI.Page
             int timerID = Convert.ToInt32(HttpContext.Current.Session["timerID"]);
 
             string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            using (OleDbConnection con = new OleDbConnection(connectionString))
+            using (MySqlConnection con = new MySqlConnection(connectionString))
             {
                 con.Open();
-                OleDbCommand cmd = new OleDbCommand("UPDATE Timer SET timerDuration = ? WHERE timerID = ?", con);
-                cmd.Parameters.AddWithValue("?", newDuration);
-                cmd.Parameters.AddWithValue("?", timerID);
+                MySqlCommand cmd = new MySqlCommand("UPDATE Timer SET timerDuration = @duration WHERE timerID = @timerID", con);
+                cmd.Parameters.AddWithValue("@duration", newDuration);
+                cmd.Parameters.AddWithValue("@timerID", timerID);
                 cmd.ExecuteNonQuery();
             }
 
@@ -98,12 +80,12 @@ public partial class A200_View_timer : System.Web.UI.Page
             int thisTimerID = Convert.ToInt32(Session["timerID"]);
 
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            using (OleDbConnection con2 = new OleDbConnection(cs))
+            using (MySqlConnection con2 = new MySqlConnection(cs))
             {
-                string deleteCommand = "DELETE FROM [Timer] WHERE [timerID] = ?";
-                using (OleDbCommand cmd = new OleDbCommand(deleteCommand, con2))
+                string deleteCommand = "DELETE FROM Timer WHERE timerID = @timerID";
+                using (MySqlCommand cmd = new MySqlCommand(deleteCommand, con2))
                 {
-                    cmd.Parameters.AddWithValue("?", thisTimerID);
+                    cmd.Parameters.AddWithValue("@timerID", thisTimerID);
 
                     con2.Open();
                     int code = cmd.ExecuteNonQuery();
@@ -111,11 +93,6 @@ public partial class A200_View_timer : System.Web.UI.Page
 
                     if (code == 1)
                     {
-                        //Session["timerID"] = null;
-                        //Session["timerTitle"] = null;
-                        //Session["timerTag"] = null;
-                        //Session["timerDuration"] = null;
-
                         Response.Redirect("Default.aspx");
                     }
                 }
@@ -135,6 +112,7 @@ public partial class A200_View_timer : System.Web.UI.Page
             ViewState["FilterVisible"] = value;
         }
     }
+
     private void LoadTasks()
     {
         string filter = ddlFilter.SelectedValue ?? "All";
@@ -150,22 +128,24 @@ public partial class A200_View_timer : System.Web.UI.Page
         DataTable dt = new DataTable();
 
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection conn = new OleDbConnection(cs))
+        using (MySqlConnection conn = new MySqlConnection(cs))
         {
             conn.Open();
-            string sql = "SELECT * FROM ToDoListTask WHERE userID = ? " + whereClause + " ORDER BY taskStatus DESC";
-            OleDbCommand cmd = new OleDbCommand(sql, conn);
-            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            string sql = "SELECT * FROM ToDoListTask WHERE userID = @userID " + whereClause + " ORDER BY taskStatus DESC";
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
             dt.Load(cmd.ExecuteReader());
         }
 
         rptTasks.DataSource = dt;
         rptTasks.DataBind();
     }
+
     protected void txtNewTask_TextChanged(object sender, EventArgs e)
     {
         btnAdd_Click(sender, e);
     }
+
     protected void btnAdd_Click(object sender, EventArgs e)
     {
         string taskDesc = txtNewTask.Text.Trim();
@@ -173,13 +153,13 @@ public partial class A200_View_timer : System.Web.UI.Page
             return;
 
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection conn = new OleDbConnection(cs))
+        using (MySqlConnection conn = new MySqlConnection(cs))
         {
             conn.Open();
-            string sql = "INSERT into [ToDoListTask] ([taskDesc], [taskStatus], [userID]) VALUES (?, False, ?)";
-            OleDbCommand cmd = new OleDbCommand(sql, conn);
-            cmd.Parameters.AddWithValue("?", taskDesc);
-            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            string sql = "INSERT INTO ToDoListTask (taskDesc, taskStatus, userID) VALUES (@desc, False, @userID)";
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@desc", taskDesc);
+            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
             cmd.ExecuteNonQuery();
         }
 
@@ -194,12 +174,12 @@ public partial class A200_View_timer : System.Web.UI.Page
         if (e.CommandName == "Toggle")
         {
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            using (OleDbConnection conn = new OleDbConnection(cs))
+            using (MySqlConnection conn = new MySqlConnection(cs))
             {
                 conn.Open();
-                string query = "UPDATE ToDoListTask SET taskStatus = NOT taskStatus WHERE taskID = ?";
-                OleDbCommand cmd = new OleDbCommand(query, conn);
-                cmd.Parameters.AddWithValue("?", taskID);
+                string query = "UPDATE ToDoListTask SET taskStatus = NOT taskStatus WHERE taskID = @taskID";
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@taskID", taskID);
                 cmd.ExecuteNonQuery();
             }
             Response.Redirect(Request.RawUrl);
@@ -207,12 +187,12 @@ public partial class A200_View_timer : System.Web.UI.Page
         else if (e.CommandName == "Delete")
         {
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            using (OleDbConnection conn = new OleDbConnection(cs))
+            using (MySqlConnection conn = new MySqlConnection(cs))
             {
                 conn.Open();
-                string query = "DELETE FROM ToDoListTask WHERE taskID = ?";
-                OleDbCommand cmd = new OleDbCommand(query, conn);
-                cmd.Parameters.AddWithValue("?", taskID);
+                string query = "DELETE FROM ToDoListTask WHERE taskID = @taskID";
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@taskID", taskID);
                 cmd.ExecuteNonQuery();
             }
             Response.Redirect(Request.RawUrl);
@@ -230,13 +210,13 @@ public partial class A200_View_timer : System.Web.UI.Page
                 return;
 
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            using (OleDbConnection conn = new OleDbConnection(cs))
+            using (MySqlConnection conn = new MySqlConnection(cs))
             {
                 conn.Open();
-                string query = "UPDATE ToDoListTask SET taskDesc = ? WHERE taskID = ?";
-                OleDbCommand cmd = new OleDbCommand(query, conn);
-                cmd.Parameters.AddWithValue("?", newDesc);
-                cmd.Parameters.AddWithValue("?", taskID);
+                string query = "UPDATE ToDoListTask SET taskDesc = @desc WHERE taskID = @taskID";
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@desc", newDesc);
+                cmd.Parameters.AddWithValue("@taskID", taskID);
                 cmd.ExecuteNonQuery();
             }
             ViewState["EditingTaskID"] = null;
@@ -250,11 +230,13 @@ public partial class A200_View_timer : System.Web.UI.Page
         ViewState["SelectedFilter"] = selectedFilter;
         LoadTasks();
     }
+
     protected void toDoFilterBtn_Click(object sender, EventArgs e)
     {
         IsToDoFilterVisible = !IsToDoFilterVisible;
         ddlFilter.Visible = IsToDoFilterVisible;
     }
+
     protected void rptTasks_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
         if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
@@ -267,7 +249,6 @@ public partial class A200_View_timer : System.Web.UI.Page
             if (txtDesc != null && editBtn != null && saveBtn != null && taskIDHidden != null)
             {
                 string editingTaskID = Convert.ToString(ViewState["EditingTaskID"]);
-
 
                 if (editingTaskID == taskIDHidden.Value)
                 {
@@ -285,24 +266,18 @@ public partial class A200_View_timer : System.Web.UI.Page
             }
         }
     }
-    protected void toggleToDoList_Click(object sender, ImageClickEventArgs e) 
+
+    protected void toggleToDoList_Click(object sender, ImageClickEventArgs e)
     {
         if (toDoListPanel.Visible == true)
         {
             toDoListPanel.Visible = false;
             toggleToDoList.ImageUrl = "~/Icons/icons8-double-left-white-96.png";
         }
-        else if(toDoListPanel.Visible == false)
+        else if (toDoListPanel.Visible == false)
         {
-            toDoListPanel.Visible= true;
+            toDoListPanel.Visible = true;
             toggleToDoList.ImageUrl = "~/Icons/icons8-double-right-white-96.png";
         }
-        //bool isToDoVisible = ViewState["ToDoListVisible"] != null && (bool)ViewState["ToDoListVisible"];
-
-        //toDoListPanel.Visible = !isToDoVisible;
-        //ViewState["ToDoListVisible"] = !isToDoVisible;
-
-        //toggleToDoList.ImageUrl = !isToDoVisible ? "~/Icons/icons8-double-right-white-96.png" : "~/Icons/icons8-double-left-white-96.png";
     }
-
 }

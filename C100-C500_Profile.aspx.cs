@@ -1,24 +1,19 @@
 ﻿using System;
-using System.Activities.Expressions;
-using System.Activities.Statements;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.OleDb;
+using System.Data;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Security.Policy;
-using System.ServiceModel.Activities;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using MySql.Data.MySqlClient;
 
 public partial class Default2 : System.Web.UI.Page
 {
-
     protected void Page_Load(object sender, EventArgs e)
     {
-        string username = ""; 
+        string username = "";
 
         if (Session["Username"] != null)
         {
@@ -33,14 +28,14 @@ public partial class Default2 : System.Web.UI.Page
             if (string.IsNullOrEmpty(username)) return;
 
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            using (OleDbConnection con = new OleDbConnection(cs))
+            using (MySqlConnection con = new MySqlConnection(cs))
             {
-                string query = "SELECT * FROM [Users] WHERE [username] = ?";
-                OleDbCommand cmd = new OleDbCommand(query, con);
-                cmd.Parameters.AddWithValue("?", username);
+                string query = "SELECT * FROM Users WHERE username = @username";
+                MySqlCommand cmd = new MySqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@username", username);
 
                 con.Open();
-                OleDbDataReader reader = cmd.ExecuteReader();
+                MySqlDataReader reader = cmd.ExecuteReader();
                 if (reader.Read())
                 {
                     txtUsername.Text = reader["username"].ToString();
@@ -75,10 +70,10 @@ public partial class Default2 : System.Web.UI.Page
         btnSaveUser.Visible = true;
         btnCancelUser.Visible = true;
     }
-   
+
     protected void btnLogout_Click(object sender, EventArgs e)
     {
-      pnlLogout.Visible = true;
+        pnlLogout.Visible = true;
     }
     private string originalEmail
     {
@@ -104,7 +99,6 @@ public partial class Default2 : System.Web.UI.Page
         btnEditEmail.Visible = false;
         btnSaveEmail.Visible = true;
         btnCancelEmail.Visible = true;
-       
     }
 
     protected void btnCancelEmail_Click(object sender, EventArgs e)
@@ -127,12 +121,12 @@ public partial class Default2 : System.Web.UI.Page
         if (string.IsNullOrEmpty(username)) return;
 
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection con = new OleDbConnection(cs))
+        using (MySqlConnection con = new MySqlConnection(cs))
         {
-            string query = "UPDATE [Users] SET [email] = ? WHERE [username] = ?";
-            OleDbCommand cmd = new OleDbCommand(query, con);
-            cmd.Parameters.AddWithValue("?", newEmail);
-            cmd.Parameters.AddWithValue("?", username);
+            string query = "UPDATE Users SET email = @email WHERE username = @username";
+            MySqlCommand cmd = new MySqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@email", newEmail);
+            cmd.Parameters.AddWithValue("@username", username);
 
             con.Open();
             cmd.ExecuteNonQuery();
@@ -147,6 +141,7 @@ public partial class Default2 : System.Web.UI.Page
         originalEmail = newEmail;
         emailBadge();
     }
+
     public void emailBadge() //user earns email badge
     {
         string username = "";
@@ -155,17 +150,18 @@ public partial class Default2 : System.Web.UI.Page
             username = Session["Username"].ToString();
         }
         if (string.IsNullOrEmpty(username)) return;
+
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection con = new OleDbConnection(cs))
+        using (MySqlConnection con = new MySqlConnection(cs))
         {
             con.Open();
-            string getUserQuery = "SELECT userID, email FROM [Users] WHERE [username] = ?";
+            string getUserQuery = "SELECT userID, email FROM Users WHERE username = @username";
             int userID = -1;
             string userEmail = null;
-            using (OleDbCommand getUserCmd = new OleDbCommand(getUserQuery, con))
+            using (MySqlCommand getUserCmd = new MySqlCommand(getUserQuery, con))
             {
-                getUserCmd.Parameters.AddWithValue("?", username);
-                OleDbDataReader reader = getUserCmd.ExecuteReader();
+                getUserCmd.Parameters.AddWithValue("@username", username);
+                MySqlDataReader reader = getUserCmd.ExecuteReader();
                 if (reader.Read())
                 {
                     userID = Convert.ToInt32(reader["userID"]);
@@ -173,24 +169,26 @@ public partial class Default2 : System.Web.UI.Page
                 }
                 reader.Close();
             }
+
             if (userID != -1 && !string.IsNullOrEmpty(userEmail))
             {
-                string checkBadgeQuery = "SELECT COUNT(*) FROM [UserBadge] WHERE [userID] = ? AND [badgeID] = ?";
+                string checkBadgeQuery = "SELECT COUNT(*) FROM UserBadge WHERE userID = @userID AND badgeID = @badgeID";
                 int badgeCount = 0;
-                using (OleDbCommand checkBadgeCmd = new OleDbCommand(checkBadgeQuery, con))
+                using (MySqlCommand checkBadgeCmd = new MySqlCommand(checkBadgeQuery, con))
                 {
-                    checkBadgeCmd.Parameters.AddWithValue("?", userID);
-                    checkBadgeCmd.Parameters.AddWithValue("?", 15);
-                    badgeCount = (int)checkBadgeCmd.ExecuteScalar();
+                    checkBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                    checkBadgeCmd.Parameters.AddWithValue("@badgeID", 15);
+                    badgeCount = Convert.ToInt32(checkBadgeCmd.ExecuteScalar());
                 }
+
                 if (badgeCount == 0)
                 {
-                    string insertBadgeQuery = "INSERT INTO [UserBadge] ([userID], [badgeID], [badgeType]) VALUES (?, ?, ?)";
-                    using (OleDbCommand insertBadgeCmd = new OleDbCommand(insertBadgeQuery, con))
+                    string insertBadgeQuery = "INSERT INTO UserBadge (userID, badgeID, badgeType) VALUES (@userID, @badgeID, @badgeType)";
+                    using (MySqlCommand insertBadgeCmd = new MySqlCommand(insertBadgeQuery, con))
                     {
-                        insertBadgeCmd.Parameters.AddWithValue("?", userID);
-                        insertBadgeCmd.Parameters.AddWithValue("?", 15);
-                        insertBadgeCmd.Parameters.AddWithValue("?", "Gold");
+                        insertBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                        insertBadgeCmd.Parameters.AddWithValue("@badgeID", 15);
+                        insertBadgeCmd.Parameters.AddWithValue("@badgeType", "Gold");
                         insertBadgeCmd.ExecuteNonQuery();
                     }
                 }
@@ -228,16 +226,15 @@ public partial class Default2 : System.Web.UI.Page
         if (string.IsNullOrEmpty(username)) return;
 
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection con = new OleDbConnection(cs))
+        using (MySqlConnection con = new MySqlConnection(cs))
         {
-            string query = "UPDATE [Users] SET [password] = ? WHERE [username] = ?";
-            OleDbCommand cmd = new OleDbCommand(query, con);
+            string query = "UPDATE Users SET password = @password WHERE username = @username";
+            MySqlCommand cmd = new MySqlCommand(query, con);
 
-           
             string hashedPassword = FormsAuthentication.HashPasswordForStoringInConfigFile(newPassword, "SHA1");
 
-            cmd.Parameters.AddWithValue("?", hashedPassword);
-            cmd.Parameters.AddWithValue("?", username);
+            cmd.Parameters.AddWithValue("@password", hashedPassword);
+            cmd.Parameters.AddWithValue("@username", username);
 
             con.Open();
             cmd.ExecuteNonQuery();
@@ -249,7 +246,7 @@ public partial class Default2 : System.Web.UI.Page
         btnSavePass.Visible = false;
         btnCancelPass.Visible = false;
 
-        originalPass = newPassword; 
+        originalPass = newPassword;
     }
 
     protected void btnSaveUser_Click(object sender, EventArgs e)
@@ -263,12 +260,12 @@ public partial class Default2 : System.Web.UI.Page
         if (string.IsNullOrEmpty(currentUsername)) return;
 
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection con = new OleDbConnection(cs))
+        using (MySqlConnection con = new MySqlConnection(cs))
         {
-            string query = "UPDATE [Users] SET [username] = ? WHERE [username] = ?";
-            OleDbCommand cmd = new OleDbCommand(query, con);
-            cmd.Parameters.AddWithValue("?", newUsername);
-            cmd.Parameters.AddWithValue("?", currentUsername);
+            string query = "UPDATE Users SET username = @newUsername WHERE username = @currentUsername";
+            MySqlCommand cmd = new MySqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@newUsername", newUsername);
+            cmd.Parameters.AddWithValue("@currentUsername", currentUsername);
 
             con.Open();
             cmd.ExecuteNonQuery();
@@ -292,6 +289,7 @@ public partial class Default2 : System.Web.UI.Page
         btnSavePass.Visible = true;
         btnCancelPass.Visible = true;
     }
+
     protected void btnEditUser_Click(object sender, EventArgs e)
     {
         txtUsername.ReadOnly = false;
@@ -299,9 +297,10 @@ public partial class Default2 : System.Web.UI.Page
         btnSaveUser.Visible = true;
         btnCancelUser.Visible = true;
     }
+
     protected void txtPassword_TextChanged(object sender, EventArgs e)
     {
-        
+        // Empty event handler
     }
 
     protected void btnChangeIcon_Click(object sender, EventArgs e)
@@ -313,6 +312,7 @@ public partial class Default2 : System.Web.UI.Page
     {
         Response.Redirect("Landing-page.aspx");
     }
+
     protected void deleteImageButton_Click(object sender, ImageClickEventArgs e)
     {
         pnlDeleteProfile.Visible = true;
@@ -324,7 +324,6 @@ public partial class Default2 : System.Web.UI.Page
         if (Session["Username"] != null)
         {
             username = Session["Username"].ToString();
-
         }
 
         if (string.IsNullOrEmpty(username))
@@ -334,31 +333,25 @@ public partial class Default2 : System.Web.UI.Page
         }
 
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection con = new OleDbConnection(cs))
+        using (MySqlConnection con = new MySqlConnection(cs))
         {
             con.Open();
-            OleDbTransaction transaction = null;
+            MySqlTransaction transaction = null;
 
             try
             {
                 transaction = con.BeginTransaction();
-                Response.Write("Debug: Transaction started.<br/>");
 
                 int userID = -1;
-                string getUserIDQuery = "SELECT userID FROM [Users] WHERE [username] = ?";
-                using (OleDbCommand cmdGetID = new OleDbCommand(getUserIDQuery, con, transaction))
+                string getUserIDQuery = "SELECT userID FROM Users WHERE username = @username";
+                using (MySqlCommand cmdGetID = new MySqlCommand(getUserIDQuery, con, transaction))
                 {
-                    cmdGetID.Parameters.AddWithValue("?", username);
+                    cmdGetID.Parameters.AddWithValue("@username", username);
 
                     object result = cmdGetID.ExecuteScalar();
                     if (result != null && result != DBNull.Value)
                     {
                         userID = Convert.ToInt32(result);
-                        Response.Write("Debug: Retrieved UserID: " + userID.ToString() + "<br/>");
-                    }
-                    else
-                    {
-                        Response.Write("Debug: UserID not found for username: " + username + "<br/>");
                     }
                 }
 
@@ -369,110 +362,40 @@ public partial class Default2 : System.Web.UI.Page
                     return;
                 }
 
-                // Delete FriendsList (as userIDfrom)
-                string deleteFriendsListQuery1 = "DELETE FROM [FriendsList] WHERE [userIDfrom] = ?";
-                using (OleDbCommand cmd = new OleDbCommand(deleteFriendsListQuery1, con, transaction))
+                // Delete related records in all tables
+                string[] deleteQueries = new string[]
                 {
-                    cmd.Parameters.AddWithValue("?", userID);
-                    int rows = cmd.ExecuteNonQuery();
-                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from FriendsList (userIDfrom).<br/>");
+                    "DELETE FROM FriendsList WHERE userIDfrom = @userID",
+                    "DELETE FROM FriendsList WHERE userIDto = @userID",
+                    "DELETE FROM FriendRequest WHERE userID = @userID",
+                    "DELETE FROM UserBadge WHERE userID = @userID",
+                    "DELETE FROM UserPets WHERE userID = @userID",
+                    "DELETE FROM CurrentLevel WHERE userID = @userID",
+                    "DELETE FROM CalendarEvent WHERE userID = @userID",
+                    "DELETE FROM StudySessionParticipants WHERE userID = @userID",
+                    "DELETE FROM Timer WHERE userID = @userID",
+                    "DELETE FROM ToDoListTask WHERE userID = @userID"
+                };
+
+                foreach (string query in deleteQueries)
+                {
+                    using (MySqlCommand cmd = new MySqlCommand(query, con, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("@userID", userID);
+                        cmd.ExecuteNonQuery();
+                    }
                 }
 
-                // Delete FriendsList (as userIDto)
-                string deleteFriendsListQuery2 = "DELETE FROM [FriendsList] WHERE [userIDto] = ?";
-                using (OleDbCommand cmd = new OleDbCommand(deleteFriendsListQuery2, con, transaction))
+                // Finally delete the user
+                string deleteUserQuery = "DELETE FROM Users WHERE userID = @userID";
+                using (MySqlCommand cmdDeleteUser = new MySqlCommand(deleteUserQuery, con, transaction))
                 {
-                    cmd.Parameters.AddWithValue("?", userID);
-                    int rows = cmd.ExecuteNonQuery();
-                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from FriendsList (userIDto).<br/>");
-                }
-
-                // Delete FriendRequest (as userID)
-                string deleteFriendRequestQuery1 = "DELETE FROM [FriendRequest] WHERE [userID] = ?";
-                using (OleDbCommand cmd = new OleDbCommand(deleteFriendRequestQuery1, con, transaction))
-                {
-                    cmd.Parameters.AddWithValue("?", userID);
-                    int rows = cmd.ExecuteNonQuery();
-                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from FriendRequest (userID).<br/>");
-                }
-
-                // Delete UserBadge
-                string deleteUserBadgeQuery = "DELETE FROM [UserBadge] WHERE [userID] = ?";
-                using (OleDbCommand cmd = new OleDbCommand(deleteUserBadgeQuery, con, transaction))
-                {
-                    cmd.Parameters.AddWithValue("?", userID);
-                    int rows = cmd.ExecuteNonQuery();
-                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from UserBadge.<br/>");
-                }
-
-                // Delete UserPets
-                string deleteUserPetsQuery = "DELETE FROM [UserPets] WHERE [userID] = ?";
-                using (OleDbCommand cmd = new OleDbCommand(deleteUserPetsQuery, con, transaction))
-                {
-                    cmd.Parameters.AddWithValue("?", userID);
-                    int rows = cmd.ExecuteNonQuery();
-                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from UserPets.<br/>");
-                }
-
-                // Delete CurrentLevel
-                string deleteCurrentLevelQuery = "DELETE FROM [CurrentLevel] WHERE [userID] = ?";
-                using (OleDbCommand cmd = new OleDbCommand(deleteCurrentLevelQuery, con, transaction))
-                {
-                    cmd.Parameters.AddWithValue("?", userID);
-                    int rows = cmd.ExecuteNonQuery();
-                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from CurrentLevel.<br/>");
-                }
-
-                // Delete CalendarEvent
-                string deleteCalendarEventQuery = "DELETE FROM [CalendarEvent] WHERE [userID] = ?";
-                using (OleDbCommand cmd = new OleDbCommand(deleteCalendarEventQuery, con, transaction))
-                {
-                    cmd.Parameters.AddWithValue("?", userID);
-                    int rows = cmd.ExecuteNonQuery();
-                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from CalendarEvent.<br/>");
-                }
-
-                // Delete  StudySessionParticipants
-                string deleteStudySessionParticipationQuery = "DELETE FROM [StudySessionParticipants] WHERE [userID] = ?";
-                using (OleDbCommand cmd = new OleDbCommand(deleteStudySessionParticipationQuery, con, transaction))
-                {
-                    cmd.Parameters.AddWithValue("?", userID);
-                    int rows = cmd.ExecuteNonQuery();
-                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from StudySessionParticipa...<br/>");
-                }
-
-                // Delete Timer
-                string deleteTimerQuery = "DELETE FROM [Timer] WHERE [userID] = ?";
-                using (OleDbCommand cmd = new OleDbCommand(deleteTimerQuery, con, transaction))
-                {
-                    cmd.Parameters.AddWithValue("?", userID);
-                    int rows = cmd.ExecuteNonQuery();
-                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from Timer.<br/>");
-                }
-
-                // Delete ToDoListTask
-                string deleteToDoListTaskQuery = "DELETE FROM [ToDoListTask] WHERE [userID] = ?";
-                using (OleDbCommand cmd = new OleDbCommand(deleteToDoListTaskQuery, con, transaction))
-                {
-                    cmd.Parameters.AddWithValue("?", userID);
-                    int rows = cmd.ExecuteNonQuery();
-                    Response.Write("Debug: Deleted " + rows.ToString() + " rows from ToDoListTask.<br/>");
-                }
-
-                //  delete  Users
-                string deleteUserQuery = "DELETE FROM [Users] WHERE [userID] = ?";
-                using (OleDbCommand cmdDeleteUser = new OleDbCommand(deleteUserQuery, con, transaction))
-                {
-                    cmdDeleteUser.Parameters.AddWithValue("?", userID);
+                    cmdDeleteUser.Parameters.AddWithValue("@userID", userID);
 
                     int rowsAffected = cmdDeleteUser.ExecuteNonQuery();
-                    Response.Write("Debug: Deleted " + rowsAffected.ToString() + " rows from Users table.<br/>");
-
                     if (rowsAffected > 0)
                     {
                         transaction.Commit();
-                        Response.Write("Debug: Transaction committed successfully.<br/>");
-
                         Session.Clear();
                         Session.Abandon();
                         FormsAuthentication.SignOut();
@@ -488,12 +411,9 @@ public partial class Default2 : System.Web.UI.Page
             catch (Exception ex)
             {
                 Response.Write("<script>alert('An error occurred during profile deletion: " + ex.Message.Replace("'", "\\'") + "');</script>");
-                Response.Write("Debug: Full Error: " + ex.ToString() + "<br/>");
-
                 if (transaction != null)
                 {
                     transaction.Rollback();
-                    Response.Write("Debug: Transaction rolled back due to error.<br/>");
                 }
             }
             finally
@@ -501,7 +421,6 @@ public partial class Default2 : System.Web.UI.Page
                 if (con.State == System.Data.ConnectionState.Open)
                 {
                     con.Close();
-                    Response.Write("Debug: Connection closed.<br/>");
                 }
             }
         }
@@ -518,15 +437,16 @@ public partial class Default2 : System.Web.UI.Page
         Session.Abandon();
         Response.Redirect("Landing-page.aspx");
     }
+
     private void LoadUserProfileIcon(string username)
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
-        using (OleDbConnection con = new OleDbConnection(cs))
+        using (MySqlConnection con = new MySqlConnection(cs))
         {
-            string query = "SELECT iconNum FROM Users WHERE username = ?";
-            OleDbCommand cmd = new OleDbCommand(query, con);
-            cmd.Parameters.AddWithValue("?", username);
+            string query = "SELECT iconNum FROM Users WHERE username = @username";
+            MySqlCommand cmd = new MySqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@username", username);
 
             try
             {
@@ -554,6 +474,7 @@ public partial class Default2 : System.Web.UI.Page
             }
         }
     }
+
     private string GetProfileImagePath(int iconNum)
     {
         switch (iconNum)
@@ -566,6 +487,7 @@ public partial class Default2 : System.Web.UI.Page
             default: return "~/Images/ProfilePictures/CatPfp.png";
         }
     }
+
     private string GetCircleClass(int iconNum)
     {
         switch (iconNum)
@@ -578,36 +500,4 @@ public partial class Default2 : System.Web.UI.Page
             default: return "circle-cat";
         }
     }
-
-   
-
-    //protected void btnPress_Click(object sender, EventArgs e)
-    //{
-    //    string username = Session["Username"] != null ? Session["Username"].ToString() : "";
-
-    //    if (string.IsNullOrEmpty(username))
-    //    {
-    //        Response.Write("<script>alert('Error: User session not found.');</script>");
-    //        return;
-    //    }
-
-    //    string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-    //    using (OleDbConnection con = new OleDbConnection(cs))
-    //    {
-    //            con.Open();
-    //            string selectQuery = "SELECT userXP FROM [Users] WHERE [username] = ?";
-    //            OleDbCommand selectCmd = new OleDbCommand(selectQuery, con);
-    //            selectCmd.Parameters.AddWithValue("?", username);
-
-    //            object xpObj = selectCmd.ExecuteScalar();
-    //            int currentXP = (xpObj != null && xpObj != DBNull.Value) ? Convert.ToInt32(xpObj) : 0;
-    //            int newXP = currentXP + 10;
-    //            // Update XP
-    //            string updateQuery = "UPDATE [Users] SET userXP = ? WHERE username = ?";
-    //            OleDbCommand updateCmd = new OleDbCommand(updateQuery, con);
-    //            updateCmd.Parameters.AddWithValue("?", newXP);
-    //            updateCmd.Parameters.AddWithValue("?", username);
-    //            updateCmd.ExecuteNonQuery();
-    //    }
-    //}
 }

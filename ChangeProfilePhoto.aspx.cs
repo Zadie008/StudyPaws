@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.OleDb;
 using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -47,13 +48,13 @@ public partial class Default2 : System.Web.UI.Page
                 {
                     string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
-                    using (OleDbConnection con = new OleDbConnection(cs))
+                    using (MySqlConnection con = new MySqlConnection(cs))
                     {
-                        string query = "UPDATE [Users] SET [iconNum] = ? WHERE [userID] = ?";
-                        using (OleDbCommand cmd = new OleDbCommand(query, con))
+                        string query = "UPDATE Users SET iconNum = ?iconNum WHERE userID = ?userID";
+                        using (MySqlCommand cmd = new MySqlCommand(query, con))
                         {
-                            cmd.Parameters.AddWithValue("?", iconNum);
-                            cmd.Parameters.AddWithValue("?", userId);
+                            cmd.Parameters.AddWithValue("?iconNum", iconNum);
+                            cmd.Parameters.AddWithValue("?userID", userId);
                             con.Open();
                             int rowsAffected = cmd.ExecuteNonQuery();
                             con.Close();
@@ -130,12 +131,12 @@ public partial class Default2 : System.Web.UI.Page
 
     private void GetUserProfileIcon(string connectionString, string userID)
     {
-        string query = "SELECT iconNum FROM Users WHERE userID = ?";
+        string query = "SELECT iconNum FROM Users WHERE userID = ?userID";
 
-        using (OleDbConnection con = new OleDbConnection(connectionString))
-        using (OleDbCommand cmd = new OleDbCommand(query, con))
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        using (MySqlCommand cmd = new MySqlCommand(query, con))
         {
-            cmd.Parameters.AddWithValue("@userID", userID);
+            cmd.Parameters.AddWithValue("?userID", userID);
             try
             {
                 con.Open();

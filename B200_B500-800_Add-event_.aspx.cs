@@ -1,7 +1,7 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.OleDb;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -70,15 +70,15 @@ public partial class Default2 : System.Web.UI.Page
         int userID = Convert.ToInt32(Session["userID"]);
 
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection conn = new OleDbConnection(cs))
+        using (MySqlConnection conn = new MySqlConnection(cs))
         {
             conn.Open();
-            string sql = "INSERT into [CalendarEvent] ([eventDesc], [eventDate], [tagID], [userID]) VALUES (?, ?, ?, ?)";
-            OleDbCommand cmd = new OleDbCommand(sql, conn);
-            cmd.Parameters.AddWithValue("?", desc);
-            cmd.Parameters.AddWithValue("?", DateTime.Today);
-            cmd.Parameters.AddWithValue("?", tag);
-            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            string sql = "INSERT into CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (@desc, @eventDate, @tagID, @userID)";
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@desc", desc);
+            cmd.Parameters.AddWithValue("@eventDate", DateTime.Today);
+            cmd.Parameters.AddWithValue("@tagID", tag);
+            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
             cmd.ExecuteNonQuery();
         }
 
@@ -97,25 +97,25 @@ public partial class Default2 : System.Web.UI.Page
             int tagColourNum = int.Parse(hfTagColourNum.Value);
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
-            using (OleDbConnection conn = new OleDbConnection(cs))
+            using (MySqlConnection conn = new MySqlConnection(cs))
             {
                 conn.Open();
                 if (!string.IsNullOrEmpty(hiddenSelectedTagID.Value))
                 {
                     int tagID = int.Parse(hiddenSelectedTagID.Value);
-                    string update = "UPDATE CalendarEventTag SET tagName = ?, tagColourNum = ? WHERE tagID = ?";
-                    OleDbCommand cmdUpdate = new OleDbCommand(update, conn);
-                    cmdUpdate.Parameters.AddWithValue("?", tagName);
-                    cmdUpdate.Parameters.AddWithValue("?", tagColourNum);
-                    cmdUpdate.Parameters.AddWithValue("?", tagID);
+                    string update = "UPDATE CalendarEventTag SET tagName = @tagName, tagColourNum = @tagColourNum WHERE tagID = @tagID";
+                    MySqlCommand cmdUpdate = new MySqlCommand(update, conn);
+                    cmdUpdate.Parameters.AddWithValue("@tagName", tagName);
+                    cmdUpdate.Parameters.AddWithValue("@tagColourNum", tagColourNum);
+                    cmdUpdate.Parameters.AddWithValue("@tagID", tagID);
                     cmdUpdate.ExecuteNonQuery();
                 }
                 else
                 {
-                    string query = "INSERT into [CalendarEventTag] ([tagName], [tagColourNum]) VALUES (?, ?)";
-                    OleDbCommand cmd = new OleDbCommand(query, conn);
-                    cmd.Parameters.AddWithValue("?", tagName);
-                    cmd.Parameters.AddWithValue("?", tagColourNum);
+                    string query = "INSERT into CalendarEventTag (tagName, tagColourNum) VALUES (@tagName, @tagColourNum)";
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@tagName", tagName);
+                    cmd.Parameters.AddWithValue("@tagColourNum", tagColourNum);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -129,12 +129,12 @@ public partial class Default2 : System.Web.UI.Page
     protected void LoadTags()
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (OleDbConnection conn = new OleDbConnection(cs))
+        using (MySqlConnection conn = new MySqlConnection(cs))
         {
             conn.Open();
-            string query = "SELECT tagID, tagName FROM [CalendarEventTag]";
-            OleDbCommand cmd = new OleDbCommand(query, conn);
-            using (OleDbDataReader reader = cmd.ExecuteReader())
+            string query = "SELECT tagID, tagName FROM CalendarEventTag";
+            MySqlCommand cmd = new MySqlCommand(query, conn);
+            using (MySqlDataReader reader = cmd.ExecuteReader())
             {
                 dropdownEventTag.Items.Clear();
                 dropdownEventTag.Items.Add(new ListItem(""));
@@ -160,19 +160,19 @@ public partial class Default2 : System.Web.UI.Page
     }
     protected void btnEditTag_Click(Object sender, EventArgs e)
     {
-        if (dropdownEventTag.SelectedIndex > 0 && dropdownEventTag.SelectedValue!= "")
+        if (dropdownEventTag.SelectedIndex > 0 && dropdownEventTag.SelectedValue != "")
         {
             int tagID = Convert.ToInt32(dropdownEventTag.SelectedValue);
             hiddenSelectedTagID.Value = tagID.ToString();
 
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            using (OleDbConnection conn = new OleDbConnection(cs))
+            using (MySqlConnection conn = new MySqlConnection(cs))
             {
                 conn.Open();
-                string query = "SELECT tagName, tagColourNum FROM [CalendarEventTag] WHERE tagID = ?";
-                OleDbCommand cmd = new OleDbCommand(query, conn);
-                cmd.Parameters.AddWithValue("?", tagID);
-                using (OleDbDataReader reader = cmd.ExecuteReader())
+                string query = "SELECT tagName, tagColourNum FROM CalendarEventTag WHERE tagID = @tagID";
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@tagID", tagID);
+                using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
                     {
@@ -194,30 +194,30 @@ public partial class Default2 : System.Web.UI.Page
             hiddenSelectedTagID.Value = tagID.ToString();
 
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            using (OleDbConnection conn = new OleDbConnection(cs))
+            using (MySqlConnection conn = new MySqlConnection(cs))
             {
                 conn.Open();
-                string query = "DELETE FROM CalendarEventTag WHERE tagID = ?";
-                OleDbCommand cmd = new OleDbCommand(query, conn);
-                cmd.Parameters.AddWithValue("?", tagID);
+                string query = "DELETE FROM CalendarEventTag WHERE tagID = @tagID";
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@tagID", tagID);
                 cmd.ExecuteNonQuery();
                 ScriptManager.RegisterStartupScript(this, GetType(), "hideDeletePopup", "hideDeletePopup();", true);
             }
         }
     }
-    //protected void btnNoDelete_Click(Object sender, EventArgs e)
-    //{
-    //    ViewState["PendingAction"] = null;
-    //    ViewState["PendingTagID"] = null;
-    //    ScriptManager.RegisterStartupScript();
-    //}
+    /*protected void btnNoDelete_Click(Object sender, EventArgs e)
+    {
+        ViewState["PendingAction"] = null;
+        ViewState["PendingTagID"] = null;
+        ScriptManager.RegisterStartupScript();
+    }*/
 
     // start: header profile code
     private string GetUserID(string username, string connectionString)
     {
         string query = "SELECT userID FROM Users WHERE username = @username";
-        using (OleDbConnection con = new OleDbConnection(connectionString))
-        using (OleDbCommand cmd = new OleDbCommand(query, con))
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        using (MySqlCommand cmd = new MySqlCommand(query, con))
         {
             cmd.Parameters.AddWithValue("@username", username);
             try
@@ -239,8 +239,8 @@ public partial class Default2 : System.Web.UI.Page
         string query = "SELECT userXP FROM Users WHERE userID = @userID";
         int userXP = 0;
 
-        using (OleDbConnection con = new OleDbConnection(connectionString))
-        using (OleDbCommand cmd = new OleDbCommand(query, con))
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        using (MySqlCommand cmd = new MySqlCommand(query, con))
         {
             cmd.Parameters.AddWithValue("@userID", userID);
             try
@@ -265,8 +265,8 @@ public partial class Default2 : System.Web.UI.Page
         int currentLevelXpAmount = 0;
         int nextLevelXpAmount = 0;
         string currentLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
-        using (OleDbConnection con = new OleDbConnection(connectionString))
-        using (OleDbCommand cmdCurrentLevel = new OleDbCommand(currentLevelQuery, con))
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        using (MySqlCommand cmdCurrentLevel = new MySqlCommand(currentLevelQuery, con))
         {
             cmdCurrentLevel.Parameters.AddWithValue("@userID", userID);
             con.Open();
@@ -281,9 +281,9 @@ public partial class Default2 : System.Web.UI.Page
                 return Tuple.Create(0, 0, 0);
             }
         }
-        string currentLevelXPQuery = "SELECT xpAmount FROM [Level] WHERE levelNum = @currentLevel";
-        using (OleDbConnection con = new OleDbConnection(connectionString))
-        using (OleDbCommand cmdCurrentXP = new OleDbCommand(currentLevelXPQuery, con))
+        string currentLevelXPQuery = "SELECT xpAmount FROM Level WHERE levelNum = @currentLevel";
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        using (MySqlCommand cmdCurrentXP = new MySqlCommand(currentLevelXPQuery, con))
         {
             cmdCurrentXP.Parameters.AddWithValue("@currentLevel", currentLevel);
             con.Open();
@@ -294,9 +294,9 @@ public partial class Default2 : System.Web.UI.Page
             }
         }
 
-        string nextLevelXPQuery = "SELECT xpAmount FROM [Level] WHERE levelNum = @nextLevel";
-        using (OleDbConnection con = new OleDbConnection(connectionString))
-        using (OleDbCommand cmdNextXP = new OleDbCommand(nextLevelXPQuery, con))
+        string nextLevelXPQuery = "SELECT xpAmount FROM Level WHERE levelNum = @nextLevel";
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        using (MySqlCommand cmdNextXP = new MySqlCommand(nextLevelXPQuery, con))
         {
             cmdNextXP.Parameters.AddWithValue("@nextLevel", currentLevel + 1);
             con.Open();
@@ -345,13 +345,13 @@ public partial class Default2 : System.Web.UI.Page
     {
         string query = "SELECT userCoinCount FROM Users WHERE userID = @userID";
 
-        using (OleDbConnection con = new OleDbConnection(connectionString))
-        using (OleDbCommand cmd = new OleDbCommand(query, con))
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        using (MySqlCommand cmd = new MySqlCommand(query, con))
         {
             cmd.Parameters.AddWithValue("@userID", userID);
 
             con.Open();
-            using (OleDbDataReader reader = cmd.ExecuteReader())
+            using (MySqlDataReader reader = cmd.ExecuteReader())
             {
                 if (reader.Read())
                 {
@@ -369,8 +369,8 @@ public partial class Default2 : System.Web.UI.Page
     {
         string query = "SELECT iconNum FROM Users WHERE userID = @userID";
 
-        using (OleDbConnection con = new OleDbConnection(connectionString))
-        using (OleDbCommand cmd = new OleDbCommand(query, con))
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        using (MySqlCommand cmd = new MySqlCommand(query, con))
         {
             cmd.Parameters.AddWithValue("@userID", userID);
             try
@@ -425,14 +425,14 @@ public partial class Default2 : System.Web.UI.Page
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         List<SessionInvite> pendingInvites = new List<SessionInvite>();
-        string query = "SELECT StudySession.sessionID, StudySession.sessionTitle, StudySession.sessionTag, StudySession.sessionStart, StudySession.sessionEnd, Users.username FROM (StudySessionParticipants INNER JOIN StudySession ON StudySessionParticipants.sessionID = StudySession.sessionID) INNER JOIN Users ON StudySession.leaderID = Users.userID WHERE StudySessionParticipants.userID = ? AND StudySessionParticipants.replied = false ORDER BY StudySession.sessionID ASC";
+        string query = "SELECT StudySession.sessionID, StudySession.sessionTitle, StudySession.sessionTag, StudySession.sessionStart, StudySession.sessionEnd, Users.username FROM (StudySessionParticipants INNER JOIN StudySession ON StudySessionParticipants.sessionID = StudySession.sessionID) INNER JOIN Users ON StudySession.leaderID = Users.userID WHERE StudySessionParticipants.userID = @userID AND StudySessionParticipants.accepted = false ORDER BY StudySession.sessionID ASC";
 
-        using (OleDbConnection conn = new OleDbConnection(cs))
-        using (OleDbCommand cmd = new OleDbCommand(query, conn))
+        using (MySqlConnection conn = new MySqlConnection(cs))
+        using (MySqlCommand cmd = new MySqlCommand(query, conn))
         {
-            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
             conn.Open();
-            using (OleDbDataReader reader = cmd.ExecuteReader())
+            using (MySqlDataReader reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
                 {
@@ -483,12 +483,12 @@ public partial class Default2 : System.Web.UI.Page
     {
         int sessionID = int.Parse(hiddenSessionID.Value);
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string updateQuery = "UPDATE StudySessionParticipants SET replied = true, sessionStatus = 'Accepted' WHERE sessionID = ? AND userID = ?";
-        using (OleDbConnection conn = new OleDbConnection(cs))
-        using (OleDbCommand cmd = new OleDbCommand(updateQuery, conn))
+        string updateQuery = "UPDATE StudySessionParticipants SET accepted = true WHERE sessionID = @sessionID AND userID = @userID";
+        using (MySqlConnection conn = new MySqlConnection(cs))
+        using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn))
         {
-            cmd.Parameters.AddWithValue("?", sessionID);
-            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            cmd.Parameters.AddWithValue("@sessionID", sessionID);
+            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
             conn.Open();
             cmd.ExecuteNonQuery();
         }
@@ -510,19 +510,19 @@ public partial class Default2 : System.Web.UI.Page
 
         if (invite != null)
         {
-            string insertQuery = "INSERT INTO CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (?, ?, ?, ?)";
-            using (OleDbConnection conn = new OleDbConnection(cs))
-            using (OleDbCommand cmd2 = new OleDbCommand(insertQuery, conn))
+            string insertQuery = "INSERT INTO CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (@eventDesc, @eventDate, @tagID, @userID)";
+            using (MySqlConnection conn = new MySqlConnection(cs))
+            using (MySqlCommand cmd2 = new MySqlCommand(insertQuery, conn))
             {
                 string eventDesc = invite.title + " (From: " + invite.leaderUsername + ")";
                 DateTime eventDate = invite.startTime;
                 int tagID = 1;
                 int userID = Convert.ToInt32(Session["userID"]);
 
-                cmd2.Parameters.AddWithValue("?", eventDesc);
-                cmd2.Parameters.AddWithValue("?", eventDate);
-                cmd2.Parameters.AddWithValue("?", tagID);
-                cmd2.Parameters.AddWithValue("?", userID);
+                cmd2.Parameters.AddWithValue("@eventDesc", eventDesc);
+                cmd2.Parameters.AddWithValue("@eventDate", eventDate);
+                cmd2.Parameters.AddWithValue("@tagID", tagID);
+                cmd2.Parameters.AddWithValue("@userID", userID);
 
                 conn.Open();
                 cmd2.ExecuteNonQuery();
@@ -557,16 +557,16 @@ public partial class Default2 : System.Web.UI.Page
     private void LoadUpcomingSessions()
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string query = "SELECT StudySession.sessionID, StudySession.sessionStart FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = ? AND StudySessionParticipants.replied = true AND StudySessionParticipants.sessionStatus = 'Accepted'";
+        string query = "SELECT StudySession.sessionID, StudySession.sessionStart FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = @userID AND StudySessionParticipants.accepted = true";
 
         List<string> jsSessionTimes = new List<string>();
 
-        using (OleDbConnection conn = new OleDbConnection(cs))
-        using (OleDbCommand cmd = new OleDbCommand(query, conn))
+        using (MySqlConnection conn = new MySqlConnection(cs))
+        using (MySqlCommand cmd = new MySqlCommand(query, conn))
         {
-            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
             conn.Open();
-            using (OleDbDataReader reader = cmd.ExecuteReader())
+            using (MySqlDataReader reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
                 {
@@ -606,12 +606,12 @@ public partial class Default2 : System.Web.UI.Page
     {
         int sessionID = int.Parse(hiddenSessionID.Value);
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = ? AND userID = ? AND replied = false";
-        using (OleDbConnection conn = new OleDbConnection(cs))
-        using (OleDbCommand cmd = new OleDbCommand(deleteQuery, conn))
+        string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = @sessionID AND userID = @userID AND accepted = false";
+        using (MySqlConnection conn = new MySqlConnection(cs))
+        using (MySqlCommand cmd = new MySqlCommand(deleteQuery, conn))
         {
-            cmd.Parameters.AddWithValue("?", sessionID);
-            cmd.Parameters.AddWithValue("?", Session["userID"]);
+            cmd.Parameters.AddWithValue("@sessionID", sessionID);
+            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
             conn.Open();
             cmd.ExecuteNonQuery();
         }
@@ -633,9 +633,27 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnJoin_Click(object sender, EventArgs e)
     {
-        if (Session["sessionID"] != null)
+        if (Session["sessionID"] != null && Session["userID"] != null)
         {
-            Response.Redirect("A1400_View-study-session.aspx");
+            int sessionID = Convert.ToInt32(Session["sessionID"]);
+            int userID = Convert.ToInt32(Session["userID"]);
+
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            string updateQuery = "UPDATE StudySessionParticipants SET joined = true WHERE sessionID = @sessionID AND userID = @userID";
+
+            using (MySqlConnection conn = new MySqlConnection(cs))
+            using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn))
+            {
+                cmd.Parameters.AddWithValue("@sessionID", sessionID);
+                cmd.Parameters.AddWithValue("@userID", userID);
+                conn.Open();
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                if (rowsAffected > 0)
+                {
+                    Response.Redirect("A1400_View-study-session.aspx");
+                }
+            }
         }
     }
     // end: notification bell code

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.OleDb;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using MySql.Data.MySqlClient;
 
 public partial class View_pets : System.Web.UI.Page
 {
@@ -27,6 +27,8 @@ public partial class View_pets : System.Web.UI.Page
         }
     }
 
+    // start: view pets code
+
     // DISPLAYING THE OWNED PETS OF THE USER
     private void LoadOwnedPets(string userID)
     {
@@ -34,20 +36,20 @@ public partial class View_pets : System.Web.UI.Page
 
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
-        string command = "SELECT Pet.colourNum, UserPets.equippedStatus FROM UserPets INNER JOIN Pet ON UserPets.petID = Pet.petID WHERE UserPets.userID = ? AND Pet.petType = ?";
+        string command = "SELECT Pet.colourNum, UserPets.equippedStatus FROM UserPets INNER JOIN Pet ON UserPets.petID = Pet.petID WHERE UserPets.userID = @userID AND Pet.petType = @petType";
 
         List<OwnedPet> ownedPets = new List<OwnedPet>();
 
-        using (OleDbConnection con = new OleDbConnection(cs))
-        using (OleDbCommand cmd = new OleDbCommand(command, con))
+        using (MySqlConnection con = new MySqlConnection(cs))
+        using (MySqlCommand cmd = new MySqlCommand(command, con))
         {
-            cmd.Parameters.AddWithValue("?", userID);
-            cmd.Parameters.AddWithValue("?", "Cat"); // PET TYPE~~~~
+            cmd.Parameters.AddWithValue("@userID", userID);
+            cmd.Parameters.AddWithValue("@petType", "Cat"); // PET TYPE~~~~
 
             try
             {
                 con.Open();
-                using (OleDbDataReader reader = cmd.ExecuteReader())
+                using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
@@ -119,23 +121,7 @@ public partial class View_pets : System.Web.UI.Page
         }
     }
 
-    private Control FindControlRecursive(Control root, string id)
-    {
-        if (root.ID == id)
-            return root;
-
-        foreach (Control child in root.Controls)
-        {
-            Control found = FindControlRecursive(child, id);
-            if (found != null)
-                return found;
-        }
-
-        return null;
-    }
-
     // EQUIPPING THE HOME PAGE PET (UPDATING THE EQUIPPEDSTATUS)
-
     protected void Page_Init(object sender, EventArgs e)
     {
         btnEquip.Click += new EventHandler(btnEquip_Click);
@@ -152,25 +138,25 @@ public partial class View_pets : System.Web.UI.Page
             return;
         }
 
-        using (OleDbConnection con = new OleDbConnection(cs))
+        using (MySqlConnection con = new MySqlConnection(cs))
         {
             con.Open();
 
             // 1. uncheck all current equipped pets for this user
-            string unequipQuery = "UPDATE UserPets SET equippedStatus = FALSE WHERE userID = ?";
-            using (OleDbCommand cmdUnequip = new OleDbCommand(unequipQuery, con))
+            string unequipQuery = "UPDATE UserPets SET equippedStatus = FALSE WHERE userID = @userID";
+            using (MySqlCommand cmdUnequip = new MySqlCommand(unequipQuery, con))
             {
-                cmdUnequip.Parameters.AddWithValue("?", userID);
+                cmdUnequip.Parameters.AddWithValue("@userID", userID);
                 cmdUnequip.ExecuteNonQuery();
             }
 
             // 2. get petID
             int petID = -1;
-            string getPetIDQuery = "SELECT petID FROM Pet WHERE petType = 'Cat' AND colourNum = ?"; // PET TYPE~~~~
+            string getPetIDQuery = "SELECT petID FROM Pet WHERE petType = 'Cat' AND colourNum = @colourNum"; // PET TYPE~~~~
 
-            using (OleDbCommand getPetIDCmd = new OleDbCommand(getPetIDQuery, con))
+            using (MySqlCommand getPetIDCmd = new MySqlCommand(getPetIDQuery, con))
             {
-                getPetIDCmd.Parameters.AddWithValue("?", selectedColourNum);
+                getPetIDCmd.Parameters.AddWithValue("@colourNum", selectedColourNum);
                 object result = getPetIDCmd.ExecuteScalar();
                 if (result != null)
                 {
@@ -183,11 +169,11 @@ public partial class View_pets : System.Web.UI.Page
             }
 
             // 3. equip the selected one (check the checkbox)
-            string equipQuery = "UPDATE UserPets SET equippedStatus = TRUE WHERE userID = ? AND petID = ?";
-            using (OleDbCommand equipCmd = new OleDbCommand(equipQuery, con))
+            string equipQuery = "UPDATE UserPets SET equippedStatus = TRUE WHERE userID = @userID AND petID = @petID";
+            using (MySqlCommand equipCmd = new MySqlCommand(equipQuery, con))
             {
-                equipCmd.Parameters.AddWithValue("?", userID);
-                equipCmd.Parameters.AddWithValue("?", petID);
+                equipCmd.Parameters.AddWithValue("@userID", userID);
+                equipCmd.Parameters.AddWithValue("@petID", petID);
                 equipCmd.ExecuteNonQuery();
             }
         }
@@ -213,16 +199,16 @@ public partial class View_pets : System.Web.UI.Page
         int sellPrice = 0;
         string petType = "";
 
-        using (OleDbConnection con = new OleDbConnection(cs))
+        using (MySqlConnection con = new MySqlConnection(cs))
         {
             con.Open();
 
-            string queryPet = "SELECT petID, sellPrice, petType FROM Pet WHERE petType = ? AND colourNum = ?";
-            using (OleDbCommand cmd = new OleDbCommand(queryPet, con))
+            string queryPet = "SELECT petID, sellPrice, petType FROM Pet WHERE petType = @petType AND colourNum = @colourNum";
+            using (MySqlCommand cmd = new MySqlCommand(queryPet, con))
             {
-                cmd.Parameters.AddWithValue("?", "Cat"); // PET TYPE~~~~
-                cmd.Parameters.AddWithValue("?", selectedColourNum);
-                using (OleDbDataReader reader = cmd.ExecuteReader())
+                cmd.Parameters.AddWithValue("@petType", "Cat"); // PET TYPE~~~~
+                cmd.Parameters.AddWithValue("@colourNum", selectedColourNum);
+                using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
                     {
@@ -247,6 +233,7 @@ public partial class View_pets : System.Web.UI.Page
         lblSellPrice.Text = sellPrice.ToString(); // UPDATE COIN LABEL
         ScriptManager.RegisterStartupScript(this, GetType(), "showPopup", "showPopup();", true);
     }
+
     protected void btnYes_Click(object sender, EventArgs e)
     {
         string userID = Session["UserID"] as string;
@@ -261,45 +248,45 @@ public partial class View_pets : System.Web.UI.Page
         int currentCoins = 0;
         bool wasEquipped = false;
 
-        using (OleDbConnection con = new OleDbConnection(cs))
+        using (MySqlConnection con = new MySqlConnection(cs))
         {
             con.Open();
 
             // CHECK IF SOLD PET WAS EQUIPPED
-            string checkEquippedQuery = "SELECT equippedStatus FROM UserPets WHERE userID = ? AND petID = ?";
-            using (OleDbCommand cmd = new OleDbCommand(checkEquippedQuery, con))
+            string checkEquippedQuery = "SELECT equippedStatus FROM UserPets WHERE userID = @userID AND petID = @petID";
+            using (MySqlCommand cmd = new MySqlCommand(checkEquippedQuery, con))
             {
-                cmd.Parameters.AddWithValue("?", userID);
-                cmd.Parameters.AddWithValue("?", petID);
+                cmd.Parameters.AddWithValue("@userID", userID);
+                cmd.Parameters.AddWithValue("@petID", petID);
                 object result = cmd.ExecuteScalar();
                 wasEquipped = result != null && Convert.ToBoolean(result);
             }
 
             // 1. DELETE PET FROM UserPets
-            string deleteCommand = "DELETE FROM UserPets WHERE userID = ? AND petID = ?";
-            using (OleDbCommand cmd = new OleDbCommand(deleteCommand, con))
+            string deleteCommand = "DELETE FROM UserPets WHERE userID = @userID AND petID = @petID";
+            using (MySqlCommand cmd = new MySqlCommand(deleteCommand, con))
             {
-                cmd.Parameters.AddWithValue("?", userID);
-                cmd.Parameters.AddWithValue("?", petID);
+                cmd.Parameters.AddWithValue("@userID", userID);
+                cmd.Parameters.AddWithValue("@petID", petID);
                 cmd.ExecuteNonQuery();
             }
 
             // 2. GET CURRENT coin count
-            string getCoinsQuery = "SELECT userCoinCount FROM Users WHERE userID = ?";
-            using (OleDbCommand cmd = new OleDbCommand(getCoinsQuery, con))
+            string getCoinsQuery = "SELECT userCoinCount FROM Users WHERE userID = @userID";
+            using (MySqlCommand cmd = new MySqlCommand(getCoinsQuery, con))
             {
-                cmd.Parameters.AddWithValue("?", userID);
+                cmd.Parameters.AddWithValue("@userID", userID);
                 object result = cmd.ExecuteScalar();
                 currentCoins = result != null ? Convert.ToInt32(result) : 0;
             }
 
             // 3. UPDATE coin count
             int updatedCoins = currentCoins + sellPrice;
-            string updateCoins = "UPDATE Users SET userCoinCount = ? WHERE userID = ?";
-            using (OleDbCommand cmd = new OleDbCommand(updateCoins, con))
+            string updateCoins = "UPDATE Users SET userCoinCount = @coins WHERE userID = @userID";
+            using (MySqlCommand cmd = new MySqlCommand(updateCoins, con))
             {
-                cmd.Parameters.AddWithValue("?", updatedCoins);
-                cmd.Parameters.AddWithValue("?", userID);
+                cmd.Parameters.AddWithValue("@coins", updatedCoins);
+                cmd.Parameters.AddWithValue("@userID", userID);
                 cmd.ExecuteNonQuery();
             }
 
@@ -308,7 +295,7 @@ public partial class View_pets : System.Web.UI.Page
                 // GET petID of Cat 1
                 int cat1PetID = -1;
                 string getCat1ID = "SELECT petID FROM Pet WHERE petType = 'Cat' AND colourNum = 1";
-                using (OleDbCommand cmd = new OleDbCommand(getCat1ID, con))
+                using (MySqlCommand cmd = new MySqlCommand(getCat1ID, con))
                 {
                     object result = cmd.ExecuteScalar();
                     if (result != null)
@@ -317,28 +304,28 @@ public partial class View_pets : System.Web.UI.Page
 
                 // ENSURE CAT 1 IS OWNED BY USER
                 bool ownsCat1 = false;
-                string checkOwnership = "SELECT COUNT(*) FROM UserPets WHERE userID = ? AND petID = ?";
-                using (OleDbCommand cmd = new OleDbCommand(checkOwnership, con))
+                string checkOwnership = "SELECT COUNT(*) FROM UserPets WHERE userID = @userID AND petID = @petID";
+                using (MySqlCommand cmd = new MySqlCommand(checkOwnership, con))
                 {
-                    cmd.Parameters.AddWithValue("?", userID);
-                    cmd.Parameters.AddWithValue("?", cat1PetID);
+                    cmd.Parameters.AddWithValue("@userID", userID);
+                    cmd.Parameters.AddWithValue("@petID", cat1PetID);
                     ownsCat1 = Convert.ToInt32(cmd.ExecuteScalar()) > 0;
                 }
 
                 if (ownsCat1)
                 {
-                    string unequipAll = "UPDATE UserPets SET equippedStatus = FALSE WHERE userID = ?";
-                    using (OleDbCommand cmd = new OleDbCommand(unequipAll, con))
+                    string unequipAll = "UPDATE UserPets SET equippedStatus = FALSE WHERE userID = @userID";
+                    using (MySqlCommand cmd = new MySqlCommand(unequipAll, con))
                     {
-                        cmd.Parameters.AddWithValue("?", userID);
+                        cmd.Parameters.AddWithValue("@userID", userID);
                         cmd.ExecuteNonQuery();
                     }
 
-                    string equipCat1 = "UPDATE UserPets SET equippedStatus = TRUE WHERE userID = ? AND petID = ?";
-                    using (OleDbCommand cmd = new OleDbCommand(equipCat1, con))
+                    string equipCat1 = "UPDATE UserPets SET equippedStatus = TRUE WHERE userID = @userID AND petID = @petID";
+                    using (MySqlCommand cmd = new MySqlCommand(equipCat1, con))
                     {
-                        cmd.Parameters.AddWithValue("?", userID);
-                        cmd.Parameters.AddWithValue("?", cat1PetID);
+                        cmd.Parameters.AddWithValue("@userID", userID);
+                        cmd.Parameters.AddWithValue("@petID", cat1PetID);
                         cmd.ExecuteNonQuery();
                     }
 
@@ -380,7 +367,9 @@ public partial class View_pets : System.Web.UI.Page
     {
         Response.Redirect("A1800_View-pets-special.aspx");
     }
+    // end: view pets code
 
+    // start: 
     private string LoadUserData(string username)
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -400,15 +389,14 @@ public partial class View_pets : System.Web.UI.Page
         return uid;
     }
 
-
     private string GetUserID(string username, string connectionString)
     {
         string query = "SELECT userID FROM Users WHERE username = @username";
         string userID = null;
 
-        using (OleDbConnection con = new OleDbConnection(connectionString))
+        using (MySqlConnection con = new MySqlConnection(connectionString))
         {
-            using (OleDbCommand cmd = new OleDbCommand(query, con))
+            using (MySqlCommand cmd = new MySqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@username", username);
 
@@ -434,9 +422,9 @@ public partial class View_pets : System.Web.UI.Page
     {
         string query = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
 
-        using (OleDbConnection con = new OleDbConnection(connectionString))
+        using (MySqlConnection con = new MySqlConnection(connectionString))
         {
-            using (OleDbCommand cmd = new OleDbCommand(query, con))
+            using (MySqlCommand cmd = new MySqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@userID", userID);
 
@@ -459,16 +447,16 @@ public partial class View_pets : System.Web.UI.Page
     {
         string query = "SELECT userXP, userCoinCount FROM Users WHERE userID = @userID";
 
-        using (OleDbConnection con = new OleDbConnection(connectionString))
+        using (MySqlConnection con = new MySqlConnection(connectionString))
         {
-            using (OleDbCommand cmd = new OleDbCommand(query, con))
+            using (MySqlCommand cmd = new MySqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@userID", userID);
 
                 try
                 {
                     con.Open();
-                    using (OleDbDataReader reader = cmd.ExecuteReader())
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -481,7 +469,7 @@ public partial class View_pets : System.Web.UI.Page
                             lblPaws.Text = "N/A";
                         }
                     }
-                } 
+                }
                 catch (Exception ex)
                 {
                     lblXPAmount.Text = "ERR";
@@ -491,6 +479,4 @@ public partial class View_pets : System.Web.UI.Page
             }
         }
     }
-    
-    
 }

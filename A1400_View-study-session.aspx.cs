@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.OleDb;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using MySql.Data.MySqlClient;
 
 public partial class View_study_session : System.Web.UI.Page
 {
@@ -22,15 +22,15 @@ public partial class View_study_session : System.Web.UI.Page
         if (!IsPostBack)
         {
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            using (OleDbConnection con = new OleDbConnection(cs))
+            using (MySqlConnection con = new MySqlConnection(cs))
             {
-                string query = "SELECT StudySession.sessionTitle, StudySession.sessionDuration FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySession.sessionID = ?";
+                string query = "SELECT StudySession.sessionTitle, StudySession.sessionDuration FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySession.sessionID = @sessionID";
 
-                using (OleDbCommand cmd = new OleDbCommand(query, con))
+                using (MySqlCommand cmd = new MySqlCommand(query, con))
                 {
-                    cmd.Parameters.AddWithValue("?", sessionID);
+                    cmd.Parameters.AddWithValue("@sessionID", sessionID);
                     con.Open();
-                    using (OleDbDataReader reader = cmd.ExecuteReader())
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -62,8 +62,6 @@ public partial class View_study_session : System.Web.UI.Page
                     pet.ImageUrl = Session["EquippedPetImagePath"].ToString();
                 }
             }
-
-           
         }
     }
 
@@ -76,13 +74,13 @@ public partial class View_study_session : System.Web.UI.Page
             int thisUserID = Convert.ToInt32(Session["userID"]);
 
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            using (OleDbConnection con2 = new OleDbConnection(cs))
+            using (MySqlConnection con2 = new MySqlConnection(cs))
             {
-                string deleteCommand = "DELETE FROM [StudySessionParticipants] WHERE [sessionID] = ? AND [userID] = ?";
-                using (OleDbCommand cmd = new OleDbCommand(deleteCommand, con2))
+                string deleteCommand = "DELETE FROM StudySessionParticipants WHERE sessionID = @sessionID AND userID = @userID";
+                using (MySqlCommand cmd = new MySqlCommand(deleteCommand, con2))
                 {
-                    cmd.Parameters.AddWithValue("?", thisSessionID);
-                    cmd.Parameters.AddWithValue("?", thisUserID);
+                    cmd.Parameters.AddWithValue("@sessionID", thisSessionID);
+                    cmd.Parameters.AddWithValue("@userID", thisUserID);
 
                     con2.Open();
                     int code = cmd.ExecuteNonQuery();
@@ -109,13 +107,13 @@ public partial class View_study_session : System.Web.UI.Page
                 int userID = Convert.ToInt32(HttpContext.Current.Session["userID"]);
 
                 string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-                string updateQuery = "UPDATE StudySessionParticipants SET completed = true WHERE sessionID = ? AND userID = ?";
+                string updateQuery = "UPDATE StudySessionParticipants SET completed = true WHERE sessionID = @sessionID AND userID = @userID";
 
-                using (OleDbConnection conn = new OleDbConnection(cs))
-                using (OleDbCommand cmd = new OleDbCommand(updateQuery, conn))
+                using (MySqlConnection conn = new MySqlConnection(cs))
+                using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn))
                 {
-                    cmd.Parameters.AddWithValue("?", sessionID);
-                    cmd.Parameters.AddWithValue("?", userID);
+                    cmd.Parameters.AddWithValue("@sessionID", sessionID);
+                    cmd.Parameters.AddWithValue("@userID", userID);
                     conn.Open();
                     int rowsAffected = cmd.ExecuteNonQuery();
 
@@ -133,5 +131,4 @@ public partial class View_study_session : System.Web.UI.Page
             return "error: " + ex.Message;
         }
     }
-
 }
