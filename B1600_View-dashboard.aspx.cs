@@ -31,8 +31,13 @@ public partial class Default2 : System.Web.UI.Page
 
         if (Session["userID"] != null)
         {
+            string username = Session["Username"].ToString();
+
             ddlFilter.Visible = IsToDoFilterVisible;
             userIDHidden.Value = Convert.ToString(Session["userID"]);
+
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            string userID = GetUserID(username, cs);
 
             if (!IsPostBack)
             {
@@ -44,6 +49,20 @@ public partial class Default2 : System.Web.UI.Page
                 hfYear.Value = currentDate.Year.ToString();
                 hfMonth.Value = DateTime.Today.Month.ToString();
                 LoadCalendar(currentDate.Year, currentDate.Month);
+
+                int userXP = GetUserXP(cs, userID);
+                Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
+                int currentLevel = levelInfo.Item1;
+                int currentLevelXpAmount = levelInfo.Item2;
+                int nextLevelXpAmount = levelInfo.Item3;
+
+                lblLevelNumber.Text = currentLevel.ToString();
+
+                CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
+                GetUserStats(cs, userID);
+                GetUserProfileIcon(cs, userID);
+                LoadPendingInvitesFromDB();
+                LoadUpcomingSessions();
             }
             else
             {
