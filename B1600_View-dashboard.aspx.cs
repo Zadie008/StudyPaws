@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Script.Serialization;
+using System.Web.Security;
 using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -18,6 +19,16 @@ public partial class Default2 : System.Web.UI.Page
     string connString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Request.IsAuthenticated)
+        {
+            var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (authCookie != null)
+            {
+                var ticket = FormsAuthentication.Decrypt(authCookie.Value);
+                Session["UserID"] = ticket.UserData;
+            }
+        }
+
         if (Session["userID"] != null)
         {
             ddlFilter.Visible = IsToDoFilterVisible;

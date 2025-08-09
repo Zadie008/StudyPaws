@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.OleDb;
 using System.Linq;
 using System.Web;
 using System.Web.Security;
@@ -42,9 +41,24 @@ public partial class Login : System.Web.UI.Page
                 if (reader.HasRows && reader.Read())
                 {
                     int userId = Convert.ToInt32(reader["UserID"]);
+                    string username = txtUsername.Text;
+
+                    FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
+                        1,                              // version
+                        username,                       // username
+                        DateTime.Now,                   // issue time
+                        DateTime.Now.AddMinutes(30),    // expiry time
+                        false,                          // persistent
+                        userId.ToString()               // user-specific data
+                    );
+
+                    string encryptedTicket = FormsAuthentication.Encrypt(ticket);
+                    HttpCookie authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+                    Response.Cookies.Add(authCookie);
+
                     Session["UserID"] = userId;
-                    Session["Username"] = txtUsername.Text;
-                    FormsAuthentication.SetAuthCookie(txtUsername.Text, false);
+                    Session["Username"] = username;
+
                     Response.Redirect("Default.aspx");
                 }
                 else
@@ -52,7 +66,6 @@ public partial class Login : System.Web.UI.Page
                     pnlLogin.Visible = true;
                     ScriptManager.RegisterStartupScript(this, GetType(), "popup", "showPopup();", true);
                 }
-
                 con.Close();
             }
         }

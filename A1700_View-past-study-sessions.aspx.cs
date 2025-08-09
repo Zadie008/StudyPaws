@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -11,6 +12,16 @@ public partial class Default2 : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Request.IsAuthenticated)
+        {
+            var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (authCookie != null)
+            {
+                var ticket = FormsAuthentication.Decrypt(authCookie.Value);
+                Session["UserID"] = ticket.UserData;
+            }
+        }
+
         if (!IsPostBack)
         {
             if (Session["userID"] != null)
@@ -19,7 +30,7 @@ public partial class Default2 : System.Web.UI.Page
 
                 using (MySqlConnection con = new MySqlConnection(cs))
                 {
-                    string command = "SELECT StudySession.sessionStart AS `Start Time`, StudySession.sessionTitle AS Title, StudySession.sessionTag AS Tag, StudySession.sessionDuration AS Duration FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = @userID AND StudySession.completed = true ORDER BY StudySession.sessionStart DESC";
+                    string command = "SELECT StudySession.sessionStart AS `Start Time`, StudySession.sessionTitle AS Title, StudySession.sessionTag AS Tag, StudySession.sessionDuration AS Duration FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = @userID AND StudySessionParticipants.completed = true ORDER BY StudySession.sessionStart DESC";
 
                     MySqlCommand cmd = new MySqlCommand(command, con);
                     cmd.Parameters.AddWithValue("@userID", Convert.ToInt32(Session["userID"]));

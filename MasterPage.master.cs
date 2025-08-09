@@ -1,12 +1,13 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.OleDb;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using MySql.Data.MySqlClient;
 
 public partial class MasterPage : System.Web.UI.MasterPage
 {
@@ -18,13 +19,13 @@ public partial class MasterPage : System.Web.UI.MasterPage
     private void CheckUpcomingStudySessions()
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        List<int> sessionIds = new List<int>();
+
         using (MySqlConnection conn = new MySqlConnection(cs))
         {
             conn.Open();
-            // fetch all sessions starting in 10 minutes
             string selectQuery = "SELECT sessionID FROM StudySession WHERE sessionStart BETWEEN ?startWindowBegin AND ?startWindowEnd";
 
-            // checking for study session starting between 0-10 minutes
             DateTime startWindowBegin = DateTime.Now.AddMinutes(0);
             DateTime startWindowEnd = DateTime.Now.AddMinutes(10);
 
@@ -37,10 +38,18 @@ public partial class MasterPage : System.Web.UI.MasterPage
                 {
                     while (reader.Read())
                     {
-                        int sessionID = Convert.ToInt32(reader["sessionID"]);
-                        HandleSessionParticipants(sessionID, conn);
+                        sessionIds.Add(Convert.ToInt32(reader["sessionID"]));
                     }
                 }
+            }
+        }
+
+        foreach (int sessionID in sessionIds)
+        {
+            using (MySqlConnection conn = new MySqlConnection(cs))
+            {
+                conn.Open();
+                HandleSessionParticipants(sessionID, conn);
             }
         }
     }

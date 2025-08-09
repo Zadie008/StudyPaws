@@ -1,18 +1,29 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using MySql.Data.MySqlClient;
 
 public partial class A200_View_timer : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Request.IsAuthenticated)
+        {
+            var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (authCookie != null)
+            {
+                var ticket = FormsAuthentication.Decrypt(authCookie.Value);
+                Session["UserID"] = ticket.UserData;
+            }
+        }
+
         int totalSeconds = Convert.ToInt32(Session["timerDuration"]);
         int hours = totalSeconds / 3600;
         int minutes = (totalSeconds % 3600) / 60;

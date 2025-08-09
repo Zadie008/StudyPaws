@@ -1,19 +1,30 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using MySql.Data.MySqlClient;
 
 public partial class View_study_session : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Request.IsAuthenticated)
+        {
+            var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (authCookie != null)
+            {
+                var ticket = FormsAuthentication.Decrypt(authCookie.Value);
+                Session["UserID"] = ticket.UserData;
+            }
+        }
+
         if (Session["sessionID"] == null)
         {
-            Response.Redirect("Default.aspx");
+            Response.Redirect("Login.aspx");
             return;
         }
 

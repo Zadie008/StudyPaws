@@ -8,7 +8,7 @@
     <div class="profileHeader">
         <!--Back Button -->
         <div class="headerLeft">
-            <asp:Button ID="btnBackProfile" class="profilebutton" runat="server" Text="Back" OnClick=" btnBackProfile_Click" />
+            <asp:Button ID="btnBackProfile" class="profilebutton" runat="server" Text="Back" OnClick="btnBackProfile_Click" />
         </div>
         
         <!-- pfpIcon -->
@@ -23,17 +23,17 @@
         
         <!-- Time -->
        <div class="rightInfoDiv">
-    <div class="timeNotificationWrapper">
-        <div class="timeDateDiv">
-            <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="09:52"></asp:Label>
-            <div class="dateContainer">
-                <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Friday"></asp:Label>
-                <span class="dateSeparator">|</span>
-                <asp:Label ID="lblDate" CssClass="accountInfoLabel currentDate" runat="server" Text="18 April"></asp:Label>
+            <div class="timeNotificationWrapper">
+                <div class="timeDateDiv">
+                    <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="09:52"></asp:Label>
+                    <div class="dateContainer">
+                        <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Friday"></asp:Label>
+                        <span class="dateSeparator">|</span>
+                        <asp:Label ID="lblDate" CssClass="accountInfoLabel currentDate" runat="server" Text="18 April"></asp:Label>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
     </div>
 </asp:Content>
 
@@ -42,6 +42,9 @@
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div id="profileMainContent">
+        <div class="changeIconContainer">
+            <asp:Button ID="btnChangeIcon" class="profilebutton" runat="server" Text="Change icon" OnClick="btnChangeIcon_Click" />
+        </div>
         <table>
             <tr>
                 <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>

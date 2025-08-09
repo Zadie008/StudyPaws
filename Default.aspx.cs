@@ -1,15 +1,26 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
-using MySql.Data.MySqlClient;
+using System.Web.Security;
 using System.Web.UI;
 
 public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Request.IsAuthenticated)
+        {
+            var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (authCookie != null)
+            {
+                var ticket = FormsAuthentication.Decrypt(authCookie.Value);
+                Session["UserID"] = ticket.UserData;
+            }
+        }
+
         if (Session["Username"] != null)
         {
             lblLoggedInUserName.Text = Session["Username"].ToString() + "!";

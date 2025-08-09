@@ -3520,6 +3520,7 @@ footer p {
     vertical-align: middle;
 }
 
+/* -------------------------------------------- PROFILE PAGE -------------------------------------------- */
 #profileMainContent {
     margin: 1em 4em 4em 4em;
 }
@@ -3543,7 +3544,6 @@ footer p {
     justify-content: center;
     align-items: center;
 }
-
 
 .rightInfoDiv {
     flex: 1; 

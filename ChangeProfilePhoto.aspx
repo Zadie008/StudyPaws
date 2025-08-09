@@ -6,38 +6,35 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
     <div class="profileHeader">
-        <!--Back Button -->
-        <div class="headerLeft">
-            <asp:Button ID="btnBackProfile" class="profilebutton" runat="server" Text="Back" OnClick=" btnBackProfile_Click" />
-        </div>
-        
-        <!-- pfpIcon -->
-         <div class="headerCenter">
-            <div class="profileIcon">
-                <div class="profileImageContainer">
-                   <div id="profileCircle" runat="server" ClientIDMode="Static"></div>
-                    <asp:Image ID="profilePet" runat="server" />
-                </div>
-            </div>
-        </div>
-        
-        <!-- Time -->
-        <div class="headerRight">
-            <div class="timeDateDiv">
-                <table>
-
-                    <tr>
-                        <td colspan="2"><asp:Label ID="lblTime" CssClass="accountInfoLabel" runat="server" Text="--:--" Font-Size="65"></asp:Label></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><asp:Label ID="lblDay" CssClass="accountInfoLabel" runat="server" Text="Day"></asp:Label></td>
-                        <td><asp:Label ID="lblDate" CssClass="accountInfoLabel" runat="server" Text="Date"></asp:Label></td>
-                    </tr>
-                </table>
+    <!--Back Button -->
+    <div class="headerLeft">
+        <asp:Button ID="btnBackProfile" class="profilebutton" runat="server" Text="Back" OnClick="btnBackProfile_Click" />
+    </div>
+    
+    <!-- pfpIcon -->
+     <div class="headerCenter">
+        <div class="profileIcon">
+            <div class="profileImageContainer">
+               <div id="profileCircle" runat="server" ClientIDMode="Static"></div>
+                <asp:Image ID="profilePet" runat="server" />
             </div>
         </div>
     </div>
+    
+    <!-- Time -->
+   <div class="rightInfoDiv">
+        <div class="timeNotificationWrapper">
+            <div class="timeDateDiv">
+                <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="09:52"></asp:Label>
+                <div class="dateContainer">
+                    <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Friday"></asp:Label>
+                    <span class="dateSeparator">|</span>
+                    <asp:Label ID="lblDate" CssClass="accountInfoLabel currentDate" runat="server" Text="18 April"></asp:Label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
 </asp:Content>
