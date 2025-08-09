@@ -5,60 +5,66 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-  <!--account info to copy and paste-->
- <div class="accountInfoDiv">
-     <div class="profileDiv">
-      
-         <a href="C100-C500_Profile.aspx" class="profileIconLink">
-             <div class="profileIcon">
-                 <div id="profileCircle" runat="server" ClientIDMode="Static"></div>
-                <asp:Image ID="profilePet" runat="server" />
-             </div>
-         </a>
+<div class="accountInfoDiv">
+    <div class="profileDiv">
+        <div class="profileIcon">
+            <div id="profileCircle" runat="server" ClientIDMode="Static"></div>
+            <asp:Image ID="profilePet" runat="server" />
+        </div>
+        <div class="profileDetails">
+            <table>
+                <tr>
+                    <td>
+                        <asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Level"></asp:Label>
+                    </td>
+                    <td>
+                        <asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server"></asp:Label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="xpProgressContainer">
+                            <asp:Label ID="lblXP" CssClass="accountInfoLabel" runat="server" Text="XP"></asp:Label>
+                            <div class="progressBarBackground">
+                                <asp:Panel ID="xpProgressBar" runat="server" CssClass="progressBarFill"></asp:Panel>
+                            </div>
+                            <asp:Label ID="lblXPPercentage" CssClass="accountInfoLabel xpPercentage" runat="server" Text="0%"></asp:Label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="pawIcon">
+                            <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
+                            <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
+                        </div>
+                    </td>
+                    <td>
+                        <asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server" Text="---"></asp:Label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 
-         <div class="profileDetails">
-             <table>
-                 <tr>
-                     <td><asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Level"></asp:Label></td>
-                     <td><asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server" Text="--"></asp:Label></td>
-                 </tr>
-                 <tr>
-                     <td><asp:Label ID="lblXP" CssClass="accountInfoTableLabel" runat="server" Text="XP"></asp:Label></td>
-                     <td><asp:Label ID="lblXPAmount" CssClass="accountInfoTableLabelRight" runat="server" Text="--"></asp:Label></td>
-                 </tr>
-                 <tr>
-                     <td>
-                         <div class="pawIcon">
-                             <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
-                             <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
-                         </div>
-                     </td>
-                 <td><asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server" Text="---"></asp:Label></td>
-                 </tr>
-             </table>
-         </div>
-         <div class="notificationDetails">
-             <asp:ImageButton ID="imgNotificationRinging" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-ringing-white-96.png" OnClientClick="showNotificationPopup(true); return false;" />
-             <asp:ImageButton ID="imgNotificationNormal" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" OnClientClick="showNotificationPopup(false); return false;" />
-             <div id="notificationBadge" runat="server" class="notificationBadge"></div> <!--the coloured circle-->
-         </div>
-     </div>
+    <div class="rightInfoDiv">
+        <div class="timeNotificationWrapper">
+            <div class="notificationDetails">
+                <asp:ImageButton ID="imgNotificationNormal" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" CausesValidation="False" Enabled="False" />
+            </div>
 
-    <div class="timeDateDiv">
-        <table>
-            <tr>
-                <td colspan="2"><asp:Label ID="lblTime" CssClass="accountInfoLabel" runat="server" Text="--:--" Font-Size="65"></asp:Label></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td><asp:Label ID="lblDay" CssClass="accountInfoLabel" runat="server" Text="Day"></asp:Label></td>
-                <td><asp:Label ID="lblDate" CssClass="accountInfoLabel" runat="server" Text="Date"></asp:Label></td>
-            </tr>
-        </table>
+            <div class="timeDateDiv">
+                <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="09:52"></asp:Label>
+                <div class="dateContainer">
+                    <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Friday"></asp:Label>
+                    <span class="dateSeparator">|</span>
+                    <asp:Label ID="lblDate" CssClass="accountInfoLabel currentDate" runat="server" Text="18 April"></asp:Label>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<!--study paws header to copy and paste-->
 <div class="curved-header">
     <svg viewBox="0 0 700 150" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -80,7 +86,6 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-
     <div class="viewTimerMainContent">
         <div class="timeSection">
             <div class="leftSection">
@@ -104,48 +109,45 @@
             </div>
 
             <div class="rightSection">
-                        <asp:ImageButton ID="toggleToDoList" runat="server" OnClick="toggleToDoList_Click" class="toggleToDoListBtn"/>
-    <asp:Panel ID="toDoListPanel" runat="server" CssClass="toDoListSection" Visible="true" >
-            <div class="toDoListControls">
-                <div class="toDoListHeaderRow">
-                    <p class="toDoListHeading">To Do List</p>
-                    <div class="toDoListFilters">
-                        <asp:DropDownList ID="ddlFilter" BackColor="#ADA7C9" runat="server" AutoPostBack="true" class="toDoFilterDropDownList" OnSelectedIndexChanged="ddlFilter_SelectedIndexChanged">
-                            <asp:ListItem Text="All Tasks" Value="All" />
-                            <asp:ListItem Text="In Progress" Value="InProgress" />
-                            <asp:ListItem Text="Completed" Value="Completed" />
-                        </asp:DropDownList>
-                        <asp:ImageButton ID="filterButton" runat="server" class="toDoFilterBtn" ClientIDMode="Static" ImageUrl="~/Icons/icons8-filter-bars-white-96.png" OnClick="toDoFilterBtn_Click"/>
-                    </div>
-                </div>
-            </div>
-        
-        <div class="newTaskContainer">
-            <asp:ImageButton ID="btnAdd" runat="server" CommandName="Add" class="addTaskBtn" OnClick="btnAdd_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png"/>
-            <asp:TextBox ID="txtNewTask" runat="server" CssClass="addTaskText" AutoPostBack="true" OnTextChanged="txtNewTask_TextChanged" Placeholder="Add a new task..."></asp:TextBox>
-        </div>
-        
-        <div class="scrollableTasksContainer">
-            <asp:Repeater ID="rptTasks" runat="server" EnableViewState="false" OnItemCommand="rptTasks_ItemCommand" OnItemDataBound="rptTasks_ItemDataBound">
-                <ItemTemplate>
-                    <div class="task">
-                        <asp:Button runat="server" CommandName="Toggle" CommandArgument='<%# Eval("taskID") %>' CssClass='<%# (bool)Eval("taskStatus") ? "checkbox checked" : "checkbox" %>' Text=" " />
-                        <asp:TextBox ID="txtEditDesc" runat="server"  ReadOnly="true" Text='<%# Eval("taskDesc") %>' CssClass='<%# (bool)Eval("taskStatus") ? "taskCompleted" : "taskUncompleted" %>' />
-                        <div class="taskControls">
-                            <asp:ImageButton ID="editBtn" runat="server" class="editBtn" CommandName="Edit" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-edit-white-96.png" />
-                            <asp:ImageButton ID="saveEditBtn" runat="server" visible="false" class="saveEditBtn" CommandName="Save" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-check-white-96.png"/>
-                            <asp:ImageButton ID="deleteBtn" runat="server" class="deleteBtn" CommandName="Delete" CommandArgument='<%# Eval("taskID") %>' ImageUrl="~/Icons/icons8-delete-white-96.png"/>
+                <asp:ImageButton ID="toggleToDoList" runat="server" OnClick="toggleToDoList_Click" class="toggleToDoListBtn"/>
+                <asp:Panel ID="toDoListPanel" runat="server" CssClass="toDoListSection" Visible="true" >
+                        <div class="toDoListControls">
+                            <div class="toDoListHeaderRow">
+                                <p class="toDoListHeading">To Do List</p>
+                                <div class="toDoListFilters">
+                                    <asp:DropDownList ID="ddlFilter" BackColor="#ADA7C9" runat="server" AutoPostBack="true" class="toDoFilterDropDownList" OnSelectedIndexChanged="ddlFilter_SelectedIndexChanged">
+                                        <asp:ListItem Text="All Tasks" Value="All" />
+                                        <asp:ListItem Text="In Progress" Value="InProgress" />
+                                        <asp:ListItem Text="Completed" Value="Completed" />
+                                    </asp:DropDownList>
+                                    <asp:ImageButton ID="filterButton" runat="server" class="toDoFilterBtn" ClientIDMode="Static" ImageUrl="~/Icons/icons8-filter-bars-white-96.png" OnClick="toDoFilterBtn_Click"/>
+                                </div>
+                            </div>
                         </div>
-                        <asp:HiddenField ID="taskIDHidden" runat="server" Value='<%# Eval("taskID") %>' />
+        
+                    <div class="newTaskContainer">
+                        <asp:ImageButton ID="btnAdd" runat="server" CommandName="Add" class="addTaskBtn" OnClick="btnAdd_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png"/>
+                        <asp:TextBox ID="txtNewTask" runat="server" CssClass="addTaskText" AutoPostBack="true" OnTextChanged="txtNewTask_TextChanged" Placeholder="Add a new task..."></asp:TextBox>
                     </div>
-                </ItemTemplate>
-            </asp:Repeater>
-            <asp:HiddenField ID="userIDHidden" runat="server" />
-        </div>
-    </asp:Panel>
-
-          
-                
+        
+                    <div class="scrollableTasksContainer">
+                        <asp:Repeater ID="rptTasks" runat="server" EnableViewState="false" OnItemCommand="rptTasks_ItemCommand" OnItemDataBound="rptTasks_ItemDataBound">
+                            <ItemTemplate>
+                                <div class="task">
+                                    <asp:Button runat="server" CommandName="Toggle" CommandArgument='<%# Eval("taskID") %>' CssClass='<%# (bool)Eval("taskStatus") ? "checkbox checked" : "checkbox" %>' Text=" " />
+                                    <asp:TextBox ID="txtEditDesc" runat="server"  ReadOnly="true" Text='<%# Eval("taskDesc") %>' CssClass='<%# (bool)Eval("taskStatus") ? "taskCompleted" : "taskUncompleted" %>' />
+                                    <div class="taskControls">
+                                        <asp:ImageButton ID="editBtn" runat="server" class="editBtn" CommandName="Edit" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-edit-white-96.png" />
+                                        <asp:ImageButton ID="saveEditBtn" runat="server" visible="false" class="saveEditBtn" CommandName="Save" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-check-white-96.png"/>
+                                        <asp:ImageButton ID="deleteBtn" runat="server" class="deleteBtn" CommandName="Delete" CommandArgument='<%# Eval("taskID") %>' ImageUrl="~/Icons/icons8-delete-white-96.png"/>
+                                    </div>
+                                    <asp:HiddenField ID="taskIDHidden" runat="server" Value='<%# Eval("taskID") %>' />
+                                </div>
+                            </ItemTemplate>
+                        </asp:Repeater>
+                        <asp:HiddenField ID="userIDHidden" runat="server" />
+                    </div>
+                </asp:Panel>
             </div>
         </div>
         <div class="buttonSection">
