@@ -3185,7 +3185,7 @@ body.page-exit .welcomeBackTextDiv {
     align-items: center;
     margin: auto;
     padding-left: 0.2em;
-    background-color: #90A8C3;
+    background-color: #90A8C3; /*dull blue*/
     min-width: 85%;
     max-width: 85%;
     height: auto;
@@ -3214,7 +3214,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .badge-card {
-    background-color: #90a8c3;
+    background-color: #90a8c3; /*dull blue*/
     border-radius: 1rem;
     width: 100%;
     text-align: center;
@@ -3230,7 +3230,7 @@ body.page-exit .welcomeBackTextDiv {
     height: 180px;
     border-radius: 50%;
     border: 4px solid white;
-    background-color: #D7B9D5;
+    background-color: #D7B9D5; /*light purple*/
     overflow: hidden;
     display: flex;
     align-items: center;
