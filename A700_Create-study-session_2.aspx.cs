@@ -481,7 +481,7 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnOk_Click(object sender, EventArgs e)
     {
-        Response.Redirect("Default.aspx");
+        Response.Redirect("A700_Create-study-session_2.aspx");
     }
 
     protected void btnSure_Click(object sender, EventArgs e)
@@ -505,12 +505,12 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnNotSure_Click(object sender, EventArgs e)
     {
-        Response.Redirect("Default.aspx");
+        Response.Redirect("A700_Create-study-session_2.aspx");
     }
 
     protected void btnOkayDeclined_Click(object sender, EventArgs e)
     {
-        Response.Redirect("Default.aspx");
+        Response.Redirect("A700_Create-study-session_2.aspx");
     }
 
     protected void btnJoin_Click(object sender, EventArgs e)
