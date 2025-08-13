@@ -10,6 +10,7 @@
 .dotnet-tools-global
 .packages
 .tools
+packages.config
 
 # User-specific files
 *.suo
@@ -371,3 +372,5 @@ test:.cs
 
 # Visual Studio
 .vs/
+packages.config
+*.config
