@@ -1,9 +1,8 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="C600_View-friend-list.aspx.cs" Inherits="Default2" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="C700_Search-Friends.aspx.cs" Inherits="Default2" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
-    Friends
+    Seach Friends
 </asp:Content>
-
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
 <div class="accountInfoDiv">
     <div class="profileDiv">
@@ -114,21 +113,20 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-    <div id="viewFriendListMainContent">
-    <div class="header-container">
-        <h2>Your friends</h2>
-        <asp:ImageButton ID="btnMail" runat="server" 
-            ImageUrl="Icons/icons8-mail-white-96.png" 
-            CssClass="mailIcon" 
-            OnClick="btnMail_Click" />
-    </div>
+ <div id="SearchFriendsMainContent">
+ <div class="header-container">
+     <h2>Find your friends</h2>
+     </div>
 
-    <div class="backgroundColorContainer">
-        <div class="leftSection"></div>
-        <div class="middleSection">
-              
-                
+        <div class="backgroundColorContainer">
+       <div class="leftSection"></div>
+       <div class="middleSection">
 
+         <div id="searchFriendsSection">
+              <asp:TextBox ID="txtSearchFriends" ClientIDMode="Static" CssClass="textbox" runat="server" Placeholder="Search" OnTextChanged="txtSearchFriends_TextChanged" AutoPostBack="true"></asp:TextBox>
+              <asp:ImageButton ID="btnSearchFriends" CssClass="imageButton" runat="server" ImageUrl="Icons/icons8-search-white-96.png" OnClick="btnSearchFriends_Click" Width="75" Height="75" />
+        </div>
+       
                  <div class="friendsScrollableTableContainer">
                     <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" AutoGenerateColumns="False" OnRowCommand="GridView1_RowCommand">
                         <Columns>
@@ -143,53 +141,23 @@
                                     </a>
                                     <span class="friendUsername"><%# Eval("username") %></span>
                                  
-                           <asp:Button ID="btnSendGift" CssClass="profilebutton" runat="server" Text="Send Gift" OnClick="btnSendGift_Click" />
-                           <asp:ImageButton ID="btnDeleteFriend" runat="server" ImageUrl="Icons/icons8-delete-white-96.png" CssClass="imageButton" CommandName="DeleteFriend" CommandArgument='<%# Eval("userID") %>' />
-                                </div>
+                           <asp:ImageButton ID="btnAddFriend" runat="server" ImageUrl="Icons/icons8-add-new-white-96.png" CssClass="addFriendBtn" CommandName="AddFriend" CommandArgument='<%# Eval("userID") %>' />
+                         
+                                    </div>
                             </ItemTemplate>
                         </asp:TemplateField>
                         </Columns>
                     </asp:GridView>
                 </div>
-                
-            </div>
-             <div class="rightSection">
-            </div>
-        </div>
-         <div class="buttonSection">
-        <asp:Button ID="btnSearch" CssClass="button" runat="server" Text="Search friends" OnClick="btnSearchFriends_Click" />
-        </div>
-      <asp:Panel ID="pnlDeleteFriend" runat="server" Visible="false">
-    <div id="popup" class="simple-popup">
-        <div class="popup-blue-box">
-            <p>Are you sure you want to delete your friend? You will no longer be able to view them</p>
-            <img src="Images/Notification%20Sad%20Hamster.png" />
-            <br />
-            <div class="buttonSection">
-                <asp:Button ID="btnConfirmDeleteFriend" CssClass="popup-button" 
-                    runat="server" Text="Yes, I am sure" 
-                    OnClick="btnConfirmDeleteFriend_Click" />
-                <asp:Button ID="btnCancelDeleteFriend" CssClass="popup-button-best-blue" 
-                    runat="server" Text="No, not sure!" 
-                    OnClick="btnCancelFriend_Click" />
-            </div>
-        </div>
-    </div>
-</asp:Panel>
-        <!--does not have notification-->
-        <div id="popupNoNotifications" class="simple-popup" style="display: none;">
-            <div class="popup-blue-box">
-                <p>You do not have any notifications at the moment!</p>
-                <img src="Images/Notification%20Sad%20Hamster.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideNotificationPopup(); return false;" />
-                </div>
-            </div>
-        </div>
-    
-        <!--has notifications-->
-        <div id="popupHasNotifications" class="simple-popup" style="display: none;">
+       
+       
+       </div>
+
+       <div class="rightSection">
+       </div>
+     </div>
+     </div>
+            <div id="popupHasNotifications" class="simple-popup" style="display: none;">
             <div class="popup-pink-box">
                 <asp:HiddenField ID="hiddenSessionID" runat="server" />
                 <asp:Literal ID="litNotificationText" runat="server" />
@@ -251,37 +219,8 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <script>
-        function setCircleColors() {
-            const profileImages = document.querySelectorAll('.friendProfileImage');
-
-            profileImages.forEach(img => {
-                const circle = img.closest('.friendProfileIcon').querySelector('.friendProfileCircle');
-
-                const src = img.getAttribute('src').toLowerCase();
-                let colorClass = 'circle-cat';
-
-                if (src.includes('cat')) colorClass = 'circle-cat';
-                else if (src.includes('dog')) colorClass = 'circle-dog';
-                else if (src.includes('bunny')) colorClass = 'circle-bunny';
-                else if (src.includes('cow')) colorClass = 'circle-cow';
-                else if (src.includes('unicorn')) colorClass = 'circle-unicorn';
-
-                circle.classList.add(colorClass);
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', setCircleColors);
-        if (typeof Sys !== 'undefined') {
-            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(setCircleColors);
-        }
-    </script>
 
 </asp:Content>
-
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
-
 </asp:Content>
 

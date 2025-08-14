@@ -1,12 +1,10 @@
 ﻿using MySql.Data.MySqlClient;
-using MySqlX.XDevAPI.Relational;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Security;
-using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -29,14 +27,14 @@ public partial class Default2 : System.Web.UI.Page
             if (Session["Username"] != null)
             {
                 string username = Session["Username"].ToString();
-               
+
                 string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
                 string userID = GetUserID(username, cs);
 
                 if (!string.IsNullOrEmpty(userID))
                 {
                     int userXP = GetUserXP(cs, userID);
-                    LoadFriends();
+                    SearchFriends("");
                     GetLevelInformation(cs, userID);
                     GetUserStats(cs, userID);
                     GetUserProfileIcon(cs, userID);
@@ -52,7 +50,7 @@ public partial class Default2 : System.Web.UI.Page
                     // Calculate progress for the progress bar
                     CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
                 }
-               
+
             }
             else
             {
@@ -61,48 +59,70 @@ public partial class Default2 : System.Web.UI.Page
             ShowNextInvite();
         }
     }
+    protected void txtSearchFriends_TextChanged(object sender, EventArgs e)
+    {
+        SearchFriends(txtSearchFriends.Text.Trim());
+    }
 
-    // start: friends code
     protected void btnSearchFriends_Click(object sender, EventArgs e)
     {
-        Response.Redirect("C700_Search-Friends.aspx");
+        SearchFriends(txtSearchFriends.Text.Trim());
     }
 
-    protected void btnSendGift_Click(object sender, EventArgs e)
-    {
-
-    }
-
-    private void LoadFriends()
+    private void SearchFriends(string searchTerm)
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string query = @"SELECT userID, username, iconNum FROM Users 
+                        WHERE username LIKE @searchTerm 
+                        AND userID != @currentUserID
+                        AND userID NOT IN (
+                            SELECT userIDto FROM FriendsList WHERE userIDfrom = @currentUserID
+                            UNION
+                            SELECT userIDfrom FROM FriendsList WHERE userIDto = @currentUserID
+                        )";
 
         using (MySqlConnection con = new MySqlConnection(cs))
+        using (MySqlCommand cmd = new MySqlCommand(query, con))
         {
-            string command = @"
-            SELECT u.userID, u.username, u.iconNum 
-            FROM Users u 
-            JOIN FriendsList f ON (u.userID = f.userIDto AND f.userIDfrom = @id) OR (u.userID = f.userIDfrom AND f.userIDto = @id) 
-            WHERE u.userID != @id;";
-
-            MySqlCommand cmd = new MySqlCommand(command, con);
-
-            if (Session["userID"] != null)
-            {
-                cmd.Parameters.AddWithValue("@id", Session["userID"]);
-            }
-            else
-            {
-                return;
-            }
+            cmd.Parameters.AddWithValue("@searchTerm", "%" + searchTerm + "%");
+            cmd.Parameters.AddWithValue("@currentUserID", Session["UserID"]);
 
             con.Open();
-            MySqlDataReader rdr = cmd.ExecuteReader();
-            GridView1.DataSource = rdr;
+            MySqlDataReader reader = cmd.ExecuteReader();
+            GridView1.DataSource = reader;
             GridView1.DataBind();
         }
     }
 
+    protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        if (e.CommandName == "AddFriend")
+        {
+            string friendID = e.CommandArgument.ToString();
+            string currentUserID = Session["UserID"].ToString();
+
+            CreateFriendRequest(currentUserID, friendID, "pending");
+            SearchFriends(txtSearchFriends.Text.Trim());
+        }
+    }
+
+    private void CreateFriendRequest(string userID, string friendID, string status)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string query = @"INSERT INTO FriendRequest (requestStatus, userID, friendID) 
+                     VALUES (@status, @userID, @friendID)";
+
+        using (MySqlConnection con = new MySqlConnection(cs))
+        using (MySqlCommand cmd = new MySqlCommand(query, con))
+        {
+            cmd.Parameters.AddWithValue("@status", status);
+            cmd.Parameters.AddWithValue("@userID", userID);
+            cmd.Parameters.AddWithValue("@friendID", friendID);
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+        }
+    }
     public string GetProfileImageUrl(object iconNum)
     {
         int num = Convert.ToInt32(iconNum);
@@ -116,101 +136,6 @@ public partial class Default2 : System.Web.UI.Page
             default: return "Images/ProfilePictures/CatPfp.png";
         }
     }
-
-    protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
-    {
-        string friendID = e.CommandArgument.ToString();
-
-        switch (e.CommandName)
-        {
-            case "SendGift":
-                Response.Redirect(string.Format("SendGift.aspx?friendID={0}", friendID));
-                break;
-
-            case "DeleteFriend":
-                ViewState["FriendToDelete"] = friendID; // Store friend ID for deletion
-                pnlDeleteFriend.Visible = true;
-                break;
-        }
-    }
-    protected void btnCancelFriend_Click(object sender, EventArgs e)
-    {
-        pnlDeleteFriend.Visible = false;
-    }
-
-    protected void btnMail_Click(object sender, EventArgs e)
-    {
-
-    }
-    protected void btnConfirmDeleteFriend_Click(object sender, EventArgs e)
-    {
-        string friendID = ViewState["FriendToDelete"] as string;
-        string userID = Session["userID"] as string;
-
-        if (!string.IsNullOrEmpty(friendID) && !string.IsNullOrEmpty(userID))
-        {
-            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-
-            using (MySqlConnection con = new MySqlConnection(cs))
-            {
-                con.Open();
-
-                // First, get the friendshipID(s) that connect these users
-                List<int> friendshipIDs = new List<int>();
-                string getFriendshipIDsQuery = @"
-                SELECT friendshipID FROM FriendsList 
-                WHERE (userIDfrom = @userID AND userIDto = @friendID)
-                   OR (userIDfrom = @friendID AND userIDto = @userID)";
-
-                using (MySqlCommand cmd = new MySqlCommand(getFriendshipIDsQuery, con))
-                {
-                    cmd.Parameters.AddWithValue("@userID", userID);
-                    cmd.Parameters.AddWithValue("@friendID", friendID);
-
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            friendshipIDs.Add(Convert.ToInt32(reader["friendshipID"]));
-                        }
-                    }
-                }
-
-                // Delete from FriendRequest first (child table)
-                if (friendshipIDs.Count > 0)
-                {
-                    string deleteRequestQuery = @"
-                    DELETE FROM FriendRequest 
-                    WHERE friendshipID IN (" + string.Join(",", friendshipIDs) + ")";
-
-                    using (MySqlCommand cmd = new MySqlCommand(deleteRequestQuery, con))
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-
-                // Then delete from FriendsList (parent table)
-                string deleteFriendQuery = @"
-                DELETE FROM FriendsList 
-                WHERE (userIDfrom = @userID AND userIDto = @friendID)
-                   OR (userIDfrom = @friendID AND userIDto = @userID)";
-
-                using (MySqlCommand cmd = new MySqlCommand(deleteFriendQuery, con))
-                {
-                    cmd.Parameters.AddWithValue("@userID", userID);
-                    cmd.Parameters.AddWithValue("@friendID", friendID);
-                    cmd.ExecuteNonQuery();
-                }
-            }
-
-            // Refresh the friend list
-            LoadFriends();
-        }
-
-        pnlDeleteFriend.Visible = false;
-    }
-    // end: friends code
-
     // start: header profile code
     private string GetUserID(string username, string connectionString)
     {

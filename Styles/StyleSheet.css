@@ -3135,7 +3135,7 @@ body.page-exit .welcomeBackTextDiv {
 
 /* -------------------------------------------- VIEW FRIEND LIST PAGE -------------------------------------------- */
 #viewFriendListMainContent {
-    margin: 1em 4em 4em 4em;
+    margin: 1em auto;
 }
 
 #viewFriendListMainContent h2 {
@@ -3149,11 +3149,25 @@ body.page-exit .welcomeBackTextDiv {
     align-items: center;
     margin: auto;
     background-color: #ADA7C9; /*dark purple*/
-    min-width: 85%;
-    max-width: 85%;
-    height: 63vh;
+    /*min-width: 60%;*/
+    max-width: 55%;
+    height: 55vh;
     border-radius: 3em;
-    padding: 0.5em;
+    padding: -5em;
+}
+#viewFriendListMainContent .friendRow {
+    display: flex;
+    align-items: center;
+    gap: 0.5em; /* Ensures consistent spacing */
+    padding: -200em;
+}
+#viewFriendListMainContent .imageButton {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+#viewFriendListMainContent .friendsScrollableTableContainer {
+    padding: 0em;
 }
 
 /* NOTIFICATION POPUP */
@@ -3164,6 +3178,75 @@ body.page-exit .welcomeBackTextDiv {
 
 #viewFriendListMainContent .popup-pink-box p {
     font-size: 2.2rem;
+}
+.mailIcon {
+    display: inline-block;
+    vertical-align: middle; 
+    width: 55px; 
+    height: 55px;
+    padding: 5px; 
+    margin-left: 5px; 
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: transform 0.2s ease; 
+}
+.header-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    position: relative; 
+}
+
+#viewFriendListMainContent h2 {
+    font-size: 2.5rem;
+   
+    text-shadow: 0px 0px 5px dimgrey;
+}
+/*code for the search friends*/
+#SearchFriendsMainContent {
+    margin: 1em auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#SearchFriendsMainContent .backgroundColorContainer {
+   display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    background-color: #ADA7C9; 
+    max-width: 55%;
+    border-radius: 3em;
+    padding: 1.5em; 
+    height: auto; 
+}
+
+#searchFriendsSection .textbox {
+    flex: 1; 
+    min-width: 0;
+    background-color: white;
+    border: none;
+    border-radius: 2em;
+    padding: 0.5em 1em;
+    font-size: 2rem;
+    height: 50px;
+    box-sizing: border-box;
+    text-align: left;
+}
+#searchFriendsSection {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    width: 100%;
+    padding: 0 1em;
+    margin-bottom: 0.5em;
+}
+#viewFriendListMainContent #btnSearch {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    flex-shrink:0;
 }
 
 /* -------------------------------------------- BADGES PAGE -------------------------------------------- */
