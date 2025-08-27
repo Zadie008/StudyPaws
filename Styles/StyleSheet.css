@@ -1488,7 +1488,7 @@ body.page-exit .welcomeBackTextDiv {
     flex-wrap: nowrap;
     flex-direction: row;
 }
-/*--------------------------------------------- CREATE EVENT PAGE B200 and B500-B800 ---------------------------------------------*/
+/*--------------------------------------------- CREATE EVENT PAGE B200 and B500 ---------------------------------------------*/
 .createEventMainContent {
     margin: 4em 4em 4em 4em;
 }
@@ -1531,6 +1531,7 @@ body.page-exit .welcomeBackTextDiv {
 
 .eventTitleTagSection table {
     width: auto;
+    align-items:center; 
 }
 
     .eventTitleTagSection table tr {
@@ -1577,6 +1578,20 @@ body.page-exit .welcomeBackTextDiv {
         z-index: 10;
         flex: 1;
     }
+.tagControls {
+    /*text-align: right;
+    display: none;*/
+    flex-direction: row;
+    gap: 3px;
+   /* z-index: 100;*/
+    flex: 0 0 auto;
+    /*order: 0;*/
+    /*position: absolute;
+    right: 5px;
+    top: 50%;*/
+    transform: translateY(-50%);
+    align-items:center;
+}
 .createEventMainContent .eventTitleTagSection .rightSection .addTagBtn {
     width: 40px;
     height: 40px;

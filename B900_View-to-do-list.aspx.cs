@@ -136,7 +136,9 @@ public partial class Default2 : System.Web.UI.Page
             {
                 ViewState["PendingAction"] = "Toggle";
                 ViewState["PendingTaskID"] = taskID;
-                ScriptManager.RegisterStartupScript(this, GetType(), "showTogglePopup", "showPopup();", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "showTogglePopup",
+                "setTimeout(function() { showPopup(); }, 100);", true);
+                //ScriptManager.RegisterStartupScript(this, GetType(), "showTogglePopup", "showPopup();", true);
             }
             else
             {
@@ -149,7 +151,9 @@ public partial class Default2 : System.Web.UI.Page
             ViewState["PendingAction"] = "Delete";
             ViewState["PendingTaskID"] = taskID;
 
-            ScriptManager.RegisterStartupScript(this, GetType(), "showDeletePopup", "showPopupDelete();", true);
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "showDeletePopup",
+            "setTimeout(function() { showPopupDelete(); }, 100);", true);
+            //ScriptManager.RegisterStartupScript(this, GetType(), "showDeletePopup", "showPopupDelete();", true);
         }
         else if (e.CommandName == "Edit")
         {

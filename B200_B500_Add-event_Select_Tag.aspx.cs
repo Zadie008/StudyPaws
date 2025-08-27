@@ -2,21 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
-using System.Data.OleDb;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
-using System.Web.Script.Serialization;
 using System.Web.Security;
-using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
 public partial class Default2 : System.Web.UI.Page
 {
-    string connString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
     protected void Page_Load(object sender, EventArgs e)
     {
         if (Request.IsAuthenticated)
@@ -29,27 +22,19 @@ public partial class Default2 : System.Web.UI.Page
             }
         }
 
-        if (Session["userID"] != null)
+        LoadTags();
+        if (!IsPostBack)
+            LoadTags();
+
+        if (Session["Username"] != null)
         {
             string username = Session["Username"].ToString();
-
-            ddlFilter.Visible = IsToDoFilterVisible;
-            userIDHidden.Value = Convert.ToString(Session["userID"]);
 
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
             string userID = GetUserID(username, cs);
 
             if (!IsPostBack)
             {
-                ViewState["SelectedFilter"] = "All";
-                ddlFilter.SelectedValue = "All";
-                LoadTasks();
-
-                DateTime currentDate = DateTime.Today;
-                hfYear.Value = currentDate.Year.ToString();
-                hfMonth.Value = DateTime.Today.Month.ToString();
-                LoadCalendar(currentDate.Year, currentDate.Month);
-
                 int userXP = GetUserXP(cs, userID);
                 Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
                 int currentLevel = levelInfo.Item1;
@@ -64,386 +49,194 @@ public partial class Default2 : System.Web.UI.Page
                 LoadPendingInvitesFromDB();
                 LoadUpcomingSessions();
             }
-            else
-            {
-                LoadTasks();
-
-                int year = int.Parse(hfYear.Value);
-                int month = int.Parse(hfMonth.Value);
-                LoadCalendar(year, month);
-            }
-            //LoadTasks();
         }
         else
         {
-            Response.Redirect("Login.aspx");
+            Response.Redirect("Landing-page.aspx");
         }
+
+        //{
+        //    if (Session["timerTitle"] != null)
+        //    {
+        //        txtEventTitle.Text = Session["timerTitle"].ToString();
+        //    }
+
+        //    if (Session["timerTag"] != null)
+        //    {
+        //        dropdownEventTag.SelectedValue = Session["timerTag"].ToString();
+        //    }
+        //}
 
         ShowNextInvite();
     }
-    private bool IsToDoFilterVisible
+    protected void btnBack_Click(object sender, EventArgs e)
     {
-        get
-        {
-            return ViewState["FilterVisible"] != null && (bool)ViewState["FilterVisible"];
-        }
-        set
-        {
-            ViewState["FilterVisible"] = value;
-        }
-    }
-    private void LoadCalendar(int year, int month)
-    {
-        lblMonthYear.Text = new DateTime(year, month, 1).ToString("MMMM yyyy");
-        literalCalendar.Text = GenerateCalendar(year, month);
-        hfYear.Value = year.ToString();
-        hfMonth.Value = month.ToString();
-    }
-    protected void calendarFilterBtn_Click(object sender, EventArgs e)
-    {
-        System.Diagnostics.Debug.WriteLine("Button clicked");
-    }
-    private String GenerateCalendar(int year, int month)
-    {
-        StringBuilder sb = new StringBuilder();
-        DateTime firstDayOfMonth = new DateTime(year, month, 1);
-        int daysInMonth = DateTime.DaysInMonth(year, month);
-
-        int adjustedStartDay = ((int)firstDayOfMonth.DayOfWeek + 6) % 7;
-
-        sb.Append("<table class='calendarBox'>");
-        sb.Append("<tr>");
-        string[] dayNames = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
-        foreach (string dayName in dayNames)
-        {
-            sb.Append(string.Format("<th class='weeks'>{0}</th>", dayName));
-        }
-        sb.Append("</tr>");
-
-        int currentDay = 1;
-
-        DateTime prevMonth = firstDayOfMonth.AddMonths(-1);
-        int daysInPrevMonth = DateTime.DaysInMonth(prevMonth.Year, prevMonth.Month);
-
-        DateTime nextMonth = firstDayOfMonth.AddMonths(1);
-        int week = 0;
-
-        while (currentDay <= daysInMonth)
-        {
-            sb.Append("<tr>");
-
-            for (int dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++)
-            {
-
-                if (week == 0 && dayOfWeek < adjustedStartDay)
-                {
-                    int prevDay = daysInPrevMonth - (adjustedStartDay - dayOfWeek - 1);
-                    sb.Append(string.Format("<td class='otherMonth'>{0}</td>", prevDay));
-                }
-                else if (currentDay <= daysInMonth)
-                {
-                    DateTime thisDay = new DateTime(year, month, currentDay);
-                    bool isToday = thisDay.Date == DateTime.Today;
-
-                    List<string> events = GetEventsForDay(thisDay);
-
-                    sb.Append("<td class='calendarCell'>");
-
-                    // Day number
-                    sb.Append("<div class='dayNumber'>");
-                    if (isToday)
-                    {
-                        sb.AppendFormat("<span class='today'>{0}</span>", currentDay);
-                    }
-                    else
-                    {
-                        sb.AppendFormat("{0}", currentDay);
-                    }
-                    sb.Append("</div>");
-
-                    // Events
-                    sb.Append("<div class='events scrollableEvents'>");
-                    foreach (string ev in events)
-                    {
-                        sb.Append("<div class='eventItem'><span class='eventDot'></span>");
-                        sb.Append(HttpUtility.HtmlEncode(ev));
-                        sb.Append("</div>");
-                    }
-                    sb.Append("</div>");
-
-                    // '+' Button
-                    sb.AppendFormat(
-                        "<a class='addEventBtn' href='B200_B500_Add-event_Select_Tag.aspx?date={0}'>" + "<img src='Icons/icons8-add-new-white-96.png' class='addEventBtnImg' />" + "</a>",
-                        thisDay.ToString("yyyy-MM-dd")
-                    );
-
-                    sb.Append("</td>");
-                    currentDay++;
-
-                }
-                else
-                {
-                    int nextDay = (currentDay - daysInMonth);
-                    sb.Append(string.Format("<td class='otherMonth'>{0}</td>", nextDay));
-                    currentDay++;
-                }
-            }
-
-            sb.Append("</tr>");
-            week++;
-        }
-
-        sb.Append("</table>");
-        return sb.ToString();
-
-    }
-    private List<string> GetEventsForDay(DateTime day)
-    {
-        // Simulated data for now
-        var sampleEvents = new Dictionary<string, List<string>>()
-    {
-        { "2025-07-01", new List<string> { "WRPV Assignment" } },
-        { "2025-07-10", new List<string> { "WRAV Assignment" } },
-        { "2025-07-18", new List<string> { "FS Document", "UI Designs" } }
-    };
-
-        string key = day.ToString("yyyy-MM-dd");
-        return sampleEvents.ContainsKey(key) ? sampleEvents[key] : new List<string>();
+        Response.Redirect("B1600_View-dashboard.aspx");
     }
 
-    protected void btnPrevMonth_Click(Object sender, EventArgs e)
-    {
-        int year = int.Parse(hfYear.Value);
-        int month = int.Parse(hfMonth.Value);
-
-        DateTime prevMonth = new DateTime(year, month, 1).AddMonths(-1);
-        LoadCalendar(prevMonth.Year, prevMonth.Month);
-    }
-    protected void btnNextMonth_Click(Object sender, EventArgs e)
-    {
-        int year = int.Parse(hfYear.Value);
-        int month = int.Parse(hfMonth.Value);
-
-        DateTime nextMonth = new DateTime(year, month, 1).AddMonths(1);
-        LoadCalendar(nextMonth.Year, nextMonth.Month);
-    }
-    protected void btnToday_Click(Object sender, EventArgs e)
-    {
-        DateTime today = DateTime.Today;
-        hfYear.Value = today.Year.ToString();
-        hfMonth.Value = today.Month.ToString();
-        LoadCalendar(today.Year, today.Month);
-    }
-
-    private void LoadTasks()
-    {
-        string filter = ddlFilter.SelectedValue ?? "All";
-        ViewState["SelectedFilter"] = filter;
-
-        string whereClause = "";
-
-        if (filter == "Completed")
-            whereClause = "AND taskStatus = True";
-        else if (filter == "InProgress")
-            whereClause = "AND taskStatus = False";
-
-        DataTable dt = new DataTable();
-
-        using (MySqlConnection conn = new MySqlConnection(connString))
-        {
-            conn.Open();
-            string sql = "SELECT * FROM ToDoListTask WHERE userID = @userID " + whereClause + " ORDER BY taskStatus DESC";
-            MySqlCommand cmd = new MySqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
-            dt.Load(cmd.ExecuteReader());
-        }
-
-        rptTasks.DataSource = dt;
-        rptTasks.DataBind();
-    }
-    protected void txtNewTask_TextChanged(object sender, EventArgs e)
-    {
-        btnAdd_Click(sender, e);
-    }
     protected void btnAdd_Click(object sender, EventArgs e)
     {
-        string taskDesc = txtNewTask.Text.Trim();
-        if (taskDesc == "")
+        String desc = txtEventTitle.Text;
+        int userID = Convert.ToInt32(Session["userID"]);
+        if (string.IsNullOrEmpty(dropdownEventTag.SelectedValue))
+        {
             return;
+        }
+        int tag = int.Parse(dropdownEventTag.SelectedValue);
 
-        using (MySqlConnection conn = new MySqlConnection(connString))
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (MySqlConnection conn = new MySqlConnection(cs))
         {
             conn.Open();
-            string sql = "INSERT into ToDoListTask (taskDesc, taskStatus, userID) VALUES (@taskDesc, False, @userID)";
+            string sql = "INSERT into CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (@desc, @eventDate, @tagID, @userID)";
             MySqlCommand cmd = new MySqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("@taskDesc", taskDesc);
+            cmd.Parameters.AddWithValue("@desc", desc);
+            cmd.Parameters.AddWithValue("@eventDate", DateTime.Today);
+            cmd.Parameters.AddWithValue("@tagID", tag);
             cmd.Parameters.AddWithValue("@userID", Session["userID"]);
             cmd.ExecuteNonQuery();
         }
 
-        txtNewTask.Text = "";
-        Response.Redirect(Request.RawUrl);
+        Response.Redirect("B1600_View-dashboard.aspx");
     }
-
-    protected void rptTasks_ItemCommand(object source, RepeaterCommandEventArgs e)
+    protected void btnNewTag_Click(object sender, EventArgs e)
     {
-        int taskID = Convert.ToInt32(e.CommandArgument);
-
-        if (e.CommandName == "Toggle")
+        Response.Redirect("B600_Add_Tags.aspx");
+    }
+    /*protected void btnNewTag_Click(object sender, EventArgs e)
+    {
+        txtTagTitle.Text = "";
+        ScriptManager.RegisterStartupScript( this, GetType(), "showPopup", "setTimeout(function(){ showPopup1(); }, 100);", true);
+        //ScriptManager.RegisterStartupScript(this, GetType(), "showPopup", "showPopup1();", true);
+    }*/
+    protected void btnAddTag_Click(Object sender, EventArgs e)
+    {
+        if (Page.IsValid)
         {
-            HiddenField taskIDHidden = (HiddenField)e.Item.FindControl("taskIDHidden");
-            bool currentStatus = GetTaskStatus(taskID);
+            String tagName = txtTagTitle.Text.Trim();
+            int tagColourNum = int.Parse(hfTagColourNum.Value);
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
-            if (!currentStatus)
-            {
-                ViewState["PendingAction"] = "Toggle";
-                ViewState["PendingTaskID"] = taskID;
-                ScriptManager.RegisterStartupScript(this, GetType(), "showTogglePopup", "showPopup();", true);
-            }
-            else
-            {
-                ToggleTaskStatus(taskID);
-                LoadTasks();
-            }
-
-
-        }
-        else if (e.CommandName == "Delete")
-        {
-            ViewState["PendingAction"] = "Delete";
-            ViewState["PendingTaskID"] = taskID;
-
-            ScriptManager.RegisterStartupScript(this, GetType(), "showDeletePopup", "showPopupDelete();", true);
-
-        }
-        else if (e.CommandName == "Edit")
-        {
-            ViewState["EditingTaskID"] = e.CommandArgument.ToString();
-            LoadTasks();
-        }
-        else if (e.CommandName == "Save")
-        {
-            TextBox txtEditDesc = (TextBox)e.Item.FindControl("txtEditDesc");
-            string newDesc = txtEditDesc.Text.Trim();
-            if (string.IsNullOrWhiteSpace(newDesc))
-                return;
-
-            using (MySqlConnection conn = new MySqlConnection(connString))
+            using (MySqlConnection conn = new MySqlConnection(cs))
             {
                 conn.Open();
-                string query = "UPDATE ToDoListTask SET taskDesc = @newDesc WHERE taskID = @taskID";
-                MySqlCommand cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@newDesc", newDesc);
-                cmd.Parameters.AddWithValue("@taskID", taskID);
-                cmd.ExecuteNonQuery();
-            }
-            ViewState["EditingTaskID"] = null;
-            LoadTasks();
-        }
-    }
-
-    protected void ddlFilter_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        string selectedFilter = ddlFilter.SelectedValue;
-        ViewState["SelectedFilter"] = selectedFilter;
-        LoadTasks();
-    }
-    protected void toDoFilterBtn_Click(object sender, EventArgs e)
-    {
-        IsToDoFilterVisible = !IsToDoFilterVisible;
-        ddlFilter.Visible = IsToDoFilterVisible;
-    }
-    protected void rptTasks_ItemDataBound(object sender, RepeaterItemEventArgs e)
-    {
-        if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-        {
-            TextBox txtDesc = (TextBox)e.Item.FindControl("txtEditDesc");
-            ImageButton editBtn = (ImageButton)e.Item.FindControl("editBtn");
-            ImageButton saveBtn = (ImageButton)e.Item.FindControl("saveEditBtn");
-            HiddenField taskIDHidden = (HiddenField)e.Item.FindControl("taskIDHidden");
-
-            if (txtDesc != null && editBtn != null && saveBtn != null && taskIDHidden != null)
-            {
-                string editingTaskID = Convert.ToString(ViewState["EditingTaskID"]);
-
-
-                if (editingTaskID == taskIDHidden.Value)
+                if (!string.IsNullOrEmpty(hiddenSelectedTagID.Value))
                 {
-                    txtDesc.ReadOnly = false;
-                    editBtn.Visible = false;
-                    saveBtn.Visible = true;
-                    txtDesc.Focus();
+                    int tagID = int.Parse(hiddenSelectedTagID.Value);
+                    string update = "UPDATE CalendarEventTag SET tagName = @tagName, tagColourNum = @tagColourNum WHERE tagID = @tagID";
+                    MySqlCommand cmdUpdate = new MySqlCommand(update, conn);
+                    cmdUpdate.Parameters.AddWithValue("@tagName", tagName);
+                    cmdUpdate.Parameters.AddWithValue("@tagColourNum", tagColourNum);
+                    cmdUpdate.Parameters.AddWithValue("@tagID", tagID);
+                    cmdUpdate.ExecuteNonQuery();
                 }
                 else
                 {
-                    txtDesc.ReadOnly = true;
-                    editBtn.Visible = true;
-                    saveBtn.Visible = false;
+                    string query = "INSERT into CalendarEventTag (tagName, tagColourNum) VALUES (@tagName, @tagColourNum)";
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@tagName", tagName);
+                    cmd.Parameters.AddWithValue("@tagColourNum", tagColourNum);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            Response.Redirect(Request.RawUrl);
+        }
+    }
+    protected void validatorTagColour_ServerValidate(object sender, ServerValidateEventArgs e)
+    {
+        e.IsValid = !string.IsNullOrEmpty(hfTagColourNum.Value);
+    }
+    protected void LoadTags()
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (MySqlConnection conn = new MySqlConnection(cs))
+        {
+            conn.Open();
+            string query = "SELECT tagID, tagName FROM CalendarEventTag";
+            MySqlCommand cmd = new MySqlCommand(query, conn);
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                dropdownEventTag.Items.Clear();
+                dropdownEventTag.Items.Add(new ListItem(""));
+
+                while (reader.Read())
+                {
+                    string tagName = reader["tagName"].ToString();
+                    int tagID = Convert.ToInt32(reader["tagID"]);
+
+                    if (tagID != 1)
+                    {
+                        dropdownEventTag.Items.Add(new ListItem(tagName, tagID.ToString()));
+                    }
                 }
             }
         }
+    }
+    protected void btnDeleteTag_Click(object sender, EventArgs e)
+    {
+        //ViewState["PendingAction"] = "Delete";
+        //ViewState["PendingTagID"] = Convert.ToInt32(hiddenSelectedTagID.Value);
+        ScriptManager.RegisterStartupScript(this, GetType(), "showDeletePopup", "showDeletePopup();", true);
+    }
+    protected void btnEditTag_Click(Object sender, EventArgs e)
+    {
+        if (!string.IsNullOrEmpty(dropdownEventTag.SelectedValue))
+        {
+            int tagID = Convert.ToInt32(dropdownEventTag.SelectedValue);
+            Session["EditTagID"] = tagID;
+            Response.Redirect("B700-B800_Edit_Delete_Tags.aspx");
+        }
+        //if (dropdownEventTag.SelectedIndex > 0 && dropdownEventTag.SelectedValue != "")
+        //{
+        //    int tagID = Convert.ToInt32(dropdownEventTag.SelectedValue);
+        //    hiddenSelectedTagID.Value = tagID.ToString();
+
+        //    string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        //    using (MySqlConnection conn = new MySqlConnection(cs))
+        //    {
+        //        conn.Open();
+        //        string query = "SELECT tagName, tagColourNum FROM CalendarEventTag WHERE tagID = @tagID";
+        //        MySqlCommand cmd = new MySqlCommand(query, conn);
+        //        cmd.Parameters.AddWithValue("@tagID", tagID);
+        //        using (MySqlDataReader reader = cmd.ExecuteReader())
+        //        {
+        //            if (reader.Read())
+        //            {
+        //                txtTagTitleEdit.Text = reader["tagName"].ToString();
+        //                hfEditTagColourNum.Value = reader["tagColourNum"].ToString();
+
+        //                ScriptManager.RegisterStartupScript(this, GetType(), "setColourEdit", "selectTagColour(" + reader["tagColourNum"].ToString() + ");", true);
+        //            }
+        //        }
+        //    }
+        //    Response.Redirect("B700-B800_Edit_Delete_Tags.aspx");
+        //}
     }
     protected void btnYesDelete_Click(object sender, EventArgs e)
     {
-        string action = ViewState["PendingAction"] as string;
-        int taskID = Convert.ToInt32(ViewState["PendingTaskID"]);
-
-        if (action == "Delete")
+        if (dropdownEventTag.SelectedIndex > 0 && dropdownEventTag.SelectedValue != "")
         {
-            using (MySqlConnection conn = new MySqlConnection(connString))
+            int tagID = Convert.ToInt32(dropdownEventTag.SelectedValue);
+            hiddenSelectedTagID.Value = tagID.ToString();
+
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            using (MySqlConnection conn = new MySqlConnection(cs))
             {
                 conn.Open();
-                string query = "DELETE FROM ToDoListTask WHERE taskID = @taskID";
+                string query = "DELETE FROM CalendarEventTag WHERE tagID = @tagID";
                 MySqlCommand cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@taskID", taskID);
+                cmd.Parameters.AddWithValue("@tagID", tagID);
                 cmd.ExecuteNonQuery();
+                ScriptManager.RegisterStartupScript(this, GetType(), "hideDeletePopup", "hideDeletePopup();", true);
             }
-            Response.Redirect(Request.RawUrl);
-            ViewState["PendingAction"] = null;
-            ViewState["PendingTaskID"] = null;
         }
     }
-    protected void btnNoDelete_Click(Object sender, EventArgs e)
+    /*protected void btnNoDelete_Click(Object sender, EventArgs e)
     {
         ViewState["PendingAction"] = null;
-        ViewState["PendingTaskID"] = null;
-        LoadTasks();
-    }
-    private bool GetTaskStatus(int taskID)
-    {
-        using (MySqlConnection conn = new MySqlConnection(connString))
-        {
-            conn.Open();
-            string query = "SELECT taskStatus FROM ToDoListTask WHERE taskID = @taskID";
-            MySqlCommand cmd = new MySqlCommand(query, conn);
-            cmd.Parameters.AddWithValue("@taskID", taskID);
-            var result = cmd.ExecuteScalar();
-            return result != DBNull.Value && Convert.ToBoolean(result);
-        }
-    }
-    private void ToggleTaskStatus(int taskID)
-    {
-
-        using (MySqlConnection conn = new MySqlConnection(connString))
-        {
-            conn.Open();
-            string query = "UPDATE ToDoListTask SET taskStatus = NOT taskStatus WHERE taskID = @taskID";
-            MySqlCommand cmd = new MySqlCommand(query, conn);
-            cmd.Parameters.AddWithValue("@taskID", taskID);
-            cmd.ExecuteNonQuery();
-        }
-        Response.Redirect(Request.RawUrl);
-        ViewState["PendingAction"] = null;
-        ViewState["PendingTaskID"] = null;
-    }
-    protected void btnThankYou_Click(object sender, EventArgs e)
-    {
-        if (ViewState["PendingAction"] != null && ViewState["PendingAction"].ToString() == "Toggle" && ViewState["PendingTaskID"] != null)
-        {
-            int taskID = Convert.ToInt32(ViewState["PendingTaskID"]);
-            ToggleTaskStatus(taskID);
-        }
-    }
+        ViewState["PendingTagID"] = null;
+        ScriptManager.RegisterStartupScript();
+    }*/
 
     // start: header profile code
     private string GetUserID(string username, string connectionString)
@@ -832,7 +625,7 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnOk_Click(object sender, EventArgs e)
     {
-        Response.Redirect("B1600_View-dashboard.aspx");
+        Response.Redirect("B200_B500-800_Add-event_.aspx");
     }
 
     protected void btnSure_Click(object sender, EventArgs e)
@@ -856,12 +649,12 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnNotSure_Click(object sender, EventArgs e)
     {
-        Response.Redirect("B1600_View-dashboard.aspx");
+        Response.Redirect("B200_B500-800_Add-event_.aspx");
     }
 
     protected void btnOkayDeclined_Click(object sender, EventArgs e)
     {
-        Response.Redirect("B1600_View-dashboard.aspx");
+        Response.Redirect("B200_B500-800_Add-event_.aspx");
     }
 
     protected void btnJoin_Click(object sender, EventArgs e)

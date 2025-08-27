@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="B200_B500-800_Add-event_.aspx.cs" Inherits="Default2" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="B200_B500_Add-event_Select_Tag.aspx.cs" Inherits="Default2" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
     Add event
@@ -119,9 +119,11 @@
                     <td><asp:RequiredFieldValidator ID="errorTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title" EnableClientScript="true" ControlToValidate="txtEventTitle"></asp:RequiredFieldValidator></td>
                 </tr>
                 <tr>
-                    <td><asp:ImageButton ID="btnAddTag" runat="server" CommandName="AddTag" CausesValidation="false" class="addTagBtn" OnClick="btnNewTag_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png" /></td>
-                    <td><asp:ImageButton ID="btnEditTag" runat="server" CausesValidation="false" CommandArgument='<%# Eval ("tagID") %>' CssClass="addTagBtn" ImageUrl="~/Icons/icons8-edit-white-96.png" OnClick="btnEditTag_Click"/></td>
-                    <td><asp:RequiredFieldValidator ID="errorDropDown" class="validationError" runat="server" ErrorMessage="Please select a Tag" EnableClientScript="true" ControlToValidate="dropdownEventTag"></asp:RequiredFieldValidator></td>
+                    <td><div class="tagControls">
+                        <asp:ImageButton ID="btnAddTag" runat="server" CommandName="AddTag" CausesValidation="false" class="addTagBtn" OnClick="btnNewTag_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png" /></div>
+                        <asp:ImageButton ID="btnEditTag" runat="server" CausesValidation="false" CommandArgument='<%# Eval ("tagID") %>' CssClass="addTagBtn" ImageUrl="~/Icons/icons8-edit-white-96.png" OnClick="btnEditTag_Click"/>
+                    </td>
+                    <td><asp:RequiredFieldValidator ID="errorDropDown" class="validationError" runat="server" ErrorMessage="Please select a Tag" EnableClientScript="true" ControlToValidate="dropdownEventTag" InitialValue="" ></asp:RequiredFieldValidator></td>
                 </tr>
             </table>
         </div>
@@ -138,7 +140,7 @@
         </div>
     </div>
 
-    <div id="popup1" class="simple-popup" style="display: none;">
+    <div id="popup1" runat="server" ClientIDMode="static" class="simple-popup" style="display: none;">
     <div class="popup-pink-boxTagEdit">
         <table class="popupTagEditing">
             <tr>
@@ -175,7 +177,7 @@
 </div>
 
         <!-- EDIT AND DELETE TAG POPUP-->
-            <div id="popup2" class="simple-popup" style="display: none;">
+            <div id="popup2" runat="server" ClientIDMode="static" class="simple-popup" style="display: none;">
                 <div class="popup-pink-boxTagEdit">
                     <table class="popupTagEditing">
                         <tr>
