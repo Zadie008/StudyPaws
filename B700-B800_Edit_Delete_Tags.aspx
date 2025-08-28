@@ -123,8 +123,66 @@
             <asp:Button ID="btnSaveEditTag" class="button" runat="server" Text="Save" CausesValidation="true" OnClick="btnSave_Click" ValidationGroup="tagPopup" />
         </div>
     </div>
-    <asp:HiddenField ID="hiddenSelectedTagColourEdit" runat="server" />     
+    <asp:HiddenField ID="hiddenSelectedTagColourEdit" runat="server" />  
+
+  <div id="popupDeleteTag" class="simple-popup" style="display: none;">
+    <div class="popup-blue-box">
+        <p>Are you sure you want to delete this tag?</p>
+        <img src="Images/Notification%20Sad%20Hamster.png" />
+        <br />
+        <div class="buttonSection">
+            <asp:Button ID="btnYesDelete" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnYesDelete_Click" />
+            <asp:Button ID="btnNo" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClientClick="hideDeletePopup(); return false;"  />
+        </div>
+    </div>
 </div>
+
+
+        <script type="text/javascript">
+            window.addEventListener('DOMContentLoaded', function () {
+                const tagButtons = document.querySelectorAll('.tagOne, .tagTwo, .tagThree, .tagFour, .tagFive');
+                const hiddenField = document.getElementById('<%= hiddenSelectedTagColourEdit.ClientID %>');
+                tagButtons.forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        tagButtons.forEach(b => b.classList.remove('selectedTag'));
+                        this.classList.add('selectedTag');
+                        hiddenField.value = this.id;
+                    });
+                });
+            });
+
+            function validateTagColour(sender, args) {
+                var selected = document.getElementById('<%=hiddenSelectedTagColourEdit.ClientID%>').value;
+    args.IsValid = selected !== "";
+}
+function selectTagColour(colourNum) {
+    document.getElementById('<%= hfEditTagColourNum.ClientID%>').value = colourNum;
+    const tagButtons = document.querySelectorAll('.tagOne, .tagTwo, .tagThree, .tagFour, .tagFive');
+    tagButtons.forEach(b => b.classList.remove('selectedTag'));
+    const btnIDMap = {
+        1: '<%= tagColourOneEdit.ClientID%>',
+        2: '<%= tagColourTwoEdit.ClientID%>',
+        3: '<%= tagColourThreeEdit.ClientID%>',
+        4: '<%= tagColourFourEdit.ClientID%>',
+        5: '<%= tagColourFiveEdit.ClientID%>'
+    };
+    const selectedBtn = document.getElementById(btnIDMap[colourNum]);
+    if (selectedBtn) {
+        selectedBtn.classList.add('selectedTag');
+    }
+    document.getElementById('<%= hiddenSelectedTagColourEdit.ClientID%>').value = selectedBtn ? selectedBtn.id : '';
+            }
+            function hideDeletePopup() {
+                document.getElementById('popupDeleteTag').style.display = 'none';
+            }
+            function showDeletePopup(){
+                document.getElementById('popupDeleteTag').style.display = 'block';
+            }
+        </script>
+
+
+</div>
+
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

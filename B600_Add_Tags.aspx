@@ -126,7 +126,31 @@
         </div>
     </div>
         <asp:HiddenField ID="hiddenSelectedTagColour" runat="server" />     
+
+
+<script type="text/javascript">
+    window.addEventListener('DOMContentLoaded', function () {
+        const tagButtons = document.querySelectorAll('.tagOne, .tagTwo, .tagThree, .tagFour, .tagFive');
+        const hiddenField = document.getElementById('<%= hiddenSelectedTagColour.ClientID %>');
+        tagButtons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                tagButtons.forEach(b => b.classList.remove('selectedTag'));
+                this.classList.add('selectedTag');
+                hiddenField.value = this.id;
+            });
+        });
+    });
+
+    function validateTagColour(sender, args) {
+        var selected = document.getElementById('<%=hiddenSelectedTagColour.ClientID%>').value;
+        args.IsValid = selected !== "";
+    }
+    function selectTagColour(colourNum) {
+        document.getElementById('<%= hfTagColourNum.ClientID%>').value = colourNum;
+}
+</script>
 </div>
+
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

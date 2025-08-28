@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
@@ -43,6 +44,34 @@ public partial class B700_B800_Edit_Delete_Tags : System.Web.UI.Page
                 }
             }
         }
+        if (Session["Username"] != null)
+        {
+            string username = Session["Username"].ToString();
+
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            string userID = GetUserID(username, cs);
+
+            if (!IsPostBack)
+            {
+                int userXP = GetUserXP(cs, userID);
+                Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
+                int currentLevel = levelInfo.Item1;
+                int currentLevelXpAmount = levelInfo.Item2;
+                int nextLevelXpAmount = levelInfo.Item3;
+
+                lblLevelNumber.Text = currentLevel.ToString();
+
+                CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
+                GetUserStats(cs, userID);
+                GetUserProfileIcon(cs, userID);
+                LoadPendingInvitesFromDB();
+                //LoadUpcomingSessions();
+            }
+        }
+        else
+        {
+            Response.Redirect("Landing-page.aspx");
+        }
     }
     protected void validatorTagColour_ServerValidate(object sender, ServerValidateEventArgs e)
     {
@@ -50,39 +79,64 @@ public partial class B700_B800_Edit_Delete_Tags : System.Web.UI.Page
     }
     protected void btnBack_Click(object sender, EventArgs e) 
     {
-        Response.Redirect("B200_B500_Add-event_Select_Tag.aspx");
+        if (Session["EditTagID"] != null)
+        {
+            int tagID = (int)Session["EditTagID"];
+            Response.Redirect("B200_B500_Add-event_Select_Tag.aspx?selectedTag=" + tagID);
+        }
     }
     protected void btnDelete_Click(object sender, EventArgs e) 
     {
-        //do this
-        Response.Redirect("B200_B500_Add-event_Select_Tag.aspx");
+        //ViewState["PendingAction"] = "Delete";
+        //ViewState["PendingTagID"] = Convert.ToInt32(hiddenSelectedTagID.Value);
+        ScriptManager.RegisterStartupScript(this, GetType(), "showDeletePopup", "showDeletePopup();", true);
     }
     protected void btnSave_Click(object sender, EventArgs e) 
     {
-        if (Page.IsValid)
+        if (Page.IsValid && Session["EditTagID"]!=null)
         {
             String tagName = txtTagTitleEdit.Text.Trim();
             int tagColourNum = int.Parse(hfEditTagColourNum.Value);
-            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            int tagID = (int)Session["EditTagID"];
 
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
             using (MySqlConnection conn = new MySqlConnection(cs))
             {
                 conn.Open();
-                if (!string.IsNullOrEmpty(hiddenSelectedTagColourEdit.Value))
-                {
-                    int tagID = int.Parse(hiddenSelectedTagColourEdit.Value);
-                    string update = "UPDATE CalendarEventTag SET tagName = @tagName, tagColourNum = @tagColourNum WHERE tagID = @tagID";
-                    MySqlCommand cmdUpdate = new MySqlCommand(update, conn);
-                    cmdUpdate.Parameters.AddWithValue("@tagName", tagName);
-                    cmdUpdate.Parameters.AddWithValue("@tagColourNum", tagColourNum);
-                    cmdUpdate.Parameters.AddWithValue("@tagID", tagID);
-                    cmdUpdate.ExecuteNonQuery();
-                }
+                string update = "UPDATE CalendarEventTag SET tagName = @tagName, tagColourNum = @tagColourNum WHERE tagID = @tagID";
+                MySqlCommand cmdUpdate = new MySqlCommand(update, conn);
+                cmdUpdate.Parameters.AddWithValue("@tagName", tagName);
+                cmdUpdate.Parameters.AddWithValue("@tagColourNum", tagColourNum);
+                cmdUpdate.Parameters.AddWithValue("@tagID", tagID);
+                cmdUpdate.ExecuteNonQuery();
+            }
+            Response.Redirect("B200_B500_Add-event_Select_Tag.aspx?selectedTag=" + tagID);
+        }
+    }
+    protected void btnYesDelete_Click(object sender, EventArgs e)
+    {
+        if (Session["EditTagID"] != null)
+        {
+            int tagID = (int)Session["EditTagID"];
+
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            using (MySqlConnection conn = new MySqlConnection(cs))
+            {
+                conn.Open();
+                string query = "DELETE FROM CalendarEventTag WHERE tagID = @tagID";
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@tagID", tagID);
+                cmd.ExecuteNonQuery();
             }
             Response.Redirect("B200_B500_Add-event_Select_Tag.aspx");
         }
     }
-
+    /*protected void btnNoDelete_Click(Object sender, EventArgs e)
+    {
+        ViewState["PendingAction"] = null;
+        ViewState["PendingTagID"] = null;
+        ScriptManager.RegisterStartupScript();
+    }*/
 
     // start: header profile code
     private string GetUserID(string username, string connectionString)
