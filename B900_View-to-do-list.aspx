@@ -149,8 +149,11 @@
             </asp:Repeater>
             <asp:HiddenField ID="userIDHidden" runat="server" />
         </div>
-
-        <div id="popupTaskComplete" class="simple-popup" style="display: none;">
+        <asp:Button ID="btnTestToggle" runat="server" Text="Test Toggle Popup" 
+    OnClientClick="showPopup(); return false;" />
+<asp:Button ID="btnTestDelete" runat="server" Text="Test Delete Popup" 
+    OnClientClick="showPopupDelete(); return false;" />
+        <div id="popupTaskComplete" runat="server" ClientIDMode="static" class="simple-popup" style="display: none;">
             <div class="popup-pink-box">
                 <p>Congrats! You earned:</p> 
                 <p>XP   +10</p>
@@ -162,7 +165,7 @@
             </div>
         </div>
 
-        <div id="popupDeleteTask" class="simple-popup" style="display: none;">
+        <div id="popupDeleteTask" runat="server" ClientIDMode="static" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
                 <p>Are you sure you want to delete this task?</p>
                 <img src="Images/Notification%20Sad%20Hamster.png" />
@@ -263,17 +266,28 @@
         </div>
 
         <script type="text/javascript">
-            function showPopup() {
-                document.getElementById('popupTaskComplete').style.display = 'flex';
+            function showPopup() {//rewrite
+                console.log('showPopup called - looking for popupTaskComplete');
+                var popup = document.getElementById('popupTaskComplete');
+                console.log('Popup element found:', popup);
+                if (popup) {
+                    popup.style.display = 'flex';
+                    console.log('Popup should be visible now');
+                } else {
+                    console.error('popupTaskComplete element not found!');
+                }
             }
-            function hidePopup() {
-                document.getElementById('popupTaskComplete').style.display = 'none';
+            function hidePopup() {//rewrite
+                var popup = document.getElementById('popupTaskComplete');
+                if (popup) popup.style.display = 'none';
             }
-            function showPopupDelete() {
-                document.getElementById('popupDeleteTask').style.display = 'flex';
+            function showPopupDelete() {//rewrite
+                var popup = document.getElementById('popupDeleteTask');
+                if (popup) popup.style.display = 'flex';
             }
-            function hideDeletePopup() {
-                document.getElementById('popupDeleteTask').style.display = 'none';
+            function hideDeletePopup() {//rewrite
+                var popup = document.getElementById('popupDeleteTask'); // rewte these
+                if (popup) popup.style.display = 'none';
             }
             <%-- this is the code for the level up panel--%>
             function showLevelUp() {
