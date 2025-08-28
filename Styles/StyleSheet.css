@@ -87,7 +87,6 @@ p {
 
 /* -------------------------------------------- POP-UPS -------------------------------------------- */
 .simple-popup {
-    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -213,6 +212,10 @@ p {
 .popup-button-best-pink a {
     color: #D7B9D5;
     text-decoration: none;
+}
+.simple-popup.show {
+    visibility: visible;
+    opacity: 1;
 }
 
 /* -------------------------------------------- MASTER PAGE DIVS -------------------------------------------- */

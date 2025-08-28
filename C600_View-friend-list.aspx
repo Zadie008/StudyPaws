@@ -146,19 +146,41 @@
                 </div>
             </asp:Panel>
         </ContentTemplate>
-        <Triggers>
-            <asp:AsyncPostBackTrigger ControlID="btnMail" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="btnAcceptFriendRequest" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="btnDeclineFriendRequest" EventName="Click" />
-        </Triggers>
+       <Triggers>
+    <asp:AsyncPostBackTrigger ControlID="btnMail" EventName="Click" />
+    <asp:AsyncPostBackTrigger ControlID="btnAcceptFriendRequest" EventName="Click" />
+    <asp:AsyncPostBackTrigger ControlID="btnDeclineFriendRequest" EventName="Click" />
+    <asp:AsyncPostBackTrigger ControlID="btnCollectGift" EventName="Click" />
+    <asp:AsyncPostBackTrigger ControlID="btnLaterGift" EventName="Click" />
+</Triggers>
     </asp:UpdatePanel>
+        <!-- Gift Notification Panel -->
+<asp:Panel ID="pnlGiftNotifications" runat="server" Visible="false">
+    <div id="popupGiftNotifications" class="simple-popup">
+        <div class="popup-pink-box">
+            <asp:HiddenField ID="hiddenGiftFriendID" runat="server" />
+            <asp:Label ID="lblGiftMessage" runat="server" Text=""></asp:Label>
+            <img src="Images/Notification%20Happy.png" />
+            <br />
+            <div class="buttonSection">
+                <asp:Button ID="btnCollectGift" CssClass="popup-button-best-pink" runat="server" 
+                    Text="Collect!" OnClick="btnCollectGift_Click" />
+                <asp:Button ID="btnLaterGift" CssClass="popup-button" runat="server" 
+                    Text="Later" OnClick="btnLaterGift_Click" />
+            </div>
+        </div>
+    </div>
+</asp:Panel>
 
     <div class="backgroundColorContainer">
         <div class="leftSection"></div>
         <div class="middleSection">
             <div class="friendsScrollableTableContainer">
-                <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" AutoGenerateColumns="False" OnRowCommand="GridView1_RowCommand">
-                    <Columns>
+<asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" 
+    AutoGenerateColumns="False" 
+   
+    OnRowDataBound="GridView1_RowDataBound">
+    <Columns>
                         <asp:TemplateField>
                             <ItemTemplate>
                                 <div class="friendRow">
@@ -170,7 +192,8 @@
                                     </a>
                                     <span class="friendUsername"><%# Eval("username") %></span>
                                     
-                                   <asp:Button ID="btnSendGift" CssClass="profilebutton" runat="server" Text="Send Gift" OnClick="btnSendGift_Click" CommandArgument='<%# Eval("userID") %>' />
+<asp:Button ID="btnSendGift" CssClass="profilebutton" runat="server" Text="Send Gift" 
+    OnClick="btnSendGift_Click" CommandArgument='<%# Eval("userID") %>' />
                                     <asp:ImageButton ID="btnDeleteFriend" runat="server" ImageUrl="Icons/icons8-delete-white-96.png" CssClass="imageButton" CommandName="DeleteFriend" CommandArgument='<%# Eval("userID") %>' />
                                 </div>
                             </ItemTemplate>
