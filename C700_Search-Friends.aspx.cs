@@ -73,13 +73,13 @@ public partial class Default2 : System.Web.UI.Page
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         string query = @"SELECT userID, username, iconNum FROM Users 
-                        WHERE username LIKE @searchTerm 
-                        AND userID != @currentUserID
-                        AND userID NOT IN (
-                            SELECT userIDto FROM FriendsList WHERE userIDfrom = @currentUserID
-                            UNION
-                            SELECT userIDfrom FROM FriendsList WHERE userIDto = @currentUserID
-                        )";
+                    WHERE username LIKE @searchTerm 
+                    AND userID != @currentUserID
+                    AND userID NOT IN (
+                        SELECT userIDto FROM friendslist WHERE userIDfrom = @currentUserID
+                        UNION
+                        SELECT userIDfrom FROM friendslist WHERE userIDto = @currentUserID
+                    )";
 
         using (MySqlConnection con = new MySqlConnection(cs))
         using (MySqlCommand cmd = new MySqlCommand(query, con))
@@ -109,18 +109,46 @@ public partial class Default2 : System.Web.UI.Page
     private void CreateFriendRequest(string userID, string friendID, string status)
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string query = @"INSERT INTO FriendRequest (requestStatus, userID, friendID) 
-                     VALUES (@status, @userID, @friendID)";
+
+        // Check if friendship already exists to avoid duplicates
+        string checkQuery = @"SELECT COUNT(*) FROM friendslist 
+                         WHERE (userIDfrom = @userID AND userIDto = @friendID)
+                         OR (userIDfrom = @friendID AND userIDto = @userID)";
 
         using (MySqlConnection con = new MySqlConnection(cs))
-        using (MySqlCommand cmd = new MySqlCommand(query, con))
+        using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, con))
         {
+            checkCmd.Parameters.AddWithValue("@userID", userID);
+            checkCmd.Parameters.AddWithValue("@friendID", friendID);
+
+            con.Open();
+            int existingCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+            if (existingCount > 0)
+            {
+                // Friendship already exists or request is pending
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "friendRequestExists",
+                    "alert('Friend request already sent or you are already friends!');", true);
+                return;
+            }
+        }
+
+        // Insert new friend request
+        string insertQuery = @"INSERT INTO friendslist (userIDfrom, userIDto, requestStatus, giftAvailable) 
+                         VALUES (@userIDfrom, @userIDto, @status, 0)";
+
+        using (MySqlConnection con = new MySqlConnection(cs))
+        using (MySqlCommand cmd = new MySqlCommand(insertQuery, con))
+        {
+            cmd.Parameters.AddWithValue("@userIDfrom", userID);
+            cmd.Parameters.AddWithValue("@userIDto", friendID);
             cmd.Parameters.AddWithValue("@status", status);
-            cmd.Parameters.AddWithValue("@userID", userID);
-            cmd.Parameters.AddWithValue("@friendID", friendID);
 
             con.Open();
             cmd.ExecuteNonQuery();
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "friendRequestSent",
+                "alert('Friend request sent successfully!');", true);
         }
     }
     public string GetProfileImageUrl(object iconNum)

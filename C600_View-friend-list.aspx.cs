@@ -63,6 +63,7 @@ public partial class Default2 : System.Web.UI.Page
             }
             ShowNextInvite(false);
         }
+        ScriptManager1.RegisterAsyncPostBackControl(GridView1);
     }
 
     // start: friends code
@@ -101,15 +102,21 @@ public partial class Default2 : System.Web.UI.Page
         DataTable pendingRequests = LoadPendingFriendRequests();
         DataTable pendingGifts = LoadPendingGifts();
 
+        // Clear any existing popups first
+        pnlFriendRequests.Visible = false;
+        pnlGiftNotifications.Visible = false;
+
+        // Reset viewstate to ensure fresh data
+        ViewState["PendingFriendRequests"] = pendingRequests;
+        ViewState["PendingGifts"] = pendingGifts;
+
         if (pendingRequests.Rows.Count > 0)
         {
-            ViewState["PendingFriendRequests"] = pendingRequests;
             ViewState["CurrentRequestIndex"] = 0;
             ShowFriendRequest(0);
         }
         else if (pendingGifts.Rows.Count > 0)
         {
-            ViewState["PendingGifts"] = pendingGifts;
             ViewState["CurrentGiftIndex"] = 0;
             ShowGiftNotification(0);
         }
@@ -126,19 +133,26 @@ public partial class Default2 : System.Web.UI.Page
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         DataTable dt = new DataTable();
+        string currentUserID = Session["userID"].ToString();
 
         using (MySqlConnection con = new MySqlConnection(cs))
         {
             string query = @"
-            SELECT f.userIDfrom, u.username, f.giftFromUser, f.giftToUser
-            FROM FriendsList f
-            JOIN Users u ON f.userIDfrom = u.userID
-            WHERE f.userIDto = @userID 
-            AND (f.giftFromUser = '1' OR f.giftToUser = '1')
-            AND f.requestStatus = 'Accepted'";
+        SELECT 
+            CASE 
+                WHEN f.userIDfrom = @userID THEN f.userIDto
+                ELSE f.userIDfrom
+            END as friendID,
+            u.username
+        FROM FriendsList f
+        JOIN Users u ON 
+            (f.userIDfrom = @userID AND u.userID = f.userIDto) OR
+            (f.userIDto = @userID AND u.userID = f.userIDfrom)
+        WHERE f.giftAvailable = 1
+        AND f.requestStatus = 'Accepted'";
 
             MySqlCommand cmd = new MySqlCommand(query, con);
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
+            cmd.Parameters.AddWithValue("@userID", currentUserID);
 
             con.Open();
             using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
@@ -157,7 +171,7 @@ public partial class Default2 : System.Web.UI.Page
         {
             DataRow row = pendingGifts.Rows[index];
 
-            hiddenGiftFriendID.Value = row["userIDfrom"].ToString();
+            hiddenGiftFriendID.Value = row["friendID"].ToString();
             lblGiftMessage.Text = "You received a gift of 10 coins from <span style='font-weight:bold;'>" + row["username"].ToString() + "</span>!";
 
             pnlGiftNotifications.Visible = true;
@@ -178,46 +192,45 @@ public partial class Default2 : System.Web.UI.Page
 
             using (MySqlConnection con = new MySqlConnection(cs))
             {
+                con.Open();
+
                 // Update current user's coin count (add 10 coins)
                 string updateCoinsQuery = @"
-                UPDATE Users 
-                SET userCoinCount = userCoinCount + 10 
-                WHERE userID = @userID";
+            UPDATE Users 
+            SET userCoinCount = userCoinCount + 10 
+            WHERE userID = @userID";
 
                 MySqlCommand updateCoinsCmd = new MySqlCommand(updateCoinsQuery, con);
                 updateCoinsCmd.Parameters.AddWithValue("@userID", userID);
+                updateCoinsCmd.ExecuteNonQuery();
 
-                // Reset the gift status to 0 (collected)
+                // Reset gift status
                 string updateGiftQuery = @"
-                UPDATE FriendsList 
-                SET 
-                    giftFromUser = CASE 
-                        WHEN userIDfrom = @friendID THEN '0' 
-                        ELSE giftFromUser 
-                    END,
-                    giftToUser = CASE 
-                        WHEN userIDto = @friendID THEN '0' 
-                        ELSE giftToUser 
-                    END
-                WHERE (userIDfrom = @friendID AND userIDto = @userID)
-                   OR (userIDfrom = @userID AND userIDto = @friendID)";
+            UPDATE FriendsList 
+            SET giftAvailable = 0, lastGiftSender = NULL
+            WHERE (userIDfrom = @friendID AND userIDto = @userID)
+               OR (userIDfrom = @userID AND userIDto = @friendID)";
 
                 MySqlCommand updateGiftCmd = new MySqlCommand(updateGiftQuery, con);
                 updateGiftCmd.Parameters.AddWithValue("@friendID", friendID);
                 updateGiftCmd.Parameters.AddWithValue("@userID", userID);
-
-                con.Open();
-                updateCoinsCmd.ExecuteNonQuery();
                 updateGiftCmd.ExecuteNonQuery();
             }
 
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "giftCollected",
-                "alert('10 coins collected successfully!');", true);
-
-            // Refresh the user's coin display
+           
             GetUserStats(cs, userID);
+            LoadFriends();
 
-            // Show next gift or close
+        
+            pnlGiftNotifications.Visible = false;
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "hideGiftPopup",
+                "document.getElementById('popupGiftNotifications').style.display = 'none';", true);
+
+         
+            updFriendRequests.Update();
+
+           
+
             ShowNextGiftOrClose();
         }
     }
@@ -292,13 +305,19 @@ public partial class Default2 : System.Web.UI.Page
                 cmd.ExecuteNonQuery();
             }
 
+            // INSTANT UPDATE: Reload friends and update the panel
             LoadFriends();
+
+            // Hide the friend request panel
+            pnlFriendRequests.Visible = false;
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "hideFriendRequestPopup",
+                "document.getElementById('popupFriendRequests').style.display = 'none';", true);
+
+            // Update the UpdatePanel
+            updFriendRequests.Update();
+
             ShowNextRequestOrClose();
-
-         
         }
-
-        updFriendRequests.Update();
     }
 
 
@@ -387,12 +406,12 @@ public partial class Default2 : System.Web.UI.Page
         {
             con.Open();
 
-            // Check if current user has already sent a gift to this friend
+            // Check if there's already an uncollected gift
             string checkQuery = @"
-            SELECT userIDfrom, giftFromUser, giftToUser 
-            FROM FriendsList 
-            WHERE (userIDfrom = @currentUserID AND userIDto = @friendID)
-               OR (userIDfrom = @friendID AND userIDto = @currentUserID)";
+        SELECT giftAvailable, lastGiftSender 
+        FROM FriendsList 
+        WHERE (userIDfrom = @currentUserID AND userIDto = @friendID)
+           OR (userIDfrom = @friendID AND userIDto = @currentUserID)";
 
             MySqlCommand checkCmd = new MySqlCommand(checkQuery, con);
             checkCmd.Parameters.AddWithValue("@currentUserID", userID);
@@ -404,61 +423,37 @@ public partial class Default2 : System.Web.UI.Page
             {
                 if (reader.Read())
                 {
-                    // Get the string values and convert to boolean logic
-                    string giftFromUserStr = reader["giftFromUser"].ToString();
-                    string giftToUserStr = reader["giftToUser"].ToString();
-                    string userIDFrom = reader["userIDfrom"].ToString();
+                    bool giftAvailable = ConvertToBoolean(reader["giftAvailable"]);
+                    object lastGiftSender = reader["lastGiftSender"];
 
-                    // Determine which column to check based on who initiated the friendship
-                    if (userIDFrom == userID)
-                    {
-                        // Current user is the initiator, check giftFromUser
-                        // Treat "true", "1", "yes" as true, everything else as false
-                        canSendGift = !(giftFromUserStr.Equals("true", StringComparison.OrdinalIgnoreCase) ||
-                                       giftFromUserStr == "1" ||
-                                       giftFromUserStr.Equals("yes", StringComparison.OrdinalIgnoreCase));
-                    }
-                    else
-                    {
-                        // Current user is the receiver, check giftToUser
-                        canSendGift = !(giftToUserStr.Equals("true", StringComparison.OrdinalIgnoreCase) ||
-                                       giftToUserStr == "1" ||
-                                       giftToUserStr.Equals("yes", StringComparison.OrdinalIgnoreCase));
-                    }
+                    // Can't send if there's already an uncollected gift
+                    canSendGift = !giftAvailable;
                 }
             }
 
             if (!canSendGift)
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "giftAlreadySent",
-                    "alert('You have already sent a gift to this friend. You can only send one gift per friend.');", true);
+                    "alert('There is already an uncollected gift for this friend.');", true);
                 return;
             }
 
-            // Update receiver's coin count (add 10 coins) - This is the main gift action
+            // Update receiver's coin count (add 10 coins)
             string updateCoinsQuery = @"
-            UPDATE Users 
-            SET userCoinCount = userCoinCount + 10 
-            WHERE userID = @receiverID";
+        UPDATE Users 
+        SET userCoinCount = userCoinCount + 10 
+        WHERE userID = @receiverID";
 
             MySqlCommand updateCoinsCmd = new MySqlCommand(updateCoinsQuery, con);
             updateCoinsCmd.Parameters.AddWithValue("@receiverID", friendID);
             updateCoinsCmd.ExecuteNonQuery();
 
-            // Update the gift sent status in FriendsList (set to "1" since your DB shows 1 for true)
+            // Mark gift as available and set who sent it
             string updateFriendQuery = @"
-            UPDATE FriendsList 
-            SET 
-                giftFromUser = CASE 
-                    WHEN userIDfrom = @currentUserID THEN '1' 
-                    ELSE giftFromUser 
-                END,
-                giftToUser = CASE 
-                    WHEN userIDto = @currentUserID THEN '1' 
-                    ELSE giftToUser 
-                END
-            WHERE (userIDfrom = @currentUserID AND userIDto = @friendID)
-               OR (userIDfrom = @friendID AND userIDto = @currentUserID)";
+        UPDATE FriendsList 
+        SET giftAvailable = 1, lastGiftSender = @currentUserID
+        WHERE (userIDfrom = @currentUserID AND userIDto = @friendID)
+           OR (userIDfrom = @friendID AND userIDto = @currentUserID)";
 
             MySqlCommand updateFriendCmd = new MySqlCommand(updateFriendQuery, con);
             updateFriendCmd.Parameters.AddWithValue("@currentUserID", userID);
@@ -466,19 +461,16 @@ public partial class Default2 : System.Web.UI.Page
             updateFriendCmd.ExecuteNonQuery();
         }
 
-        ScriptManager.RegisterStartupScript(this, this.GetType(), "giftSent",
-            "alert('Gift of 10 coins sent successfully!');", true);
+      
 
-        // Refresh the GridView to update button states
         LoadFriends();
-
-        // Refresh the user's coin display
         GetUserStats(cs, userID);
     }
 
     private void LoadFriends()
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string currentUserID = Session["userID"].ToString();
 
         using (MySqlConnection con = new MySqlConnection(cs))
         {
@@ -487,17 +479,20 @@ public partial class Default2 : System.Web.UI.Page
             u.userID, 
             u.username, 
             u.iconNum, 
-            COALESCE(f.giftFromUser, '0') as giftFromUser, 
-            COALESCE(f.giftToUser, '0') as giftToUser,
+            f.giftAvailable,
+            f.lastGiftSender,
             f.userIDfrom,
-            f.userIDto
+            f.userIDto,
+            CASE 
+                WHEN f.userIDfrom = @currentUserID THEN u.userID
+                ELSE f.userIDfrom
+            END as friendUserID
         FROM Users u 
-        JOIN friendslist f ON (u.userID = f.userIDto AND f.userIDfrom = @id) OR (u.userID = f.userIDfrom AND f.userIDto = @id) 
-        WHERE u.userID != @id AND f.requestStatus = 'Accepted'";
-            // REMOVED the gift exclusion condition
+        JOIN friendslist f ON (u.userID = f.userIDto AND f.userIDfrom = @currentUserID) OR (u.userID = f.userIDfrom AND f.userIDto = @currentUserID) 
+        WHERE u.userID != @currentUserID AND f.requestStatus = 'Accepted'";
 
             MySqlCommand cmd = new MySqlCommand(command, con);
-            cmd.Parameters.AddWithValue("@id", Session["userID"]);
+            cmd.Parameters.AddWithValue("@currentUserID", currentUserID);
 
             con.Open();
             DataTable dt = new DataTable();
@@ -524,44 +519,40 @@ public partial class Default2 : System.Web.UI.Page
             default: return "Images/ProfilePictures/CatPfp.png";
         }
     }
+    protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        if (e.CommandName == "DeleteFriend")
+        {
+            string friendID = e.CommandArgument.ToString();
+            hiddenFriendToDelete.Value = friendID; // Store in hidden field
 
+            // Show the confirmation popup
+            pnlDeleteFriend.Visible = true;
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "showDeletePopup",
+                "document.getElementById('popup-blue-box').style.display = 'block';", true);
+
+            // Update the UpdatePanel
+            updFriendRequests.Update();
+        }
+    }
     protected void GridView1_RowDataBound(object sender, GridViewRowEventArgs e)
     {
         if (e.Row.RowType == DataControlRowType.DataRow)
         {
             Button btnSendGift = (Button)e.Row.FindControl("btnSendGift");
+            ImageButton btnDeleteFriend = (ImageButton)e.Row.FindControl("btnDeleteFriend");
+
             if (btnSendGift != null)
             {
                 DataRowView rowView = (DataRowView)e.Row.DataItem;
-                string currentUserID = Session["userID"].ToString();
-                string userIDFrom = rowView["userIDfrom"].ToString();
+                bool giftAvailable = ConvertToBoolean(rowView["giftAvailable"]);
 
-                bool giftSent = false;
-
-                // Determine which gift column to check based on who initiated the friendship
-                if (userIDFrom == currentUserID)
-                {
-                    // Current user initiated the friendship, check giftFromUser (string)
-                    string giftFromUserStr = rowView["giftFromUser"].ToString();
-                    giftSent = (giftFromUserStr.Equals("true", StringComparison.OrdinalIgnoreCase) ||
-                               giftFromUserStr == "1" ||
-                               giftFromUserStr.Equals("yes", StringComparison.OrdinalIgnoreCase));
-                }
-                else
-                {
-                    // Friend initiated the friendship, check giftToUser (string)
-                    string giftToUserStr = rowView["giftToUser"].ToString();
-                    giftSent = (giftToUserStr.Equals("true", StringComparison.OrdinalIgnoreCase) ||
-                               giftToUserStr == "1" ||
-                               giftToUserStr.Equals("yes", StringComparison.OrdinalIgnoreCase));
-                }
-
-                if (giftSent)
+                if (giftAvailable)
                 {
                     btnSendGift.Enabled = false;
                     btnSendGift.Text = "Gift Sent";
                     btnSendGift.CssClass = "btn btn-secondary";
-                    btnSendGift.ToolTip = "You've already sent a gift to this friend";
+                    btnSendGift.ToolTip = "There's already an uncollected gift";
                 }
                 else
                 {
@@ -571,7 +562,37 @@ public partial class Default2 : System.Web.UI.Page
                     btnSendGift.ToolTip = "Send 10 coins to this friend";
                 }
             }
+
+            if (btnDeleteFriend != null)
+            {
+                DataRowView rowView = (DataRowView)e.Row.DataItem;
+                string friendID = rowView["userID"].ToString(); 
+                btnDeleteFriend.CommandArgument = friendID;
+                btnDeleteFriend.CommandName = "DeleteFriend";
+            }
         }
+    }
+    // Helper method to handle various MySQL boolean representations
+    private bool ConvertToBoolean(object value)
+    {
+        if (value == null || value == DBNull.Value)
+            return false;
+
+        if (value is int)
+        {
+            return (int)value == 1;
+        }
+        else if (value is bool)
+        {
+            return (bool)value;
+        }
+        else if (value is string)
+        {
+            string strValue = value.ToString().ToLower();
+            return strValue == "1" || strValue == "true" || strValue == "yes";
+        }
+
+        return false;
     }
     private void SendGiftToFriend(string friendID)
     {
@@ -675,8 +696,7 @@ public partial class Default2 : System.Web.UI.Page
             updateFriendCmd.ExecuteNonQuery();
         }
 
-        ScriptManager.RegisterStartupScript(this, this.GetType(), "giftSent",
-            "alert('Gift of 10 coins sent successfully!');", true);
+       
 
         // Refresh the GridView to update button states
         LoadFriends();
@@ -702,15 +722,17 @@ public partial class Default2 : System.Web.UI.Page
             cmd.ExecuteNonQuery();
         }
     }
-    protected void btnCancelFriend_Click(object sender, EventArgs e)
+    protected void btnCancelDeleteFriend_Click(object sender, EventArgs e)
     {
         pnlDeleteFriend.Visible = false;
+        ScriptManager.RegisterStartupScript(this, this.GetType(), "hideDeletePopup",
+            "document.getElementById('popup-blue-box').style.display = 'none';", true);
     }
 
-    
+
     protected void btnConfirmDeleteFriend_Click(object sender, EventArgs e)
     {
-        string friendID = ViewState["FriendToDelete"] as string;
+        string friendID = hiddenFriendToDelete.Value;
         string userID = Session["userID"] as string;
 
         if (!string.IsNullOrEmpty(friendID) && !string.IsNullOrEmpty(userID))
@@ -720,55 +742,34 @@ public partial class Default2 : System.Web.UI.Page
             using (MySqlConnection con = new MySqlConnection(cs))
             {
                 con.Open();
-                List<int> friendshipIDs = new List<int>();
-                string getFriendshipIDsQuery = @"
-                SELECT friendshipID FROM FriendsList 
-                WHERE (userIDfrom = @userID AND userIDto = @friendID)
-                   OR (userIDfrom = @friendID AND userIDto = @userID)";
-
-                using (MySqlCommand cmd = new MySqlCommand(getFriendshipIDsQuery, con))
-                {
-                    cmd.Parameters.AddWithValue("@userID", userID);
-                    cmd.Parameters.AddWithValue("@friendID", friendID);
-
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            friendshipIDs.Add(Convert.ToInt32(reader["friendshipID"]));
-                        }
-                    }
-                }
-
-                if (friendshipIDs.Count > 0)
-                {
-                    string deleteRequestQuery = @"
-                    DELETE FROM FriendRequest 
-                    WHERE friendshipID IN (" + string.Join(",", friendshipIDs) + ")";
-
-                    using (MySqlCommand cmd = new MySqlCommand(deleteRequestQuery, con))
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-                }
 
                 string deleteFriendQuery = @"
-                DELETE FROM friendslist 
-                WHERE (userIDfrom = @userID AND userIDto = @friendID)
-                   OR (userIDfrom = @friendID AND userIDto = @userID)";
+            DELETE FROM friendslist 
+            WHERE (userIDfrom = @userID AND userIDto = @friendID)
+               OR (userIDfrom = @friendID AND userIDto = @userID)";
 
                 using (MySqlCommand cmd = new MySqlCommand(deleteFriendQuery, con))
                 {
                     cmd.Parameters.AddWithValue("@userID", userID);
                     cmd.Parameters.AddWithValue("@friendID", friendID);
-                    cmd.ExecuteNonQuery();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                    {
+                        
+                        LoadFriends();
+                    }
                 }
             }
 
-            LoadFriends();
+            // Update the UpdatePanel
+            updFriendRequests.Update();
         }
 
+        // Hide the popup
         pnlDeleteFriend.Visible = false;
+        ScriptManager.RegisterStartupScript(this, this.GetType(), "hideDeletePopup",
+            "document.getElementById('popup-blue-box').style.display = 'none';", true);
     }
     // end: friends code
 
