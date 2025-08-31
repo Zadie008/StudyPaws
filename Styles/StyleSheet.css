@@ -4644,17 +4644,17 @@ table {
 }
 
 .btn.btn-secondary {
-    background-color: #ADA7C9 !important; 
-    border: 2px solid #ADA7C9 !important; 
+    background-color: #ADA7C9 !important;
+    border: 2px solid #ADA7C9 !important;
     border-radius: 999px;
-    color: #E0DDEB !important; 
+    color: #E0DDEB !important;
     padding: 1vh 2vw;
     font-size: clamp(1.2rem, 2.5vw, 2.7rem);
     font-family: 'Lilita One', sans-serif;
     letter-spacing: 0.1em;
-    cursor: not-allowed !important; 
+    cursor: not-allowed !important;
     text-decoration: none;
     margin: 1vh;
-    opacity: 0.7 !important; 
+    opacity: 0.7 !important;
     transition: all 0.3s ease;
 }

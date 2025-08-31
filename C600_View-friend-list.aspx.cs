@@ -15,6 +15,7 @@ public partial class Default2 : System.Web.UI.Page
 {
     private List<FriendRequest> pendingFriendRequests = new List<FriendRequest>();
     private int currentRequestIndex = 0;
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (Request.IsAuthenticated)
@@ -32,30 +33,29 @@ public partial class Default2 : System.Web.UI.Page
             if (Session["Username"] != null)
             {
                 string username = Session["Username"].ToString();
-               
                 string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
                 string userID = GetUserID(username, cs);
 
                 if (!string.IsNullOrEmpty(userID))
                 {
+                    Session["userID"] = userID; // Ensure userID is in session
                     int userXP = GetUserXP(cs, userID);
                     LoadFriends();
-                    GetLevelInformation(cs, userID);
+                    Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
                     GetUserStats(cs, userID);
                     GetUserProfileIcon(cs, userID);
                     LoadPendingInvitesFromDB();
                     LoadUpcomingSessions();
-                    Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
+
                     int currentLevel = levelInfo.Item1;
                     int currentLevelXpAmount = levelInfo.Item2; // XP needed to reach current level
                     int nextLevelXpAmount = levelInfo.Item3; // XP needed to reach next level
 
                     lblLevelNumber.Text = currentLevel.ToString();
-                   
+
                     // Calculate progress for the progress bar
                     CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
                 }
-               
             }
             else
             {
@@ -63,6 +63,7 @@ public partial class Default2 : System.Web.UI.Page
             }
             ShowNextInvite(false);
         }
+        ScriptManager1.RegisterAsyncPostBackControl(GridView1);
     }
 
     // start: friends code
@@ -70,6 +71,7 @@ public partial class Default2 : System.Web.UI.Page
     {
         Response.Redirect("C700_Search-Friends.aspx");
     }
+
     private DataTable LoadPendingFriendRequests()
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -78,10 +80,10 @@ public partial class Default2 : System.Web.UI.Page
         using (MySqlConnection con = new MySqlConnection(cs))
         {
             string query = @"
-        SELECT friendshipID, userIDfrom, u.username
-        FROM FriendsList f
-        JOIN Users u ON f.userIDfrom = u.userID
-        WHERE f.userIDto = @userID AND f.requestStatus = 'Pending'"; // Fixed column name
+            SELECT friendshipID, userIDfrom, u.username
+            FROM FriendsList f
+            JOIN Users u ON f.userIDfrom = u.userID
+            WHERE f.userIDto = @userID AND f.requestStatus = 'Pending'";
 
             MySqlCommand cmd = new MySqlCommand(query, con);
             cmd.Parameters.AddWithValue("@userID", Session["userID"]);
@@ -92,26 +94,167 @@ public partial class Default2 : System.Web.UI.Page
                 da.Fill(dt);
             }
         }
-
         return dt;
     }
 
     protected void btnMail_Click(object sender, EventArgs e)
     {
         DataTable pendingRequests = LoadPendingFriendRequests();
+        DataTable pendingGifts = LoadPendingGifts();
+
+        // Clear any existing popups first
+        pnlFriendRequests.Visible = false;
+        pnlGiftNotifications.Visible = false;
+
+        // Reset viewstate to ensure fresh data
+        ViewState["PendingFriendRequests"] = pendingRequests;
+        ViewState["PendingGifts"] = pendingGifts;
 
         if (pendingRequests.Rows.Count > 0)
         {
-            ViewState["PendingFriendRequests"] = pendingRequests;
             ViewState["CurrentRequestIndex"] = 0;
             ShowFriendRequest(0);
         }
+        else if (pendingGifts.Rows.Count > 0)
+        {
+            ViewState["CurrentGiftIndex"] = 0;
+            ShowGiftNotification(0);
+        }
         else
         {
+            // Show the no notifications popup
             ScriptManager.RegisterStartupScript(this, this.GetType(), "showNoNotifications",
                 "document.getElementById('popupNoNotifications').style.display = 'block';", true);
         }
+        updFriendRequests.Update();
+    }
 
+    private DataTable LoadPendingGifts()
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        DataTable dt = new DataTable();
+        string currentUserID = Session["userID"].ToString();
+
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            string query = @"
+            SELECT  
+                CASE 
+                    WHEN f.userIDfrom = @userID THEN f.userIDto
+                    ELSE f.userIDfrom
+                END as friendID,
+                u.username
+            FROM FriendsList f
+            JOIN Users u ON 
+                (f.userIDfrom = @userID AND u.userID = f.userIDto) OR
+                (f.userIDto = @userID AND u.userID = f.userIDfrom)
+            WHERE f.giftAvailable = 1
+            AND f.requestStatus = 'Accepted'";
+
+            MySqlCommand cmd = new MySqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@userID", currentUserID);
+
+            con.Open();
+            using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+            {
+                da.Fill(dt);
+            }
+        }
+        return dt;
+    }
+
+    private void ShowGiftNotification(int index)
+    {
+        DataTable pendingGifts = ViewState["PendingGifts"] as DataTable;
+
+        if (pendingGifts != null && index >= 0 && index < pendingGifts.Rows.Count)
+        {
+            DataRow row = pendingGifts.Rows[index];
+
+            hiddenGiftFriendID.Value = row["friendID"].ToString();
+            lblGiftMessage.Text = "You received a gift of 10 coins from <span style='font-weight:bold;'>" + row["username"].ToString() + "</span>!";
+
+            pnlGiftNotifications.Visible = true;
+            ViewState["CurrentGiftIndex"] = index;
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "showGiftPopup",
+                "document.getElementById('popupGiftNotifications').style.display = 'block';", true);
+            updFriendRequests.Update();
+        }
+    }
+
+    protected void btnCollectGift_Click(object sender, EventArgs e)
+    {
+        string friendID = hiddenGiftFriendID.Value;
+        string userID = Session["userID"].ToString();
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+        if (!string.IsNullOrEmpty(friendID))
+        {
+            using (MySqlConnection con = new MySqlConnection(cs))
+            {
+                con.Open();
+
+                // Update current user's coin count (add 10 coins)
+                string updateCoinsQuery = @"
+                UPDATE Users 
+                SET userCoinCount = userCoinCount + 10 
+                WHERE userID = @userID";
+
+                MySqlCommand updateCoinsCmd = new MySqlCommand(updateCoinsQuery, con);
+                updateCoinsCmd.Parameters.AddWithValue("@userID", userID);
+                updateCoinsCmd.ExecuteNonQuery();
+
+                // Reset gift status
+                string updateGiftQuery = @"
+                UPDATE FriendsList 
+                SET giftAvailable = 0
+                WHERE (userIDfrom = @friendID AND userIDto = @userID)
+                    OR (userIDfrom = @userID AND userIDto = @friendID)";
+
+                MySqlCommand updateGiftCmd = new MySqlCommand(updateGiftQuery, con);
+                updateGiftCmd.Parameters.AddWithValue("@friendID", friendID);
+                updateGiftCmd.Parameters.AddWithValue("@userID", userID);
+                updateGiftCmd.ExecuteNonQuery();
+            }
+
+            GetUserStats(cs, userID);
+            LoadFriends();
+            ShowNextGiftOrClose();
+        }
+    }
+
+    protected void btnLaterGift_Click(object sender, EventArgs e)
+    {
+        ShowNextGiftOrClose();
+    }
+
+    private void ShowNextGiftOrClose()
+    {
+        DataTable pendingGifts = ViewState["PendingGifts"] as DataTable;
+        int currentIndex = ViewState["CurrentGiftIndex"] != null ? (int)ViewState["CurrentGiftIndex"] : 0;
+
+        if (pendingGifts != null && pendingGifts.Rows.Count > 0)
+        {
+            pendingGifts.Rows.RemoveAt(currentIndex);
+            ViewState["PendingGifts"] = pendingGifts;
+
+            if (pendingGifts.Rows.Count > 0)
+            {
+                ShowGiftNotification(0);
+            }
+            else
+            {
+                pnlGiftNotifications.Visible = false;
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "hideGiftPopup",
+                    "document.getElementById('popupGiftNotifications').style.display = 'none';", true);
+            }
+        }
+        else
+        {
+            pnlGiftNotifications.Visible = false;
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "hideGiftPopup",
+                "document.getElementById('popupGiftNotifications').style.display = 'none';", true);
+        }
         updFriendRequests.Update();
     }
 
@@ -134,6 +277,7 @@ public partial class Default2 : System.Web.UI.Page
             updFriendRequests.Update();
         }
     }
+
     protected void btnAcceptFriendRequest_Click(object sender, EventArgs e)
     {
         string friendshipID = hiddenFriendRequestID.Value;
@@ -151,14 +295,12 @@ public partial class Default2 : System.Web.UI.Page
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
+
+            LoadFriends();
             ShowNextRequestOrClose();
-
-            LoadFriends(); 
         }
-
         updFriendRequests.Update();
     }
-
 
     protected void btnDeclineFriendRequest_Click(object sender, EventArgs e)
     {
@@ -177,27 +319,11 @@ public partial class Default2 : System.Web.UI.Page
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
+
+            LoadFriends();
             ShowNextRequestOrClose();
-
-            LoadFriends(); 
         }
-
         updFriendRequests.Update();
-    }
-
-    private void RemoveProcessedRequest()
-    {
-        if (ViewState["PendingFriendRequests"] != null)
-        {
-            pendingFriendRequests = (List<FriendRequest>)ViewState["PendingFriendRequests"];
-            currentRequestIndex = (int)ViewState["CurrentRequestIndex"];
-        }
-
-        if (pendingFriendRequests.Count > 0 && currentRequestIndex < pendingFriendRequests.Count)
-        {
-            pendingFriendRequests.RemoveAt(currentRequestIndex);
-            ViewState["PendingFriendRequests"] = pendingFriendRequests;
-        }
     }
 
     private void ShowNextRequestOrClose()
@@ -219,7 +345,6 @@ public partial class Default2 : System.Web.UI.Page
                 pnlFriendRequests.Visible = false;
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "hideFriendRequestPopup",
                     "document.getElementById('popupFriendRequests').style.display = 'none';", true);
-                updFriendRequests.Update();
             }
         }
         else
@@ -227,9 +352,10 @@ public partial class Default2 : System.Web.UI.Page
             pnlFriendRequests.Visible = false;
             ScriptManager.RegisterStartupScript(this, this.GetType(), "hideFriendRequestPopup",
                 "document.getElementById('popupFriendRequests').style.display = 'none';", true);
-            updFriendRequests.Update();
         }
+        updFriendRequests.Update();
     }
+
     protected void btnSendGift_Click(object sender, EventArgs e)
     {
         Button btn = (Button)sender;
@@ -240,72 +366,84 @@ public partial class Default2 : System.Web.UI.Page
 
         using (MySqlConnection con = new MySqlConnection(cs))
         {
-            // Determine if current user is userIDfrom or userIDto
-            string query = @"
-            UPDATE FriendsList 
-            SET giftFromUser = CASE 
-                WHEN userIDfrom = @currentUserID THEN true 
-                ELSE giftFromUser 
-            END,
-            giftToUser = CASE 
-                WHEN userIDto = @currentUserID THEN true 
-                ELSE giftToUser 
-            END
-            WHERE (userIDfrom = @currentUserID AND userIDto = @friendID)
-               OR (userIDfrom = @friendID AND userIDto = @currentUserID)";
-
-            MySqlCommand cmd = new MySqlCommand(query, con);
-            cmd.Parameters.AddWithValue("@currentUserID", userID);
-            cmd.Parameters.AddWithValue("@friendID", friendID);
-
             con.Open();
-            cmd.ExecuteNonQuery();
+
+            // Check if there's already an uncollected gift
+            string checkQuery = @"
+            SELECT giftAvailable
+            FROM FriendsList
+            WHERE (userIDfrom = @currentUserID AND userIDto = @friendID)
+                OR (userIDfrom = @friendID AND userIDto = @currentUserID)";
+
+            MySqlCommand checkCmd = new MySqlCommand(checkQuery, con);
+            checkCmd.Parameters.AddWithValue("@currentUserID", userID);
+            checkCmd.Parameters.AddWithValue("@friendID", friendID);
+
+            bool canSendGift = true;
+            object result = checkCmd.ExecuteScalar();
+            if (result != null && Convert.ToBoolean(result))
+            {
+                canSendGift = false;
+            }
+
+            if (!canSendGift)
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "giftAlreadySent",
+                    "alert('There is already an uncollected gift for this friend.');", true);
+                return;
+            }
+
+            // Update friendslist to mark gift as available
+            string updateFriendQuery = @"
+            UPDATE FriendsList 
+            SET giftAvailable = 1
+            WHERE (userIDfrom = @currentUserID AND userIDto = @friendID)
+                OR (userIDfrom = @friendID AND userIDto = @currentUserID)";
+
+            MySqlCommand updateFriendCmd = new MySqlCommand(updateFriendQuery, con);
+            updateFriendCmd.Parameters.AddWithValue("@currentUserID", userID);
+            updateFriendCmd.Parameters.AddWithValue("@friendID", friendID);
+            updateFriendCmd.ExecuteNonQuery();
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "giftSent",
+                "alert('Gift sent successfully!');", true);
         }
-        ScriptManager.RegisterStartupScript(this, this.GetType(), "giftSent",
-            "alert('Gift sent successfully!');", true);
+        LoadFriends();
+        // You may need to update the user stats on the page, but since you're only gifting, you don't need to update the sender's coins
     }
 
     private void LoadFriends()
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string currentUserID = Session["userID"].ToString();
 
         using (MySqlConnection con = new MySqlConnection(cs))
         {
             string command = @"
-        SELECT u.userID, u.username, u.iconNum 
-        FROM Users u 
-        JOIN friendslist f ON (u.userID = f.userIDto AND f.userIDfrom = @id) OR (u.userID = f.userIDfrom AND f.userIDto = @id) 
-        WHERE u.userID != @id AND f.requestStatus = 'Accepted';"; 
+            SELECT  
+                u.userID, 
+                u.username, 
+                u.iconNum, 
+                f.giftAvailable,
+                CASE 
+                    WHEN f.userIDfrom = @currentUserID THEN f.userIDto
+                    ELSE f.userIDfrom
+                END as friendUserID
+            FROM Users u 
+            JOIN friendslist f ON (u.userID = f.userIDto AND f.userIDfrom = @currentUserID) OR (u.userID = f.userIDfrom AND f.userIDto = @currentUserID) 
+            WHERE f.requestStatus = 'Accepted'";
 
             MySqlCommand cmd = new MySqlCommand(command, con);
-
-            if (Session["userID"] != null)
-            {
-                cmd.Parameters.AddWithValue("@id", Session["userID"]);
-            }
-            else
-            {
-                return;
-            }
+            cmd.Parameters.AddWithValue("@currentUserID", currentUserID);
 
             con.Open();
-            MySqlDataReader rdr = cmd.ExecuteReader();
-            GridView1.DataSource = rdr;
+            DataTable dt = new DataTable();
+            using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+            {
+                da.Fill(dt);
+            }
+            GridView1.DataSource = dt;
             GridView1.DataBind();
-        }
-    }
-
-    public string GetProfileImageUrl(object iconNum)
-    {
-        int num = Convert.ToInt32(iconNum);
-        switch (num)
-        {
-            case 1: return "Images/ProfilePictures/CatPfp.png";
-            case 2: return "Images/ProfilePictures/DogPfp.png";
-            case 3: return "Images/ProfilePictures/BunnyPfp.png";
-            case 4: return "Images/ProfilePictures/CowPfp.png";
-            case 5: return "Images/ProfilePictures/UnicornPfp.png";
-            default: return "Images/ProfilePictures/CatPfp.png";
         }
     }
 
@@ -316,7 +454,10 @@ public partial class Default2 : System.Web.UI.Page
         switch (e.CommandName)
         {
             case "SendGift":
-                Response.Redirect(string.Format("SendGift.aspx?friendID={0}", friendID));
+                // This logic is now handled in btnSendGift_Click
+                // The original redirect is problematic if you want to stay on the page and use AJAX
+                // so the btnSendGift_Click method now handles the logic directly.
+                // Call the SendGift logic here if needed, or rely on the button click.
                 break;
 
             case "DeleteFriend":
@@ -325,12 +466,12 @@ public partial class Default2 : System.Web.UI.Page
                 break;
         }
     }
+
     protected void btnCancelFriend_Click(object sender, EventArgs e)
     {
         pnlDeleteFriend.Visible = false;
     }
 
-    
     protected void btnConfirmDeleteFriend_Click(object sender, EventArgs e)
     {
         string friendID = ViewState["FriendToDelete"] as string;
@@ -343,42 +484,10 @@ public partial class Default2 : System.Web.UI.Page
             using (MySqlConnection con = new MySqlConnection(cs))
             {
                 con.Open();
-                List<int> friendshipIDs = new List<int>();
-                string getFriendshipIDsQuery = @"
-                SELECT friendshipID FROM FriendsList 
-                WHERE (userIDfrom = @userID AND userIDto = @friendID)
-                   OR (userIDfrom = @friendID AND userIDto = @userID)";
-
-                using (MySqlCommand cmd = new MySqlCommand(getFriendshipIDsQuery, con))
-                {
-                    cmd.Parameters.AddWithValue("@userID", userID);
-                    cmd.Parameters.AddWithValue("@friendID", friendID);
-
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            friendshipIDs.Add(Convert.ToInt32(reader["friendshipID"]));
-                        }
-                    }
-                }
-
-                if (friendshipIDs.Count > 0)
-                {
-                    string deleteRequestQuery = @"
-                    DELETE FROM FriendRequest 
-                    WHERE friendshipID IN (" + string.Join(",", friendshipIDs) + ")";
-
-                    using (MySqlCommand cmd = new MySqlCommand(deleteRequestQuery, con))
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-
                 string deleteFriendQuery = @"
                 DELETE FROM friendslist 
                 WHERE (userIDfrom = @userID AND userIDto = @friendID)
-                   OR (userIDfrom = @friendID AND userIDto = @userID)";
+                    OR (userIDfrom = @friendID AND userIDto = @userID)";
 
                 using (MySqlCommand cmd = new MySqlCommand(deleteFriendQuery, con))
                 {
@@ -387,10 +496,8 @@ public partial class Default2 : System.Web.UI.Page
                     cmd.ExecuteNonQuery();
                 }
             }
-
             LoadFriends();
         }
-
         pnlDeleteFriend.Visible = false;
     }
     // end: friends code
@@ -576,7 +683,7 @@ public partial class Default2 : System.Web.UI.Page
         }
     }
 
-    private string GetProfileImagePath(int iconNum)
+    protected string GetProfileImagePath(int iconNum)
     {
         switch (iconNum)
         {
@@ -849,9 +956,20 @@ public partial class Default2 : System.Web.UI.Page
     }
     // end: notification bell code
 }
+
 public class FriendRequest
 {
     public int FriendshipID { get; set; }
     public int RequesterID { get; set; }
     public string RequesterName { get; set; }
+}
+
+public class SessionInvite
+{
+    public int sessionID { get; set; }
+    public string leaderUsername { get; set; }
+    public string title { get; set; }
+    public string tag { get; set; }
+    public DateTime startTime { get; set; }
+    public DateTime endTime { get; set; }
 }
