@@ -132,7 +132,9 @@
     </div>
     <div class="middleSection">
         <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="False" />
-        <asp:Button ID="btnAdd" class="button" runat="server" Text="Add" OnClick="btnAdd_Click" />
+        <asp:Button ID="btnDelete" class="button" runat="server" Text="Delete" OnClick="btnDelete_Click" CausesValidation="False" />
+        <asp:Button ID="btnSave" class="button" runat="server" Text="Save" OnClick="btnSave_Click" />
+
     </div>
     <div class="rightSection">
         <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->

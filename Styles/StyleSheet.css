@@ -1019,14 +1019,16 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 28px;
     text-shadow: 0px 0px 5px dimgrey; /* text shadow */
     margin: 0;
+    flex-shrink: 0;
 }
-.controlsCalendar{
-    flex:70%;
+.controlsCalendar {
+    flex: 70%;
     font-size: 22px;
     display: flex;
     align-content: space-between;
-    gap:5px;
-    align-items:center;
+    gap: 5px;
+    align-items: center;
+    flex-grow: 1;
 }
     .controlsCalendar .calendarDropDownList {
         cursor: pointer;
@@ -1593,9 +1595,9 @@ body.page-exit .welcomeBackTextDiv {
     align-items:center;
 }
 .createEventMainContent .eventTitleTagSection .rightSection .addTagBtn {
-    width: 40px;
-    height: 40px;
-    max-width: 40px;
+    width: 35px;
+    height: 35px;
+    max-width: 35px;
     border: none;
     background: transparent;
     cursor: pointer;
@@ -1604,7 +1606,7 @@ body.page-exit .welcomeBackTextDiv {
 }
     .createEventMainContent .eventTitleTagSection .rightSection .addTagBtn img {
         width: 2.5vw;
-        max-width: 40px;
+        max-width: 35px;
     }
     
     /* NOTIFICATION POPUP */

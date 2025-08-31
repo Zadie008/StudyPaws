@@ -119,12 +119,7 @@
             <div class="calendarHeader">
                 <asp:Label ID="lblMonthYear" runat="server" Text="" CssClass="calendarTitle"></asp:Label>
                 <div class="controlsCalendar">
-                    <asp:DropDownList ID="calendarDropDown" ClientIDMode="Static" class="calendarDropDownList" runat="server" BackColor="#D7B9D5">
-                        <asp:ListItem></asp:ListItem>
-                        <asp:ListItem>Test</asp:ListItem>
-                        <asp:ListItem>Exam</asp:ListItem>
-                        <asp:ListItem>Birthday</asp:ListItem>
-                        <asp:ListItem>Another tag</asp:ListItem>
+                    <asp:DropDownList ID="calendarDropDown" ClientIDMode="Static" class="calendarDropDownList" runat="server" BackColor="#D7B9D5" AutoPostBack="true" OnSelectedIndexChnaned="calendarDropDown_SelectedIndexChnaged">
                     </asp:DropDownList>
 
                     <asp:ImageButton ID="calendarFilterBtn" runat="server" class="calendarFilters" ImageUrl="~/Icons/icons8-filter-bars-white-96.png" OnClick="calendarFilterBtn_Click"/>
@@ -204,7 +199,7 @@
         </div>
 
         <!--does not have notification-->
-        <div id="popupNoNotifications" class="simple-popup" style="display: none;">
+        <%--<div id="popupNoNotifications" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
                 <p>You do not have any notifications at the moment!</p>
                 <img src="Images/Notification%20Sad%20Hamster.png" />
@@ -277,7 +272,7 @@
                     <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
                 </div>
             </div>
-        </div>
+        </div>--%>
 
         <script type="text/javascript">
             function showPopup() {
