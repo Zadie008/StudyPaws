@@ -136,7 +136,7 @@
             <asp:Repeater ID="rptTasks" runat="server" EnableViewState="false" OnItemCommand="rptTasks_ItemCommand" OnItemDataBound="rptTasks_ItemDataBound">
                 <ItemTemplate>
                     <div class="task">
-                        <asp:Button runat="server" CommandName="Toggle" CommandArgument='<%# Eval("taskID") %>' CssClass='<%# (bool)Eval("taskStatus") ? "checkbox checked" : "checkbox" %>' Text=" " />
+                        <asp:Button ID="toggleBtn" runat="server" CommandName="Toggle" CommandArgument='<%# Eval("taskID") %>' CssClass='<%# (bool)Eval("taskStatus") ? "checkbox checked" : "checkbox" %>' Text=" " />
                         <asp:TextBox ID="txtEditDesc" runat="server"  ReadOnly="true" Text='<%# Eval("taskDesc") %>' CssClass='<%# (bool)Eval("taskStatus") ? "taskCompleted" : "taskUncompleted" %>' />
                         <div class="taskControls">
                             <asp:ImageButton ID="editBtn" runat="server" class="editBtn" CommandName="Edit" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-edit-white-96.png" />
@@ -150,7 +150,7 @@
             <asp:HiddenField ID="userIDHidden" runat="server" />
         </div>
         <asp:Button ID="btnTestToggle" runat="server" Text="Test Toggle Popup" 
-    OnClientClick="showPopup(); return false;" />
+    OnClientClick="showTaskCompletePopup(); return false;" />
 <asp:Button ID="btnTestDelete" runat="server" Text="Test Delete Popup" 
     OnClientClick="showPopupDelete(); return false;" />
         <div id="popupTaskComplete" runat="server" ClientIDMode="static" class="simple-popup" style="display: none;">
@@ -177,7 +177,7 @@
             </div>
         </div>
 
-        <!--does not have notification-->
+        <%--<!--does not have notification-->
         <div id="popupNoNotifications" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
                 <p>You do not have any notifications at the moment!</p>
@@ -251,7 +251,7 @@
                     <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
                 </div>
             </div>
-        </div>
+        </div>--%>
 
         <%-- this is the code for the level up panel--%>
         <div id="popupLevelUp" class="simple-popup" style="display: none;">
@@ -276,6 +276,14 @@
                 } else {
                     console.error('popupTaskComplete element not found!');
                 }
+            }
+            function showTaskCompletePopup() {
+                var popup = document.getElementById('popupTaskComplete');
+                if (popup) popup.style.display = 'flex';
+            }
+            function hideTaskCompletePopup() {
+                var popup = document.getElementById('popupTaskComplete');
+                if (popup) popup.style.display = 'none';
             }
             function hidePopup() {//rewrite
                 var popup = document.getElementById('popupTaskComplete');

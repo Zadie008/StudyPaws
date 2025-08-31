@@ -103,16 +103,48 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
     }
     private void LoadEvent(int eventID)
     {
-        //string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        //using (MySqlConnection conn = new MySqlConnection(cs))
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (MySqlConnection conn = new MySqlConnection(cs))
+        {
+            conn.Open();
+            string sql = "SELECT eventDesc, tagID FROM CalendarEvent WHERE eventID=@eventID";
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@eventID", eventID);
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    txtEventTitle.Text = reader["eventDesc"].ToString();
+                    dropdownEventTag.SelectedIndex = Convert.ToInt32(reader["tagID"]);
+                    
+                }
+            }
+        }
+        ViewState["EditEventID"] = eventID;
     }
     protected void btnBack_Click(object sender, EventArgs e)
     {
         Response.Redirect("B1600_View-dashboard.aspx");
     }
 
-    protected void btnAdd_Click(object sender, EventArgs e)
+    protected void btnDelete_Click(object sender, EventArgs e) //CREATE CONFRIM POPUP 
     {
+        int eventID = (int)ViewState["EditEventID"];
+
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (MySqlConnection conn = new MySqlConnection(cs))
+        {
+            conn.Open();
+            string sql = "DELETE FROM CalendarEvent WHERE eventID=@eventID";
+            MySqlCommand cmd = new MySqlCommand( sql, conn);
+            cmd.Parameters.AddWithValue("@eventID", eventID);
+            cmd.ExecuteNonQuery();
+        }
+        Response.Redirect("B1600_View-dashboard.aspx");
+    }
+    protected void btnSave_Click(object sender, EventArgs e)
+    {
+        int eventID = (int)ViewState["EditEventID"];
         String desc = txtEventTitle.Text;
         int userID = Convert.ToInt32(Session["userID"]);
 
@@ -132,12 +164,12 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
         using (MySqlConnection conn = new MySqlConnection(cs))
         {
             conn.Open();
-            string sql = "INSERT into CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (@desc, @eventDate, @tagID, @userID)";
+            string sql = "UPDATE CalendarEvent SET eventDesc=@desc, eventDate=@eventDate, tagID=@tagID WHERE eventID=@eventID";
             MySqlCommand cmd = new MySqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@desc", desc);
             cmd.Parameters.AddWithValue("@eventDate", eventDate);
             cmd.Parameters.AddWithValue("@tagID", tag);
-            cmd.Parameters.AddWithValue("@userID", userID);
+            cmd.Parameters.AddWithValue("@eventID", eventID);
             cmd.ExecuteNonQuery();
         }
 

@@ -35,6 +35,7 @@ public partial class Default2 : System.Web.UI.Page
             string username = Session["Username"].ToString();
 
             ddlFilter.Visible = IsToDoFilterVisible;
+            calendarDropDown.Visible = IsToDoFilterVisible;
             userIDHidden.Value = Convert.ToString(Session["userID"]);
 
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -63,8 +64,8 @@ public partial class Default2 : System.Web.UI.Page
                 CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
                 GetUserStats(cs, userID);
                 GetUserProfileIcon(cs, userID);
-                LoadPendingInvitesFromDB();
-                LoadUpcomingSessions();
+                //LoadPendingInvitesFromDB();
+                //LoadUpcomingSessions();
             }
             else
             {
@@ -81,7 +82,7 @@ public partial class Default2 : System.Web.UI.Page
             Response.Redirect("Login.aspx");
         }
 
-        ShowNextInvite();
+        //ShowNextInvite();
     }
     private bool IsToDoFilterVisible
     {
@@ -94,6 +95,17 @@ public partial class Default2 : System.Web.UI.Page
             ViewState["FilterVisible"] = value;
         }
     }
+    private bool IsCalendarFilterVisible
+    {
+        get
+        {
+            return ViewState["CalendarFilterVisible"] != null && (bool)ViewState["CalendarFilterVisible"];
+        }
+        set
+        {
+            ViewState["CalendarFilterVisible"] = value;
+        }
+    }
     private void LoadCalendar(int year, int month)
     {
         lblMonthYear.Text = new DateTime(year, month, 1).ToString("MMMM yyyy");
@@ -103,7 +115,32 @@ public partial class Default2 : System.Web.UI.Page
     }
     protected void calendarFilterBtn_Click(object sender, EventArgs e)
     {
-        System.Diagnostics.Debug.WriteLine("Button clicked");
+        IsCalendarFilterVisible = !IsCalendarFilterVisible;
+        calendarDropDown.Visible = IsCalendarFilterVisible;
+
+        if (IsCalendarFilterVisible)
+            LoadCalendarTags();
+    }
+    private void LoadCalendarTags()
+    {
+        calendarDropDown.Items.Clear();
+        calendarDropDown.Items.Add(new ListItem("All Tags", "0"));
+
+        using (MySqlConnection conn = new MySqlConnection(connString))
+        {
+            conn.Open();
+            string sql = "SELECT tagID, tagName FROM CalendarEventTag";
+            using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    int tagID = Convert.ToInt32(reader["tagID"]);
+                    string tagName = reader["tagName"].ToString();
+                    calendarDropDown.Items.Add(new ListItem(tagName, tagID.ToString()));
+                }
+            }
+        }
     }
     private String GenerateCalendar(int year, int month)
     {
@@ -216,7 +253,7 @@ public partial class Default2 : System.Web.UI.Page
                     int eventID = Convert.ToInt32(reader["eventID"]);
                     String desc = reader["eventDesc"].ToString();
                     int tagID = Convert.ToInt32(reader["tagID"]);
-                    string tagColour = tagColours.ContainsKey(tagID) ? tagColours[tagID] : "#000000";
+                    string tagColour = (tagColours!=null && tagColours.ContainsKey(tagID)) ? tagColours[tagID] : "#000000";
                     string eventHtml = "<div class='eventItem'><span class='eventDot' style='background-color:" + tagColour + ";'></span>" + "<a href='B300-B400_Edit_Delete_Event.aspx?eventID=" + eventID + "' styler='color:inherit;text-decoration:none;'>" + HttpUtility.HtmlEncode(desc) + "</a></div>";
                     events.Add(eventHtml);
                 }
@@ -705,240 +742,240 @@ public partial class Default2 : System.Web.UI.Page
     // end: header profile code
 
     // start: notification bell code
-    private void LoadPendingInvitesFromDB()
-    {
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        List<SessionInvite> pendingInvites = new List<SessionInvite>();
-        string query = "SELECT StudySession.sessionID, StudySession.sessionTitle, StudySession.sessionTag, StudySession.sessionStart, StudySession.sessionEnd, Users.username FROM (StudySessionParticipants INNER JOIN StudySession ON StudySessionParticipants.sessionID = StudySession.sessionID) INNER JOIN Users ON StudySession.leaderID = Users.userID WHERE StudySessionParticipants.userID = @userID AND StudySessionParticipants.accepted = false ORDER BY StudySession.sessionID ASC";
+    //private void LoadPendingInvitesFromDB()
+    //{
+    //    string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+    //    List<SessionInvite> pendingInvites = new List<SessionInvite>();
+    //    string query = "SELECT StudySession.sessionID, StudySession.sessionTitle, StudySession.sessionTag, StudySession.sessionStart, StudySession.sessionEnd, Users.username FROM (StudySessionParticipants INNER JOIN StudySession ON StudySessionParticipants.sessionID = StudySession.sessionID) INNER JOIN Users ON StudySession.leaderID = Users.userID WHERE StudySessionParticipants.userID = @userID AND StudySessionParticipants.accepted = false ORDER BY StudySession.sessionID ASC";
 
-        using (MySqlConnection conn = new MySqlConnection(cs))
-        using (MySqlCommand cmd = new MySqlCommand(query, conn))
-        {
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
-            conn.Open();
-            using (MySqlDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    pendingInvites.Add(new SessionInvite
-                    {
-                        sessionID = Convert.ToInt32(reader["sessionID"]),
-                        leaderUsername = reader["username"].ToString(),
-                        title = reader["sessionTitle"].ToString(),
-                        tag = reader["sessionTag"].ToString(),
-                        startTime = Convert.ToDateTime(reader["sessionStart"]),
-                        endTime = Convert.ToDateTime(reader["sessionEnd"])
-                    });
-                }
-            }
-        }
+    //    using (MySqlConnection conn = new MySqlConnection(cs))
+    //    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+    //    {
+    //        cmd.Parameters.AddWithValue("@userID", Session["userID"]);
+    //        conn.Open();
+    //        using (MySqlDataReader reader = cmd.ExecuteReader())
+    //        {
+    //            while (reader.Read())
+    //            {
+    //                pendingInvites.Add(new SessionInvite
+    //                {
+    //                    sessionID = Convert.ToInt32(reader["sessionID"]),
+    //                    leaderUsername = reader["username"].ToString(),
+    //                    title = reader["sessionTitle"].ToString(),
+    //                    tag = reader["sessionTag"].ToString(),
+    //                    startTime = Convert.ToDateTime(reader["sessionStart"]),
+    //                    endTime = Convert.ToDateTime(reader["sessionEnd"])
+    //                });
+    //            }
+    //        }
+    //    }
 
-        Session["PendingInvites"] = pendingInvites;
-    }
+    //    Session["PendingInvites"] = pendingInvites;
+    //}
 
-    private void ShowNextInvite()
-    {
-        List<SessionInvite> invites = Session["PendingInvites"] as List<SessionInvite>;
-        if (invites != null && invites.Count > 0)
-        {
-            var invite = invites[0];
+    //private void ShowNextInvite()
+    //{
+    //    List<SessionInvite> invites = Session["PendingInvites"] as List<SessionInvite>;
+    //    if (invites != null && invites.Count > 0)
+    //    {
+    //        var invite = invites[0];
 
-            litNotificationText.Text = "<p><span style='text-decoration:underline;'>Study session invitation</span></p><table><tr><td><p>From:</p></td><td><p><span style='font-weight:bold;'>" + invite.leaderUsername + "</span></p></td></tr>" + "<tr><td><p>Title:</p></td><td><p><span style='font-weight:bold;'>" + invite.title + "</span></p></td></tr>" + "<tr><td><p>Tag:</p></td><td><p><span style='font-weight:bold;'>" + invite.tag + "</span></p></td></tr>" + "<tr><td><p>Starts:</p></td><td><p><span style='font-weight:bold;'>" + invite.startTime.ToString("dddd, dd MMMM yyyy @ HH:mm") + "</span></p></td></tr><tr><td><p>Ends:</p></td><td><p><span style='font-weight:bold;'>" + invite.endTime.ToString("dddd, dd MMMM yyyy @ HH:mm") + "</span></p></td></tr></table>";
+    //        litNotificationText.Text = "<p><span style='text-decoration:underline;'>Study session invitation</span></p><table><tr><td><p>From:</p></td><td><p><span style='font-weight:bold;'>" + invite.leaderUsername + "</span></p></td></tr>" + "<tr><td><p>Title:</p></td><td><p><span style='font-weight:bold;'>" + invite.title + "</span></p></td></tr>" + "<tr><td><p>Tag:</p></td><td><p><span style='font-weight:bold;'>" + invite.tag + "</span></p></td></tr>" + "<tr><td><p>Starts:</p></td><td><p><span style='font-weight:bold;'>" + invite.startTime.ToString("dddd, dd MMMM yyyy @ HH:mm") + "</span></p></td></tr><tr><td><p>Ends:</p></td><td><p><span style='font-weight:bold;'>" + invite.endTime.ToString("dddd, dd MMMM yyyy @ HH:mm") + "</span></p></td></tr></table>";
 
-            hiddenSessionID.Value = invite.sessionID.ToString();
+    //        hiddenSessionID.Value = invite.sessionID.ToString();
 
-            imgNotificationRinging.Visible = true;
-            imgNotificationNormal.Visible = false;
-            notificationBadge.Visible = true;
+    //        imgNotificationRinging.Visible = true;
+    //        imgNotificationNormal.Visible = false;
+    //        notificationBadge.Visible = true;
 
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "showNotificationPopup();", true);
-        }
-        else
-        {
-            imgNotificationRinging.Visible = false;
-            imgNotificationNormal.Visible = true;
-            notificationBadge.Visible = false;
+    //        ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "showNotificationPopup();", true);
+    //    }
+    //    else
+    //    {
+    //        imgNotificationRinging.Visible = false;
+    //        imgNotificationNormal.Visible = true;
+    //        notificationBadge.Visible = false;
 
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopupNone", "showNotificationPopup(false);", true);
-        }
-    }
+    //        ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopupNone", "showNotificationPopup(false);", true);
+    //    }
+    //}
 
-    protected void btnYes_Click(object sender, EventArgs e)
-    {
-        int sessionID = int.Parse(hiddenSessionID.Value);
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string updateQuery = "UPDATE StudySessionParticipants SET accepted = true WHERE sessionID = @sessionID AND userID = @userID";
-        using (MySqlConnection conn = new MySqlConnection(cs))
-        using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn))
-        {
-            cmd.Parameters.AddWithValue("@sessionID", sessionID);
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
-            conn.Open();
-            cmd.ExecuteNonQuery();
-        }
+    //protected void btnYes_Click(object sender, EventArgs e)
+    //{
+    //    int sessionID = int.Parse(hiddenSessionID.Value);
+    //    string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+    //    string updateQuery = "UPDATE StudySessionParticipants SET accepted = true WHERE sessionID = @sessionID AND userID = @userID";
+    //    using (MySqlConnection conn = new MySqlConnection(cs))
+    //    using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn))
+    //    {
+    //        cmd.Parameters.AddWithValue("@sessionID", sessionID);
+    //        cmd.Parameters.AddWithValue("@userID", Session["userID"]);
+    //        conn.Open();
+    //        cmd.ExecuteNonQuery();
+    //    }
 
-        List<SessionInvite> invites = Session["PendingInvites"] as List<SessionInvite>;
-        SessionInvite invite = null;
+    //    List<SessionInvite> invites = Session["PendingInvites"] as List<SessionInvite>;
+    //    SessionInvite invite = null;
 
-        if (invites != null)
-        {
-            foreach (SessionInvite i in invites)
-            {
-                if (i.sessionID == sessionID)
-                {
-                    invite = i;
-                    break;
-                }
-            }
-        }
+    //    if (invites != null)
+    //    {
+    //        foreach (SessionInvite i in invites)
+    //        {
+    //            if (i.sessionID == sessionID)
+    //            {
+    //                invite = i;
+    //                break;
+    //            }
+    //        }
+    //    }
 
-        if (invite != null)
-        {
-            string insertQuery = "INSERT INTO CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (@eventDesc, @eventDate, @tagID, @userID)";
-            using (MySqlConnection conn = new MySqlConnection(cs))
-            using (MySqlCommand cmd2 = new MySqlCommand(insertQuery, conn))
-            {
-                string eventDesc = invite.title + " (From: " + invite.leaderUsername + ")";
-                DateTime eventDate = invite.startTime;
-                int tagID = 1;
-                int userID = Convert.ToInt32(Session["userID"]);
+    //    if (invite != null)
+    //    {
+    //        string insertQuery = "INSERT INTO CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (@eventDesc, @eventDate, @tagID, @userID)";
+    //        using (MySqlConnection conn = new MySqlConnection(cs))
+    //        using (MySqlCommand cmd2 = new MySqlCommand(insertQuery, conn))
+    //        {
+    //            string eventDesc = invite.title + " (From: " + invite.leaderUsername + ")";
+    //            DateTime eventDate = invite.startTime;
+    //            int tagID = 1;
+    //            int userID = Convert.ToInt32(Session["userID"]);
 
-                cmd2.Parameters.AddWithValue("@eventDesc", eventDesc);
-                cmd2.Parameters.AddWithValue("@eventDate", eventDate);
-                cmd2.Parameters.AddWithValue("@tagID", tagID);
-                cmd2.Parameters.AddWithValue("@userID", userID);
+    //            cmd2.Parameters.AddWithValue("@eventDesc", eventDesc);
+    //            cmd2.Parameters.AddWithValue("@eventDate", eventDate);
+    //            cmd2.Parameters.AddWithValue("@tagID", tagID);
+    //            cmd2.Parameters.AddWithValue("@userID", userID);
 
-                conn.Open();
-                cmd2.ExecuteNonQuery();
-            }
-        }
+    //            conn.Open();
+    //            cmd2.ExecuteNonQuery();
+    //        }
+    //    }
 
-        hiddenShowCalendar.Value = "true";
+    //    hiddenShowCalendar.Value = "true";
 
-        RemoveInviteAndShowNext(sessionID);
-    }
+    //    RemoveInviteAndShowNext(sessionID);
+    //}
 
-    protected void btnNo_Click(object sender, EventArgs e)
-    {
-        hiddenShowConfirmation.Value = "true";
-    }
+    //protected void btnNo_Click(object sender, EventArgs e)
+    //{
+    //    hiddenShowConfirmation.Value = "true";
+    //}
 
-    private void RemoveInviteAndShowNext(int sessionID)
-    {
-        List<SessionInvite> invites = Session["PendingInvites"] as List<SessionInvite>;
-        if (invites != null)
-        {
-            var currentInvite = invites.Find(i => i.sessionID == sessionID);
-            if (currentInvite != null)
-            {
-                invites.Remove(currentInvite);
-            }
-            Session["PendingInvites"] = invites;
-            ShowNextInvite();
-        }
-    }
+    //private void RemoveInviteAndShowNext(int sessionID)
+    //{
+    //    List<SessionInvite> invites = Session["PendingInvites"] as List<SessionInvite>;
+    //    if (invites != null)
+    //    {
+    //        var currentInvite = invites.Find(i => i.sessionID == sessionID);
+    //        if (currentInvite != null)
+    //        {
+    //            invites.Remove(currentInvite);
+    //        }
+    //        Session["PendingInvites"] = invites;
+    //        ShowNextInvite();
+    //    }
+    //}
 
-    private void LoadUpcomingSessions()
-    {
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string query = "SELECT StudySession.sessionID, StudySession.sessionStart FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = @userID AND StudySessionParticipants.accepted = true";
+    //private void LoadUpcomingSessions()
+    //{
+    //    string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+    //    string query = "SELECT StudySession.sessionID, StudySession.sessionStart FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = @userID AND StudySessionParticipants.accepted = true";
 
-        List<string> jsSessionTimes = new List<string>();
+    //    List<string> jsSessionTimes = new List<string>();
 
-        using (MySqlConnection conn = new MySqlConnection(cs))
-        using (MySqlCommand cmd = new MySqlCommand(query, conn))
-        {
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
-            conn.Open();
-            using (MySqlDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    int foundSessionID = Convert.ToInt32(reader["sessionID"]);
-                    DateTime sessionStart = Convert.ToDateTime(reader["sessionStart"]);
+    //    using (MySqlConnection conn = new MySqlConnection(cs))
+    //    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+    //    {
+    //        cmd.Parameters.AddWithValue("@userID", Session["userID"]);
+    //        conn.Open();
+    //        using (MySqlDataReader reader = cmd.ExecuteReader())
+    //        {
+    //            while (reader.Read())
+    //            {
+    //                int foundSessionID = Convert.ToInt32(reader["sessionID"]);
+    //                DateTime sessionStart = Convert.ToDateTime(reader["sessionStart"]);
 
-                    string jsObject = "{ sessionID: " + foundSessionID + ", time: '" + sessionStart.ToString("yyyy-MM-ddTHH:mm:ss") + "' }";
-                    jsSessionTimes.Add(jsObject);
+    //                string jsObject = "{ sessionID: " + foundSessionID + ", time: '" + sessionStart.ToString("yyyy-MM-ddTHH:mm:ss") + "' }";
+    //                jsSessionTimes.Add(jsObject);
 
-                    TimeSpan timeUntilStart = sessionStart - DateTime.Now;
-                    if (timeUntilStart.TotalMinutes >= 0 && timeUntilStart.TotalMinutes <= 10)
-                    {
-                        Session["sessionID"] = foundSessionID;
-                    }
-                }
-            }
-        }
+    //                TimeSpan timeUntilStart = sessionStart - DateTime.Now;
+    //                if (timeUntilStart.TotalMinutes >= 0 && timeUntilStart.TotalMinutes <= 10)
+    //                {
+    //                    Session["sessionID"] = foundSessionID;
+    //                }
+    //            }
+    //        }
+    //    }
 
-        if (jsSessionTimes.Count > 0)
-        {
-            string jsArray = "[" + string.Join(",", jsSessionTimes.ToArray()) + "]";
-            ClientScript.RegisterStartupScript(this.GetType(), "registerSessions", "var upcomingSessions = " + jsArray + ";", true);
-        }
-    }
+    //    if (jsSessionTimes.Count > 0)
+    //    {
+    //        string jsArray = "[" + string.Join(",", jsSessionTimes.ToArray()) + "]";
+    //        ClientScript.RegisterStartupScript(this.GetType(), "registerSessions", "var upcomingSessions = " + jsArray + ";", true);
+    //    }
+    //}
 
-    protected void btnCalendar_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("B100_View-calendar.aspx");
-    }
+    //protected void btnCalendar_Click(object sender, EventArgs e)
+    //{
+    //    Response.Redirect("B100_View-calendar.aspx");
+    //}
 
-    protected void btnOk_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("B1600_View-dashboard.aspx");
-    }
+    //protected void btnOk_Click(object sender, EventArgs e)
+    //{
+    //    Response.Redirect("B1600_View-dashboard.aspx");
+    //}
 
-    protected void btnSure_Click(object sender, EventArgs e)
-    {
-        int sessionID = int.Parse(hiddenSessionID.Value);
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = @sessionID AND userID = @userID AND accepted = false";
-        using (MySqlConnection conn = new MySqlConnection(cs))
-        using (MySqlCommand cmd = new MySqlCommand(deleteQuery, conn))
-        {
-            cmd.Parameters.AddWithValue("@sessionID", sessionID);
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
-            conn.Open();
-            cmd.ExecuteNonQuery();
-        }
+    //protected void btnSure_Click(object sender, EventArgs e)
+    //{
+    //    int sessionID = int.Parse(hiddenSessionID.Value);
+    //    string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+    //    string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = @sessionID AND userID = @userID AND accepted = false";
+    //    using (MySqlConnection conn = new MySqlConnection(cs))
+    //    using (MySqlCommand cmd = new MySqlCommand(deleteQuery, conn))
+    //    {
+    //        cmd.Parameters.AddWithValue("@sessionID", sessionID);
+    //        cmd.Parameters.AddWithValue("@userID", Session["userID"]);
+    //        conn.Open();
+    //        cmd.ExecuteNonQuery();
+    //    }
 
-        hiddenShowDeclineConfirmed.Value = "true";
+    //    hiddenShowDeclineConfirmed.Value = "true";
 
-        RemoveInviteAndShowNext(sessionID);
-    }
+    //    RemoveInviteAndShowNext(sessionID);
+    //}
 
-    protected void btnNotSure_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("B1600_View-dashboard.aspx");
-    }
+    //protected void btnNotSure_Click(object sender, EventArgs e)
+    //{
+    //    Response.Redirect("B1600_View-dashboard.aspx");
+    //}
 
-    protected void btnOkayDeclined_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("B1600_View-dashboard.aspx");
-    }
+    //protected void btnOkayDeclined_Click(object sender, EventArgs e)
+    //{
+    //    Response.Redirect("B1600_View-dashboard.aspx");
+    //}
 
-    protected void btnJoin_Click(object sender, EventArgs e)
-    {
-        if (Session["sessionID"] != null && Session["userID"] != null)
-        {
-            int sessionID = Convert.ToInt32(Session["sessionID"]);
-            int userID = Convert.ToInt32(Session["userID"]);
+    //protected void btnJoin_Click(object sender, EventArgs e)
+    //{
+    //    if (Session["sessionID"] != null && Session["userID"] != null)
+    //    {
+    //        int sessionID = Convert.ToInt32(Session["sessionID"]);
+    //        int userID = Convert.ToInt32(Session["userID"]);
 
-            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            string updateQuery = "UPDATE StudySessionParticipants SET joined = true WHERE sessionID = @sessionID AND userID = @userID";
+    //        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+    //        string updateQuery = "UPDATE StudySessionParticipants SET joined = true WHERE sessionID = @sessionID AND userID = @userID";
 
-            using (MySqlConnection conn = new MySqlConnection(cs))
-            using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn))
-            {
-                cmd.Parameters.AddWithValue("@sessionID", sessionID);
-                cmd.Parameters.AddWithValue("@userID", userID);
-                conn.Open();
-                int rowsAffected = cmd.ExecuteNonQuery();
+    //        using (MySqlConnection conn = new MySqlConnection(cs))
+    //        using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn))
+    //        {
+    //            cmd.Parameters.AddWithValue("@sessionID", sessionID);
+    //            cmd.Parameters.AddWithValue("@userID", userID);
+    //            conn.Open();
+    //            int rowsAffected = cmd.ExecuteNonQuery();
 
-                if (rowsAffected > 0)
-                {
-                    Response.Redirect("A1400_View-study-session.aspx");
-                }
-            }
-        }
-    }
+    //            if (rowsAffected > 0)
+    //            {
+    //                Response.Redirect("A1400_View-study-session.aspx");
+    //            }
+    //        }
+    //    }
+    //}
     // end: notification bell code
 }
