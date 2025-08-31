@@ -114,135 +114,133 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-<asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+    <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
 
-<div id="viewFriendListMainContent">
-    <asp:UpdatePanel ID="updFriendRequests" runat="server" UpdateMode="Conditional">
-        <ContentTemplate>
-            <asp:HiddenField ID="hiddenFriendToDelete" runat="server" />
+    <div id="viewFriendListMainContent">
+        <asp:UpdatePanel ID="updFriendRequests" runat="server" UpdateMode="Conditional">
+            <ContentTemplate>
+                <asp:HiddenField ID="hiddenFriendToDelete" runat="server" />
             
-            <!-- Header -->
-            <div class="header-container">
-                <h2>Your friends</h2>
-                <asp:ImageButton ID="btnMail" runat="server" 
-                    ImageUrl="Icons/icons8-mail-white-96.png" 
-                    CssClass="mailIcon" 
-                    OnClick="btnMail_Click" />
-            </div>
+                <!-- Header -->
+                <div class="header-container">
+                    <h2>Your friends</h2>
+                    <asp:ImageButton ID="btnMail" runat="server" 
+                        ImageUrl="Icons/icons8-mail-white-96.png" 
+                        CssClass="mailIcon" 
+                        OnClick="btnMail_Click" />
+                </div>
 
-            <!-- Friend Request Notification Panel -->
-            <asp:Panel ID="pnlFriendRequests" runat="server" Visible="false">
-                <div id="popupFriendRequests" class="simple-popup">
-                    <div class="popup-pink-box">
-                        <asp:HiddenField ID="hiddenFriendRequestID" runat="server" />
-                        <asp:HiddenField ID="hiddenRequesterID" runat="server" />
-                        <asp:Label ID="lblFriendRequestMessage" runat="server" Text=""></asp:Label>
-                        <img src="Images/Notification%20Happy.png" />
-                        <br />
-                        <div class="buttonSection">
-                            <asp:Button ID="btnAcceptFriendRequest" CssClass="popup-button-best-pink" runat="server" 
-                                Text="Accept!" OnClick="btnAcceptFriendRequest_Click" />
-                            <asp:Button ID="btnDeclineFriendRequest" CssClass="popup-button" runat="server" 
-                                Text="Decline!" OnClick="btnDeclineFriendRequest_Click" />
+                <!-- Friend Request Notification Panel -->
+                <asp:Panel ID="pnlFriendRequests" runat="server" Visible="false">
+                    <div id="popupFriendRequests" class="simple-popup">
+                        <div class="popup-pink-box">
+                            <asp:HiddenField ID="hiddenFriendRequestID" runat="server" />
+                            <asp:HiddenField ID="hiddenRequesterID" runat="server" />
+                            <asp:Label ID="lblFriendRequestMessage" runat="server" Text=""></asp:Label>
+                            <img src="Images/Notification%20Happy.png" />
+                            <br />
+                            <div class="buttonSection">
+                                <asp:Button ID="btnAcceptFriendRequest" CssClass="popup-button-best-pink" runat="server" 
+                                    Text="Accept!" OnClick="btnAcceptFriendRequest_Click" />
+                                <asp:Button ID="btnDeclineFriendRequest" CssClass="popup-button" runat="server" 
+                                    Text="Decline!" OnClick="btnDeclineFriendRequest_Click" />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </asp:Panel>
+                </asp:Panel>
 
-            <!-- Gift Notification Panel -->
-            <asp:Panel ID="pnlGiftNotifications" runat="server" Visible="false">
-                <div id="popupGiftNotifications" class="simple-popup">
-                    <div class="popup-pink-box">
-                        <asp:HiddenField ID="hiddenGiftFriendID" runat="server" />
-                        <asp:Label ID="lblGiftMessage" runat="server" Text=""></asp:Label>
-                        <img src="Images/Notification%20Happy.png" />
-                        <br />
-                        <div class="buttonSection">
-                            <asp:Button ID="btnCollectGift" CssClass="popup-button-best-pink" runat="server" 
-                                Text="Collect!" OnClick="btnCollectGift_Click" />
-                            <asp:Button ID="btnLaterGift" CssClass="popup-button" runat="server" 
-                                Text="Later" OnClick="btnLaterGift_Click" />
+                <!-- Gift Notification Panel -->
+                <asp:Panel ID="pnlGiftNotifications" runat="server" Visible="false">
+                    <div id="popupGiftNotifications" class="simple-popup">
+                        <div class="popup-pink-box">
+                            <asp:HiddenField ID="hiddenGiftFriendID" runat="server" />
+                            <asp:Label ID="lblGiftMessage" runat="server" Text=""></asp:Label>
+                            <img src="Images/Notification%20Happy.png" />
+                            <br />
+                            <div class="buttonSection">
+                                <asp:Button ID="btnCollectGift" CssClass="popup-button-best-pink" runat="server" 
+                                    Text="Collect!" OnClick="btnCollectGift_Click" />
+                                <asp:Button ID="btnLaterGift" CssClass="popup-button" runat="server" 
+                                    Text="Later" OnClick="btnLaterGift_Click" />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </asp:Panel>
+                </asp:Panel>
 
-            <!-- Delete Confirmation Panel -->
-            <asp:Panel ID="pnlDeleteFriend" runat="server" Visible="false">
-                <div id="popup-blue-box" class="simple-popup">
-                    <div class="popup-blue-box">
-                        <p>Are you sure you want to delete your friend? You will no longer be able to view them</p>
-                        <img src="Images/Notification%20Sad%20Hamster.png" />
-                        <br />
-                        <div class="buttonSection">
-                            <asp:Button ID="btnConfirmDeleteFriend" CssClass="popup-button" 
-                                runat="server" Text="Yes, I am sure" 
-                                OnClick="btnConfirmDeleteFriend_Click" />
-                            <asp:Button ID="btnCancelDeleteFriend" CssClass="popup-button-best-blue" 
-                                runat="server" Text="No, not sure!" 
-                                OnClick="btnCancelDeleteFriend_Click" />
+                <!-- Delete Confirmation Panel -->
+                <asp:Panel ID="pnlDeleteFriend" runat="server" Visible="false">
+                    <div id="popup-blue-box" class="simple-popup">
+                        <div class="popup-blue-box">
+                            <p>Are you sure you want to delete your friend? You will no longer be able to view them</p>
+                            <img src="Images/Notification%20Sad%20Hamster.png" />
+                            <br />
+                            <div class="buttonSection">
+                                <asp:Button ID="btnConfirmDeleteFriend" CssClass="popup-button" 
+                                    runat="server" Text="Yes, I am sure" 
+                                    OnClick="btnConfirmDeleteFriend_Click" />
+                                <asp:Button ID="btnCancelDeleteFriend" CssClass="popup-button-best-blue" 
+                                    runat="server" Text="No, not sure!" 
+                                    OnClick="btnCancelDeleteFriend_Click" />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </asp:Panel>
+                </asp:Panel>
 
-            <!-- Friends GridView -->
-            <div class="backgroundColorContainer">
-                <div class="leftSection"></div>
-                <div class="middleSection">
-                    <div class="friendsScrollableTableContainer">
-                        <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" 
-                            AutoGenerateColumns="False" OnRowDataBound="GridView1_RowDataBound" 
-                            OnRowCommand="GridView1_RowCommand">
-                            <Columns>
-                                <asp:TemplateField>
-                                    <ItemTemplate>
-                                        <div class="friendRow">
-                                            <a href="C600_View-friend-list.aspx" class="friendProfileIconLink">
-                                                <div class="friendProfileIcon">
-                                                    <div class="friendProfileCircle"></div>
-                                                    <img class="friendProfileImage" src='<%# Eval("iconNum", "Images/ProfilePictures/{0}Pfp.png") %>' />
-                                                </div>
-                                            </a>
-                                            <span class="friendUsername"><%# Eval("username") %></span>
+                <!-- Friends GridView -->
+                <div class="backgroundColorContainer">
+                    <div class="leftSection"></div>
+                    <div class="middleSection">
+                        <div class="friendsScrollableTableContainer">
+                            <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" 
+                                AutoGenerateColumns="False" OnRowDataBound="GridView1_RowDataBound" 
+                                OnRowCommand="GridView1_RowCommand">
+                                <Columns>
+                                    <asp:TemplateField>
+                                        <ItemTemplate>
+                                            <div class="friendRow">
+                                                <a href="C600_View-friend-list.aspx" class="friendProfileIconLink">
+                                                    <div class="friendProfileIcon">
+                                                        <div class="friendProfileCircle"></div>
+                                                        <img class="friendProfileImage" src='<%# Eval("iconNum", "Images/ProfilePictures/{0}Pfp.png") %>' />
+                                                    </div>
+                                                </a>
+                                                <span class="friendUsername"><%# Eval("username") %></span>
                                             
-                                            <asp:Button ID="btnSendGift" CssClass="profilebutton" runat="server" Text="Send Gift" 
-                                                OnClick="btnSendGift_Click" CommandArgument='<%# Eval("userID") %>' />
-                                            <asp:ImageButton ID="btnDeleteFriend" runat="server" 
-                                                ImageUrl="Icons/icons8-delete-white-96.png" CssClass="imageButton" 
-                                                CommandName="DeleteFriend" CommandArgument='<%# Eval("userID") %>' />
-                                        </div>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                            </Columns>
-                        </asp:GridView>
+                                                <asp:Button ID="btnSendGift" CssClass="profilebutton" runat="server" Text="Send Gift" 
+                                                    OnClick="btnSendGift_Click" CommandArgument='<%# Eval("userID") %>' />
+                                                <asp:ImageButton ID="btnDeleteFriend" runat="server" 
+                                                    ImageUrl="Icons/icons8-delete-white-96.png" CssClass="imageButton" 
+                                                    CommandName="DeleteFriend" CommandArgument='<%# Eval("userID") %>' />
+                                            </div>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                </Columns>
+                            </asp:GridView>
+                        </div>
                     </div>
-                </div>
                 <div class="rightSection"></div>
-            </div>
+                </div>
             
-            <!-- Search Friends Button -->
-            <div class="buttonSection">
-                <asp:Button ID="btnSearch" CssClass="button" runat="server" 
-                    Text="Search friends" OnClick="btnSearchFriends_Click" />
-            </div>
-        </ContentTemplate>
+                <!-- Search Friends Button -->
+                <div class="buttonSection">
+                    <asp:Button ID="btnSearch" CssClass="button" runat="server" Text="Search friends" OnClick="btnSearchFriends_Click" />
+                </div>
+            </ContentTemplate>
 
-        <Triggers>
-            <asp:AsyncPostBackTrigger ControlID="btnMail" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="btnAcceptFriendRequest" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="btnDeclineFriendRequest" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="btnCollectGift" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="btnLaterGift" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="btnConfirmDeleteFriend" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="btnCancelDeleteFriend" EventName="Click" />
-            <%--<asp:AsyncPostBackTrigger ControlID="btnSendGift" EventName="Click" />--%>
-            <asp:AsyncPostBackTrigger ControlID="btnSearch" EventName="Click" />
-        </Triggers>
-    </asp:UpdatePanel>
-</div>
+            <Triggers>
+                <asp:AsyncPostBackTrigger ControlID="btnMail" EventName="Click" />
+                <asp:AsyncPostBackTrigger ControlID="btnAcceptFriendRequest" EventName="Click" />
+                <asp:AsyncPostBackTrigger ControlID="btnDeclineFriendRequest" EventName="Click" />
+                <asp:AsyncPostBackTrigger ControlID="btnCollectGift" EventName="Click" />
+                <asp:AsyncPostBackTrigger ControlID="btnLaterGift" EventName="Click" />
+                <asp:AsyncPostBackTrigger ControlID="btnConfirmDeleteFriend" EventName="Click" />
+                <asp:AsyncPostBackTrigger ControlID="btnCancelDeleteFriend" EventName="Click" />
+                <%--<asp:AsyncPostBackTrigger ControlID="btnSendGift" EventName="Click" />--%>
+                <asp:AsyncPostBackTrigger ControlID="btnSearch" EventName="Click" />
+            </Triggers>
+        </asp:UpdatePanel>
+    </div>
 
-      
         <!--does not have notification-->
         <div id="popupNoNotifications" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">

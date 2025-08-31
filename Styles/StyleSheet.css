@@ -3207,30 +3207,27 @@ body.page-exit .welcomeBackTextDiv {
 #viewFriendListMainContent .popup-pink-box p {
     font-size: 2.2rem;
 }
+
 .mailIcon {
     display: inline-block;
     vertical-align: middle; 
-    width: 55px; 
+    width: 55px;
     height: 55px;
-    padding: 5px; 
-    margin-left: 5px; 
+    padding: 5px;
+    margin-left: 5px;
     border: none;
     background: transparent;
     cursor: pointer;
-    transition: transform 0.2s ease; 
-}
-.header-container {
-    display: flex;
-    justify-content: center; 
-    align-items: center;
-    position: relative; 
+    transition: transform 0.2s ease;
 }
 
-#viewFriendListMainContent h2 {
-    font-size: 2.5rem;
-   
-    text-shadow: 0px 0px 5px dimgrey;
+.header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
 }
+
 /*code for the search friends*/
 #SearchFriendsMainContent {
     margin: 0em auto;
@@ -3238,6 +3235,7 @@ body.page-exit .welcomeBackTextDiv {
     flex-direction: column;
     align-items: center;
 }
+
 #SearchFriendsMainContent .backgroundColorContainer {
    display: flex;
     flex-direction: column;
@@ -3246,7 +3244,7 @@ body.page-exit .welcomeBackTextDiv {
     background-color: #ADA7C9; 
     max-width: 55%;
     border-radius: 3em;
-    padding: 1.5em; 
+    padding: 1.5em;
     height: 65vh; 
 }
 

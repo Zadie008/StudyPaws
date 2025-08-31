@@ -260,7 +260,7 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnCancelDeleteFriend_Click(object sender, EventArgs e)
     {
-
+        Response.Redirect("C600_View-friend-list.aspx");
     }
 
     private void ShowFriendRequest(int index)
