@@ -1005,77 +1005,62 @@ body.page-exit .welcomeBackTextDiv {
 .calendarCell:hover .addEventBtn {
     display: block;
 }
-.calendarHeader { 
+.calendarHeader {
     display: flex;
     justify-content: space-between;
-    font-size: 22px;
-    margin: 15px 20px 20px 20px;
-    margin-bottom: 5px;
-    align-items:center;
-}
-.calendarTitle {
-    flex: 30%;
-    margin-bottom: 5px;
-    text-align: left;
-    font-family: 'Lilita One', sans-serif;
-    font-weight: 400;
-    font-size: 28px;
-    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
-    margin: 0;
-    flex-shrink: 0;
-}
-.controlsCalendar {
-    flex: 70%;
-    font-size: 22px;
-    display: flex;
-    align-content: space-between;
-    gap: 5px;
     align-items: center;
-    flex-grow: 1;
+    margin: 15px 20px 20px 20px;
+    gap: 15px;
+    flex-wrap: wrap;
 }
+
+.calendarTitle {
+    flex: 1;
+    min-width: 200px;
+    margin: 0;
+    font-family: 'Lilita One', sans-serif;
+    font-size: 1.8rem;
+    text-shadow: 0px 0px 5px dimgrey;
+    text-align: left;
+}
+
+.controlsCalendar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+}
+
     .controlsCalendar .calendarDropDownList {
-        cursor: pointer;
-        height: 30px;
-        line-height: 30px;
-        vertical-align: central;
-        align-items: center;
-        position: relative;
-        z-index: 10;
+        height: 32px;
         border-radius: 2rem;
         border: 2px solid white;
         background-color: transparent;
-        -webkit-appearance: none;
-        appearance: none; /* removes default arrow */
-        background-image: url('../Icons/icons8-expand-arrow-white-96.png'); /* down arrow */
-        transition: background-image 0.2s ease;
+        background-image: url('../Icons/icons8-expand-arrow-white-96.png');
         background-repeat: no-repeat;
         background-position: right 0.5em center;
         background-size: 20px;
         padding: 0 2em 0 1em;
-        /*padding: 0.2em 2em 0.2em 1em;*/
         color: white;
-        font-size: 20px;
+        font-size: 16px;
         font-family: 'Gilda Display', serif;
-        font-weight: 200;
         outline: none;
-        margin: 1vh auto;
-        text-align: left;
-        width: 100%;
-        max-width: 300px;
-        box-sizing: border-box;
-        display: block;
+        appearance: none;
+        cursor: pointer;
+        min-width: 150px;
+        font-size: 16px;
     }
-.controlsCalendar .calendarFilters{
-    flex:1;
-    /*width: 2.5vw;*/
-    width: 32px;
-    height:32px;
-    max-width:32px;
-    border:none;
-    background:transparent;
-    gap: 10px;
-    cursor:pointer;
-}
+    .controlsCalendar .calendarFilters {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        padding: 0;
+        margin: 0;
+        flex-shrink: 0;
+    }
 /*.controlsCalendar .calendarFilters img{*/
    /* width:2.5vw;*/
     /*max-width:30px;
@@ -1104,19 +1089,23 @@ body.page-exit .welcomeBackTextDiv {
 
     .controlsCalendar .dateCalendar {
         flex: 1;
-        font-size: 20px;
+        font-size: 16px; /* Reduced from 20px to match other elements */
         text-align: center;
         background-color: #D7B9D5;
         border: 2.3px solid white;
         border-radius: 1rem;
         color: white;
-        height: 27px;
+        height: 32px; /* Increased from 27px to match dropdown height */
         font-family: 'Lilita One', sans-serif;
         letter-spacing: 0.1em;
         cursor: pointer;
         text-decoration: none;
-        margin-top: 3px;
+        margin-top: 0; /* Removed margin-top since it's aligned with other elements */
         transition: background-color 0.3s ease;
+        padding: 0 20px; /* ADD THIS - padding on left and right */
+        white-space: nowrap; /* Prevents text wrapping */
+        min-width: 80px; /* Ensures minimum width */
+        box-sizing: border-box; /* Includes padding in width calculation */
     }
         .controlsCalendar .dateCalendar:hover {
             background-color: #cca6c9;
@@ -1336,7 +1325,6 @@ body.page-exit .welcomeBackTextDiv {
 }
 .toDoFilterDropDownList {
     height: 32px;
-    line-height: 32px;
     border-radius: 2rem;
     border: 2px solid white;
     background-color: transparent;
@@ -1348,14 +1336,10 @@ body.page-exit .welcomeBackTextDiv {
     color: white;
     font-size: 16px;
     font-family: 'Gilda Display', serif;
-    font-weight: 200;
     outline: none;
-    width: 200px;
-    max-width: 300px;
-    margin: 0;
-    box-sizing: border-box;
     appearance: none;
     cursor: pointer;
+    min-width: 150px;
 }
 
 .scrollableTasksContainer {
@@ -2439,14 +2423,14 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 .toggleToDoListBtn {
-    width: 30px;
-    height: 30px;
-    max-width: 30px;
+    width: 32px;
+    height: 32px;
     border: none;
     background: transparent;
-    /*gap: 5px;*/
     cursor: pointer;
-    flex: 10%;
+    padding: 0;
+    margin: 0;
+    flex-shrink: 0;
 }
 .toggleToDoListBtn img{
     width:30px;
