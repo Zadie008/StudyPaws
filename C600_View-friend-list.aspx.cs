@@ -258,6 +258,11 @@ public partial class Default2 : System.Web.UI.Page
         updFriendRequests.Update();
     }
 
+    protected void btnCancelDeleteFriend_Click(object sender, EventArgs e)
+    {
+
+    }
+
     private void ShowFriendRequest(int index)
     {
         DataTable pendingRequests = ViewState["PendingFriendRequests"] as DataTable;
@@ -447,7 +452,7 @@ public partial class Default2 : System.Web.UI.Page
         }
     }
 
-    protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
+    /*protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
     {
         string friendID = e.CommandArgument.ToString();
 
@@ -465,7 +470,30 @@ public partial class Default2 : System.Web.UI.Page
                 pnlDeleteFriend.Visible = true;
                 break;
         }
+    }*/
+
+    protected void GridView1_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (e.Row.RowType == DataControlRowType.DataRow)
+        {
+            // Example: add logic here if needed
+            // var username = DataBinder.Eval(e.Row.DataItem, "username");
+        }
     }
+
+    protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        if (e.CommandName == "DeleteFriend")
+        {
+            string userId = e.CommandArgument.ToString();
+            // Show confirmation popup
+            hiddenFriendToDelete.Value = userId;
+            pnlDeleteFriend.Visible = true;
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "showDeletePopup",
+                "document.getElementById('popup-blue-box').style.display = 'block';", true);
+        }
+    }
+
 
     protected void btnCancelFriend_Click(object sender, EventArgs e)
     {
@@ -962,14 +990,4 @@ public class FriendRequest
     public int FriendshipID { get; set; }
     public int RequesterID { get; set; }
     public string RequesterName { get; set; }
-}
-
-public class SessionInvite
-{
-    public int sessionID { get; set; }
-    public string leaderUsername { get; set; }
-    public string title { get; set; }
-    public string tag { get; set; }
-    public DateTime startTime { get; set; }
-    public DateTime endTime { get; set; }
 }
