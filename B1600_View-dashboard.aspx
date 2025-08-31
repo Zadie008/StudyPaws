@@ -88,7 +88,7 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
-    <!--navigation to copy and paste-->
+<!--navigation to copy and paste-->
 <div class="collapsedNav">
     <div class="navbar">
         <asp:Menu ID="MenuLeft" runat="server" Orientation="Vertical" CssClass="nav-left" StaticDisplayLevels="1" StaticMenuItemStyle-CssClass="menu-item">

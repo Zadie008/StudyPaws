@@ -88,7 +88,7 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
-    <!--navigation to copy and paste-->
+<!--navigation to copy and paste-->
 <div class="collapsedNav">
     <div class="navbar">
         <asp:Menu ID="MenuLeft" runat="server" Orientation="Vertical" CssClass="nav-left" StaticDisplayLevels="1" StaticMenuItemStyle-CssClass="menu-item">
@@ -115,6 +115,8 @@
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div class="toDoListPage">
+        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+        
         <div class="toDoListControls">
             <div class="toDoListHeaderRow">
                 <p class="toDoListHeading">To-Do List</p>
@@ -128,31 +130,39 @@
                 </div>
             </div>
         </div>
-        <div class="newTaskContainer">
-            <asp:ImageButton ID="btnAdd" runat="server" CommandName="Add" class="addTaskBtn" OnClick="btnAdd_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png"/>
-            <asp:TextBox ID="txtNewTask" runat="server" CssClass="addTaskText" AutoPostBack="true" OnTextChanged="txtNewTask_TextChanged" Placeholder="Add a new task..."></asp:TextBox>
-        </div>
-        <div class="scrollableTasksContainer">
-            <asp:Repeater ID="rptTasks" runat="server" EnableViewState="false" OnItemCommand="rptTasks_ItemCommand" OnItemDataBound="rptTasks_ItemDataBound">
-                <ItemTemplate>
-                    <div class="task">
-                        <asp:Button ID="toggleBtn" runat="server" CommandName="Toggle" CommandArgument='<%# Eval("taskID") %>' CssClass='<%# (bool)Eval("taskStatus") ? "checkbox checked" : "checkbox" %>' Text=" " />
-                        <asp:TextBox ID="txtEditDesc" runat="server"  ReadOnly="true" Text='<%# Eval("taskDesc") %>' CssClass='<%# (bool)Eval("taskStatus") ? "taskCompleted" : "taskUncompleted" %>' />
-                        <div class="taskControls">
-                            <asp:ImageButton ID="editBtn" runat="server" class="editBtn" CommandName="Edit" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-edit-white-96.png" />
-                            <asp:ImageButton ID="saveEditBtn" runat="server" visible="false" class="saveEditBtn" CommandName="Save" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-check-white-96.png"/>
-                            <asp:ImageButton ID="deleteBtn" runat="server" class="deleteBtn" CommandName="Delete" CommandArgument='<%# Eval("taskID") %>' ImageUrl="~/Icons/icons8-delete-white-96.png"/>
+        
+        <asp:UpdatePanel ID="upMain" runat="server" UpdateMode="Conditional">
+            <ContentTemplate>
+                <div class="newTaskContainer">
+                    <asp:ImageButton ID="btnAdd" runat="server" CommandName="Add" class="addTaskBtn" OnClick="btnAdd_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png"/>
+                    <asp:TextBox ID="txtNewTask" runat="server" CssClass="addTaskText" AutoPostBack="true" OnTextChanged="txtNewTask_TextChanged" Placeholder="Add a new task..."></asp:TextBox>
+                </div>
+                
+                <asp:UpdatePanel ID="upTasks" runat="server" UpdateMode="Conditional">
+                    <ContentTemplate>
+                        <div class="scrollableTasksContainer">
+                            <asp:Repeater ID="rptTasks" runat="server" EnableViewState="false" OnItemCommand="rptTasks_ItemCommand" OnItemDataBound="rptTasks_ItemDataBound">
+                                <ItemTemplate>
+                                    <div class="task">
+                                        <asp:Button ID="toggleBtn" runat="server" CommandName="Toggle" CommandArgument='<%# Eval("taskID") %>' CssClass='<%# (bool)Eval("taskStatus") ? "checkbox checked" : "checkbox" %>' Text=" " OnClientClick="showTaskCompletePopup(); return false;" />
+                                        <asp:TextBox ID="txtEditDesc" runat="server"  ReadOnly="true" Text='<%# Eval("taskDesc") %>' CssClass='<%# (bool)Eval("taskStatus") ? "taskCompleted" : "taskUncompleted" %>' />
+                                        <div class="taskControls">
+                                            <asp:ImageButton ID="editBtn" runat="server" class="editBtn" CommandName="Edit" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-edit-white-96.png" />
+                                            <asp:ImageButton ID="saveEditBtn" runat="server" visible="false" class="saveEditBtn" CommandName="Save" CommandArgument='<%#Eval("taskID") %>' ImageUrl="~/Icons/icons8-check-white-96.png"/>
+                                            <asp:ImageButton ID="deleteBtn" runat="server" class="deleteBtn" OnClientClick='<%# "confirmDelete(" + Eval("taskID") + "); return false;" %>' ImageUrl="~/Icons/icons8-delete-white-96.png" />
+                                        </div>
+                                        <asp:HiddenField ID="taskIDHidden" runat="server" Value='<%# Eval("taskID") %>' />
+                                    </div>
+                                </ItemTemplate>
+                            </asp:Repeater>
+                            <asp:HiddenField ID="userIDHidden" runat="server" />
+                            <asp:HiddenField ID="hiddenDeleteTaskID" runat="server" Value="" />
                         </div>
-                        <asp:HiddenField ID="taskIDHidden" runat="server" Value='<%# Eval("taskID") %>' />
-                    </div>
-                </ItemTemplate>
-            </asp:Repeater>
-            <asp:HiddenField ID="userIDHidden" runat="server" />
-        </div>
-        <asp:Button ID="btnTestToggle" runat="server" Text="Test Toggle Popup" 
-    OnClientClick="showTaskCompletePopup(); return false;" />
-<asp:Button ID="btnTestDelete" runat="server" Text="Test Delete Popup" 
-    OnClientClick="showPopupDelete(); return false;" />
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+            </ContentTemplate>
+        </asp:UpdatePanel>
+
         <div id="popupTaskComplete" runat="server" ClientIDMode="static" class="simple-popup" style="display: none;">
             <div class="popup-pink-box">
                 <p>Congrats! You earned:</p> 
@@ -177,7 +187,7 @@
             </div>
         </div>
 
-        <%--<!--does not have notification-->
+        <!--does not have notification-->
         <div id="popupNoNotifications" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
                 <p>You do not have any notifications at the moment!</p>
@@ -251,7 +261,7 @@
                     <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
                 </div>
             </div>
-        </div>--%>
+        </div>
 
         <%-- this is the code for the level up panel--%>
         <div id="popupLevelUp" class="simple-popup" style="display: none;">
@@ -266,43 +276,41 @@
         </div>
 
         <script type="text/javascript">
-            function showPopup() {//rewrite
-                console.log('showPopup called - looking for popupTaskComplete');
-                var popup = document.getElementById('popupTaskComplete');
-                console.log('Popup element found:', popup);
-                if (popup) {
-                    popup.style.display = 'flex';
-                    console.log('Popup should be visible now');
-                } else {
-                    console.error('popupTaskComplete element not found!');
-                }
-            }
+            // To-Do List Popups
             function showTaskCompletePopup() {
                 var popup = document.getElementById('popupTaskComplete');
                 if (popup) popup.style.display = 'flex';
             }
+
             function hideTaskCompletePopup() {
                 var popup = document.getElementById('popupTaskComplete');
                 if (popup) popup.style.display = 'none';
             }
-            function hidePopup() {//rewrite
-                var popup = document.getElementById('popupTaskComplete');
-                if (popup) popup.style.display = 'none';
-            }
-            function showPopupDelete() {//rewrite
+
+            function showPopupDelete() {
                 var popup = document.getElementById('popupDeleteTask');
                 if (popup) popup.style.display = 'flex';
             }
-            function hideDeletePopup() {//rewrite
-                var popup = document.getElementById('popupDeleteTask'); // rewte these
+
+            function hideDeletePopup() {
+                var popup = document.getElementById('popupDeleteTask');
                 if (popup) popup.style.display = 'none';
             }
-            <%-- this is the code for the level up panel--%>
-            function showLevelUp() {
-                document.getElementById('popupLevelUp').style.display = 'flex';
+
+            function confirmDelete(taskId) {
+                document.getElementById('<%= hiddenDeleteTaskID.ClientID %>').value = taskId;
+                showPopupDelete();
             }
+
+            // Level Up Popup
+            function showLevelUp() {
+                var popup = document.getElementById('popupLevelUp');
+                if (popup) popup.style.display = 'flex';
+            }
+
             function hideLevelUp() {
-                document.getElementById('popupLevelUp').style.display = 'none';
+                var popup = document.getElementById('popupLevelUp');
+                if (popup) popup.style.display = 'none';
             }
         </script>
     </div>
@@ -311,4 +319,3 @@
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
 
 </asp:Content>
-
