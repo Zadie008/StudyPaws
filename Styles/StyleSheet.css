@@ -4164,6 +4164,11 @@ table {
 
 @media (max-width: 1900px) {
     /* ---------------------- POP-UPS ---------------------- */
+    /* PINK */
+    .popup-pink-box {
+        width: 40%;
+    }
+
     .popup-pink-box p {
         font-size: 1.5rem;
     }
@@ -4171,6 +4176,16 @@ table {
     .popup-pink-box img {
         max-width: 60%;
         width: 220px;
+    }
+
+    .popup-pink-box .buttonSection {
+        margin-top: 3vh;
+        gap: 0.1em;
+    }
+
+    /* BLUE */
+    .popup-blue-box {
+        width: 40%;
     }
 
     .popup-blue-box p {
@@ -4182,11 +4197,16 @@ table {
         width: 220px;
     }
 
+    .popup-blue-box .buttonSection {
+        margin-top: 3vh;
+        gap: 0.1em;
+    }
+
     .popup-button {
         font-size: 1.8rem;
     }
 
-    /* best button option */
+    /* BEST BUTTON OPTION */
     .popup-button-best-blue {
         font-size: 1.8rem;
     }
@@ -4203,7 +4223,7 @@ table {
         transform: translate(5.1rem, -50%) rotate(8deg);
     }
 
-    /* navigation */
+    /* ---------------------- NAVIGATION ---------------------- */
     .nav-left {
         padding-top: 2%;
     }
@@ -4229,7 +4249,7 @@ table {
         margin-bottom: 0.5em;
     }
 
-    /*collapsed nav*/
+    /* COLLAPSED NAV */
     .collapsedNav .nav-left {
         padding-top: 2%;
     }
@@ -4263,7 +4283,7 @@ table {
         transform: translateX(21em);
     }
 
-    /* home page */
+    /* ---------------------- HOME PAGE ---------------------- */
     .homePagePet {
         width: min(90vw, 350px);
     }
@@ -4283,26 +4303,23 @@ table {
         font-size: 1.5rem;
     }
 
-    /* register page */
+    /* ---------------------- REGISTER PAGE ---------------------- */
     #registerPageDiv {
         margin-top: 15%;
     }
 
-    /* login page */
+    /* ---------------------- LOGIN PAGE ---------------------- */
     #loginPageDiv {
         margin-top: 15%;
     }
 
-    /* dashboard pages */
+    /* ---------------------- DASHBOARD PAGE ---------------------- */
     .dashboardContainer {
         margin: 0em 4em 0em 4em;
         height: 70vh;
     }
 
-    .toDoFilterDropDownList {
-        width: 150px;
-    }
-
+    /* ---------------------- CALENDAR PAGE ---------------------- */
     .calendarBox th {
         width: 10%;
         height: 48px;
@@ -4318,15 +4335,21 @@ table {
         margin: 3em 3em 3em 3em;
     }
 
-        .createEventMainContent .eventTitleTagSection {
-            padding: 4% 0 9.25% 0;
-        }
+    .createEventMainContent .eventTitleTagSection {
+        padding: 4% 0 9.25% 0;
+    }
 
-            .createEventMainContent .eventTitleTagSection .rightSection table td {
-                padding: 2.8vh 0;
-            }
+    .createEventMainContent .eventTitleTagSection .rightSection table td {
+        padding: 2.8vh 0;
+    }
 
-    /* timer pages */
+    /* ---------------------- TO-DO LIST PAGE ---------------------- */
+    .toDoFilterDropDownList {
+        width: 150px;
+    }
+
+    /* ---------------------- TIMER PAGES ---------------------- */
+    /* CREATE TIMER PAGE 1 */
     .createTimerMainContent {
         margin: 3em 3em 3em 3em;
     }
@@ -4335,6 +4358,7 @@ table {
         margin-top: 28%;
     }
 
+    /* CREATE TIMER PAGE 2 */
     .createTimer2MainContent {
         margin: 3em 3em 3em 3em;
     }
@@ -4353,6 +4377,7 @@ table {
         text-overflow: ellipsis;
     }
 
+    /* CREATE TIMER PAGE 3 */
     .createTimer3MainContent {
         margin: 3em 3em 3em 3em;
     }
@@ -4361,64 +4386,9 @@ table {
         padding: 2% 0 1% 0;
     }
 
-    /* STUDY SESSION PAGES */
-    #createSession3MainContent {
-        margin: 1em 0 0 0;
-    }
-
-    #createSession3MainContent h2 {
-        margin-top: -1.5em;
-        margin-bottom: 0.2em;
-    }
-
-    #createSession3MainContent .timeSection {
-        padding-bottom: 0.75%;
-    }
-
-    #inviteFriendsToSession {
-        min-width: 40%;
-        max-width: 40%;
-    }
-
-    #inviteFriendsToSession .textbox {
-        padding: 0em 1em;
-        margin: 1vh auto;
-        max-width: 600px;
-    }
-
-    #inviteFriendsToSession .scrollableTableContainer {
-        height: 30vh;
-    }
-
-    .friendUsername {
-        min-width: 11.5em; /* make it bigger? */
-    }
-
-    .validationErrorSection {
-        height: 4.9em;
-    }
-
-    #createSession4MainContent {
-        margin: 1em 0 0 0;
-    }
-
-    #createSession4MainContent h2 {
-        margin-top: -1.5em;
-        margin-bottom: 0.2em;
-    }
-
-    #createSession4MainContent .timeSection {
-        padding-bottom: 0%;
-    }
-
-    #selectDateTimeSection table {
-        margin-top: -0.5em;
-        padding: 1em;
-    }
-
     /* VIEW TIMER PAGE */
     .viewTimerMainContent {
-        margin: 3em 3em 1em 3em;
+        margin: 2em 4em 0em 4em;
     }
 
     .viewTimerMainContent .timeSection {
@@ -4429,6 +4399,21 @@ table {
         margin-top: -1.5em;
     }
 
+    .viewTimerMainContent .buttonSection {
+        margin-top: 0em;
+        margin-bottom: 0em;
+    }
+
+    .buttonRow {
+        margin-top: 0em;
+        margin-bottom: 0em;
+    }
+
+    .extraTimeRow {
+        top: 77%;
+    }
+
+    /* VIEW PAST TIMERS PAGE */
     .viewPastTimersMainContent {
         margin: 3em 3em 1em 3em;
     }
@@ -4470,22 +4455,61 @@ table {
         max-height: 46vh;
     }
 
-    .viewTimerMainContent {
-        margin: 2em 4em 0em 4em;
+    /* ---------------------- STUDY SESSION PAGES ---------------------- */
+    /* CREATE STUDY SESSION PAGE 3 */
+    #createSession3MainContent {
+        margin: 1em 0 0 0;
     }
 
-    .viewTimerMainContent .buttonSection {
-        margin-top: 0em;
-        margin-bottom: 0em;
+    #createSession3MainContent h2 {
+        margin-top: -1.5em;
+        margin-bottom: 0.2em;
     }
 
-    .buttonRow {
-        margin-top: 0em;
-        margin-bottom: 0em;
+    #createSession3MainContent .timeSection {
+        padding-bottom: 0.75%;
     }
 
-    .extraTimeRow {
-        top: 77%;
+    #inviteFriendsToSession {
+        min-width: 40%;
+        max-width: 40%;
+    }
+
+    #inviteFriendsToSession .textbox {
+        padding: 0em 1em;
+        margin: 1vh auto;
+        max-width: 600px;
+    }
+
+    #inviteFriendsToSession .scrollableTableContainer {
+        height: 30vh;
+    }
+
+    .friendUsername {
+        min-width: 11.5em; /* make it bigger? */
+    }
+
+    .validationErrorSection {
+        height: 4.9em;
+    }
+
+    /* CREATE STUDY SESSION PAGE 4 */
+    #createSession4MainContent {
+        margin: 1em 0 0 0;
+    }
+
+    #createSession4MainContent h2 {
+        margin-top: -1.5em;
+        margin-bottom: 0.2em;
+    }
+
+    #createSession4MainContent .timeSection {
+        padding-bottom: 0%;
+    }
+
+    #selectDateTimeSection table {
+        margin-top: -0.5em;
+        padding: 1em;
     }
 
     /* ---------------------- PET SHOP PAGE ---------------------- */
@@ -4572,36 +4596,19 @@ table {
         width: 120px;
     }
 
-    /* POPUPS */
-    .popup-pink-box {
-        width: 40%;
-    }
-
-    .popup-pink-box .buttonSection {
-        margin-top: 3vh;
-        gap: 0.1em;
-    }
-
-    .popup-blue-box {
-        width: 40%;
-    }
-
-    .popup-blue-box .buttonSection {
-        margin-top: 3vh;
-        gap: 0.1em;
-    }
-
-    /* LANDING PAGE */
+    /* ---------------------- LANDING PAGE ---------------------- */
     #landingPageDiv img {
         width: 200px;
         margin-bottom: -1em;
     }
 
-    /* PROFILE PAGE */
+    /* ---------------------- PROFILE PAGES ---------------------- */
+    /* MAIN PROFILE PAGE */
     #profileMainContent {
         margin: 1em 4em 2em 4em;
     }
 
+    /* CHANGE PROFILE PHOTO PAGE */
     #changeProfilePhotoPage {
         margin: 0 4em 1em 4em;
     }
@@ -4615,12 +4622,13 @@ table {
         gap: 20px;
     }
 
+    /* ---------------------- FOOTER ---------------------- */
     footer {
         max-height: 35px;
         bottom: 0;
     }
-
 }
+
 .btn.btn-primary {
     background-color: #90A8C3;
     border: 3px solid white;
