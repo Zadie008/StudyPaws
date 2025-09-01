@@ -158,7 +158,7 @@ public partial class Default2 : System.Web.UI.Page
         else
         {
             // Show the no notifications popup
-            pnlNoNotifications.Visible = true; // Make sure this panel exists
+          
             ScriptManager.RegisterStartupScript(this, this.GetType(), "showNoNotifications",
                 "document.getElementById('popupNoNotifications').style.display = 'block';", true);
         }
