@@ -92,7 +92,7 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-        <div id="popup1" runat="server" ClientIDMode="static" class="simple-popup" >
+    <!--<div id="popup1" runat="server" ClientIDMode="static" class="simple-popup" >-->
     <div class="popup-pink-boxTagEdit">
         <table class="popupTagEditing">
             <tr>
@@ -125,10 +125,10 @@
             <asp:Button ID="btnAddNewTag" class="button" runat="server" Text="Add" CausesValidation="true" OnClick="btnAddTag_Click" ValidationGroup="tagPopup" />
         </div>
     </div>
-        <asp:HiddenField ID="hiddenSelectedTagColour" runat="server" />     
+    <asp:HiddenField ID="hiddenSelectedTagColour" runat="server" />     
 
 
-<script type="text/javascript">
+    <script type="text/javascript">
     window.addEventListener('DOMContentLoaded', function () {
         const tagButtons = document.querySelectorAll('.tagOne, .tagTwo, .tagThree, .tagFour, .tagFive');
         const hiddenField = document.getElementById('<%= hiddenSelectedTagColour.ClientID %>');
@@ -147,10 +147,9 @@
     }
     function selectTagColour(colourNum) {
         document.getElementById('<%= hfTagColourNum.ClientID%>').value = colourNum;
-}
-</script>
+    }
+    </script>
 </div>
-
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

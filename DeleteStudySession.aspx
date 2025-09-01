@@ -91,70 +91,70 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-        <div class="createEventMainContent">
-<div class="eventTitleTagSection">
-    <div class="leftSection">
-    </div>
-    <div class="middleSection">
-        <table>
-            <tr>
-                <td><asp:Label ID="lblEventTitle" class="label" runat="server" Text="Title"></asp:Label></td>
-                <td><asp:TextBox ID="txtEventTitle" class="textbox" runat="server"></asp:TextBox></td>
-            </tr>
-            <tr>
-                <td><asp:Label ID="lblEventTag" class="label" runat="server" Text="Tag"></asp:Label></td>
-                <td>
-                    <asp:DropDownList ID="dropdownEventTag" ClientIDMode="Static" class="dropDownList" runat="server" BackColor="#446791" DataTextField="tagName" DataValueField="tagID">
-                    </asp:DropDownList>
-                    <asp:HiddenField ID="hiddenSelectedTagID" runat="server" />
-                </td>
-            </tr>
-            <tr>
-                <td><asp:Label ID="lblEventDate" class="label" runat="server" Text="Date"></asp:Label></td>
-                <td><asp:TextBox ID="txtEventDate" class="textbox" runat="server" TextMode="Date"></asp:TextBox></td>
-            </tr>
-        </table>
-    </div>
-    <div class="rightSection">
-        <table>
-            <tr>
-                <td></td>
-                <td><asp:RequiredFieldValidator ID="errorTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title" EnableClientScript="true" ControlToValidate="txtEventTitle"></asp:RequiredFieldValidator></td>
-            </tr>
-            <tr>
-                <td><asp:RequiredFieldValidator ID="errorDropDown" class="validationError" runat="server" ErrorMessage="Please select a Tag" EnableClientScript="true" ControlToValidate="dropdownEventTag" InitialValue="" ></asp:RequiredFieldValidator></td>
-            </tr>
-            <tr>
-                <asp:RequiredFieldValidator ID="errorDate" class="validationError" runat="server" ErrorMessage="Please select a Date" EnableClientScript="true" ControlToValidate="txtEventDate"></asp:RequiredFieldValidator></tr>
-        </table>
-    </div>
-</div>
-<div class="buttonSection">
-    <div class="leftSection">
-    </div>
-    <div class="middleSection">
-        <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="False" />
-        <asp:Button ID="btnDelete" class="button" runat="server" Text="Delete" OnClick="btnDelete_Click" CausesValidation="False" />
-        <%--<asp:Button ID="btnSave" class="button" runat="server" Text="Save" OnClick="btnSave_Click" />--%>
-
-    </div>
-    <div class="rightSection">
-        <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
-    </div>
-</div>
-    <%--<asp:HiddenField ID="hiddenSelectedDate" runat="server" />--%>
-
-        <div id="popupDeleteEvent" class="simple-popup" style="display: none;">
-    <div class="popup-blue-box">
-        <p>Are you sure you want to delete this study session?</p>
-        <img src="Images/Notification%20Sad%20Hamster.png" />
-        <br />
-        <div class="buttonSection">
-            <asp:Button ID="btnYesDelete" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnYesDelete_Click" />
-            <asp:Button ID="btnNo" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnNoDelete_Click"  />
+<div id="deleteStudySession" class="createEventMainContent">
+    <div class="eventTitleTagSection">
+        <div class="leftSection">
+        </div>
+        <div class="middleSection">
+            <table>
+                <tr>
+                    <td><asp:Label ID="lblEventTitle" class="label" runat="server" Text="Title"></asp:Label></td>
+                    <td><asp:TextBox ID="txtEventTitle" class="textbox" runat="server"></asp:TextBox></td>
+                </tr>
+                <tr>
+                    <td><asp:Label ID="lblEventTag" class="label" runat="server" Text="Tag"></asp:Label></td>
+                    <td>
+                        <asp:DropDownList ID="dropdownEventTag" ClientIDMode="Static" class="dropDownList" runat="server" BackColor="#446791" DataTextField="tagName" DataValueField="tagID">
+                        </asp:DropDownList>
+                        <asp:HiddenField ID="hiddenSelectedTagID" runat="server" />
+                    </td>
+                </tr>
+                <tr>
+                    <td><asp:Label ID="lblEventDate" class="label" runat="server" Text="Date"></asp:Label></td>
+                    <td><asp:TextBox ID="txtEventDate" class="textbox" runat="server" TextMode="Date"></asp:TextBox></td>
+                </tr>
+            </table>
+        </div>
+        <div class="rightSection">
+            <table>
+                <tr>
+                    <td></td>
+                    <td><asp:RequiredFieldValidator ID="errorTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title" EnableClientScript="true" ControlToValidate="txtEventTitle"></asp:RequiredFieldValidator></td>
+                </tr>
+                <tr>
+                    <td><asp:RequiredFieldValidator ID="errorDropDown" class="validationError" runat="server" ErrorMessage="Please select a Tag" EnableClientScript="true" ControlToValidate="dropdownEventTag" InitialValue="" ></asp:RequiredFieldValidator></td>
+                </tr>
+                <tr>
+                    <asp:RequiredFieldValidator ID="errorDate" class="validationError" runat="server" ErrorMessage="Please select a Date" EnableClientScript="true" ControlToValidate="txtEventDate"></asp:RequiredFieldValidator></tr>
+            </table>
         </div>
     </div>
-</div>
+    <div class="buttonSection">
+        <div class="leftSection">
+        </div>
+        <div class="middleSection">
+            <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="False" />
+            <asp:Button ID="btnDelete" class="button" runat="server" Text="Delete" OnClick="btnDelete_Click" CausesValidation="False" OnClientClick="showPopupDelete(); return false;" />
+            <%--<asp:Button ID="btnSave" class="button" runat="server" Text="Save" OnClick="btnSave_Click" />--%>
+
+        </div>
+        <div class="rightSection">
+            <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
+        </div>
+    </div>
+    <%--<asp:HiddenField ID="hiddenSelectedDate" runat="server" />--%>
+
+    <div id="popupDeleteEvent" class="simple-popup" style="display: none;">
+        <div class="popup-blue-box">
+            <p>Are you sure you want to delete this study session?</p>
+            <img src="Images/Notification%20Sad%20Hamster.png" />
+            <br />
+            <div class="buttonSection">
+                <asp:Button ID="btnYesDelete" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnYesDelete_Click" CausesValidation="False" />
+                <asp:Button ID="btnNo" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnNoDelete_Click" CausesValidation="False" />
+            </div>
+        </div>
+    </div>
 
     <!--does not have notification-->
     <div id="popupNoNotifications" class="simple-popup" style="display: none;">

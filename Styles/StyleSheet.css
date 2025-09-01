@@ -1490,66 +1490,74 @@ body.page-exit .welcomeBackTextDiv {
 }
 /*--------------------------------------------- CREATE EVENT PAGE B200 and B500 ---------------------------------------------*/
 .createEventMainContent {
-    margin: 4em 4em 4em 4em;
+    margin: 4em 4em 0em 4em;
 }
 
-    .createEventMainContent .eventTitleTagSection {
-        padding: 6% 0 10.85% 0;
-        display: flex;
-    }
+.createEventMainContent .eventTitleTagSection {
+    padding: 6% 0 10.95% 0;
+    display: flex;
+}
 
-        .createEventMainContent .eventTitleTagSection .leftSection {
-            flex: 1;
-        }
+#editDeleteEvent .eventTitleTagSection { /* LEA ADDED THIS, YOU CAN CHANGE AMOUNTS */
+    padding: 6% 0 7% 0;
+}
 
-        .createEventMainContent .eventTitleTagSection .middleSection {
-            flex: 1;
-        }
+#deleteStudySession .eventTitleTagSection { /* LEA ADDED THIS, YOU CAN CHANGE AMOUNTS */
+    padding: 6% 0 7% 0;
+}
 
-        .createEventMainContent .eventTitleTagSection .rightSection {
-            flex: 1;
-        }
+.createEventMainContent .eventTitleTagSection .leftSection {
+    flex: 1;
+}
 
-            .createEventMainContent .eventTitleTagSection .rightSection table {
-                padding: 0;
-                margin: 0;
-                /*width: auto;*/
-                align-items:center;
-                vertical-align:middle;
-            }
+.createEventMainContent .eventTitleTagSection .middleSection {
+    flex: 1;
+}
 
-                .createEventMainContent .eventTitleTagSection .rightSection table td {
-                    padding: 3vh 0;
-                    gap:2px;
-                    vertical-align:middle;
-                }
+.createEventMainContent .eventTitleTagSection .rightSection {
+    flex: 1;
+}
 
-                    .createEventMainContent .eventTitleTagSection .rightSection table td .validationError {
-                        text-align: left;
-                        font-size: 1.5em;
-                    }
+.createEventMainContent .eventTitleTagSection .rightSection table {
+    padding: 0;
+    margin: 0;
+    /*width: auto;*/
+    align-items:center;
+    vertical-align:middle;
+}
+
+.createEventMainContent .eventTitleTagSection .rightSection table td {
+    padding: 3vh 0;
+    gap:2px;
+    vertical-align:middle;
+}
+
+.createEventMainContent .eventTitleTagSection .rightSection table td .validationError {
+    text-align: left;
+    font-size: 1.5em;
+}
 
 .eventTitleTagSection table {
     width: auto;
     align-items:center; 
 }
 
-    .eventTitleTagSection table tr {
-        padding: 0.1em;
-    }
+.eventTitleTagSection table tr {
+    padding: 0.1em;
+}
 
-    .eventTitleTagSection table td {
-        vertical-align: middle;
-        padding: 0.1em 1em;
-    }
+.eventTitleTagSection table td {
+    vertical-align: middle;
+    padding: 0.1em 1em;
+}
 
-        .eventTitleTagSection table td:first-child {
-            text-align: left;
-        }
+.eventTitleTagSection table td:first-child {
+    text-align: left;
+}
 
-        .eventTitleTagSection table td:last-child {
-            text-align: right;
-        }
+.eventTitleTagSection table td:last-child {
+    text-align: right;
+}
 
 .eventTitleTagSection .textbox {
     text-align: left;
@@ -1564,20 +1572,20 @@ body.page-exit .welcomeBackTextDiv {
     display: flex;
 }
 
-    .createEventMainContent .buttonSection .leftSection {
-        z-index: 10;
-        flex: 1;
-    }
+.createEventMainContent .buttonSection .leftSection {
+    z-index: 10;
+    flex: 1;
+}
 
-    .createEventMainContent .buttonSection .middleSection {
-        z-index: 10;
-        flex: 1;
-    }
+.createEventMainContent .buttonSection .middleSection {
+    z-index: 10;
+    flex: 2;
+}
 
-    .createEventMainContent .buttonSection .rightSection {
-        z-index: 10;
-        flex: 1;
-    }
+.createEventMainContent .buttonSection .rightSection {
+    z-index: 10;
+    flex: 1;
+}
 .tagControls {
     /*text-align: right;
     display: none;*/
@@ -1627,6 +1635,7 @@ body.page-exit .welcomeBackTextDiv {
     max-height: 400vh;
     min-height: 150px;
     /*text-align: center;*/
+    margin: 4em 22%; /* LEA ADDED THIS TO CENTER POPUP, YOU CAN CHANGE AMOUNTS */
 }
 .popup-pink-boxTagEdit .buttonSection {
     text-align: center;
