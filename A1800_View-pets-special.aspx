@@ -179,9 +179,10 @@
             </div>
         </div>
 
-         <div id="popupSell" class="simple-popup" style="display: none;">
+        <div id="popupSell" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
                 <p>Are you sure you want to sell this pet for</p>
+                <br />
                 <table id="popupSellPriceTable">
                     <tr>
                         <td>
@@ -194,11 +195,12 @@
                         <td>?</td>
                     </tr>
                 </table>
+                <br />
                 <img src="Images/Notification%20Sad%20Hamster.png" />
 
                 <div class="buttonSection">
                     <asp:Button ID="btnConfirmSell" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnConfirmSell_Click" OnClientClick="return confirmSell();" />
-                    <asp:Button ID="btnNo" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClientClick="hidePopup(); return false;" />
+                    <asp:Button ID="btnDontSell" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClientClick="hideSellPopup(); return false;" />
                 </div>
             </div>
         </div>
@@ -207,10 +209,11 @@
         <div id="popupNoNotifications" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
                 <p>You do not have any notifications at the moment!</p>
+                <br />
                 <img src="Images/Notification%20Sad%20Hamster.png" />
                 <br />
                 <div class="buttonSection">
-                    <asp:Button ID="Button1" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideNotificationPopup(); return false;" />
+                    <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideNotificationPopup(); return false;" />
                 </div>
             </div>
         </div>
@@ -220,11 +223,12 @@
             <div class="popup-pink-box">
                 <asp:HiddenField ID="hiddenSessionID" runat="server" />
                 <asp:Literal ID="litNotificationText" runat="server" />
+                <br />
                 <img src="Images/Notification%20Happy.png" />
                 <br />
                 <div class="buttonSection">
-                    <asp:Button ID="Button2" CssClass="popup-button-best-pink" runat="server" Text="Accept!" OnClick="btnYes_Click" />
-                    <asp:Button ID="Button3" CssClass="popup-button" runat="server" Text="Decline!" OnClick="btnNo_Click" />
+                    <asp:Button ID="btnYes" CssClass="popup-button-best-pink" runat="server" Text="Accept!" OnClick="btnYes_Click" />
+                    <asp:Button ID="btnNo" CssClass="popup-button" runat="server" Text="Decline!" OnClick="btnNo_Click" />
                 </div>
             </div>
         </div>
@@ -278,22 +282,8 @@
                 </div>
             </div>
         </div>
-
-        <script type="text/javascript">
-            function showPopup() {
-                document.getElementById('popupSell').style.display = 'flex';
-            }
-
-            function hidePopup() {
-                document.getElementById('popupSell').style.display = 'none';
-            }
-
-            function confirmSell() {
-                hidePopup();
-                return true;
-            }
-        </script>
-        <audio id="equipSound" src="Audio/soundEffectPop_1.mp3" preload="auto"></audio>
+    </div>
+    <audio id="equipSound" src="Audio/soundEffectPop_1.mp3" preload="auto"></audio>
     </div>
 </asp:Content>
 

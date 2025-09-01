@@ -453,26 +453,42 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (!isSelected) {
                 button.classList.add('buttonSelected');
-
-
                 const colourNum = button.getAttribute('data-colour');
-
 
                 document.getElementById('mainContentPlaceHolder_hfSelectedColourNum').value = colourNum;
 
-                btnSell.style.display = 'inline-block';
-                btnEquip.style.display = 'inline-block';
+                // Show sell and equip buttons
+                if (btnSell) btnSell.style.display = 'inline-block';
+                if (btnEquip) btnEquip.style.display = 'inline-block';
             }
-            else
-            {
+            else {
                 button.classList.remove('buttonSelected');
                 document.getElementById('mainContentPlaceHolder_hfSelectedColourNum').value = "";
 
-                btnSell.style.display = 'none';
-                btnEquip.style.display = 'none';
+                // Hide sell and equip buttons
+                if (btnSell) btnSell.style.display = 'none';
+                if (btnEquip) btnEquip.style.display = 'none';
             }
         });
     });
+
+    // Add click event to sell button
+    if (btnSell) {
+        btnSell.addEventListener('click', function (e) {
+            e.preventDefault();
+            const colourNum = document.getElementById('mainContentPlaceHolder_hfSelectedColourNum').value;
+
+            // Check if it's the first cat (cannot be sold)
+            if (colourNum === "1") {
+                showCannotSellPopup();
+                return false;
+            }
+
+            // For other pets, show sell popup - CHANGE THIS LINE
+            showSellPopup(); // Changed from showPopup() to showSellPopup()
+            return false;
+        });
+    }
 });
 
 function playEquipSound(button) {
@@ -499,69 +515,29 @@ function playEquipSound(button) {
     return false;
 }
 
-// OLD playEquipSound method:
-/*function playEquipSound(button) {
-    const audio = document.getElementById("equipSound");
-    // SHOW BACKGROUND CHANGE OF EQUIPPED PET HAPPEN BEFORE FUNCTIONALITY
-    const selectedColour = document.getElementById("mainContentPlaceHolder_hfSelectedColourNum").value;
-
-    for (let i = 1; i <= 5; i++) {
-        const circle = document.getElementById("circle" + i);
-        if (circle) circle.classList.remove("equipped");
-    }
-
-    if (selectedColour) {
-        const selectedCircle = document.getElementById("circle" + selectedColour);
-        if (selectedCircle) selectedCircle.classList.add("equipped");
-    }
-
-    if (!audio) return false;
-
-    try {
-        audio.currentTime = 0;
-        const playPromise = audio.play();
-
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                console.log("Equip sound played");
-
-                // WAIT FOR SOUND TO FINISH BEFORE POSTBACK
-                audio.onended = function () {
-                    __doPostBack(button.name || button.id, '');
-                };
-            }).catch((err) => { // PROCEED WITH POSTBACK ANYWAY
-                console.warn("Audio play failed:", err);
-                __doPostBack(button.name || button.id, '');
-            });
-        } else {
-            __doPostBack(button.name || button.id, '');
-        }
-    } catch (err) {
-        console.warn("Error playing sound:", err);
-        __doPostBack(button.name || button.id, '');
-    }
-
-    return false; // prevent default submit
-}
-*/
-
-function showEquipSellButtons(colourNum) {
-    document.getElementById('hfSelectedColourNum').value = colourNum;
-    document.getElementById('<%= btnEquip.ClientID %>').style.display = 'inline-block';
-    document.getElementById('<%= btnSell.ClientID %>').style.display = 'inline-block';
+// Popup functions (keep these in your external JS file too)
+function showSellPopup() {
+    const popup = document.getElementById('popupSell');
+    if (popup) popup.style.display = 'flex';
 }
 
-function sellPet() {
-    const colourNum = document.getElementById('mainContentPlaceHolder_hfSelectedColourNum').value;
+function hideSellPopup() {
+    const popup = document.getElementById('popupSell');
+    if (popup) popup.style.display = 'none';
+}
 
-    __doPostBack('FetchSellPrice', colourNum); // a postback fetch of the sellPrice
+function showCannotSellPopup() {
+    const popup = document.getElementById('popupCannotSell');
+    if (popup) popup.style.display = 'flex';
+}
 
-    showPopup();
-    return false; // don't allow postback
+function hideCannotSellPopup() {
+    const popup = document.getElementById('popupCannotSell');
+    if (popup) popup.style.display = 'none';
 }
 
 function confirmSell() {
-    hidePopup();
+    hideSellPopup(); // Changed from hidePopup() to hideSellPopup()
     return true; // allow postback
 }
 

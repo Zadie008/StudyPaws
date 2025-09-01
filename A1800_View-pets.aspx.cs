@@ -264,7 +264,7 @@ public partial class View_pets : System.Web.UI.Page
         Session["colourNum"] = selectedColourNum;
 
         lblSellPrice.Text = sellPrice.ToString(); // UPDATE COIN LABEL
-        ScriptManager.RegisterStartupScript(this, GetType(), "showPopup", "showPopup();", true);
+        ScriptManager.RegisterStartupScript(this, GetType(), "showSellPopup", "showSellPopup();", true);
     }
 
     protected void btnConfirmSell_Click(object sender, EventArgs e)
