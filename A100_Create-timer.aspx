@@ -131,6 +131,7 @@
         <div id="popupNoNotifications" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
                 <p>You do not have any notifications at the moment!</p>
+                <br />
                 <img src="Images/Notification%20Sad%20Hamster.png" />
                 <br />
                 <div class="buttonSection">
@@ -144,6 +145,7 @@
             <div class="popup-pink-box">
                 <asp:HiddenField ID="hiddenSessionID" runat="server" />
                 <asp:Literal ID="litNotificationText" runat="server" />
+                <br />
                 <img src="Images/Notification%20Happy.png" />
                 <br />
                 <div class="buttonSection">
