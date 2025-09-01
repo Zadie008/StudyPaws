@@ -1,11 +1,11 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="B300-B400_Edit_Delete_Event.aspx.cs" Inherits="B300_B400_Edit_Delete_Event" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="DeleteStudySession.aspx.cs" Inherits="DeleteStudySession" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
-    Edit and Delete Calendar Events
+    Delete Study Session
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-    <div class="accountInfoDiv">
+        <div class="accountInfoDiv">
     <div class="profileDiv">
         <a href="C100-C500_Profile.aspx" class="profileIconLink">
             <div class="profileIcon">
@@ -91,7 +91,7 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-    <div class="createEventMainContent">
+        <div class="createEventMainContent">
 <div class="eventTitleTagSection">
     <div class="leftSection">
     </div>
@@ -122,10 +122,6 @@
                 <td><asp:RequiredFieldValidator ID="errorTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title" EnableClientScript="true" ControlToValidate="txtEventTitle"></asp:RequiredFieldValidator></td>
             </tr>
             <tr>
-                <td><div class="tagControls">
-                    <asp:ImageButton ID="btnAddTag" runat="server" CommandName="AddTag" CausesValidation="false" class="addTagBtn" OnClick="btnNewTag_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png" /></div>
-                    <asp:ImageButton ID="btnEditTag" runat="server" CausesValidation="false" CssClass="addTagBtn" ImageUrl="~/Icons/icons8-edit-white-96.png" OnClick="btnEditTag_Click"/>
-                </td>
                 <td><asp:RequiredFieldValidator ID="errorDropDown" class="validationError" runat="server" ErrorMessage="Please select a Tag" EnableClientScript="true" ControlToValidate="dropdownEventTag" InitialValue="" ></asp:RequiredFieldValidator></td>
             </tr>
             <tr>
@@ -139,18 +135,18 @@
     <div class="middleSection">
         <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="False" />
         <asp:Button ID="btnDelete" class="button" runat="server" Text="Delete" OnClick="btnDelete_Click" CausesValidation="False" />
-        <asp:Button ID="btnSave" class="button" runat="server" Text="Save" OnClick="btnSave_Click" />
+        <%--<asp:Button ID="btnSave" class="button" runat="server" Text="Save" OnClick="btnSave_Click" />--%>
 
     </div>
-   <%-- <div class="rightSection">
+    <div class="rightSection">
         <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
-    </div>--%>
+    </div>
 </div>
-    <asp:HiddenField ID="hiddenSelectedDate" runat="server" />
+    <%--<asp:HiddenField ID="hiddenSelectedDate" runat="server" />--%>
 
         <div id="popupDeleteEvent" class="simple-popup" style="display: none;">
     <div class="popup-blue-box">
-        <p>Are you sure you want to delete this event?</p>
+        <p>Are you sure you want to delete this study session?</p>
         <img src="Images/Notification%20Sad%20Hamster.png" />
         <br />
         <div class="buttonSection">
@@ -238,7 +234,7 @@
                 
 
     <script type="text/javascript">
-        window.addEventListener('DOMContentLoaded', function () {
+       <%-- window.addEventListener('DOMContentLoaded', function () {
             const dropdownList = document.getElementById('dropdownEventTag');
             const btnAdd = document.getElementById('<%= btnAddTag.ClientID%>');
             const btnEdit = document.getElementById('<%= btnEditTag.ClientID%>');
@@ -254,7 +250,7 @@
                 }
             });
             dropdownList.dispatchEvent(new Event('change'));
-        });
+        });--%>
         function showPopupDelete() {
             document.getElementById('popupDeleteEvent').style.display = 'flex';
         }

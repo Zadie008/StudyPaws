@@ -8,7 +8,7 @@ using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
+public partial class DeleteStudySession : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -24,32 +24,32 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
 
         if (!IsPostBack)
         {
-            LoadTags();
+            //LoadTags();
 
-            if (Request.QueryString["newTag"] != null)
-            {
-                string newTagID = Request.QueryString["newTag"];
-                if (dropdownEventTag.Items.FindByValue(newTagID) != null)
-                {
-                    dropdownEventTag.SelectedValue = newTagID;
-                }
-            }
-            if (Request.QueryString["selectedTag"] != null)
-            {
-                string selectedTagID = Request.QueryString["selectedTag"];
-                if (dropdownEventTag.Items.FindByValue(selectedTagID) != null)
-                {
-                    dropdownEventTag.SelectedValue = selectedTagID;
-                }
-            }
-            if (Request.QueryString["date"] != null)
-            {
-                DateTime selectedDate;
-                if (DateTime.TryParse(Request.QueryString["date"], out selectedDate))
-                {
-                    hiddenSelectedDate.Value = selectedDate.ToString("yyyy-MM-dd");
-                }
-            }
+            //if (Request.QueryString["newTag"] != null)
+            //{
+            //    string newTagID = Request.QueryString["newTag"];
+            //    if (dropdownEventTag.Items.FindByValue(newTagID) != null)
+            //    {
+            //        dropdownEventTag.SelectedValue = newTagID;
+            //    }
+            //}
+            //if (Request.QueryString["selectedTag"] != null)
+            //{
+            //    string selectedTagID = Request.QueryString["selectedTag"];
+            //    if (dropdownEventTag.Items.FindByValue(selectedTagID) != null)
+            //    {
+            //        dropdownEventTag.SelectedValue = selectedTagID;
+            //    }
+            //}
+            //if (Request.QueryString["date"] != null)
+            //{
+            //    DateTime selectedDate;
+            //    if (DateTime.TryParse(Request.QueryString["date"], out selectedDate))
+            //    {
+            //        hiddenSelectedDate.Value = selectedDate.ToString("yyyy-MM-dd");
+            //    }
+            //}
             if (Request.QueryString["eventID"] != null)
             {
                 int eventID = int.Parse(Request.QueryString["eventID"]);
@@ -104,7 +104,7 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
                 if (reader.Read())
                 {
                     txtEventTitle.Text = reader["eventDesc"].ToString();
-                    
+
                     if (reader["eventDate"] != DBNull.Value)
                     {
                         DateTime eventDate = Convert.ToDateTime(reader["eventDate"]);
@@ -113,23 +113,24 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
 
                     int tagID = Convert.ToInt32(reader["tagID"]);
                     string tagName = reader["tagID"].ToString();
+                    dropdownEventTag.Items.Add(new ListItem("Study Session", "1"));
+                    dropdownEventTag.SelectedValue = "1";
+                    LockStudySessionUI();
 
-                    dropdownEventTag.Items.Clear();
-                    
-                    if (tagID == 1)
-                    {
-                        dropdownEventTag.Items.Add(new ListItem("Study Session", "1"));
-                        dropdownEventTag.SelectedValue = "1";
-                        LockStudySessionUI();
-                    }
-                    else
-                    {
-                        LoadTags();
-                        if (dropdownEventTag.Items.FindByValue(tagID.ToString()) != null)
-                        {
-                            dropdownEventTag.SelectedValue = tagID.ToString();
-                        }
-                    }
+                    //dropdownEventTag.Items.Clear();
+
+                    //if (tagID == 1)
+                    //{
+                        
+                    //}
+                    //else
+                    //{
+                    //    LoadTags();
+                    //    if (dropdownEventTag.Items.FindByValue(tagID.ToString()) != null)
+                    //    {
+                    //        dropdownEventTag.SelectedValue = tagID.ToString();
+                    //    }
+                    //}
                 }
             }
         }
@@ -141,9 +142,9 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
         txtEventDate.Enabled = false;
         dropdownEventTag.Enabled = false;
 
-        btnSave.Visible = false;
-        btnAddTag.Visible = false;
-        btnEditTag.Visible = false;
+        //btnSave.Visible = false;
+        //btnAddTag.Visible = false;
+        //btnEditTag.Visible = false;
 
         btnBack.Visible = true;
         btnDelete.Visible = true;
@@ -158,7 +159,7 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
         int eventID = (int)ViewState["EditEventID"];
 
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (MySqlConnection conn = new MySqlConnection(cs))
+        using (MySqlConnection conn = new MySqlConnection(cs)) // remove from calendar event
         {
             conn.Open();
             string sql = "DELETE FROM CalendarEvent WHERE eventID=@eventID";
@@ -166,89 +167,105 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
             cmd.Parameters.AddWithValue("@eventID", eventID);
             cmd.ExecuteNonQuery();
         }
+        using (MySqlConnection conn2 = new MySqlConnection(cs)) // remove from study session
+        {
+            conn2.Open();
+            string sql2 = "DELETE FROM StudySession WHERE sessionID=@eventID";
+            MySqlCommand cmd2 = new MySqlCommand(sql2, conn2);
+            cmd2.Parameters.AddWithValue("@eventID", eventID);
+            cmd2.ExecuteNonQuery();
+        }
+        using (MySqlConnection conn3 = new MySqlConnection(cs)) // remove from study session participants
+        {
+            conn3.Open();
+            string sql3 = "DELETE FROM StudySessionParticipants WHERE sessionID=@eventID";
+            MySqlCommand cmd3 = new MySqlCommand(sql3, conn3);
+            cmd3.Parameters.AddWithValue("@eventID", eventID);
+            cmd3.ExecuteNonQuery();
+        }
         Response.Redirect("B1600_View-dashboard.aspx");
     }
     protected void btnNoDelete_Click(object sender, EventArgs e)
     {
         ScriptManager.RegisterStartupScript(this, GetType(), "showDeletePopup", "showPopupDelete();", true);
     }
-    protected void btnDelete_Click(object sender, EventArgs e) 
+    protected void btnDelete_Click(object sender, EventArgs e)
     {
         ScriptManager.RegisterStartupScript(this, GetType(), "showDeletePopup", "showPopupDelete();", true);
     }
-    protected void btnSave_Click(object sender, EventArgs e)
-    {
-        int eventID = (int)ViewState["EditEventID"];
-        String desc = txtEventTitle.Text;
-        int userID = Convert.ToInt32(Session["userID"]);
+    //protected void btnSave_Click(object sender, EventArgs e)
+    //{
+    //    int eventID = (int)ViewState["EditEventID"];
+    //    String desc = txtEventTitle.Text;
+    //    int userID = Convert.ToInt32(Session["userID"]);
 
-        if (string.IsNullOrEmpty(dropdownEventTag.SelectedValue))
-        {
-            return;
-        }
-        int tag = int.Parse(dropdownEventTag.SelectedValue);
+    //    if (string.IsNullOrEmpty(dropdownEventTag.SelectedValue))
+    //    {
+    //        return;
+    //    }
+    //    int tag = int.Parse(dropdownEventTag.SelectedValue);
 
-        DateTime eventDate;
-        if (!DateTime.TryParse(txtEventDate.Text, out eventDate))
-        {
-            eventDate = DateTime.Today;
-        }
+    //    DateTime eventDate;
+    //    if (!DateTime.TryParse(txtEventDate.Text, out eventDate))
+    //    {
+    //        eventDate = DateTime.Today;
+    //    }
 
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (MySqlConnection conn = new MySqlConnection(cs))
-        {
-            conn.Open();
-            string sql = "UPDATE CalendarEvent SET eventDesc=@desc, eventDate=@eventDate, tagID=@tagID WHERE eventID=@eventID";
-            MySqlCommand cmd = new MySqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("@desc", desc);
-            cmd.Parameters.AddWithValue("@eventDate", eventDate);
-            cmd.Parameters.AddWithValue("@tagID", tag);
-            cmd.Parameters.AddWithValue("@eventID", eventID);
-            cmd.ExecuteNonQuery();
-        }
+    //    string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+    //    using (MySqlConnection conn = new MySqlConnection(cs))
+    //    {
+    //        conn.Open();
+    //        string sql = "UPDATE CalendarEvent SET eventDesc=@desc, eventDate=@eventDate, tagID=@tagID WHERE eventID=@eventID";
+    //        MySqlCommand cmd = new MySqlCommand(sql, conn);
+    //        cmd.Parameters.AddWithValue("@desc", desc);
+    //        cmd.Parameters.AddWithValue("@eventDate", eventDate);
+    //        cmd.Parameters.AddWithValue("@tagID", tag);
+    //        cmd.Parameters.AddWithValue("@eventID", eventID);
+    //        cmd.ExecuteNonQuery();
+    //    }
 
-        Response.Redirect("B1600_View-dashboard.aspx");
-    }
-    
-    protected void btnNewTag_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("B600_Add_Tags.aspx");
-    }
-    protected void LoadTags()
-    {
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (MySqlConnection conn = new MySqlConnection(cs))
-        {
-            conn.Open();
-            string query = "SELECT tagID, tagName FROM CalendarEventTag";
-            MySqlCommand cmd = new MySqlCommand(query, conn);
-            using (MySqlDataReader reader = cmd.ExecuteReader())
-            {
-                dropdownEventTag.Items.Clear();
-                dropdownEventTag.Items.Add(new ListItem(""));
+    //    Response.Redirect("B1600_View-dashboard.aspx");
+    //}
 
-                while (reader.Read())
-                {
-                    string tagName = reader["tagName"].ToString();
-                    int tagID = Convert.ToInt32(reader["tagID"]);
+    //protected void btnNewTag_Click(object sender, EventArgs e)
+    //{
+    //    Response.Redirect("B600_Add_Tags.aspx");
+    //}
+    //protected void LoadTags()
+    //{
+    //    string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+    //    using (MySqlConnection conn = new MySqlConnection(cs))
+    //    {
+    //        conn.Open();
+    //        string query = "SELECT tagID, tagName FROM CalendarEventTag";
+    //        MySqlCommand cmd = new MySqlCommand(query, conn);
+    //        using (MySqlDataReader reader = cmd.ExecuteReader())
+    //        {
+    //            dropdownEventTag.Items.Clear();
+    //            dropdownEventTag.Items.Add(new ListItem(""));
 
-                    if (tagID != 1)
-                    {
-                        dropdownEventTag.Items.Add(new ListItem(tagName, tagID.ToString()));
-                    }
-                }
-            }
-        }
-    }
-    protected void btnEditTag_Click(Object sender, EventArgs e)
-    {
-        if (!string.IsNullOrEmpty(dropdownEventTag.SelectedValue))
-        {
-            int tagID = Convert.ToInt32(dropdownEventTag.SelectedValue);
-            Session["EditTagID"] = tagID;
-            Response.Redirect("B700-B800_Edit_Delete_Tags.aspx");
-        }
-    }
+    //            while (reader.Read())
+    //            {
+    //                string tagName = reader["tagName"].ToString();
+    //                int tagID = Convert.ToInt32(reader["tagID"]);
+
+    //                if (tagID != 1)
+    //                {
+    //                    dropdownEventTag.Items.Add(new ListItem(tagName, tagID.ToString()));
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+    //protected void btnEditTag_Click(Object sender, EventArgs e)
+    //{
+    //    if (!string.IsNullOrEmpty(dropdownEventTag.SelectedValue))
+    //    {
+    //        int tagID = Convert.ToInt32(dropdownEventTag.SelectedValue);
+    //        Session["EditTagID"] = tagID;
+    //        Response.Redirect("B700-B800_Edit_Delete_Tags.aspx");
+    //    }
+    //}
 
     // start: header profile code
     private string GetUserID(string username, string connectionString)

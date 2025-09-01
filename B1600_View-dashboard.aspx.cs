@@ -252,9 +252,19 @@ public partial class Default2 : System.Web.UI.Page
                 {
                     int eventID = Convert.ToInt32(reader["eventID"]);
                     String desc = reader["eventDesc"].ToString();
-                    int tagID = Convert.ToInt32(reader["tagID"]);
+                    int tagID = reader["tagID"] != DBNull.Value ? Convert.ToInt32(reader["tagID"]) : 0;
+                    //int tagID = Convert.ToInt32(reader["tagID"]);
+                    
                     string tagColour = (tagColours!=null && tagColours.ContainsKey(tagID)) ? tagColours[tagID] : "#000000";
-                    string eventHtml = "<div class='eventItem'><span class='eventDot' style='background-color:" + tagColour + ";'></span>" + "<a href='B300-B400_Edit_Delete_Event.aspx?eventID=" + eventID + "' styler='color:inherit;text-decoration:none;'>" + HttpUtility.HtmlEncode(desc) + "</a></div>";
+
+                    string targetPage = (tagID == 1) ? "DeleteStudySession.aspx" : "B300-B400_Edit_Delete_Event.aspx";
+
+                    string eventHtml = "<div class='eventItem'>" +
+                                       "<span class='eventDot' style='background-color:" + tagColour + ";'></span>" +
+                                       "<a href='" + targetPage + "?eventID=" + eventID + "' style='color:inherit;text-decoration:none;'>" +
+                                       HttpUtility.HtmlEncode(desc) +
+                                       "</a></div>";
+                    //string eventHtml = "<div class='eventItem'><span class='eventDot' style='background-color:" + tagColour + ";'></span>" + "<a href='B300-B400_Edit_Delete_Event.aspx?eventID=" + eventID + "' styler='color:inherit;text-decoration:none;'>" + HttpUtility.HtmlEncode(desc) + "</a></div>";
                     events.Add(eventHtml);
                 }
             }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -200,6 +201,18 @@ public partial class Default2 : System.Web.UI.Page
                                     }
                                 }
                             }
+                        }
+
+                        //5. insert into calendar event table
+                        string eventCommand = "INSERT into CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (@desc, @eventDate, @tagID, @userID)";
+                        using (MySqlCommand cmdEvent = new MySqlCommand(eventCommand, con, transaction))
+                        {
+                            cmdEvent.Parameters.AddWithValue("@desc", Session["sessionTitle"]);
+                            cmdEvent.Parameters.AddWithValue("@eventDate", sessionDate);
+                            cmdEvent.Parameters.AddWithValue("@tagID", 1);
+                            cmdEvent.Parameters.AddWithValue("@userID", Convert.ToInt32(Session["userID"]));
+
+                            cmdEvent.ExecuteNonQuery();
                         }
 
                         transaction.Commit();
