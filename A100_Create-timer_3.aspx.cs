@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
@@ -81,9 +82,10 @@ public partial class Default2 : System.Web.UI.Page
 
             using (MySqlConnection con = new MySqlConnection(cs))
             {
-                string command = "INSERT INTO Timer (timerTitle, timerTag, timerDuration, userID) VALUES (@title, @tag, @duration, @userID)";
+                string command = "INSERT INTO Timer (timerDateCreated, timerTitle, timerTag, timerDuration, userID) VALUES (@date, @title, @tag, @duration, @userID)";
                 MySqlCommand cmd = new MySqlCommand(command, con);
 
+                cmd.Parameters.AddWithValue("@date", DateTime.Now);
                 cmd.Parameters.AddWithValue("@title", Session["timerTitle"]);
                 cmd.Parameters.AddWithValue("@tag", Session["timerTag"]);
 
