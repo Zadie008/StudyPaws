@@ -217,7 +217,18 @@ p {
     visibility: visible;
     opacity: 1;
 }
+.aspnet-panel {
+    display: none;
+}
 
+.simple-popup {
+    display: none; /* Hidden by default, shown via JavaScript */
+}
+
+/* Make sure buttons don't cause postback to close popups */
+.popup-button, .popup-button-best-pink, .popup-button-best-blue {
+    cursor: pointer;
+}
 /* -------------------------------------------- MASTER PAGE DIVS -------------------------------------------- */
 .page-wrapper {
     min-height: 100vh;

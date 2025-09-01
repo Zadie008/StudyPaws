@@ -80,18 +80,33 @@ public partial class Default2 : System.Web.UI.Page
         using (MySqlConnection con = new MySqlConnection(cs))
         {
             string query = @"
-            SELECT friendshipID, userIDfrom, u.username
-            FROM FriendsList f
-            JOIN Users u ON f.userIDfrom = u.userID
-            WHERE f.userIDto = @userID AND f.requestStatus = 'Pending'";
+        SELECT friendshipID, userIDfrom, u.username
+        FROM FriendsList f
+        JOIN Users u ON f.userIDfrom = u.userID
+        WHERE f.userIDto = @userID AND f.requestStatus = 'pending'";
 
             MySqlCommand cmd = new MySqlCommand(query, con);
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
 
-            con.Open();
-            using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+            string userID = Session["userID"] != null ? Session["userID"].ToString() : null;
+            if (string.IsNullOrEmpty(userID))
             {
-                da.Fill(dt);
+                return dt;
+            }
+
+            cmd.Parameters.AddWithValue("@userID", userID);
+
+            try
+            {
+                con.Open();
+                using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                {
+                    da.Fill(dt);
+                }
+                System.Diagnostics.Debug.WriteLine("Loaded " + dt.Rows.Count + " pending friend requests");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error loading friend requests: " + ex.Message);
             }
         }
         return dt;
@@ -100,7 +115,14 @@ public partial class Default2 : System.Web.UI.Page
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         DataTable dt = new DataTable();
-        string currentUserID = Session["userID"].ToString();
+
+        // FIX: C# 5 compatible null checking
+        string currentUserID = Session["userID"] != null ? Session["userID"].ToString() : null;
+        if (string.IsNullOrEmpty(currentUserID))
+        {
+            System.Diagnostics.Debug.WriteLine("UserID is null or empty in session for gifts");
+            return dt;
+        }
 
         using (MySqlConnection con = new MySqlConnection(cs))
         {
@@ -111,7 +133,7 @@ public partial class Default2 : System.Web.UI.Page
                 ELSE f.userIDfrom
             END as friendID,
             u.username,
-            f.lastGiftSender // FIXED COLUMN NAME
+            f.lastGiftSender
         FROM FriendsList f
         JOIN Users u ON (f.userIDfrom = u.userID OR f.userIDto = u.userID) 
             AND u.userID != @currentUserID
@@ -123,92 +145,80 @@ public partial class Default2 : System.Web.UI.Page
             MySqlCommand cmd = new MySqlCommand(query, con);
             cmd.Parameters.AddWithValue("@currentUserID", currentUserID);
 
-            con.Open();
-            using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+            try
             {
-                da.Fill(dt);
+                con.Open();
+                using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                {
+                    da.Fill(dt);
+                }
+                System.Diagnostics.Debug.WriteLine("Loaded " + dt.Rows.Count + " pending gifts for user: " + currentUserID);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error loading gifts: " + ex.Message);
             }
         }
         return dt;
     }
     protected void btnMail_Click(object sender, EventArgs e)
     {
-        DataTable pendingRequests = LoadPendingFriendRequests();
-        DataTable pendingGifts = LoadPendingGifts();
-
-        // Clear any existing popups first
-        pnlFriendRequests.Visible = false;
-        pnlGiftNotifications.Visible = false;
-        
-
-        // Reset viewstate to ensure fresh data
-        ViewState["PendingFriendRequests"] = pendingRequests;
-        ViewState["PendingGifts"] = pendingGifts;
-
-        if (pendingRequests.Rows.Count > 0)
+        try
         {
-            ViewState["CurrentRequestIndex"] = 0;
-            ShowFriendRequest(0);
+            System.Diagnostics.Debug.WriteLine("Mail button clicked - starting processing");
+
+            // Check if userID exists in session
+            if (Session["userID"] == null)
+            {
+                System.Diagnostics.Debug.WriteLine("UserID is null in session!");
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "noUserID",
+                    "alert('Please log in again.');", true);
+                return;
+            }
+
+            // Clear all popups first
+            pnlFriendRequests.Visible = false;
+            pnlGiftNotifications.Visible = false;
+
+            DataTable pendingRequests = LoadPendingFriendRequests();
+            DataTable pendingGifts = LoadPendingGifts();
+
+            ViewState["PendingFriendRequests"] = pendingRequests;
+            ViewState["PendingGifts"] = pendingGifts;
+
+            System.Diagnostics.Debug.WriteLine("Requests: " + pendingRequests.Rows.Count + ", Gifts: " + pendingGifts.Rows.Count);
+
+            // Show friend requests first, then gifts
+            if (pendingRequests.Rows.Count > 0)
+            {
+                System.Diagnostics.Debug.WriteLine("Showing friend request");
+                ViewState["CurrentRequestIndex"] = 0;
+                ShowFriendRequest(0);
+            }
+            else if (pendingGifts.Rows.Count > 0)
+            {
+                System.Diagnostics.Debug.WriteLine("Showing gift notification");
+                ViewState["CurrentGiftIndex"] = 0;
+                ShowGiftNotification(0);
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("No notifications found - showing no notifications panel");
+                // Show no notifications popup
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "showNoNotifications",
+                    "showNoNotificationsPopup();", true);
+            }
+
+            updFriendRequests.Update();
+            System.Diagnostics.Debug.WriteLine("Mail button processing completed");
         }
-        else if (pendingGifts.Rows.Count > 0)
+        catch (Exception ex)
         {
-            ViewState["CurrentGiftIndex"] = 0;
-            ShowGiftNotification(0);
+            System.Diagnostics.Debug.WriteLine("Exception in btnMail_Click: " + ex.ToString());
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "error",
+                "alert('Error loading notifications: " + ex.Message.Replace("'", "\\'") + "');", true);
         }
-        else
-        {
-            // Show the no notifications popup
-          
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "showNoNotifications",
-                "document.getElementById('popupNoNotifications').style.display = 'block';", true);
-        }
-        updFriendRequests.Update();
     }
-
-    //protected void GridView1_RowDataBound(object sender, GridViewRowEventArgs e)
-    //{
-    //    if (e.Row.RowType == DataControlRowType.DataRow)
-    //    {
-    //        // Find the gift button
-    //        Button btnSendGift = (Button)e.Row.FindControl("btnSendGift");
-
-    //        if (btnSendGift != null)
-    //        {
-    //            // Get the gift availability status from data
-    //            DataRowView rowView = (DataRowView)e.Row.DataItem;
-    //            bool giftAvailable = Convert.ToBoolean(rowView["giftAvailable"]);
-    //            string friendUserID = rowView["friendUserID"].ToString();
-    //            string currentUserID = Session["userID"].ToString();
-
-    //            // Check if current user is the last sender (if gift is available)
-    //            if (giftAvailable)
-    //            {
-    //                // Determine who sent the gift
-    //                string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-    //                string lastSender = GetLastGiftSender(cs, currentUserID, friendUserID);
-
-    //                // If current user sent the gift, disable the button
-    //                if (lastSender == currentUserID)
-    //                {
-    //                    btnSendGift.CssClass = "btn btn-secondary";
-    //                    btnSendGift.Enabled = false;
-    //                    btnSendGift.ToolTip = "You already sent a gift";
-    //                }
-    //                else
-    //                {
-    //                    btnSendGift.CssClass = "btn btn-primary";
-    //                    btnSendGift.Enabled = true;
-    //                }
-    //            }
-    //            else
-    //            {
-    //                btnSendGift.CssClass = "btn btn-primary";
-    //                btnSendGift.Enabled = true;
-    //            }
-    //        }
-    //    }
-    //}
-
 
     private void ShowGiftNotification(int index)
     {
@@ -223,9 +233,17 @@ public partial class Default2 : System.Web.UI.Page
 
             pnlGiftNotifications.Visible = true;
             ViewState["CurrentGiftIndex"] = index;
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "showGiftPopup",
-                "document.getElementById('popupGiftNotifications').style.display = 'block';", true);
+
+            // Update the panel first
             updFriendRequests.Update();
+
+            // Then show the popup
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "showGiftPopup",
+                "showGiftPopup();", true);
+        }
+        else
+        {
+            System.Diagnostics.Debug.WriteLine("No gift found at index: " + index);
         }
     }
 
@@ -319,16 +337,25 @@ public partial class Default2 : System.Web.UI.Page
 
             hiddenFriendRequestID.Value = row["friendshipID"].ToString();
             hiddenRequesterID.Value = row["userIDfrom"].ToString();
-            lblFriendRequestMessage.Text = "You have a friend request from <span style='font-weight:bold;'>" + row["username"].ToString() + "</span>";
+
+            string username = row["username"].ToString();
+            lblFriendRequestMessage.Text = "You have a friend request from <span style='font-weight:bold;'>" + username + "</span>";
 
             pnlFriendRequests.Visible = true;
             ViewState["CurrentRequestIndex"] = index;
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "showFriendRequestPopup",
-                "document.getElementById('popupFriendRequests').style.display = 'block';", true);
+
+            // Update the panel first
             updFriendRequests.Update();
+
+            // Then show the popup
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "showFriendRequestPopup",
+                "showFriendRequestPopup();", true);
+        }
+        else
+        {
+            System.Diagnostics.Debug.WriteLine("No friend request found at index: " + index);
         }
     }
-
     protected void btnAcceptFriendRequest_Click(object sender, EventArgs e)
     {
         string friendshipID = hiddenFriendRequestID.Value;
@@ -339,12 +366,20 @@ public partial class Default2 : System.Web.UI.Page
 
             using (MySqlConnection con = new MySqlConnection(cs))
             {
-                string query = "UPDATE friendslist SET requestStatus = 'Accepted' WHERE friendshipID = @friendshipID";
+                string query = "UPDATE FriendsList SET requestStatus = 'Accepted' WHERE friendshipID = @friendshipID";
                 MySqlCommand cmd = new MySqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@friendshipID", friendshipID);
 
-                con.Open();
-                cmd.ExecuteNonQuery();
+                try
+                {
+                    con.Open();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    System.Diagnostics.Debug.WriteLine("Friend request accepted. Rows affected: " + rowsAffected);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error accepting friend request: " + ex.Message);
+                }
             }
 
             LoadFriends();
@@ -363,12 +398,20 @@ public partial class Default2 : System.Web.UI.Page
 
             using (MySqlConnection con = new MySqlConnection(cs))
             {
-                string deleteQuery = "DELETE FROM friendslist WHERE friendshipID = @friendshipID";
+                string deleteQuery = "DELETE FROM FriendsList WHERE friendshipID = @friendshipID";
                 MySqlCommand cmd = new MySqlCommand(deleteQuery, con);
                 cmd.Parameters.AddWithValue("@friendshipID", friendshipID);
 
-                con.Open();
-                cmd.ExecuteNonQuery();
+                try
+                {
+                    con.Open();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    System.Diagnostics.Debug.WriteLine("Friend request declined. Rows affected: " + rowsAffected);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error declining friend request: " + ex.Message);
+                }
             }
 
             LoadFriends();
@@ -395,48 +438,66 @@ public partial class Default2 : System.Web.UI.Page
             {
                 pnlFriendRequests.Visible = false;
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "hideFriendRequestPopup",
-                    "document.getElementById('popupFriendRequests').style.display = 'none';", true);
+                    "hideAllPopups();", true);
             }
         }
         else
         {
             pnlFriendRequests.Visible = false;
             ScriptManager.RegisterStartupScript(this, this.GetType(), "hideFriendRequestPopup",
-                "document.getElementById('popupFriendRequests').style.display = 'none';", true);
+                "hideAllPopups();", true);
         }
         updFriendRequests.Update();
     }
-
     protected void btnSendGift_Click(object sender, EventArgs e)
     {
         Button btn = (Button)sender;
         string friendID = btn.CommandArgument.ToString();
-        string userID = Session["userID"].ToString();
+        string userID = Session["userID"] != null ? Session["userID"].ToString() : null;
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+        System.Diagnostics.Debug.WriteLine("Sending gift from " + userID + " to " + friendID);
+
+        if (string.IsNullOrEmpty(userID))
+        {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "notLoggedIn",
+                "alert('Please log in to send gifts.');", true);
+            return;
+        }
 
         using (MySqlConnection con = new MySqlConnection(cs))
         {
             con.Open();
 
-            // Check if current user was the last sender
+            // First check the current state
             string checkQuery = @"
-        SELECT lastGiftSender 
+        SELECT giftAvailable, lastGiftSender 
         FROM FriendsList
         WHERE ((userIDfrom = @currentUserID AND userIDto = @friendID)
-            OR (userIDfrom = @friendID AND userIDto = @currentUserID))
-            AND lastGiftSender = @currentUserID";
+            OR (userIDfrom = @friendID AND userIDto = @currentUserID))";
 
             MySqlCommand checkCmd = new MySqlCommand(checkQuery, con);
             checkCmd.Parameters.AddWithValue("@currentUserID", userID);
             checkCmd.Parameters.AddWithValue("@friendID", friendID);
 
-            object result = checkCmd.ExecuteScalar();
-
-            if (result != null) // Current user was the last sender
+            using (MySqlDataReader reader = checkCmd.ExecuteReader())
             {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "giftAlreadySent",
-                    "alert('You already sent the last gift. Wait for your friend to collect it.');", true);
-                return;
+                if (reader.Read())
+                {
+                    bool giftAvailable = Convert.ToBoolean(reader["giftAvailable"]);
+                    string lastSender = reader["lastGiftSender"] != DBNull.Value ? reader["lastGiftSender"].ToString() : null;
+
+                    System.Diagnostics.Debug.WriteLine("Current state - GiftAvailable: " + giftAvailable + ", LastSender: " + lastSender);
+
+                    // If gift is already available and current user was the last sender, prevent sending
+                    if (giftAvailable && lastSender == userID)
+                    {
+                        System.Diagnostics.Debug.WriteLine("User already sent the last gift to " + friendID);
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "giftAlreadySent",
+                            "alert('You already sent the last gift. Wait for your friend to collect it.');", true);
+                        return;
+                    }
+                }
             }
 
             // Update friendslist to mark gift as available and set last sender
@@ -454,22 +515,32 @@ public partial class Default2 : System.Web.UI.Page
 
             if (rowsAffected > 0)
             {
+                System.Diagnostics.Debug.WriteLine("Gift sent successfully to " + friendID);
+                // Show gift sent confirmation popup instead of alert
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "giftSent",
-                    "alert('Gift sent successfully!');", true);
-                LoadFriends(); // Refresh the grid to update button styles
+                    "showGiftSentPopup();", true);
+
+                // Reload friends to update button states
+                LoadFriends();
             }
             else
             {
+                System.Diagnostics.Debug.WriteLine("Error sending gift to " + friendID);
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "giftError",
                     "alert('Error sending gift. Please try again.');", true);
             }
         }
     }
-
     private void LoadFriends()
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string currentUserID = Session["userID"].ToString();
+        string currentUserID = Session["userID"] != null ? Session["userID"].ToString() : null;
+
+        if (string.IsNullOrEmpty(currentUserID))
+        {
+            System.Diagnostics.Debug.WriteLine("UserID is null, cannot load friends");
+            return;
+        }
 
         using (MySqlConnection con = new MySqlConnection(cs))
         {
@@ -497,75 +568,79 @@ public partial class Default2 : System.Web.UI.Page
             {
                 da.Fill(dt);
             }
+
+            // Debug: Check what data is loaded
+            foreach (DataRow row in dt.Rows)
+            {
+                System.Diagnostics.Debug.WriteLine("Friend: " + row["friendUserID"] +
+                    ", GiftAvailable: " + row["giftAvailable"] +
+                    ", LastSender: " + (row["lastGiftSender"] != DBNull.Value ? row["lastGiftSender"].ToString() : "null"));
+            }
+
             GridView1.DataSource = dt;
             GridView1.DataBind();
         }
     }
-
-    //protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
-    //{
-    //    string friendID = e.CommandArgument.ToString();
-
-    //    switch (e.CommandName)
-    //    {
-    //        case "SendGift":
-    //            This logic is now handled in btnSendGift_Click
-    //            The original redirect is problematic if you want to stay on the page and use AJAX
-    //            so the btnSendGift_Click method now handles the logic directly.
-    //             Call the SendGift logic here if needed, or rely on the button click.
-    //            break;
-
-    //        case "DeleteFriend":
-    //            ViewState["FriendToDelete"] = friendID; // Store friend ID for deletion
-    //            pnlDeleteFriend.Visible = true;
-    //            break;
-    //    }
-    //}
-
     protected void GridView1_RowDataBound(object sender, GridViewRowEventArgs e)
     {
         if (e.Row.RowType == DataControlRowType.DataRow)
         {
-            // Find the gift button
             Button btnSendGift = (Button)e.Row.FindControl("btnSendGift");
 
             if (btnSendGift != null)
             {
-                // Get the gift availability status from data
                 DataRowView rowView = (DataRowView)e.Row.DataItem;
                 bool giftAvailable = Convert.ToBoolean(rowView["giftAvailable"]);
                 string friendUserID = rowView["friendUserID"].ToString();
-                string currentUserID = Session["userID"].ToString();
+                string currentUserID = Session["userID"] != null ? Session["userID"].ToString() : null;
 
-                // Check if current user is the last sender (if gift is available)
-                if (giftAvailable)
+                if (string.IsNullOrEmpty(currentUserID))
                 {
-                    // Determine who sent the gift
+                    btnSendGift.Enabled = false;
+                    btnSendGift.CssClass = "btn btn-secondary";
+                    btnSendGift.ToolTip = "Not logged in";
+                    return;
+                }
+
+                // DEBUG: Check the giftAvailable value
+                System.Diagnostics.Debug.WriteLine("Friend: " + friendUserID + ", GiftAvailable: " + giftAvailable + ", CurrentUser: " + currentUserID);
+
+                if (!giftAvailable) // giftAvailable = 0
+                {
+                    // No gift available - ENABLE the button with primary style
+                    btnSendGift.CssClass = "btn btn-primary";
+                    btnSendGift.Enabled = true;
+                    btnSendGift.ToolTip = "Send gift";
+
+                    System.Diagnostics.Debug.WriteLine("Button ENABLED - No gift available, can send to friend: " + friendUserID);
+                }
+                else // giftAvailable = 1
+                {
                     string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
                     string lastSender = GetLastGiftSender(cs, currentUserID, friendUserID);
 
-                    // If current user sent the gift, disable the button
+                    System.Diagnostics.Debug.WriteLine("Last sender for friend " + friendUserID + ": " + (lastSender ?? "null"));
+
                     if (lastSender == currentUserID)
                     {
+                        // User already sent gift - disable button
                         btnSendGift.CssClass = "btn btn-secondary";
                         btnSendGift.Enabled = false;
                         btnSendGift.ToolTip = "You already sent a gift";
+                        System.Diagnostics.Debug.WriteLine("Button DISABLED - User already sent gift to " + friendUserID);
                     }
                     else
                     {
+                        // Gift available but friend sent it - enable button to send back
                         btnSendGift.CssClass = "btn btn-primary";
                         btnSendGift.Enabled = true;
+                        btnSendGift.ToolTip = "Send gift back";
+                        System.Diagnostics.Debug.WriteLine("Button ENABLED - Friend sent gift, can send back to " + friendUserID);
                     }
-                }
-                else
-                {
-                    btnSendGift.CssClass = "btn btn-primary";
-                    btnSendGift.Enabled = true;
                 }
             }
         }
     }
-
     private string GetLastGiftSender(string connectionString, string userID1, string userID2)
     {
         string query = @"
@@ -582,10 +657,9 @@ public partial class Default2 : System.Web.UI.Page
 
             con.Open();
             object result = cmd.ExecuteScalar();
-            return result != null ? result.ToString() : null;
+            return result != null && result != DBNull.Value ? result.ToString() : null;
         }
     }
-
     protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
     {
         if (e.CommandName == "DeleteFriend")
