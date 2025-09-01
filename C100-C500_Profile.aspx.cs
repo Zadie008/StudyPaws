@@ -32,9 +32,6 @@ public partial class Default2 : System.Web.UI.Page
 
         if (!IsPostBack)
         {
-            pnlDeleteProfile.Visible = false;
-            pnlLogout.Visible = false;
-
             if (string.IsNullOrEmpty(username)) return;
 
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -59,11 +56,6 @@ public partial class Default2 : System.Web.UI.Page
                 con.Close();
             }
         }
-        else
-        {
-            pnlLogout.Visible = false;
-            pnlDeleteProfile.Visible = false;
-        }
 
         LoadUserProfileIcon(username);
     }
@@ -81,10 +73,6 @@ public partial class Default2 : System.Web.UI.Page
         btnCancelUser.Visible = true;
     }
 
-    protected void btnLogout_Click(object sender, EventArgs e)
-    {
-        pnlLogout.Visible = true;
-    }
     private string originalEmail
     {
         get { return ViewState["originalEmail"] as string; }
@@ -434,6 +422,8 @@ public partial class Default2 : System.Web.UI.Page
                 }
             }
         }
+
+        Response.Redirect("Landing-page.aspx");
     }
 
     protected void btnCancelDelete_Click(object sender, EventArgs e)

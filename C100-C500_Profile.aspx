@@ -77,21 +77,21 @@
                 <td><asp:Label ID="lblDelete" CssClass="label" runat="server" Text="Delete Profile"></asp:Label></td>
                 <td>
                     <div class="deleteIconContainer">
-                        <asp:ImageButton ID="deleteImageButton" runat="server" ImageUrl="~/Icons/icons8-delete-white-96.png" CssClass="deleteIcon" AlternateText="Delete Profile" OnClick="deleteImageButton_Click"/>
+                        <asp:ImageButton ID="deleteImageButton" runat="server" ImageUrl="~/Icons/icons8-delete-white-96.png" CssClass="deleteIcon" AlternateText="Delete Profile" OnClientClick="showDeletePopup(); return false;"/>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td colspan="3">
                     <div class="buttonSection">
-                        <asp:Button ID="btnLogout" CssClass="button" runat="server" Text="Logout" OnClick="btnLogout_Click" />
+                        <asp:Button ID="btnLogout" CssClass="button" runat="server" Text="Logout" OnClientClick="showLogoutPopup(); return false;" />
                     </div>
                 </td>
             </tr>
         </table>
 
-        <asp:Panel ID="pnlDeleteProfile" runat="server" Visible="false">
-            <div id="popup" class="simple-popup">
+        <asp:Panel ID="pnlDeleteProfile" runat="server" style="display: none;">
+            <div id="popupDelete" class="simple-popup">
                 <div class="popup-blue-box">
                     <p>Are you sure you want to delete your profile? All progress will be lost!</p>
                     <img src="Images/Notification%20Sad%20Hamster.png" />
@@ -104,8 +104,8 @@
             </div>
         </asp:Panel>
             
-        <asp:Panel ID="pnlLogout" runat="server" Visible="false">
-            <div id="popup" class="simple-popup">
+        <asp:Panel ID="pnlLogout" runat="server" style="display: none;">
+            <div id="popupLogout" class="simple-popup">
                 <div class="popup-pink-box">
                     <p>Hope you have a purrfect day!</p>
                     <img src="Images/Notification%20Happy.png" />
@@ -116,6 +116,41 @@
                 </div>
             </div>
         </asp:Panel>
+
+        <script type="text/javascript">
+            function showDeletePopup() {
+                var panel = document.getElementById('<%= pnlDeleteProfile.ClientID %>');
+                if (panel) {
+                    panel.style.display = 'block';
+
+                    // Also show the inner popup if it has display:none
+                    var popup = panel.querySelector('.simple-popup');
+                    if (popup) {
+                        popup.style.display = 'flex'; // or 'block' depending on your CSS
+                    }
+                }
+            }
+
+            function showLogoutPopup() {
+                var panel = document.getElementById('<%= pnlLogout.ClientID %>');
+                if (panel) {
+                    panel.style.display = 'block';
+            
+                    var popup = panel.querySelector('.simple-popup');
+                    if (popup) {
+                        popup.style.display = 'flex';
+                    }
+                }
+            }
+    
+            function hidePopup() {
+                var deletePanel = document.getElementById('<%= pnlDeleteProfile.ClientID %>');
+                var logoutPanel = document.getElementById('<%= pnlLogout.ClientID %>');
+
+                if (deletePanel) deletePanel.style.display = 'none';
+                if (logoutPanel) logoutPanel.style.display = 'none';
+            }
+        </script>
     </div>
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
