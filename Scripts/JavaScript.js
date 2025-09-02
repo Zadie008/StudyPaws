@@ -495,7 +495,6 @@ function playEquipSound(button) {
     return false;
 }
 
-// Popup functions (keep these in your external JS file too)
 function showSellPopup() {
     const popup = document.getElementById('popupSell');
     if (popup) popup.style.display = 'flex';
@@ -517,7 +516,7 @@ function hideCannotSellPopup() {
 }
 
 function confirmSell() {
-    hideSellPopup(); // Changed from hidePopup() to hideSellPopup()
+    hideSellPopup();
     return true; // allow postback
 }
 

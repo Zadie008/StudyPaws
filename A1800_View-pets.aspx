@@ -181,7 +181,7 @@
 
         <asp:HiddenField ID="hfCurrentCategory" runat="server" Value="CAT" />
 
-         <div id="popupSell" class="simple-popup" style="display: none;">
+            <div id="popupSell" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
                 <p>Are you sure you want to sell this pet for</p>
                 <br />
@@ -201,13 +201,13 @@
                 <img src="Images/Notification%20Sad%20Hamster.png" />
 
                 <div class="buttonSection">
-                    <asp:Button ID="btnConfirmSell" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnConfirmSell_Click" OnClientClick="return confirmSell();" />
+                    <asp:Button ID="btnConfirmSell" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnConfirmSell_Click" OnClientClick="confirmSell(); return false;" />
                     <asp:Button ID="btnDontSell" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClientClick="hideSellPopup(); return false;" />
                 </div>
             </div>
         </div>
 
-         <div id="popupCannotSell" class="simple-popup" style="display: none;">
+            <div id="popupCannotSell" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
                 <p>Sorry!<br />You can't sell this pet.</p>
                 <img src="Images/Notification%20Sad%20Hamster.png" />

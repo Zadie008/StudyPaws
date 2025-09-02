@@ -236,10 +236,9 @@ public partial class View_pets : System.Web.UI.Page
         {
             con.Open();
 
-            string queryPet = "SELECT petID, sellPrice, petType FROM Pet WHERE petType = @petType AND colourNum = @colourNum";
-            using (MySqlCommand cmd = new MySqlCommand(queryPet, con))
+            using (MySqlCommand cmd = new MySqlCommand("SELECT petID, sellPrice FROM Pet INNER JOIN UserPets ON Pet.petID = UserPets.petID " + "WHERE UserPets.userID = @userID AND Pet.petType = 'Cat' AND Pet.colourNum = @colourNum", con))
             {
-                cmd.Parameters.AddWithValue("@petType", "Cat"); // PET TYPE~~~~
+                cmd.Parameters.AddWithValue("@userID", userID);
                 cmd.Parameters.AddWithValue("@colourNum", selectedColourNum);
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -247,7 +246,6 @@ public partial class View_pets : System.Web.UI.Page
                     {
                         petID = Convert.ToInt32(reader["petID"]);
                         sellPrice = Convert.ToInt32(reader["sellPrice"]);
-                        petType = reader["petType"].ToString();
                     }
                 }
             }
@@ -301,7 +299,7 @@ public partial class View_pets : System.Web.UI.Page
             {
                 cmd.Parameters.AddWithValue("@userID", userID);
                 cmd.Parameters.AddWithValue("@petID", petID);
-                cmd.ExecuteNonQuery();
+                int rows = cmd.ExecuteNonQuery();
             }
 
             // 2. GET CURRENT coin count
@@ -374,36 +372,33 @@ public partial class View_pets : System.Web.UI.Page
 
         lblPaws.Text = (currentCoins + sellPrice).ToString();
         LoadOwnedPets(userID);
+
+        ScriptManager.RegisterStartupScript(this, GetType(), "hideSellPopup", "hideSellPopup();", true);
     }
 
     protected void btnCats_Click(object sender, EventArgs e)
     {
         Response.Redirect("A1800_View-pets.aspx");
-        hfCurrentCategory.Value = "CAT";
     }
 
     protected void btnDogs_Click(object sender, EventArgs e)
     {
         Response.Redirect("A1800_View-pets-dogs.aspx");
-        hfCurrentCategory.Value = "DOG";
     }
 
     protected void btnFuzzy_Click(object sender, EventArgs e)
     {
         Response.Redirect("A1800_View-pets-fuzzy.aspx");
-        hfCurrentCategory.Value = "FUZZY";
     }
 
     protected void btnFarm_Click(object sender, EventArgs e)
     {
         Response.Redirect("A1800_View-pets-farm.aspx");
-        hfCurrentCategory.Value = "FARM";
     }
 
     protected void btnSpecial_Click(object sender, EventArgs e)
     {
         Response.Redirect("A1800_View-pets-special.aspx");
-        hfCurrentCategory.Value = "SPECIAL";
     }
     // end: view pets code
 
