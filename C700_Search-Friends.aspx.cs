@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Security;
@@ -87,10 +88,29 @@ public partial class Default2 : System.Web.UI.Page
             cmd.Parameters.AddWithValue("@searchTerm", "%" + searchTerm + "%");
             cmd.Parameters.AddWithValue("@currentUserID", Session["UserID"]);
 
-            con.Open();
-            MySqlDataReader reader = cmd.ExecuteReader();
-            GridView1.DataSource = reader;
-            GridView1.DataBind();
+            try
+            {
+                con.Open();
+                DataTable dt = new DataTable();
+                using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                {
+                    da.Fill(dt);
+                }
+
+                GridView1.DataSource = dt;
+                GridView1.DataBind();
+
+                // Show message if no results found
+                if (dt.Rows.Count == 0 && !string.IsNullOrEmpty(searchTerm))
+                {
+                    // You can show a message or keep the grid empty
+                    System.Diagnostics.Debug.WriteLine("No users found for search term: " + searchTerm);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error searching friends: " + ex.Message);
+            }
         }
     }
 
@@ -358,7 +378,7 @@ public partial class Default2 : System.Web.UI.Page
         }
     }
 
-    private string GetCircleColorClass(int iconNum)
+    public string GetCircleColorClass(int iconNum)
     {
         switch (iconNum)
         {

@@ -219,22 +219,22 @@
                                 <Columns>
                                     <asp:TemplateField>
                                         <ItemTemplate>
-                                            <div class="friendRow">
-                                                <a href="C600_View-friend-list.aspx" class="friendProfileIconLink">
-                                                    <div class="friendProfileIcon">
-                                                        <div class="friendProfileCircle"></div>
-                                                        <img class="friendProfileImage" src='<%# Eval("iconNum", "Images/ProfilePictures/{0}Pfp.png") %>' />
-                                                    </div>
-                                                </a>
-                                                <span class="friendUsername"><%# Eval("username") %></span>
+    <div class="friendRow">
+        <a href="C600_View-friend-list.aspx" class="friendProfileIconLink">
+            <div class="friendProfileIcon">
+                <div class='<%# "friendProfileCircle " + GetCircleColorClass(Convert.ToInt32(Eval("iconNum"))) %>'></div>
+               <img class="friendProfileImage" src='<%# GetProfileImageUrl(Eval("iconNum")) %>' />
+            </div>
+        </a>
+        <span class="friendUsername"><%# Eval("username") %></span>
 
-                                                <asp:Button ID="btnSendGift" CssClass="profilebutton" runat="server" Text="Send Gift"
-                                                    OnClick="btnSendGift_Click" CommandArgument='<%# Eval("userID") %>' />
-                                                <asp:ImageButton ID="btnDeleteFriend" runat="server"
-                                                    ImageUrl="Icons/icons8-delete-white-96.png" CssClass="imageButton"
-                                                    CommandName="DeleteFriend" CommandArgument='<%# Eval("userID") %>' />
-                                            </div>
-                                        </ItemTemplate>
+        <asp:Button ID="btnSendGift" CssClass="profilebutton" runat="server" Text="Send Gift"
+            OnClick="btnSendGift_Click" CommandArgument='<%# Eval("userID") %>' />
+        <asp:ImageButton ID="btnDeleteFriend" runat="server"
+            ImageUrl="Icons/icons8-delete-white-96.png" CssClass="imageButton"
+            CommandName="DeleteFriend" CommandArgument='<%# Eval("userID") %>' />
+    </div>
+</ItemTemplate>
                                     </asp:TemplateField>
                                 </Columns>
                             </asp:GridView>

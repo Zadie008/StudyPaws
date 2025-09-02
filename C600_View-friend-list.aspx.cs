@@ -707,6 +707,7 @@ public partial class Default2 : System.Web.UI.Page
         }
         pnlDeleteFriend.Visible = false;
     }
+   
     // end: friends code
 
     // start: header profile code
@@ -890,7 +891,7 @@ public partial class Default2 : System.Web.UI.Page
         }
     }
 
-    protected string GetProfileImagePath(int iconNum)
+    public string GetProfileImagePath(int iconNum)
     {
         switch (iconNum)
         {
@@ -902,8 +903,23 @@ public partial class Default2 : System.Web.UI.Page
             default: return "~/Images/ProfilePictures/CatPfp.png";
         }
     }
+    public string GetProfileImageUrl(object iconNum)
+    {
+        if (iconNum == null || iconNum == DBNull.Value)
+            return "Images/ProfilePictures/CatPfp.png";
 
-    private string GetCircleColorClass(int iconNum)
+        int num = Convert.ToInt32(iconNum);
+        switch (num)
+        {
+            case 1: return "Images/ProfilePictures/CatPfp.png";
+            case 2: return "Images/ProfilePictures/DogPfp.png";
+            case 3: return "Images/ProfilePictures/BunnyPfp.png";
+            case 4: return "Images/ProfilePictures/CowPfp.png";
+            case 5: return "Images/ProfilePictures/UnicornPfp.png";
+            default: return "Images/ProfilePictures/CatPfp.png";
+        }
+    }
+    public string GetCircleColorClass(int iconNum)
     {
         switch (iconNum)
         {

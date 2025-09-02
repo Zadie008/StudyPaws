@@ -123,28 +123,30 @@
        <div class="middleSection">
 
          <div id="searchFriendsSection">
-              <asp:TextBox ID="txtSearchFriends" ClientIDMode="Static" CssClass="textbox" runat="server" Placeholder="Search" OnTextChanged="txtSearchFriends_TextChanged" AutoPostBack="true"></asp:TextBox>
-              <asp:ImageButton ID="btnSearchFriends" CssClass="imageButton" runat="server" ImageUrl="Icons/icons8-search-white-96.png" OnClick="btnSearchFriends_Click" Width="75" Height="75" />
-        </div>
+    <asp:TextBox ID="txtSearchFriends" ClientIDMode="Static" CssClass="textbox" runat="server" 
+        Placeholder="Search" OnTextChanged="txtSearchFriends_TextChanged" AutoPostBack="true"></asp:TextBox>
+    <asp:ImageButton ID="btnSearchFriends" CssClass="imageButton" runat="server" 
+        ImageUrl="Icons/icons8-search-white-96.png" OnClick="btnSearchFriends_Click" 
+        Width="75" Height="75" CausesValidation="false" />
+</div>
        
                  <div class="friendsScrollableTableContainer">
                     <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" AutoGenerateColumns="False" OnRowCommand="GridView1_RowCommand">
                         <Columns>
                             <asp:TemplateField>
-                            <ItemTemplate>
-                                <div class="friendRow">
-                                    <a href="C600_View-friend-list.aspx" class="friendProfileIconLink">
-                                        <div class="friendProfileIcon">
-                                            <div class="friendProfileCircle"></div>
-                                            <img class="friendProfileImage" src='<%# GetProfileImageUrl(Eval("iconNum")) %>' />
-                                        </div>
-                                    </a>
-                                    <span class="friendUsername"><%# Eval("username") %></span>
-                                 
-                           <asp:ImageButton ID="btnAddFriend" runat="server" ImageUrl="Icons/icons8-add-new-white-96.png" CssClass="addFriendBtn" CommandName="AddFriend" CommandArgument='<%# Eval("userID") %>' />
-                         
-                                    </div>
-                            </ItemTemplate>
+<ItemTemplate>
+    <div class="friendRow">
+        <a href="C600_View-friend-list.aspx" class="friendProfileIconLink">
+            <div class="friendProfileIcon">
+                <div class='<%# "friendProfileCircle " + GetCircleColorClass(Convert.ToInt32(Eval("iconNum"))) %>'></div>
+                <img class="friendProfileImage" src='<%# GetProfileImageUrl(Eval("iconNum")) %>' />
+            </div>
+        </a>
+        <span class="friendUsername"><%# Eval("username") %></span>
+     
+        <asp:ImageButton ID="btnAddFriend" runat="server" ImageUrl="Icons/icons8-add-new-white-96.png" CssClass="addFriendBtn" CommandName="AddFriend" CommandArgument='<%# Eval("userID") %>' />
+    </div>
+</ItemTemplate>
                         </asp:TemplateField>
                         </Columns>
                     </asp:GridView>
@@ -219,7 +221,18 @@
                 </div>
             </div>
         </div>
+    <script type="text/javascript">
+    document.getElementById('txtSearchFriends').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            document.getElementById('<%= btnSearchFriends.ClientID %>').click();
+        }
+    });
 
+    window.onload = function () {
+        document.getElementById('txtSearchFriends').focus();
+    };
+    </script>
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
 </asp:Content>
