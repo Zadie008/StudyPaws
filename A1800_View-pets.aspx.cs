@@ -379,26 +379,31 @@ public partial class View_pets : System.Web.UI.Page
     protected void btnCats_Click(object sender, EventArgs e)
     {
         Response.Redirect("A1800_View-pets.aspx");
+        hfCurrentCategory.Value = "CAT";
     }
 
     protected void btnDogs_Click(object sender, EventArgs e)
     {
         Response.Redirect("A1800_View-pets-dogs.aspx");
+        hfCurrentCategory.Value = "DOG";
     }
 
     protected void btnFuzzy_Click(object sender, EventArgs e)
     {
         Response.Redirect("A1800_View-pets-fuzzy.aspx");
+        hfCurrentCategory.Value = "FUZZY";
     }
 
     protected void btnFarm_Click(object sender, EventArgs e)
     {
         Response.Redirect("A1800_View-pets-farm.aspx");
+        hfCurrentCategory.Value = "FARM";
     }
 
     protected void btnSpecial_Click(object sender, EventArgs e)
     {
         Response.Redirect("A1800_View-pets-special.aspx");
+        hfCurrentCategory.Value = "SPECIAL";
     }
     // end: view pets code
 

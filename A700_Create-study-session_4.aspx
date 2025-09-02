@@ -115,7 +115,7 @@
                 </div>
                 <div class="rightSection">
                     <div id="validationErrorStartSection" class="validationErrorSection">
-                        <asp:RangeValidator ID="errorStartHour" CssClass="validationErrorCustom" runat="server" ControlToValidate="txtStartTimeHours" ErrorMessage="Hours have to be between 00 and 24" MinimumValue="0" MaximumValue="24" Type="Integer" Display="Dynamic" EnableClientScript="true" ValidationGroup="timerValidation" ValidateEmptyText="true" SetFocusOnError="true" />
+                        <asp:RangeValidator ID="errorStartHour" CssClass="validationErrorCustom" runat="server" ControlToValidate="txtStartTimeHours" ErrorMessage="Hours have to be between 00 and 23" MinimumValue="0" MaximumValue="23" Type="Integer" Display="Dynamic" EnableClientScript="true" ValidationGroup="timerValidation" ValidateEmptyText="true" SetFocusOnError="true" />
 
                         <asp:RangeValidator ID="errorStartMinute" CssClass="validationErrorCustom" runat="server" ControlToValidate="txtStartTimeMinutes" ErrorMessage="Minutes have to be between 00 and 59" MinimumValue="0" MaximumValue="59" Type="Integer" Display="Dynamic" EnableClientScript="true" ValidationGroup="timerValidation" ValidateEmptyText="true" SetFocusOnError="true" />
                     </div>

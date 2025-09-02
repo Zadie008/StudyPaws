@@ -179,6 +179,8 @@
             </div>
         </div>
 
+        <asp:HiddenField ID="hfCurrentCategory" runat="server" Value="SPECIAL" />
+
         <div id="popupSell" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
                 <p>Are you sure you want to sell this pet for</p>

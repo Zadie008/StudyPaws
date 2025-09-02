@@ -343,27 +343,12 @@ function toggleExtraButtons() {
     if (extraVisible) {
         container.classList.add('show');
         btn.value = 'Back';
-        //document.addEventListener('click', closeExtraOutside);
     } else {
         container.classList.remove('show');
         btn.value = 'Add';
-        //document.removeEventListener('click', closeExtraOutside);
     }
     return false;
 }
-
-// to take away the +5/+10/+15 buttons when you click somewhere else on the screen (WORK IN PROGRESS)
-/*function closeExtraOutside(e) {
-    const container = document.getElementById('extraTimeButtons');
-    const btn = document.getElementById('mainContentPlaceHolder_btnToggleAddExtra');
-
-    if (!container.contains(e.target) && e.target !== btn) {
-        container.style.display = 'none';
-        btn.value = 'Add';
-        extraVisible = false;
-        document.removeEventListener('click', closeExtraOutside);
-    }
-}*/
 
 function addExtraTime(mins) {
     const addedSeconds = mins * 60;
@@ -445,7 +430,6 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', () => {
             const isSelected = button.classList.contains('buttonSelected');
 
-            // unselect all
             selectButtons.forEach(otherId => {
                 const otherBtn = document.getElementById(otherId);
                 if (otherBtn) otherBtn.classList.remove('buttonSelected');
@@ -457,7 +441,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 document.getElementById('mainContentPlaceHolder_hfSelectedColourNum').value = colourNum;
 
-                // Show sell and equip buttons
                 if (btnSell) btnSell.style.display = 'inline-block';
                 if (btnEquip) btnEquip.style.display = 'inline-block';
             }
@@ -465,27 +448,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 button.classList.remove('buttonSelected');
                 document.getElementById('mainContentPlaceHolder_hfSelectedColourNum').value = "";
 
-                // Hide sell and equip buttons
                 if (btnSell) btnSell.style.display = 'none';
                 if (btnEquip) btnEquip.style.display = 'none';
             }
         });
     });
 
-    // Add click event to sell button
     if (btnSell) {
         btnSell.addEventListener('click', function (e) {
             e.preventDefault();
             const colourNum = document.getElementById('mainContentPlaceHolder_hfSelectedColourNum').value;
+            const currentCategory = document.getElementById('mainContentPlaceHolder_hfCurrentCategory').value;
 
-            // Check if it's the first cat (cannot be sold)
-            if (colourNum === "1") {
+            if (currentCategory === "CAT" && colourNum === "1") {
                 showCannotSellPopup();
                 return false;
             }
 
-            // For other pets, show sell popup - CHANGE THIS LINE
-            showSellPopup(); // Changed from showPopup() to showSellPopup()
+            showSellPopup();
             return false;
         });
     }
