@@ -274,6 +274,18 @@
             </div>
         </div>--%>
 
+        <%-- this is the code for the level up panel--%>
+<div id="popupLevelUp" class="simple-popup" style="display: none;">
+    <div class="popup-pink-box">
+        <p>Congrats! You have leveled up!</p> 
+        <img src="Images/Notification%20Happy.png" />
+        <br />
+        <div class="buttonSection">
+            <asp:Button ID="btnYayLevelUp" CssClass="popup-button" runat="server" Text="Thank you!" OnClick="btnYayLevelUp_Click" />
+        </div>
+    </div>
+</div>
+
         <script type="text/javascript">
             function showPopup() {
                 document.getElementById('popupTaskComplete').style.display = 'flex';
@@ -286,6 +298,16 @@
             }
             function hideDeletePopup() {
                 document.getElementById('popupDeleteTask').style.display = 'none';
+            }
+            // Level Up Popup
+            function showLevelUp() {
+                var popup = document.getElementById('popupLevelUp');
+                if (popup) popup.style.display = 'flex';
+            }
+
+            function hideLevelUp() {
+                var popup = document.getElementById('popupLevelUp');
+                if (popup) popup.style.display = 'none';
             }
         </script>
     </div>

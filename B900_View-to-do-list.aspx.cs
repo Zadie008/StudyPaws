@@ -129,41 +129,23 @@ public partial class Default2 : System.Web.UI.Page
 
         if (e.CommandName == "Toggle")
         {
-            ToggleTaskStatus(taskID);
-            LoadTasks();
-        }
-
-        /*int taskID = Convert.ToInt32(e.CommandArgument);
-
-        if (e.CommandName == "Toggle")
-        {
             HiddenField taskIDHidden = (HiddenField)e.Item.FindControl("taskIDHidden");
             bool currentStatus = GetTaskStatus(taskID);
 
             if (!currentStatus)
             {
-                //ViewState["PendingAction"] = "Toggle";
-                //ViewState["PendingTaskID"] = taskID;
-                ////ScriptManager.RegisterStartupScript(this, this.GetType(), "showTogglePopup",
-                ////"setTimeout(function() { showPopup(); }, 100);", true);
-                //ScriptManager.RegisterStartupScript(this, GetType(), "showTogglePopup", "showTaskCompletePopup();", true);
-                ToggleTaskStatus(taskID);
-                LoadTasks();
+                ViewState["PendingAction"] = "Toggle";
+                ViewState["PendingTaskID"] = taskID;
+                ScriptManager.RegisterStartupScript(this, GetType(), "showTaskCompletePopup", "showTaskCompletePopup();", true);
             }
-            else
-            {
-                ToggleTaskStatus(taskID);
-                LoadTasks();
-            }
-        }*/
+        }
         else if (e.CommandName == "Delete")
         {
             ViewState["PendingAction"] = "Delete";
             ViewState["PendingTaskID"] = taskID;
 
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "showDeletePopup",
-            "setTimeout(function() { showPopupDelete(); }, 100);", true);
-            //ScriptManager.RegisterStartupScript(this, GetType(), "showDeletePopup", "showPopupDelete();", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDeletePopup", "showPopupDelete();", true);
+
         }
         else if (e.CommandName == "Edit")
         {
@@ -206,21 +188,7 @@ public partial class Default2 : System.Web.UI.Page
     {
         if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
         {
-            var task = (DataRowView)e.Item.DataItem;
-
-            bool taskStatus = Convert.ToBoolean(task["taskStatus"]);
-            Button toggleBtn = (Button)e.Item.FindControl("toggleBtn");
             TextBox txtDesc = (TextBox)e.Item.FindControl("txtEditDesc");
-
-            if (toggleBtn != null)
-            {
-                toggleBtn.CssClass = taskStatus ? "checkbox checked" : "checkbox";
-            }
-            if (txtDesc != null)
-            {
-                txtDesc.CssClass = taskStatus ? "taskCompleted" : "taskUncompleted";
-            }
-
             ImageButton editBtn = (ImageButton)e.Item.FindControl("editBtn");
             ImageButton saveBtn = (ImageButton)e.Item.FindControl("saveEditBtn");
             HiddenField taskIDHidden = (HiddenField)e.Item.FindControl("taskIDHidden");
@@ -228,6 +196,7 @@ public partial class Default2 : System.Web.UI.Page
             if (txtDesc != null && editBtn != null && saveBtn != null && taskIDHidden != null)
             {
                 string editingTaskID = Convert.ToString(ViewState["EditingTaskID"]);
+
 
                 if (editingTaskID == taskIDHidden.Value)
                 {
@@ -245,26 +214,6 @@ public partial class Default2 : System.Web.UI.Page
             }
         }
     }
-    /*protected void btnYesDelete_Click(object sender, EventArgs e)
-    {
-        string action = ViewState["PendingAction"] as string;
-        int taskID = Convert.ToInt32(ViewState["PendingTaskID"]);
-
-        if (action == "Delete")
-        {
-            using (MySqlConnection conn = new MySqlConnection(connString))
-            {
-                conn.Open();
-                string query = "DELETE FROM ToDoListTask WHERE taskID = @taskID";
-                MySqlCommand cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@taskID", taskID);
-                cmd.ExecuteNonQuery();
-            }
-            Response.Redirect(Request.RawUrl);
-            ViewState["PendingAction"] = null;
-            ViewState["PendingTaskID"] = null;
-        }
-    }*/
 
     protected void btnYesDelete_Click(object sender, EventArgs e)
     {
@@ -303,125 +252,19 @@ public partial class Default2 : System.Web.UI.Page
             return result != DBNull.Value && Convert.ToBoolean(result);
         }
     }
-    /*private void ToggleTaskStatus(int taskID)
-    {
-        //using (MySqlConnection conn = new MySqlConnection(connString))
-        //{
-        //    conn.Open();
-        //    string query = "UPDATE ToDoListTask SET taskStatus = NOT taskStatus WHERE taskID = @taskID";
-        //    MySqlCommand cmd = new MySqlCommand(query, conn);
-        //    cmd.Parameters.AddWithValue("@taskID", taskID);
-        //    cmd.ExecuteNonQuery();
-        //}
-        //ViewState["PendingAction"] = null;
-        //ViewState["PendingTaskID"] = null;
-
-        using (MySqlConnection conn = new MySqlConnection(connString))
-        {
-            conn.Open();
-
-            // Get current status + earnedXP
-            string selectSql = "SELECT taskStatus, earnedXP FROM ToDoListTask WHERE taskID = @taskID";
-            MySqlCommand selectCmd = new MySqlCommand(selectSql, conn);
-            selectCmd.Parameters.AddWithValue("@taskID", taskID);
-
-            using (var reader = selectCmd.ExecuteReader())
-            {
-                if (reader.Read())
-                {
-                    bool currentStatus = Convert.ToBoolean(reader["taskStatus"]);
-                    bool earnedXP = Convert.ToBoolean(reader["earnedXP"]);
-
-                    reader.Close();
-
-                    if (!currentStatus)
-                    {
-                        // Incomplete → mark complete
-                        string update = "UPDATE ToDoListTask SET taskStatus = TRUE WHERE taskID = @taskID";
-                        new MySqlCommand(update, conn).ExecuteNonQuery();
-
-                        if (!earnedXP)
-                        {
-                            // First time → grant XP + set earnedXP = true
-                            //GrantXP(taskID);
-                            string markEarned = "UPDATE ToDoListTask SET earnedXP = TRUE WHERE taskID = @taskID";
-                            MySqlCommand earnedCmd = new MySqlCommand(markEarned, conn);
-                            earnedCmd.Parameters.AddWithValue("@taskID", taskID);
-                            earnedCmd.ExecuteNonQuery();
-
-                            ScriptManager.RegisterStartupScript(this, GetType(), "showTogglePopup", "showTaskCompletePopup();", true);
-                        }
-                    }
-                    else
-                    {
-                        // Complete → mark incomplete, no XP change
-                        string update = "UPDATE ToDoListTask SET taskStatus = FALSE WHERE taskID = @taskID";
-                        new MySqlCommand(update, conn).ExecuteNonQuery();
-                    }
-                }
-            }
-        }
-        LoadTasks(); // refresh UI
-    }*/
-
     private void ToggleTaskStatus(int taskID)
     {
         using (MySqlConnection conn = new MySqlConnection(connString))
         {
             conn.Open();
-
-            // Get current status + earnedXP
-            string selectSql = "SELECT taskStatus, earnedXP FROM ToDoListTask WHERE taskID = @taskID";
-            MySqlCommand selectCmd = new MySqlCommand(selectSql, conn);
-            selectCmd.Parameters.AddWithValue("@taskID", taskID);
-
-            using (var reader = selectCmd.ExecuteReader())
-            {
-                if (reader.Read())
-                {
-                    bool currentStatus = Convert.ToBoolean(reader["taskStatus"]);
-                    bool earnedXP = Convert.ToBoolean(reader["earnedXP"]);
-
-                    reader.Close();
-
-                    if (!currentStatus)
-                    {
-                        // Incomplete → mark complete
-                        string update = "UPDATE ToDoListTask SET taskStatus = TRUE WHERE taskID = @taskID";
-                        new MySqlCommand(update, conn).ExecuteNonQuery();
-
-                        if (!earnedXP)
-                        {
-                            // First time → grant XP + set earnedXP = true
-                            string markEarned = "UPDATE ToDoListTask SET earnedXP = TRUE WHERE taskID = @taskID";
-                            MySqlCommand earnedCmd = new MySqlCommand(markEarned, conn);
-                            earnedCmd.Parameters.AddWithValue("@taskID", taskID);
-                            earnedCmd.ExecuteNonQuery();
-
-                            // USE A UNIQUE KEY FOR TASK COMPLETION POPUP
-                            ScriptManager.RegisterStartupScript(this, GetType(), "showTaskCompletePopup", "showTaskCompletePopup();", true);
-                        }
-                    }
-                    else
-                    {
-                        // Complete → mark incomplete, no XP change
-                        string update = "UPDATE ToDoListTask SET taskStatus = FALSE WHERE taskID = @taskID";
-                        new MySqlCommand(update, conn).ExecuteNonQuery();
-                    }
-                }
-            }
+            string query = "UPDATE ToDoListTask SET taskStatus = TRUE WHERE taskID = @taskID AND taskStatus = FALSE";
+            MySqlCommand cmd = new MySqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@taskID", taskID);
+            cmd.ExecuteNonQuery();
         }
-        LoadTasks();
+        ViewState["PendingAction"] = null;
+        ViewState["PendingTaskID"] = null;
     }
-
-    //protected void GrantXP(int taskID)
-    //{
-    //    ViewState["PendingAction"] = "Toggle";
-    //    ViewState["PendingTaskID"] = taskID;
-    //    //ScriptManager.RegisterStartupScript(this, this.GetType(), "showTogglePopup",
-    //    //"setTimeout(function() { showPopup(); }, 100);", true);
-    //    ScriptManager.RegisterStartupScript(this, GetType(), "showTogglePopup", "showTaskCompletePopup();", true);
-    //}
     protected void btnYayLevelUp_Click(object sender, EventArgs e)
     {
         ScriptManager.RegisterStartupScript(this, GetType(), "hideLevelUp", "hideLevelUp();", false);
@@ -429,6 +272,11 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnThankYou_Click(object sender, EventArgs e)
     {
+        if (ViewState["PendingAction"] != null && ViewState["PendingAction"].ToString() == "Toggle" && ViewState["PendingTaskID"] != null)
+        {
+            int taskID = Convert.ToInt32(ViewState["PendingTaskID"]);
+            ToggleTaskStatus(taskID);
+        }
         string userID = userIDHidden.Value;
 
         if (string.IsNullOrEmpty(userID))

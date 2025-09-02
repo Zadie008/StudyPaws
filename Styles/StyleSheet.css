@@ -976,15 +976,6 @@ body.page-exit .welcomeBackTextDiv {
     text-decoration:none;
     width:20px;
     height:20px;
-    /*background-color: transparent;*/
-    /*-webkit-appearance: none;*/
-    /*appearance: none;*/ /* removes default arrow */
-    /*background-image: url('../Icons/icons8-add-new-white-96.png'); 
-    transition: background-image 0.2s ease;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 20px;
-    line-height:20px;*/
 }
 .addEventBtn img.addEventBtnImg{
     width:20px;
@@ -996,22 +987,6 @@ body.page-exit .welcomeBackTextDiv {
 .addEventBtn img.addEventBtnImg:hover{
     opacity:1;
 }
-/*.addEventBtn {
-    display: none;
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-    background-color: #E6D6E5;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    text-align: center;
-    line-height: 20px;
-    font-weight: bold;
-    color: #333;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}*/
 
 .calendarCell:hover .addEventBtn {
     display: block;
@@ -1072,10 +1047,6 @@ body.page-exit .welcomeBackTextDiv {
         margin: 0;
         flex-shrink: 0;
     }
-/*.controlsCalendar .calendarFilters img{*/
-   /* width:2.5vw;*/
-    /*max-width:30px;
-}*/
     .controlsCalendar .prevMonth {
         flex: 1;
         width: 32px;
@@ -1488,6 +1459,8 @@ body.page-exit .welcomeBackTextDiv {
     flex-wrap: nowrap;
     flex-direction: row;
 }
+/*--------------------------------------------- DELETE STUDY SESSION ---------------------------------------------*/
+
 /*--------------------------------------------- CREATE EVENT PAGE B200 and B500 ---------------------------------------------*/
 .createEventMainContent {
     margin: 4em 4em 0em 4em;
@@ -4010,6 +3983,30 @@ input.textbox:-webkit-autofill {
     background-image: url('../Icons/icons8-collapse-arrow-up-white-96.png'); /* up arrow */
     transition: background-image 0.2s ease;
 }
+    .dropDownList.disabled {
+        border-radius: 2rem;
+        border: 2px solid white;
+        background-color: transparent;
+        -webkit-appearance: none;
+        appearance: none; /* removes default arrow */
+        background-image: url('../Icons/icons8-expand-arrow-white-96.png'); /* down arrow */
+        transition: background-image 0.2s ease;
+        background-repeat: no-repeat;
+        background-position: right 0.5em center;
+        background-size: 1em;
+        padding: 0.2em 2em 0.2em 1em;
+        color: white;
+        font-size: clamp(1.2rem, 2vw, 2.5rem);
+        font-family: 'Gilda Display', serif;
+        font-weight: 200;
+        outline: none;
+        margin: 1vh auto;
+        text-align: left;
+        width: 100%;
+        max-width: 300px;
+        box-sizing: border-box;
+        display: block;
+    }
 
 /* -------------------------------------------- DATE AND TIME BOX -------------------------------------------- */
 .filterDateBox {

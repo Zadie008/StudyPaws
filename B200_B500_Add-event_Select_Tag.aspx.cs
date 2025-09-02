@@ -25,7 +25,6 @@ public partial class Default2 : System.Web.UI.Page
         if (!IsPostBack)
         {
             LoadTags();
-            tagBtnsVisibility();
 
             if (Request.QueryString["newTag"] != null)
             {
@@ -82,18 +81,6 @@ public partial class Default2 : System.Web.UI.Page
         {
             Response.Redirect("Landing-page.aspx");
         }
-
-        //{
-        //    if (Session["timerTitle"] != null)
-        //    {
-        //        txtEventTitle.Text = Session["timerTitle"].ToString();
-        //    }
-
-        //    if (Session["timerTag"] != null)
-        //    {
-        //        dropdownEventTag.SelectedValue = Session["timerTag"].ToString();
-        //    }
-        //}
 
         ShowNextInvite();
     }
@@ -171,19 +158,6 @@ public partial class Default2 : System.Web.UI.Page
             int tagID = Convert.ToInt32(dropdownEventTag.SelectedValue);
             Session["EditTagID"] = tagID;
             Response.Redirect("B700-B800_Edit_Delete_Tags.aspx");
-        }
-    }
-    protected void tagBtnsVisibility()
-    {
-        if (string.IsNullOrEmpty(dropdownEventTag.SelectedValue))
-        {
-            btnAddTag.Visible = true;
-            btnEditTag.Visible = false;
-        }
-        else
-        {
-            btnAddTag.Visible = false;
-            btnEditTag.Visible = true;
         }
     }
 

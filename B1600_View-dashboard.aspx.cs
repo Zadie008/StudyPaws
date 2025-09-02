@@ -398,13 +398,6 @@ public partial class Default2 : System.Web.UI.Page
                 ViewState["PendingTaskID"] = taskID;
                 ScriptManager.RegisterStartupScript(this, GetType(), "showTogglePopup", "showPopup();", true);
             }
-            else
-            {
-                ToggleTaskStatus(taskID);
-                LoadTasks();
-            }
-
-
         }
         else if (e.CommandName == "Delete")
         {
@@ -521,16 +514,14 @@ public partial class Default2 : System.Web.UI.Page
     }
     private void ToggleTaskStatus(int taskID)
     {
-
         using (MySqlConnection conn = new MySqlConnection(connString))
         {
             conn.Open();
-            string query = "UPDATE ToDoListTask SET taskStatus = NOT taskStatus WHERE taskID = @taskID";
+            string query = "UPDATE ToDoListTask SET taskStatus = TRUE WHERE taskID = @taskID AND taskStatus = FALSE";
             MySqlCommand cmd = new MySqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@taskID", taskID);
             cmd.ExecuteNonQuery();
         }
-        Response.Redirect(Request.RawUrl);
         ViewState["PendingAction"] = null;
         ViewState["PendingTaskID"] = null;
     }
@@ -541,6 +532,90 @@ public partial class Default2 : System.Web.UI.Page
             int taskID = Convert.ToInt32(ViewState["PendingTaskID"]);
             ToggleTaskStatus(taskID);
         }
+        string userID = userIDHidden.Value;
+
+        if (string.IsNullOrEmpty(userID))
+        {
+            Response.Write("<script>alert('Error: User not found.');</script>");
+            return;
+        }
+
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            try
+            {
+                con.Open();
+
+                // Get current XP
+                string selectXPQuery = "SELECT userXP FROM Users WHERE userID = @userID";
+                MySqlCommand selectXPCmd = new MySqlCommand(selectXPQuery, con);
+                selectXPCmd.Parameters.AddWithValue("@userID", userID);
+
+                object xpObj = selectXPCmd.ExecuteScalar();
+                int currentXP = (xpObj != null && xpObj != DBNull.Value) ? Convert.ToInt32(xpObj) : 0;
+                int newXP = currentXP + 10;
+
+                // Update XP
+                string updateXPQuery = "UPDATE Users SET userXP = @newXP WHERE userID = @userID";
+                MySqlCommand updateXPCmd = new MySqlCommand(updateXPQuery, con);
+                updateXPCmd.Parameters.AddWithValue("@newXP", newXP);
+                updateXPCmd.Parameters.AddWithValue("@userID", userID);
+                updateXPCmd.ExecuteNonQuery();
+
+                // Check new level
+                string getNewLevelQuery = "SELECT MAX(levelNum) FROM Level WHERE xpAmount <= @newXP";
+                MySqlCommand getNewLevelCmd = new MySqlCommand(getNewLevelQuery, con);
+                getNewLevelCmd.Parameters.AddWithValue("@newXP", newXP);
+
+                object newLevelObj = getNewLevelCmd.ExecuteScalar();
+                int newLevelNum = (newLevelObj != null && newLevelObj != DBNull.Value) ? Convert.ToInt32(newLevelObj) : 1;
+
+                // Get current level
+                string getCurrentLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
+                MySqlCommand getCurrentLevelCmd = new MySqlCommand(getCurrentLevelQuery, con);
+                getCurrentLevelCmd.Parameters.AddWithValue("@userID", userID);
+
+                object currentLevelObj = getCurrentLevelCmd.ExecuteScalar();
+                int currentLevel = (currentLevelObj != null && currentLevelObj != DBNull.Value) ? Convert.ToInt32(currentLevelObj) : 1;
+
+                if (newLevelNum > currentLevel)
+                {
+                    // Update level
+                    string updateLevelQuery = "UPDATE CurrentLevel SET levelID = @newLevelNum WHERE userID = @userID";
+                    MySqlCommand updateLevelCmd = new MySqlCommand(updateLevelQuery, con);
+                    updateLevelCmd.Parameters.AddWithValue("@newLevelNum", newLevelNum);
+                    updateLevelCmd.Parameters.AddWithValue("@userID", userID);
+                    updateLevelCmd.ExecuteNonQuery();
+
+                    // Show Level Up popup
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowLevelUp", "showLevelUp();", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Response.Write("<script>alert('An error occurred: " + ex.Message + "');</script>");
+            }
+        }
+
+        UpdateXPDisplay(userID);
+        LoadTasks();
+    }
+
+    private void UpdateXPDisplay(string userID)
+    {
+        int userXP = GetUserXP(connString, userID);
+        var levelInfo = GetLevelInformation(connString, userID);
+        int currentLevel = levelInfo.Item1;
+        int currentLevelXpAmount = levelInfo.Item2;
+        int nextLevelXpAmount = levelInfo.Item3;
+        lblLevelNumber.Text = currentLevel.ToString();
+        CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
+    }
+    protected void btnYayLevelUp_Click(object sender, EventArgs e)
+    {
+        ScriptManager.RegisterStartupScript(this, GetType(), "hideLevelUp", "hideLevelUp();", false);
     }
 
     // start: header profile code
