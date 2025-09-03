@@ -35,7 +35,8 @@ public partial class Default2 : System.Web.UI.Page
             string username = Session["Username"].ToString();
 
             ddlFilter.Visible = IsToDoFilterVisible;
-            calendarDropDown.Visible = IsToDoFilterVisible;
+            
+            //calendarDropDown.Visible = IsToDoFilterVisible;
             userIDHidden.Value = Convert.ToString(Session["userID"]);
 
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -43,11 +44,19 @@ public partial class Default2 : System.Web.UI.Page
 
             if (!IsPostBack)
             {
+                LoadCalendarTags();
                 ViewState["SelectedFilter"] = "All";
                 ddlFilter.SelectedValue = "All";
                 LoadTasks();
 
                 LoadTagColours();
+                
+                if (calendarDropDown.Items.FindByValue("0") != null)
+                {
+                    calendarDropDown.SelectedValue = "0";
+                }
+                ViewState["SelectedCalendarTag"] = calendarDropDown.SelectedValue;
+
                 DateTime currentDate = DateTime.Today;
                 hfYear.Value = currentDate.Year.ToString();
                 hfMonth.Value = DateTime.Today.Month.ToString();
@@ -70,10 +79,19 @@ public partial class Default2 : System.Web.UI.Page
             else
             {
                 LoadTasks();
-
+                LoadTagColours(); // added to see if it fixes default black event dots
                 int year = int.Parse(hfYear.Value);
                 int month = int.Parse(hfMonth.Value);
                 LoadCalendar(year, month);
+
+                //if (ViewState["SelectedCalendarTag"]!= null)
+                //{
+                //    string selectedValue = ViewState["SelectedCalendarTag"].ToString();
+                //    if (calendarDropDown.Items.FindByValue(selectedValue) != null)
+                //    {
+                //        calendarDropDown.SelectedValue = selectedValue;
+                //    }
+                //}
             }
             //LoadTasks();
         }
@@ -95,32 +113,41 @@ public partial class Default2 : System.Web.UI.Page
             ViewState["FilterVisible"] = value;
         }
     }
-    private bool IsCalendarFilterVisible
-    {
-        get
-        {
-            return ViewState["CalendarFilterVisible"] != null && (bool)ViewState["CalendarFilterVisible"];
-        }
-        set
-        {
-            ViewState["CalendarFilterVisible"] = value;
-        }
-    }
+    //private bool IsCalendarFilterVisible
+    //{
+    //    get
+    //    {
+    //        return ViewState["CalendarFilterVisible"] != null && (bool)ViewState["CalendarFilterVisible"];
+    //    }
+    //    set
+    //    {
+    //        ViewState["CalendarFilterVisible"] = value;
+    //    }
+    //}
     private void LoadCalendar(int year, int month)
     {
         lblMonthYear.Text = new DateTime(year, month, 1).ToString("MMMM yyyy");
         literalCalendar.Text = GenerateCalendar(year, month);
         hfYear.Value = year.ToString();
         hfMonth.Value = month.ToString();
-    }
-    protected void calendarFilterBtn_Click(object sender, EventArgs e)
-    {
-        IsCalendarFilterVisible = !IsCalendarFilterVisible;
-        calendarDropDown.Visible = IsCalendarFilterVisible;
 
-        if (IsCalendarFilterVisible)
-            LoadCalendarTags();
+        if (ViewState["SelectedCalendarTag"] != null)
+        {
+            string selectedValue = ViewState["SelectedCalendarTag"].ToString();
+            if (calendarDropDown.Items.FindByValue(selectedValue) != null)
+            {
+                calendarDropDown.SelectedValue = selectedValue;
+            }
+        }
     }
+    //protected void calendarFilterBtn_Click(object sender, EventArgs e)
+    //{
+    //    IsCalendarFilterVisible = !IsCalendarFilterVisible;
+    //    calendarDropDown.Visible = IsCalendarFilterVisible;
+
+    //    if (IsCalendarFilterVisible)
+    //        LoadCalendarTags();
+    //}
     private void LoadCalendarTags()
     {
         calendarDropDown.Items.Clear();
@@ -141,6 +168,13 @@ public partial class Default2 : System.Web.UI.Page
                 }
             }
         }
+    }
+    protected void calendarDropDown_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        ViewState["SelectedCalendarTag"] = calendarDropDown.SelectedValue;
+        int year = int.Parse(hfYear.Value);
+        int month = int.Parse(hfMonth.Value);
+        LoadCalendar(year, month);
     }
     private String GenerateCalendar(int year, int month)
     {
@@ -239,13 +273,27 @@ public partial class Default2 : System.Web.UI.Page
         List<string> events = new List<string>();
         int userID = Convert.ToInt32(Session["userID"]);
 
+        int selectedTagID = 0;
+        if (ViewState["SelectedCalendarTag"] != null)
+        {
+            selectedTagID = Convert.ToInt32(ViewState["SelectedCalendarTag"]);
+        }
+
         using (MySqlConnection conn = new MySqlConnection(connString))
         {
             conn.Open();
-            string loadEvents = "SELECT eventID, eventDesc, tagID FROM CalendarEvent WHERE userID=@userID AND eventDate=@eventDate";
+            string loadEvents = "SELECT eventID, eventDesc, tagID FROM CalendarEvent " +  "WHERE userID=@userID AND eventDate=@eventDate";
+            if (selectedTagID > 0)
+            {
+                loadEvents += " AND tagID=@tagID";
+            }
             MySqlCommand cmd = new MySqlCommand(loadEvents, conn);
             cmd.Parameters.AddWithValue("@userID", userID);
             cmd.Parameters.AddWithValue("@eventDate", day.Date);
+            if (selectedTagID > 0)
+            {
+                cmd.Parameters.AddWithValue("@tagID", selectedTagID);
+            }
             using (MySqlDataReader reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
@@ -292,13 +340,15 @@ public partial class Default2 : System.Web.UI.Page
                     {
                         case "1": tagColour =  "#F4CAE0";
                             break;
-                        case "2": tagColour = "#D7B9D5";
+                        case "2": tagColour = "#BE95C4";
                             break;
                         case "3": tagColour = "#ADA7C9";
                             break;
                         case "4": tagColour = "#90A8C3";
                             break;
                         case "5": tagColour = "#64A6BD";
+                            break;
+                        case "6": tagColour = "#446791";
                             break;
                         default: tagColour = "#000000";
                             break;
@@ -307,7 +357,6 @@ public partial class Default2 : System.Web.UI.Page
                 }
             }
         }
-        
     }
     protected void btnPrevMonth_Click(Object sender, EventArgs e)
     {
