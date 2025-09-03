@@ -453,23 +453,85 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
-
-    if (btnSell) {
-        btnSell.addEventListener('click', function (e) {
-            e.preventDefault();
-            const colourNum = document.getElementById('mainContentPlaceHolder_hfSelectedColourNum').value;
-            const currentCategory = document.getElementById('mainContentPlaceHolder_hfCurrentCategory').value;
-
-            if (currentCategory === "CAT" && colourNum === "1") {
-                showCannotSellPopup();
-                return false;
-            }
-
-            showSellPopup();
-            return false;
-        });
-    }
 });
+
+function confirmSell() {
+    console.log('confirmSell called');
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'SellHandler.ashx');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        console.log('XHR response received:', xhr.status, xhr.responseText);
+        if (xhr.status === 200) {
+            if (!xhr.responseText.startsWith("ERROR")) {
+                __doPostBack('refreshPage', '');
+            } else {
+                console.error('Error from server:', xhr.responseText);
+                alert('Error: ' + xhr.responseText);
+            }
+        } else {
+            console.error('Request failed. Status:', xhr.status);
+            alert('Request failed with status: ' + xhr.status);
+        }
+    };
+
+    xhr.onerror = function () {
+        console.error('XHR error occurred');
+        alert('Network error occurred while processing your request.');
+    };
+
+    xhr.send('action=confirmSell');
+    console.log('XHR request sent');
+
+    return false;
+}
+
+function handleSellClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const colourNum = document.getElementById('mainContentPlaceHolder_hfSelectedColourNum').value;
+    const currentCategory = document.getElementById('mainContentPlaceHolder_hfCurrentCategory').value;
+
+    let petType = "Cat"; // default
+    if (currentCategory === "DOG") petType = "Dog";
+    else if (currentCategory === "FUZZY") petType = "Fuzzy";
+    else if (currentCategory === "FARM") petType = "Farm";
+    else if (currentCategory === "SPECIAL") petType = "Special";
+
+    if (currentCategory === "CAT" && colourNum === "1") {
+        showCannotSellPopup();
+        return false;
+    }
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'SellHandler.ashx');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            if (xhr.responseText === "CANNOT_SELL") {
+                showCannotSellPopup();
+            } else if (xhr.responseText && !xhr.responseText.startsWith("ERROR")) {
+                document.getElementById('mainContentPlaceHolder_lblSellPrice').innerText = xhr.responseText;
+                showSellPopup();
+            } else {
+                console.error('Error:', xhr.responseText);
+                alert('An error occurred while processing your request.');
+            }
+        } else {
+            console.error('Request failed. Status:', xhr.status);
+            alert('An error occurred while processing your request.');
+        }
+    };
+    xhr.send('action=getSellPrice&colourNum=' + encodeURIComponent(colourNum) + '&petType=' + encodeURIComponent(petType));
+
+    return false;
+}
+
+function showLoading() {
+    document.body.style.cursor = 'wait';
+}
 
 function playEquipSound(button) {
     const audio = document.getElementById("equipSound");
@@ -513,11 +575,6 @@ function showCannotSellPopup() {
 function hideCannotSellPopup() {
     const popup = document.getElementById('popupCannotSell');
     if (popup) popup.style.display = 'none';
-}
-
-function confirmSell() {
-    hideSellPopup();
-    return true; // allow postback
 }
 
 // ---  REGISTRATION PAGE  ---

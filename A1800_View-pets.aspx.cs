@@ -221,8 +221,6 @@ public partial class View_pets : System.Web.UI.Page
     // SELL PET (DELETING THE USERPETS ENTRY)
     protected void btnSell_Click(object sender, EventArgs e)
     {
-        lblPaws.Text = "running btnSell"; // debugging
-
         string selectedColourNum = hfSelectedColourNum.Value;
         userID = Session["UserID"] as string;
 
@@ -238,10 +236,11 @@ public partial class View_pets : System.Web.UI.Page
         {
             con.Open();
 
-            using (MySqlCommand cmd = new MySqlCommand("SELECT petID, sellPrice FROM Pet INNER JOIN UserPets ON Pet.petID = UserPets.petID " + "WHERE UserPets.userID = @userID AND Pet.petType = 'Cat' AND Pet.colourNum = @colourNum", con))
+            using (MySqlCommand cmd = new MySqlCommand("SELECT Pet.petID, Pet.sellPrice FROM Pet INNER JOIN UserPets ON Pet.petID = UserPets.petID WHERE UserPets.userID = @userID AND Pet.petType = 'Cat' AND Pet.colourNum = @colourNum", con)) // PET TYPE~~~~
             {
                 cmd.Parameters.AddWithValue("@userID", userID);
                 cmd.Parameters.AddWithValue("@colourNum", selectedColourNum);
+
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
@@ -269,8 +268,6 @@ public partial class View_pets : System.Web.UI.Page
 
     protected void btnConfirmSell_Click(object sender, EventArgs e)
     {
-        lblPaws.Text = "running btnConfirmSell"; // debugging
-
         string userID = Session["UserID"] as string;
         if (Session["petID"] == null || Session["sellPrice"] == null || string.IsNullOrEmpty(userID))
             return;
@@ -378,6 +375,7 @@ public partial class View_pets : System.Web.UI.Page
         LoadOwnedPets(userID);
 
         ScriptManager.RegisterStartupScript(this, GetType(), "hideSellPopup", "hideSellPopup();", true);
+        Response.Redirect(Request.RawUrl);
     }
 
     protected void btnCats_Click(object sender, EventArgs e)

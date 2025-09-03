@@ -115,6 +115,7 @@
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div id="viewInventoryMainContent">
+        <asp:HiddenField ID="hfCurrentCategory" runat="server" Value="FUZZY" />
         <h2>Your inventory</h2>
         <div class="backgroundColorContainer">
             <div class="leftCategorySection">
@@ -171,15 +172,13 @@
             <div class="leftSection">
             </div>
             <div class="middleSection buttonRow">
-                <asp:Button ID="btnSell" class="button" runat="server" Text="Sell" Style="display: none;" OnClick="btnSell_Click" />
+                <asp:Button ID="btnSell" class="button" runat="server" Text="Sell" Style="display: none;" OnClientClick="return handleSellClick(event);" />
                 <asp:HiddenField ID="hfSelectedColourNum" runat="server" />
                 <asp:Button ID="btnEquip" class="button" runat="server" Text="Equip" Style="display: none;" UseSubmitBehavior="false" OnClientClick="return playEquipSound(this);" />
             </div>
             <div class="rightSection">
             </div>
         </div>
-
-        <asp:HiddenField ID="hfCurrentCategory" runat="server" Value="FUZZY" />
 
         <div id="popupSell" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
@@ -201,7 +200,7 @@
                 <img src="Images/Notification%20Sad%20Hamster.png" />
 
                 <div class="buttonSection">
-                    <asp:Button ID="btnConfirmSell" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnConfirmSell_Click" OnClientClick="return confirmSell();" />
+                    <asp:Button ID="btnConfirmSell" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnConfirmSell_Click" OnClientClick="showLoading(); return true;" />
                     <asp:Button ID="btnDontSell" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClientClick="hideSellPopup(); return false;" />
                 </div>
             </div>
