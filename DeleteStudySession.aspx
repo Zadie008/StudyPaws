@@ -99,7 +99,7 @@
             <table>
                 <tr>
                     <td><asp:Label ID="lblEventTitle" class="label" runat="server" Text="Title"></asp:Label></td>
-                    <td><asp:TextBox ID="txtEventTitle" class="textbox" runat="server"></asp:TextBox></td>
+                    <td><asp:TextBox ID="txtEventTitle" class="textboxDisabled" runat="server"></asp:TextBox></td>
                 </tr>
                 <tr>
                     <td><asp:Label ID="lblEventTag" class="label" runat="server" Text="Tag"></asp:Label></td>
@@ -111,7 +111,7 @@
                 </tr>
                 <tr>
                     <td><asp:Label ID="lblEventDate" class="label" runat="server" Text="Date"></asp:Label></td>
-                    <td><asp:TextBox ID="txtEventDate" class="textbox" runat="server" TextMode="Date"></asp:TextBox></td>
+                    <td><asp:TextBox ID="txtEventDate" class="textboxDisabled" runat="server" TextMode="Date"></asp:TextBox></td>
                 </tr>
             </table>
         </div>
@@ -135,8 +135,6 @@
         <div class="middleSection">
             <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="False" />
             <asp:Button ID="btnDelete" class="button" runat="server" Text="Delete" OnClick="btnDelete_Click" CausesValidation="False" OnClientClick="showPopupDelete(); return false;" />
-            <%--<asp:Button ID="btnSave" class="button" runat="server" Text="Save" OnClick="btnSave_Click" />--%>
-
         </div>
         <div class="rightSection">
             <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->

@@ -921,13 +921,13 @@ body.page-exit .welcomeBackTextDiv {
 .dashboardContainer .popup-pink-box p {
     font-size: 2.2rem;
 }
-/* -------------------------------------------- CALENDAR PAGES -------------------------------------------- */
+/* -------------------------------------------- CALENDAR DASHBOARD -------------------------------------------- */
 .calendarDashboard { 
     flex: 72%;
     background: #D7B9D5; 
     border-radius: 30px;
     padding: 10px;
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); /*fix this*/
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); 
 }
 .calendarCell {
     position: relative;
@@ -1176,7 +1176,7 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 2.2rem;
 }
 
-/* -------------------------------------------- TO DO LIST PAGES -------------------------------------------- */
+/* -------------------------------------------- TO DO LIST DASHBOARD -------------------------------------------- */
 .toDoListDashboard {
     flex: 28%;
     background: #ADA7C9;
@@ -1492,26 +1492,163 @@ body.page-exit .welcomeBackTextDiv {
     flex-wrap: nowrap;
     flex-direction: row;
 }
-/*--------------------------------------------- DELETE STUDY SESSION ---------------------------------------------*/
+/*--------------------------------------------- VIEW CALENDAR B100 ---------------------------------------------*/
+.calendarPage {
+    width: 75%;
+    background: #D7B9D5;
+    border-radius: 1.5em;
+    padding: 0.3em 1.5em 0.3em 1.5em;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
 
-/*--------------------------------------------- CREATE EVENT PAGE B200 and B500 ---------------------------------------------*/
+    align-items: center;
+    margin: 1em auto;
+    z-index:100;
+}
+.controlsCalendarPage {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    z-index:100;
+}
+
+    .controlsCalendarPage .calendarDropDownList {
+        height: 32px;
+        border-radius: 2rem;
+        border: 2px solid white;
+        background-color: transparent;
+        background-image: url('../Icons/icons8-expand-arrow-white-96.png');
+        background-repeat: no-repeat;
+        background-position: right 0.5em center;
+        background-size: 20px;
+        padding: 0 2em 0 1em;
+        color: white;
+        font-size: 16px;
+        font-family: 'Gilda Display', serif;
+        outline: none;
+        appearance: none;
+        cursor: pointer;
+        min-width: 150px;
+        font-size: 16px;
+    }
+.controlsCalendarPage .calendarFilters {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    flex-shrink: 0;
+    z-index:100;
+}
+
+.controlsCalendarPage .prevMonth {
+    flex: 1;
+    width: 32px;
+    height: 32px;
+    max-width: 32px;
+    border: none;
+    background: transparent;
+    gap: 10px;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.controlsCalendarPage .nextMonth {
+    flex: 1;
+    width: 32px;
+    height: 32px;
+    max-width: 32px;
+    border: none;
+    background: transparent;
+    gap: 10px;
+    cursor: pointer;
+    z-index: 100;
+}
+.controlsCalendarPage .dateCalendar {
+    flex: 1;
+    font-size: 16px; /* Reduced from 20px to match other elements */
+    text-align: center;
+    background-color: #D7B9D5;
+    border: 2.3px solid white;
+    border-radius: 1rem;
+    color: white;
+    height: 32px; /* Increased from 27px to match dropdown height */
+    font-family: 'Lilita One', sans-serif;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    text-decoration: none;
+    margin-top: 0; /* Removed margin-top since it's aligned with other elements */
+    transition: background-color 0.3s ease;
+    padding: 0 20px; /* ADD THIS - padding on left and right */
+    white-space: nowrap; /* Prevents text wrapping */
+    min-width: 80px; /* Ensures minimum width */
+    box-sizing: border-box; /* Includes padding in width calculation */
+    z-index:100;
+}
+
+    .controlsCalendarPage .dateCalendar:hover {
+        background-color: #cca6c9;
+    }
+/*--------------------------------------------- DELETE STUDY SESSION PAGE ---------------------------------------------*/
+#deleteStudySession .eventTitleTagSection { /* LEA ADDED THIS, YOU CAN CHANGE AMOUNTS */
+    padding: 6% 0 4% 0;
+}
+
+.textboxDisabled {
+    border-radius: 2rem;
+    border: 2px solid lightgrey;
+    background-color: transparent;
+    padding: 0.2em 1em;
+    color: lightgrey;
+    font-size: clamp(1.2rem, 2vw, 2.5rem);
+    font-family: 'Gilda Display', serif;
+    font-weight: 200;
+    outline: none;
+    margin: 1vh auto;
+    text-align: left;
+    max-width: 10em;
+    width: 10em;
+    min-width:10em;
+    box-sizing: border-box;
+    display: block;
+}
+.dropDownList .disabled {
+    border-radius: 2rem;
+    border: 2px solid white;
+    background-color: transparent;
+    -webkit-appearance: none;
+    appearance: none; /* removes default arrow */
+    background-image: url('../Icons/icons8-expand-arrow-white-96.png'); /* down arrow */
+    transition: background-image 0.2s ease;
+    background-repeat: no-repeat;
+    background-position: right 0.5em center;
+    background-size: 1em;
+    padding: 0.2em 2em 0.2em 1em;
+    color: white;
+    font-size: clamp(1.2rem, 2vw, 2.5rem);
+    font-family: 'Gilda Display', serif;
+    font-weight: 200;
+    outline: none;
+    /*margin: 1vh auto;*/
+    text-align: left;
+    width: 50em;
+    max-width: 50em;
+    min-width:50em;
+    /*box-sizing: border-box;
+    display: block;*/
+}
+/*--------------------------------------------- CREATE EVENT PAGE B200 and SELECT TAG B500 ---------------------------------------------*/
 .createEventMainContent {
     margin: 4em 4em 0em 4em;
 }
 
 .createEventMainContent .eventTitleTagSection {
-    padding: 6% 0 10.95% 0;
+    padding: 6% 0 6.95% 0;
     display: flex;
 }
-
-#editDeleteEvent .eventTitleTagSection { /* LEA ADDED THIS, YOU CAN CHANGE AMOUNTS */
-    padding: 6% 0 7% 0;
-}
-
-#deleteStudySession .eventTitleTagSection { /* LEA ADDED THIS, YOU CAN CHANGE AMOUNTS */
-    padding: 6% 0 7% 0;
-}
-
 .createEventMainContent .eventTitleTagSection .leftSection {
     flex: 1;
 }
@@ -1595,16 +1732,19 @@ body.page-exit .welcomeBackTextDiv {
 .tagControls {
     /*text-align: right;
     display: none;*/
-    flex-direction: row;
-    gap: 3px;
+    /*flex-direction: row;*/ /*changed*/
+    /*gap: 3px;*/ /*changed*/
    /* z-index: 100;*/
-    flex: 0 0 auto;
+    /*flex: 0 0 auto;*/ /* changed*/
     /*order: 0;*/
     /*position: absolute;
     right: 5px;
     top: 50%;*/
     transform: translateY(-50%);
     align-items:center;
+    display: flex; /*ADDED*/
+    justify-content: flex-start; /*ADDED*/
+    height:0px; /*ADDED*/
 }
 .createEventMainContent .eventTitleTagSection .rightSection .addTagBtn {
     width: 35px;
@@ -1613,12 +1753,13 @@ body.page-exit .welcomeBackTextDiv {
     border: none;
     background: transparent;
     cursor: pointer;
-    margin: 0 4px 4px 0;
+    margin: 0 1rem 0 0;
     vertical-align:middle;
+    display:none; /*ADDED*/
 }
     .createEventMainContent .eventTitleTagSection .rightSection .addTagBtn img {
-        width: 2.5vw;
-        max-width: 35px;
+        width: 2.2vh;
+        max-width: 3vh;
     }
     
     /* NOTIFICATION POPUP */
@@ -1767,13 +1908,62 @@ body.page-exit .welcomeBackTextDiv {
     transform: translate(-50%, -50%); /* center horizontally & vertically */
     z-index: 1000; /* ensure it’s above other elements */
 }
+/*-------------------------------------- EDIT AND DELETE EVENT PAGE B300 AND B400 ------------------------------*/
 
+#editDeleteEvent .eventTitleTagSection { /* LEA ADDED THIS, YOU CAN CHANGE AMOUNTS */
+    padding: 6% 0 4% 0;
+}
+.eventDateBox {
+    width: 350px;
+    min-width: 350px;
+    max-width: 350px;
+    padding: 0.17em 0.6em 0.17em 0.9em;
+    font-family: 'Gilda Display', serif;
+    font-size: clamp(1.2rem, 2vw, 2.5rem);
+    border: 2px solid white;
+    border-radius: 2em;
+    background-color: transparent;
+    color: white;
+    box-sizing: border-box;
+    display: block;
+}
+
+    .eventDateBox::-webkit-calendar-picker-indicator { /* browser calendar icon */
+        opacity: 0;
+        cursor: pointer;
+    }
+
+.dropDownListEditEvents {
+    border-radius: 2rem;
+    border: 2px solid white;
+    background-color: transparent;
+    -webkit-appearance: none;
+    appearance: none; /* removes default arrow */
+    background-image: url('../Icons/icons8-expand-arrow-white-96.png'); /* down arrow */
+    transition: background-image 0.2s ease;
+    background-repeat: no-repeat;
+    background-position: right 0.5em center;
+    background-size: 1em;
+    padding: 0.2em 2em 0.2em 1em;
+    color: white;
+    font-size: clamp(1.2rem, 2vw, 2.5rem);
+    font-family: 'Gilda Display', serif;
+    font-weight: 200;
+    outline: none;
+    margin: 1vh auto;
+    text-align: left;
+    width: 100%;
+    max-width: 350px;
+    min-width: 350px;
+    box-sizing: border-box;
+    display: block;
+}
 /*--------------------------------------------- TO DO LIST PAGE B900 -------------------------------------------*/
 .toDoListPage {
     background-color: #ADA7C9;
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
     color: white;
-    margin: 2em auto;
+    margin: 1em auto;
     min-width: 35%;
     max-width: 35%;
     height: 68vh;
@@ -4241,30 +4431,6 @@ input.textbox:-webkit-autofill {
     background-image: url('../Icons/icons8-collapse-arrow-up-white-96.png'); /* up arrow */
     transition: background-image 0.2s ease;
 }
-    .dropDownList.disabled {
-        border-radius: 2rem;
-        border: 2px solid white;
-        background-color: transparent;
-        -webkit-appearance: none;
-        appearance: none; /* removes default arrow */
-        background-image: url('../Icons/icons8-expand-arrow-white-96.png'); /* down arrow */
-        transition: background-image 0.2s ease;
-        background-repeat: no-repeat;
-        background-position: right 0.5em center;
-        background-size: 1em;
-        padding: 0.2em 2em 0.2em 1em;
-        color: white;
-        font-size: clamp(1.2rem, 2vw, 2.5rem);
-        font-family: 'Gilda Display', serif;
-        font-weight: 200;
-        outline: none;
-        margin: 1vh auto;
-        text-align: left;
-        width: 100%;
-        max-width: 300px;
-        box-sizing: border-box;
-        display: block;
-    }
 
 /* -------------------------------------------- DATE AND TIME BOX -------------------------------------------- */
 .filterDateBox {

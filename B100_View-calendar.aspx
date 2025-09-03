@@ -115,6 +115,27 @@
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
             <div id="CalenderMainContent">
+                <div class="calendarPage">
+    <div class="calendarHeader">
+        <asp:Label ID="lblMonthYear" runat="server" Text="" CssClass="calendarTitle"></asp:Label>
+        <div class="controlsCalendarPage">
+            <asp:DropDownList ID="calendarDropDown" ClientIDMode="Static" class="calendarDropDownList" runat="server" BackColor="#D7B9D5" EnableViewState="true" AutoPostBack="true" OnSelectedIndexChanged="calendarDropDown_SelectedIndexChanged">
+            </asp:DropDownList>
+
+            <asp:ImageButton ID="calendarFilterBtn" runat="server" class="calendarFilters" ImageUrl="~/Icons/icons8-filter-bars-white-96.png" OnClick="calendarFilterBtn_Click"/>
+            <asp:ImageButton ID="btnPrevMonth" class="prevMonth" runat="server" OnClick="btnPrevMonth_Click" ImageUrl ="~/Icons/icons8-arrow-left-white-96.png" />
+            <asp:Button ID="btnToday" class="dateCalendar" runat="server" Text="Today" OnClick="btnToday_Click" />
+            <asp:ImageButton ID="btnNextMonth" class="nextMonth" runat="server" OnClick="btnNextMonth_Click" ImageUrl="~/Icons/icons8-arrow-right-white-96.png" />
+            <asp:HiddenField ID="hfYear" runat="server" />
+            <asp:HiddenField ID="hfMonth" runat="server" />
+        </div>
+    </div>
+    
+    <div class="calendarBox">
+        <asp:Literal ID="literalCalendar" runat="server"></asp:Literal>
+    </div>
+                    <asp:HiddenField ID="userIDHidden" runat="server" />
+</div>
     
     <div id="popupNoNotifications" class="simple-popup" style="display: none;">
     <div class="popup-blue-box">
