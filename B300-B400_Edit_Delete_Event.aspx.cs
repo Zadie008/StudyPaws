@@ -139,7 +139,19 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
     }
     protected void btnBack_Click(object sender, EventArgs e)
     {
-        Response.Redirect("B1600_View-dashboard.aspx"); // CHANGE TO ADD BACK TO CALENDAR PAGE
+        string from = Request.QueryString["from"];
+        if (from == "calendar")
+        {
+            Response.Redirect("B100_View-calendar.aspx");
+        }
+        else if (from == "dashboard")
+        {
+            Response.Redirect("B1600_View-dashboard.aspx");
+        }
+        else
+        {
+            Response.Redirect("Default.aspx");
+        }
     }
 
     protected void btnYesDelete_Click(object sender, EventArgs e)
@@ -155,7 +167,19 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
             cmd.Parameters.AddWithValue("@eventID", eventID);
             cmd.ExecuteNonQuery();
         }
-        Response.Redirect("B1600_View-dashboard.aspx"); // CHANGE TO ADD BACK TO CALENDAR PAGE
+        string from = Request.QueryString["from"];
+        if (from == "calendar")
+        {
+            Response.Redirect("B100_View-calendar.aspx");
+        }
+        else if (from == "dashboard")
+        {
+            Response.Redirect("B1600_View-dashboard.aspx");
+        }
+        else
+        {
+            Response.Redirect("Default.aspx");
+        }
     }
     protected void btnNoDelete_Click(object sender, EventArgs e)
     {
@@ -204,7 +228,19 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
             cmd.ExecuteNonQuery();
         }
 
-        Response.Redirect("B1600_View-dashboard.aspx"); // CHANGE TO ADD BACK TO CALENDAR PAGE
+        string from = Request.QueryString["from"];
+        if (from == "calendar")
+        {
+            Response.Redirect("B100_View-calendar.aspx");
+        }
+        else if (from == "dashboard")
+        {
+            Response.Redirect("B1600_View-dashboard.aspx");
+        }
+        else
+        {
+            Response.Redirect("Default.aspx");
+        }
     }
     
     protected void btnNewTag_Click(object sender, EventArgs e)
