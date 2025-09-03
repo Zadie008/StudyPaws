@@ -126,69 +126,69 @@
                 <!-- Header -->
                 <div class="header-container">
                     <h2>Your friends</h2>
-                  <asp:ImageButton ID="btnMail" runat="server"
-    ImageUrl="Icons/icons8-mail-white-96.png"
-    CssClass="mailIcon"
-    OnClick="btnMail_Click" 
-    CausesValidation="false" />
+                    <asp:ImageButton ID="btnMail" runat="server"
+                        ImageUrl="Icons/icons8-mail-white-96.png"
+                        CssClass="mailIcon"
+                        OnClick="btnMail_Click"
+                        CausesValidation="false" />
                 </div>
-               
 
-<!-- Friend Request Notification Panel -->
-<asp:Panel ID="pnlFriendRequests" runat="server" Visible="false" CssClass="simple-popup" Style="display: none;">
-    <div class="popup-pink-box">
-        <asp:HiddenField ID="hiddenFriendRequestID" runat="server" />
-        <asp:HiddenField ID="hiddenRequesterID" runat="server" />
-        <asp:Label ID="lblFriendRequestMessage" runat="server" Text=""></asp:Label>
-        <img src="Images/Notification%20Happy.png" alt="Friend Request" />
-        <br />
-        <div class="buttonSection">
-            <asp:Button ID="btnAcceptFriendRequest" CssClass="popup-button-best-pink" runat="server"
-                Text="Accept!" OnClick="btnAcceptFriendRequest_Click" />
-            <asp:Button ID="btnDeclineFriendRequest" CssClass="popup-button" runat="server"
-                Text="Decline!" OnClick="btnDeclineFriendRequest_Click" />
-        </div>
-    </div>
-</asp:Panel>
 
-<!-- Gift Notification Panel -->
-<asp:Panel ID="pnlGiftNotifications" runat="server" Visible="false" CssClass="simple-popup" Style="display: none;">
-    <div class="popup-pink-box">
-        <asp:HiddenField ID="hiddenGiftFriendID" runat="server" />
-        <asp:Label ID="lblGiftMessage" runat="server" Text=""></asp:Label>
-        <img src="Images/Notification%20Happy.png" alt="Gift Notification" />
-        <br />
-        <div class="buttonSection">
-            <asp:Button ID="btnCollectGift" CssClass="popup-button-best-pink" runat="server"
-                Text="Collect!" OnClick="btnCollectGift_Click" />
-            <asp:Button ID="btnLaterGift" CssClass="popup-button" runat="server"
-                Text="Later" OnClick="btnLaterGift_Click" />
-        </div>
-    </div>
-</asp:Panel>
-<!-- No Notifications Panel -->
-<div id="popupNoNotifications" class="simple-popup" style="display: none;">
-    <div class="popup-blue-box">
-        <p>You do not have any notifications at the moment!</p>
-        <img src="Images/Notification%20Sad%20Hamster.png" alt="No notifications" />
-        <br />
-        <div class="buttonSection">
-            <asp:Button ID="Button1" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideAllPopups(); return false;" />
-        </div>
-    </div>
-</div>
+                <!-- Friend Request Notification Panel -->
+                <asp:Panel ID="pnlFriendRequests" runat="server" Visible="false" CssClass="simple-popup" Style="display: none;">
+                    <div class="popup-pink-box">
+                        <asp:HiddenField ID="hiddenFriendRequestID" runat="server" />
+                        <asp:HiddenField ID="hiddenRequesterID" runat="server" />
+                        <asp:Label ID="lblFriendRequestMessage" runat="server" Text=""></asp:Label>
+                        <img src="Images/Notification%20Happy.png" alt="Friend Request" />
+                        <br />
+                        <div class="buttonSection">
+                            <asp:Button ID="btnAcceptFriendRequest" CssClass="popup-button-best-pink" runat="server"
+                                Text="Accept!" OnClick="btnAcceptFriendRequest_Click" />
+                            <asp:Button ID="btnDeclineFriendRequest" CssClass="popup-button" runat="server"
+                                Text="Decline!" OnClick="btnDeclineFriendRequest_Click" />
+                        </div>
+                    </div>
+                </asp:Panel>
 
-<!-- Gift Sent Confirmation Panel -->
-<div id="popupGiftSent" class="simple-popup" style="display: none;">
-    <div class="popup-pink-box">
-        <p>Gift sent successfully!</p>
-        <img src="Images/Notification%20Happy.png" alt="Gift sent" />
-        <br />
-        <div class="buttonSection">
-            <asp:Button ID="btnGiftSentOkay" CssClass="popup-button-best-pink" runat="server" Text="Okay!" OnClientClick="hideAllPopups(); return false;" />
-        </div>
-    </div>
-</div>
+                <!-- Gift Notification Panel -->
+                <asp:Panel ID="pnlGiftNotifications" runat="server" Visible="false" CssClass="simple-popup" Style="display: none;">
+                    <div class="popup-pink-box">
+                        <asp:HiddenField ID="hiddenGiftFriendID" runat="server" />
+                        <asp:Label ID="lblGiftMessage" runat="server" Text=""></asp:Label>
+                        <img src="Images/Notification%20Happy.png" alt="Gift Notification" />
+                        <br />
+                        <div class="buttonSection">
+                            <asp:Button ID="btnCollectGift" CssClass="popup-button-best-pink" runat="server"
+                                Text="Collect!" OnClick="btnCollectGift_Click" />
+                            <asp:Button ID="btnLaterGift" CssClass="popup-button" runat="server"
+                                Text="Later" OnClick="btnLaterGift_Click" />
+                        </div>
+                    </div>
+                </asp:Panel>
+                <!-- No Notifications Panel -->
+                <div id="popupNoNotifications" class="simple-popup" style="display: none;">
+                    <div class="popup-blue-box">
+                        <p>You do not have any notifications at the moment!</p>
+                        <img src="Images/Notification%20Sad%20Hamster.png" alt="No notifications" />
+                        <br />
+                        <div class="buttonSection">
+                            <asp:Button ID="Button1" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideAllPopups(); return false;" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gift Sent Confirmation Panel -->
+                <div id="popupGiftSent" class="simple-popup" style="display: none;">
+                    <div class="popup-pink-box">
+                        <p>Gift sent successfully!</p>
+                        <img src="Images/Notification%20Happy.png" alt="Gift sent" />
+                        <br />
+                        <div class="buttonSection">
+                            <asp:Button ID="btnGiftSentOkay" CssClass="popup-button-best-pink" runat="server" Text="Okay!" OnClientClick="hideAllPopups(); return false;" />
+                        </div>
+                    </div>
+                </div>
                 <!-- Delete Confirmation Panel -->
                 <asp:Panel ID="pnlDeleteFriend" runat="server" Visible="false">
                     <div id="popup-blue-box" class="simple-popup">
@@ -219,22 +219,22 @@
                                 <Columns>
                                     <asp:TemplateField>
                                         <ItemTemplate>
-    <div class="friendRow">
-        <a href="C600_View-friend-list.aspx" class="friendProfileIconLink">
-            <div class="friendProfileIcon">
-                <div class='<%# "friendProfileCircle " + GetCircleColorClass(Convert.ToInt32(Eval("iconNum"))) %>'></div>
-               <img class="friendProfileImage" src='<%# GetProfileImageUrl(Eval("iconNum")) %>' />
-            </div>
-        </a>
-        <span class="friendUsername"><%# Eval("username") %></span>
+                                            <div class="friendRow">
+                                                <a href='<%# "ViewFriendProfile.aspx?friendID=" + Eval("userID") %>' class="friendProfileIconLink">
+                                                    <div class="friendProfileIcon">
+                                                        <div class='<%# "friendProfileCircle " + GetCircleColorClass(Convert.ToInt32(Eval("iconNum"))) %>'></div>
+                                                        <img class="friendProfileImage" src='<%# GetProfileImageUrl(Eval("iconNum")) %>' alt="Profile" />
+                                                    </div>
+                                                </a>
+                                                <span class="friendUsername"><%# Eval("username") %></span>
 
-        <asp:Button ID="btnSendGift" CssClass="profilebutton" runat="server" Text="Send Gift"
-            OnClick="btnSendGift_Click" CommandArgument='<%# Eval("userID") %>' />
-        <asp:ImageButton ID="btnDeleteFriend" runat="server"
-            ImageUrl="Icons/icons8-delete-white-96.png" CssClass="imageButton"
-            CommandName="DeleteFriend" CommandArgument='<%# Eval("userID") %>' />
-    </div>
-</ItemTemplate>
+                                                <asp:Button ID="btnSendGift" CssClass="profilebutton" runat="server" Text="Send Gift"
+                                                    OnClick="btnSendGift_Click" CommandArgument='<%# Eval("userID") %>' />
+                                                <asp:ImageButton ID="btnDeleteFriend" runat="server"
+                                                    ImageUrl="Icons/icons8-delete-white-96.png" CssClass="imageButton"
+                                                    CommandName="DeleteFriend" CommandArgument='<%# Eval("userID") %>' />
+                                            </div>
+                                        </ItemTemplate>
                                     </asp:TemplateField>
                                 </Columns>
                             </asp:GridView>
@@ -337,84 +337,84 @@
             </div>
         </div>
     </div>
-  
-<script type="text/javascript">
-    // Show/hide functions for popup panels
-    function showFriendRequestPopup() {
-        hideAllPopups();
-        var panel = document.getElementById('<%= pnlFriendRequests.ClientID %>');
-        if (panel) {
-            panel.style.display = 'flex';
-            console.log('Friend request popup shown');
-        }
-    }
 
-    function showGiftPopup() {
-        hideAllPopups();
-        var panel = document.getElementById('<%= pnlGiftNotifications.ClientID %>');
-        if (panel) {
-            panel.style.display = 'flex';
-            console.log('Gift notification popup shown');
-        }
-    }
-
-    function showNoNotificationsPopup() {
-        hideAllPopups();
-        var panel = document.getElementById('popupNoNotifications');
-        if (panel) {
-            panel.style.display = 'flex';
-            console.log('No notifications popup shown');
-        }
-    }
-
-    function showGiftSentPopup() {
-        hideAllPopups();
-        var panel = document.getElementById('popupGiftSent');
-        if (panel) {
-            panel.style.display = 'flex';
-            console.log('Gift sent confirmation popup shown');
-        }
-    }
-
-    function hideAllPopups() {
-        // Hide all popup panels
-        var popups = document.querySelectorAll('.simple-popup');
-        popups.forEach(function (popup) {
-            popup.style.display = 'none';
-        });
-
-        // Also hide ASP.NET panels
-        var aspNetPanels = document.querySelectorAll('[id*="pnlFriendRequests"], [id*="pnlGiftNotifications"]');
-        aspNetPanels.forEach(function (panel) {
-            panel.style.display = 'none';
-        });
-    }
-
-    // Handle escape key to close popups
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
+    <script type="text/javascript">
+        // Show/hide functions for popup panels
+        function showFriendRequestPopup() {
             hideAllPopups();
+            var panel = document.getElementById('<%= pnlFriendRequests.ClientID %>');
+            if (panel) {
+                panel.style.display = 'flex';
+                console.log('Friend request popup shown');
+            }
         }
-    });
 
-    // Handle click outside to close popups
-    document.addEventListener('click', function (e) {
-        var visiblePopups = document.querySelectorAll('.simple-popup[style*="display: flex"]');
-        visiblePopups.forEach(function (popup) {
-            var content = popup.querySelector('.popup-pink-box') || popup.querySelector('.popup-blue-box');
-            if (content && !content.contains(e.target)) {
+        function showGiftPopup() {
+            hideAllPopups();
+            var panel = document.getElementById('<%= pnlGiftNotifications.ClientID %>');
+            if (panel) {
+                panel.style.display = 'flex';
+                console.log('Gift notification popup shown');
+            }
+        }
+
+        function showNoNotificationsPopup() {
+            hideAllPopups();
+            var panel = document.getElementById('popupNoNotifications');
+            if (panel) {
+                panel.style.display = 'flex';
+                console.log('No notifications popup shown');
+            }
+        }
+
+        function showGiftSentPopup() {
+            hideAllPopups();
+            var panel = document.getElementById('popupGiftSent');
+            if (panel) {
+                panel.style.display = 'flex';
+                console.log('Gift sent confirmation popup shown');
+            }
+        }
+
+        function hideAllPopups() {
+            // Hide all popup panels
+            var popups = document.querySelectorAll('.simple-popup');
+            popups.forEach(function (popup) {
+                popup.style.display = 'none';
+            });
+
+            // Also hide ASP.NET panels
+            var aspNetPanels = document.querySelectorAll('[id*="pnlFriendRequests"], [id*="pnlGiftNotifications"]');
+            aspNetPanels.forEach(function (panel) {
+                panel.style.display = 'none';
+            });
+        }
+
+        // Handle escape key to close popups
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
                 hideAllPopups();
             }
         });
-    });
 
-    // Prevent click events from bubbling up from popup content
-    document.querySelectorAll('.popup-pink-box, .popup-blue-box').forEach(function (content) {
-        content.addEventListener('click', function (e) {
-            e.stopPropagation();
+        // Handle click outside to close popups
+        document.addEventListener('click', function (e) {
+            var visiblePopups = document.querySelectorAll('.simple-popup[style*="display: flex"]');
+            visiblePopups.forEach(function (popup) {
+                var content = popup.querySelector('.popup-pink-box') || popup.querySelector('.popup-blue-box');
+                if (content && !content.contains(e.target)) {
+                    hideAllPopups();
+                }
+            });
         });
-    });
-</script>
+
+        // Prevent click events from bubbling up from popup content
+        document.querySelectorAll('.popup-pink-box, .popup-blue-box').forEach(function (content) {
+            content.addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+        });
+    </script>
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" runat="Server">
 </asp:Content>
