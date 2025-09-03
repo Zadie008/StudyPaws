@@ -104,14 +104,15 @@
                 <tr>
                     <td><asp:Label ID="lblEventTag" class="label" runat="server" Text="Tag"></asp:Label></td>
                     <td>
-                        <asp:DropDownList ID="dropdownEventTag" ClientIDMode="Static" class="dropDownList" runat="server" BackColor="#446791" DataTextField="tagName" DataValueField="tagID">
+                        <asp:DropDownList ID="dropdownEventTag" ClientIDMode="Static" class="dropDownListEditEvents" runat="server" BackColor="#446791" DataTextField="tagName" DataValueField="tagID">
                         </asp:DropDownList>
                         <asp:HiddenField ID="hiddenSelectedTagID" runat="server" />
                     </td>
                 </tr>
                 <tr>
                     <td><asp:Label ID="lblEventDate" class="label" runat="server" Text="Date"></asp:Label></td>
-                    <td><asp:TextBox ID="txtEventDate" class="textbox" runat="server" TextMode="Date"></asp:TextBox></td>
+                    <td class="rightWords"><div class="customDateWrapper"><asp:TextBox ID="txtEventDate" runat="server" CssClass="eventDateBox" TextMode="Date"></asp:TextBox></div></td>
+                    <%--<td><asp:TextBox ID="txtEventDate" class="textbox" runat="server" TextMode="Date"></asp:TextBox></td>--%>
                 </tr>
             </table>
         </div>
@@ -129,7 +130,9 @@
                     <td><asp:RequiredFieldValidator ID="errorDropDown" class="validationError" runat="server" ErrorMessage="Please select a Tag" EnableClientScript="true" ControlToValidate="dropdownEventTag" InitialValue="" ></asp:RequiredFieldValidator></td>
                 </tr>
                 <tr>
-                    <asp:RequiredFieldValidator ID="errorDate" class="validationError" runat="server" ErrorMessage="Please select a Date" EnableClientScript="true" ControlToValidate="txtEventDate"></asp:RequiredFieldValidator></tr>
+                    <td></td>
+                    <td><asp:RequiredFieldValidator ID="errorDate" class="validationError" runat="server" ErrorMessage="Please select a Date" EnableClientScript="true" ControlToValidate="txtEventDate"></asp:RequiredFieldValidator></td>
+                </tr>
             </table>
         </div>
     </div>

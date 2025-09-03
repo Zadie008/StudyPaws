@@ -24,39 +24,12 @@ public partial class DeleteStudySession : System.Web.UI.Page
 
         if (!IsPostBack)
         {
-            //LoadTags();
-
-            //if (Request.QueryString["newTag"] != null)
-            //{
-            //    string newTagID = Request.QueryString["newTag"];
-            //    if (dropdownEventTag.Items.FindByValue(newTagID) != null)
-            //    {
-            //        dropdownEventTag.SelectedValue = newTagID;
-            //    }
-            //}
-            //if (Request.QueryString["selectedTag"] != null)
-            //{
-            //    string selectedTagID = Request.QueryString["selectedTag"];
-            //    if (dropdownEventTag.Items.FindByValue(selectedTagID) != null)
-            //    {
-            //        dropdownEventTag.SelectedValue = selectedTagID;
-            //    }
-            //}
-            //if (Request.QueryString["date"] != null)
-            //{
-            //    DateTime selectedDate;
-            //    if (DateTime.TryParse(Request.QueryString["date"], out selectedDate))
-            //    {
-            //        hiddenSelectedDate.Value = selectedDate.ToString("yyyy-MM-dd");
-            //    }
-            //}
             if (Request.QueryString["eventID"] != null)
             {
                 int eventID = int.Parse(Request.QueryString["eventID"]);
                 LoadEvent(eventID);
             }
         }
-
 
         if (Session["Username"] != null)
         {
@@ -86,7 +59,6 @@ public partial class DeleteStudySession : System.Web.UI.Page
         {
             Response.Redirect("Landing-page.aspx");
         }
-
 
         ShowNextInvite();
     }
@@ -124,13 +96,15 @@ public partial class DeleteStudySession : System.Web.UI.Page
     }
     protected void LockStudySessionUI()
     {
-        txtEventTitle.ReadOnly = true;
-        txtEventDate.ReadOnly = true;
+        txtEventTitle.Enabled = false;
+        txtEventTitle.CssClass = "textboxDisabled";
+
+        txtEventDate.Enabled = false;
+        txtEventDate.CssClass = "textboxDisabled";
+
         dropdownEventTag.Enabled = false;
         dropdownEventTag.CssClass = "dropDownList disabled";
 
-        //btnBack.Visible = true;
-        //btnDelete.Visible = true;
     }
     protected void btnBack_Click(object sender, EventArgs e)
     {

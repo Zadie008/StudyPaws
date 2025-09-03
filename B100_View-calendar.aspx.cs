@@ -2,12 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Text;
+using System.Web;
 using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
 public partial class Default2 : System.Web.UI.Page
 {
+    string connString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+    private Dictionary<int, string> tagColours;
     protected void Page_Load(object sender, EventArgs e)
     {
         if (Request.IsAuthenticated)
@@ -20,41 +24,352 @@ public partial class Default2 : System.Web.UI.Page
             }
         }
 
-        if (!IsPostBack)
+        if (Session["userID"] != null)
         {
-            if (Session["Username"] != null)
+            string username = Session["Username"].ToString();
+
+            //calendarDropDown.Visible = IsToDoFilterVisible;
+            userIDHidden.Value = Convert.ToString(Session["userID"]);
+
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            string userID = GetUserID(username, cs);
+
+            if (!IsPostBack)
             {
-                string username = Session["Username"].ToString(); //need this on every page
+                LoadCalendarTags();
+                //ViewState["SelectedFilter"] = "All";
 
-                string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-                string userID = GetUserID(username, cs);
+                LoadTagColours();
 
-                if (!IsPostBack)
+                if (calendarDropDown.Items.FindByValue("0") != null)
                 {
-                    int userXP = GetUserXP(cs, userID);
-                    Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
-                    int currentLevel = levelInfo.Item1;
-                    int currentLevelXpAmount = levelInfo.Item2;
-                    int nextLevelXpAmount = levelInfo.Item3;
-
-                    lblLevelNumber.Text = currentLevel.ToString();
-
-                    CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
-                    GetUserStats(cs, userID);
-                    GetUserProfileIcon(cs, userID);
-                    LoadPendingInvitesFromDB();
-                    LoadUpcomingSessions();
+                    calendarDropDown.SelectedValue = "0";
                 }
+                ViewState["SelectedCalendarTag"] = calendarDropDown.SelectedValue;
+
+                DateTime currentDate = DateTime.Today;
+                hfYear.Value = currentDate.Year.ToString();
+                hfMonth.Value = DateTime.Today.Month.ToString();
+                LoadCalendar(currentDate.Year, currentDate.Month);
+
+                int userXP = GetUserXP(cs, userID);
+                Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
+                int currentLevel = levelInfo.Item1;
+                int currentLevelXpAmount = levelInfo.Item2;
+                int nextLevelXpAmount = levelInfo.Item3;
+
+                lblLevelNumber.Text = currentLevel.ToString();
+
+                CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
+                GetUserStats(cs, userID);
+                GetUserProfileIcon(cs, userID);
+                LoadPendingInvitesFromDB();
+                LoadUpcomingSessions();
             }
             else
             {
-                Response.Redirect("Landing-page.aspx");
-            }
+                LoadTagColours(); 
 
-            ShowNextInvite();
+                if (ViewState["SelectedCalendarTag"] != null)
+                {
+                    string selectedValue = ViewState["SelectedCalendarTag"].ToString();
+                    var item = calendarDropDown.Items.FindByValue(selectedValue);
+                    if (item != null)
+                    {
+                        calendarDropDown.SelectedValue = selectedValue;
+                    }
+                }
+
+                int year = int.Parse(hfYear.Value);
+                int month = int.Parse(hfMonth.Value);
+                LoadCalendar(year, month);
+            }
+        }
+        else
+        {
+            Response.Redirect("Login.aspx");
+        }
+
+        ShowNextInvite();
+    }
+    private bool IsCalendarFilterVisible
+    {
+        get
+        {
+            return ViewState["CalendarFilterVisible"] != null && (bool)ViewState["CalendarFilterVisible"];
+        }
+        set
+        {
+            ViewState["CalendarFilterVisible"] = value;
         }
     }
+    private void LoadCalendar(int year, int month)
+    {
+        if (ViewState["SelectedCalendarTag"] != null)
+        {
+            string selectedValue = ViewState["SelectedCalendarTag"].ToString();
+            var item = calendarDropDown.Items.FindByValue(selectedValue);
+            if (item != null)
+            {
+                calendarDropDown.SelectedValue = selectedValue;
+            }
+        }
 
+        lblMonthYear.Text = new DateTime(year, month, 1).ToString("MMMM yyyy");
+        literalCalendar.Text = GenerateCalendar(year, month);
+        hfYear.Value = year.ToString();
+        hfMonth.Value = month.ToString();
+    }
+
+    protected void calendarFilterBtn_Click(object sender, EventArgs e)
+    {
+        IsCalendarFilterVisible = !IsCalendarFilterVisible;
+        calendarDropDown.Visible = IsCalendarFilterVisible;
+
+        if (IsCalendarFilterVisible)
+            LoadCalendarTags();
+    }
+
+    private void LoadCalendarTags()
+    {
+        calendarDropDown.Items.Clear();
+        calendarDropDown.Items.Add(new ListItem("All Tags", "0"));
+
+        using (MySqlConnection conn = new MySqlConnection(connString))
+        {
+            conn.Open();
+            string sql = "SELECT tagID, tagName FROM CalendarEventTag";
+            using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    int tagID = Convert.ToInt32(reader["tagID"]);
+                    string tagName = reader["tagName"].ToString();
+                    calendarDropDown.Items.Add(new ListItem(tagName, tagID.ToString()));
+                }
+            }
+        }
+    }
+    protected void calendarDropDown_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        ViewState["SelectedCalendarTag"] = calendarDropDown.SelectedValue;
+        int year = int.Parse(hfYear.Value);
+        int month = int.Parse(hfMonth.Value);
+        LoadCalendar(year, month);
+    }
+    private String GenerateCalendar(int year, int month)
+    {
+        StringBuilder sb = new StringBuilder();
+        DateTime firstDayOfMonth = new DateTime(year, month, 1);
+        int daysInMonth = DateTime.DaysInMonth(year, month);
+
+        int adjustedStartDay = ((int)firstDayOfMonth.DayOfWeek + 6) % 7;
+
+        sb.Append("<table class='calendarBox'>");
+        sb.Append("<tr>");
+        string[] dayNames = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+        foreach (string dayName in dayNames)
+        {
+            sb.Append(string.Format("<th class='weeks'>{0}</th>", dayName));
+        }
+        sb.Append("</tr>");
+
+        int currentDay = 1;
+
+        DateTime prevMonth = firstDayOfMonth.AddMonths(-1);
+        int daysInPrevMonth = DateTime.DaysInMonth(prevMonth.Year, prevMonth.Month);
+
+        DateTime nextMonth = firstDayOfMonth.AddMonths(1);
+        int week = 0;
+
+        while (currentDay <= daysInMonth)
+        {
+            sb.Append("<tr>");
+
+            for (int dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++)
+            {
+
+                if (week == 0 && dayOfWeek < adjustedStartDay)
+                {
+                    int prevDay = daysInPrevMonth - (adjustedStartDay - dayOfWeek - 1);
+                    sb.Append(string.Format("<td class='otherMonth'>{0}</td>", prevDay));
+                }
+                else if (currentDay <= daysInMonth)
+                {
+                    DateTime thisDay = new DateTime(year, month, currentDay);
+                    bool isToday = thisDay.Date == DateTime.Today;
+
+                    List<string> events = GetEventsForDay(thisDay);
+
+                    sb.Append("<td class='calendarCell'>");
+
+                    // Day number
+                    sb.Append("<div class='dayNumber'>");
+                    if (isToday)
+                    {
+                        sb.AppendFormat("<span class='today'>{0}</span>", currentDay);
+                    }
+                    else
+                    {
+                        sb.AppendFormat("{0}", currentDay);
+                    }
+                    sb.Append("</div>");
+
+                    // Events
+                    sb.Append("<div class='events scrollableEvents'>");
+                    foreach (string ev in events)
+                    {
+                        sb.Append(ev);
+                    }
+                    sb.Append("</div>");
+
+                    // '+' Button
+                    sb.AppendFormat(
+                        "<a class='addEventBtn' href='B200_B500_Add-event_Select_Tag.aspx?date={0}'>" + "<img src='Icons/icons8-add-new-white-96.png' class='addEventBtnImg' />" + "</a>",
+                        thisDay.ToString("yyyy-MM-dd")
+                    );
+
+                    sb.Append("</td>");
+                    currentDay++;
+
+                }
+                else
+                {
+                    int nextDay = (currentDay - daysInMonth);
+                    sb.Append(string.Format("<td class='otherMonth'>{0}</td>", nextDay));
+                    currentDay++;
+                }
+            }
+
+            sb.Append("</tr>");
+            week++;
+        }
+
+        sb.Append("</table>");
+        return sb.ToString();
+
+    }
+    private List<string> GetEventsForDay(DateTime day)
+    {
+        List<string> events = new List<string>();
+        int userID = Convert.ToInt32(Session["userID"]);
+
+        int selectedTagID = 0;
+        if (ViewState["SelectedCalendarTag"] != null)
+        {
+            selectedTagID = Convert.ToInt32(ViewState["SelectedCalendarTag"]);
+        }
+
+        using (MySqlConnection conn = new MySqlConnection(connString))
+        {
+            conn.Open();
+            string loadEvents = "SELECT eventID, eventDesc, tagID FROM CalendarEvent " + "WHERE userID=@userID AND eventDate=@eventDate";
+            if (selectedTagID > 0)
+            {
+                loadEvents += " AND tagID=@tagID";
+            }
+            MySqlCommand cmd = new MySqlCommand(loadEvents, conn);
+            cmd.Parameters.AddWithValue("@userID", userID);
+            cmd.Parameters.AddWithValue("@eventDate", day.Date);
+            if (selectedTagID > 0)
+            {
+                cmd.Parameters.AddWithValue("@tagID", selectedTagID);
+            }
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    int eventID = Convert.ToInt32(reader["eventID"]);
+                    String desc = reader["eventDesc"].ToString();
+                    int tagID = reader["tagID"] != DBNull.Value ? Convert.ToInt32(reader["tagID"]) : 0;
+                    //int tagID = Convert.ToInt32(reader["tagID"]);
+
+                    string tagColour = (tagColours != null && tagColours.ContainsKey(tagID)) ? tagColours[tagID] : "#000000";
+
+                    string targetPage = (tagID == 1) ? "DeleteStudySession.aspx" : "B300-B400_Edit_Delete_Event.aspx";
+
+                    string eventHtml = "<div class='eventItem'>" +
+                                       "<span class='eventDot' style='background-color:" + tagColour + ";'></span>" +
+                                       "<a href='" + targetPage + "?eventID=" + eventID + "' style='color:inherit;text-decoration:none;'>" +
+                                       HttpUtility.HtmlEncode(desc) +
+                                       "</a></div>";
+                    //string eventHtml = "<div class='eventItem'><span class='eventDot' style='background-color:" + tagColour + ";'></span>" + "<a href='B300-B400_Edit_Delete_Event.aspx?eventID=" + eventID + "' styler='color:inherit;text-decoration:none;'>" + HttpUtility.HtmlEncode(desc) + "</a></div>";
+                    events.Add(eventHtml);
+                }
+            }
+        }
+        return events;
+    }
+
+    private void LoadTagColours()
+    {
+        tagColours = new Dictionary<int, string>();
+        using (MySqlConnection conn = new MySqlConnection(connString))
+        {
+            conn.Open();
+            String sql = "SELECT tagID, tagColourNum FROM CalendarEventTag";
+            using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    int tagID = Convert.ToInt32(reader["tagID"]);
+                    string colourNum = reader["tagColourNum"].ToString();
+
+                    string tagColour;
+                    switch (colourNum)
+                    {
+                        case "1":
+                            tagColour = "#F4CAE0";
+                            break;
+                        case "2":
+                            tagColour = "#BE95C4";
+                            break;
+                        case "3":
+                            tagColour = "#ADA7C9";
+                            break;
+                        case "4":
+                            tagColour = "#90A8C3";
+                            break;
+                        case "5":
+                            tagColour = "#64A6BD";
+                            break;
+                        case "6":
+                            tagColour = "#446791";
+                            break;
+                        default:
+                            tagColour = "#000000";
+                            break;
+                    }
+                    tagColours[tagID] = tagColour;
+                }
+            }
+        }
+    }
+    protected void btnPrevMonth_Click(Object sender, EventArgs e)
+    {
+        int year = int.Parse(hfYear.Value);
+        int month = int.Parse(hfMonth.Value);
+
+        DateTime prevMonth = new DateTime(year, month, 1).AddMonths(-1);
+        LoadCalendar(prevMonth.Year, prevMonth.Month);
+    }
+    protected void btnNextMonth_Click(Object sender, EventArgs e)
+    {
+        int year = int.Parse(hfYear.Value);
+        int month = int.Parse(hfMonth.Value);
+
+        DateTime nextMonth = new DateTime(year, month, 1).AddMonths(1);
+        LoadCalendar(nextMonth.Year, nextMonth.Month);
+    }
+    protected void btnToday_Click(Object sender, EventArgs e)
+    {
+        DateTime today = DateTime.Today;
+        hfYear.Value = today.Year.ToString();
+        hfMonth.Value = today.Month.ToString();
+        LoadCalendar(today.Year, today.Month);
+    }
     // start: header profile code
     private string GetUserID(string username, string connectionString)
     {
