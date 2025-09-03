@@ -79,10 +79,21 @@ public partial class B700_B800_Edit_Delete_Tags : System.Web.UI.Page
     }
     protected void btnBack_Click(object sender, EventArgs e) 
     {
-        if (Session["EditTagID"] != null)
+        string from = Request.QueryString["from"];
+        string eventID = Request.QueryString["eventID"];
+        int tagID = (Session["EditTagID"]!=null) ? (int)Session["EditTagID"] : 0;
+
+        if (from == "editevent" && !string.IsNullOrEmpty(eventID))
         {
-            int tagID = (int)Session["EditTagID"];
+            Response.Redirect("B300-B400_Edit_Delete_Event.aspx?selectedTag=" + tagID + "&eventID=" + eventID);
+        }
+        else if (from == "addevent")
+        {
             Response.Redirect("B200_B500_Add-event_Select_Tag.aspx?selectedTag=" + tagID);
+        }
+        else
+        {
+            Response.Redirect("Default.aspx");
         }
     }
     protected void btnDelete_Click(object sender, EventArgs e) 
@@ -110,7 +121,22 @@ public partial class B700_B800_Edit_Delete_Tags : System.Web.UI.Page
                 cmdUpdate.Parameters.AddWithValue("@tagID", tagID);
                 cmdUpdate.ExecuteNonQuery();
             }
-            Response.Redirect("B200_B500_Add-event_Select_Tag.aspx?selectedTag=" + tagID);
+
+            string from = Request.QueryString["from"];
+            string eventID = Request.QueryString["eventID"];
+
+            if (from == "editevent" && !string.IsNullOrEmpty(eventID))
+            {
+                Response.Redirect("B300-B400_Edit_Delete_Event.aspx?selectedTag=" + tagID + "&eventID=" + eventID);
+            }
+            else if (from == "addevent")
+            {
+                Response.Redirect("B200_B500_Add-event_Select_Tag.aspx?selectedTag=" + tagID);
+            }
+            else
+            {
+                Response.Redirect("Default.aspx");
+            }
         }
     }
     protected void btnYesDelete_Click(object sender, EventArgs e)
@@ -128,7 +154,22 @@ public partial class B700_B800_Edit_Delete_Tags : System.Web.UI.Page
                 cmd.Parameters.AddWithValue("@tagID", tagID);
                 cmd.ExecuteNonQuery();
             }
-            Response.Redirect("B200_B500_Add-event_Select_Tag.aspx");
+
+            string from = Request.QueryString["from"];
+            string eventID = Request.QueryString["eventID"];
+
+            if (from == "editevent" && !string.IsNullOrEmpty(eventID))
+            {
+                Response.Redirect("B300-B400_Edit_Delete_Event.aspx?&eventID=" + eventID);
+            }
+            else if (from == "addevent")
+            {
+                Response.Redirect("B200_B500_Add-event_Select_Tag.aspx?");
+            }
+            else
+            {
+                Response.Redirect("Default.aspx");
+            }
         }
     }
     /*protected void btnNoDelete_Click(Object sender, EventArgs e)
