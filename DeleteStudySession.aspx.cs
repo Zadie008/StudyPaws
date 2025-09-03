@@ -108,7 +108,19 @@ public partial class DeleteStudySession : System.Web.UI.Page
     }
     protected void btnBack_Click(object sender, EventArgs e)
     {
-        Response.Redirect("B1600_View-dashboard.aspx");
+        string from = Request.QueryString["from"];
+        if (from == "calendar")
+        {
+            Response.Redirect("B100_View-calendar.aspx");
+        }
+        else if (from == "dashboard")
+        {
+            Response.Redirect("B1600_View-dashboard.aspx");
+        }
+        else
+        {
+            Response.Redirect("Default.aspx");
+        }
     }
 
     protected void btnYesDelete_Click(object sender, EventArgs e)
@@ -140,7 +152,19 @@ public partial class DeleteStudySession : System.Web.UI.Page
             cmd3.Parameters.AddWithValue("@eventID", eventID);
             cmd3.ExecuteNonQuery();
         }
-        Response.Redirect("B1600_View-dashboard.aspx");
+        string from = Request.QueryString["from"];
+        if (from == "calendar")
+        {
+            Response.Redirect("B100_View-calendar.aspx");
+        }
+        else if (from == "dashboard")
+        {
+            Response.Redirect("B1600_View-dashboard.aspx");
+        }
+        else
+        {
+            Response.Redirect("Default.aspx");
+        }
     }
     protected void btnNoDelete_Click(object sender, EventArgs e)
     {

@@ -252,7 +252,7 @@ public partial class Default2 : System.Web.UI.Page
 
                     // '+' Button
                     sb.AppendFormat(
-                        "<a class='addEventBtn' href='B200_B500_Add-event_Select_Tag.aspx?date={0}'>" + "<img src='Icons/icons8-add-new-white-96.png' class='addEventBtnImg' />" + "</a>",
+                        "<a class='addEventBtn' href='B200_B500_Add-event_Select_Tag.aspx?date={0}&from=dashboard'>" + "<img src='Icons/icons8-add-new-white-96.png' class='addEventBtnImg' />" + "</a>",
                         thisDay.ToString("yyyy-MM-dd")
                     );
 
@@ -313,11 +313,12 @@ public partial class Default2 : System.Web.UI.Page
                     
                     string tagColour = (tagColours!=null && tagColours.ContainsKey(tagID)) ? tagColours[tagID] : "#000000";
 
+                    string source = "dashboard";
                     string targetPage = (tagID == 1) ? "DeleteStudySession.aspx" : "B300-B400_Edit_Delete_Event.aspx";
 
                     string eventHtml = "<div class='eventItem'>" +
                                        "<span class='eventDot' style='background-color:" + tagColour + ";'></span>" +
-                                       "<a href='" + targetPage + "?eventID=" + eventID + "' style='color:inherit;text-decoration:none;'>" +
+                                       "<a href='" + targetPage + "?eventID=" + eventID + "&from=" + source + "' style='color:inherit;text-decoration:none;'>" +
                                        HttpUtility.HtmlEncode(desc) +
                                        "</a></div>";
                     //string eventHtml = "<div class='eventItem'><span class='eventDot' style='background-color:" + tagColour + ";'></span>" + "<a href='B300-B400_Edit_Delete_Event.aspx?eventID=" + eventID + "' styler='color:inherit;text-decoration:none;'>" + HttpUtility.HtmlEncode(desc) + "</a></div>";
