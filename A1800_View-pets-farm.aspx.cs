@@ -227,24 +227,22 @@ public partial class View_Pets_farm : System.Web.UI.Page
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         int petID = -1;
         int sellPrice = 0;
-        string petType = "";
 
         using (MySqlConnection con = new MySqlConnection(cs))
         {
             con.Open();
 
-            string queryPet = "SELECT petID, sellPrice, petType FROM Pet WHERE petType = @petType AND colourNum = @colourNum";
-            using (MySqlCommand cmd = new MySqlCommand(queryPet, con))
+            using (MySqlCommand cmd = new MySqlCommand("SELECT Pet.petID, Pet.sellPrice FROM Pet INNER JOIN UserPets ON Pet.petID = UserPets.petID WHERE UserPets.userID = @userID AND Pet.petType = 'Farm' AND Pet.colourNum = @colourNum", con)) // PET TYPE~~~~
             {
-                cmd.Parameters.AddWithValue("@petType", "Farm"); // PET TYPE~~~~
+                cmd.Parameters.AddWithValue("@userID", userID);
                 cmd.Parameters.AddWithValue("@colourNum", selectedColourNum);
+
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
                     {
                         petID = Convert.ToInt32(reader["petID"]);
                         sellPrice = Convert.ToInt32(reader["sellPrice"]);
-                        petType = reader["petType"].ToString();
                     }
                 }
             }
@@ -255,7 +253,7 @@ public partial class View_Pets_farm : System.Web.UI.Page
         Session["colourNum"] = selectedColourNum;
 
         lblSellPrice.Text = sellPrice.ToString(); // UPDATE COIN LABEL
-        ScriptManager.RegisterStartupScript(this, GetType(), "showPopup", "showPopup();", true);
+        ScriptManager.RegisterStartupScript(this, GetType(), "showSellPopup", "showSellPopup();", true);
     }
 
     protected void btnConfirmSell_Click(object sender, EventArgs e)
@@ -292,7 +290,7 @@ public partial class View_Pets_farm : System.Web.UI.Page
             {
                 cmd.Parameters.AddWithValue("@userID", userID);
                 cmd.Parameters.AddWithValue("@petID", petID);
-                cmd.ExecuteNonQuery();
+                int rows = cmd.ExecuteNonQuery();
             }
 
             // 2. GET CURRENT coin count
@@ -365,6 +363,9 @@ public partial class View_Pets_farm : System.Web.UI.Page
 
         lblPaws.Text = (currentCoins + sellPrice).ToString();
         LoadOwnedPets(userID);
+
+        ScriptManager.RegisterStartupScript(this, GetType(), "hideSellPopup", "hideSellPopup();", true);
+        Response.Redirect(Request.RawUrl);
     }
 
     protected void btnCats_Click(object sender, EventArgs e)
