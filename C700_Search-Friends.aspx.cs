@@ -127,7 +127,7 @@ public partial class Default2 : System.Web.UI.Page
             string friendID = e.CommandArgument.ToString();
             string currentUserID = Session["UserID"].ToString();
 
-            CreateFriendRequest(currentUserID, friendID, "pending");
+            CreateFriendRequest(currentUserID, friendID, "Pending");
             SearchFriends(txtSearchFriends.Text.Trim());
         }
     }
