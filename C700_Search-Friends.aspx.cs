@@ -70,6 +70,12 @@ public partial class Default2 : System.Web.UI.Page
         SearchFriends(txtSearchFriends.Text.Trim());
     }
 
+    
+    protected void btnViewFriends_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("C600_View-friend-list.aspx");
+    }
+
     private void SearchFriends(string searchTerm)
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;

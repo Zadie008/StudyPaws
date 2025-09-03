@@ -114,125 +114,126 @@
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
  <div id="SearchFriendsMainContent">
- <div class="header-container">
-     <h2>Find your friends</h2>
-     </div>
-
-        <div class="backgroundColorContainer">
-       <div class="leftSection"></div>
-       <div class="middleSection">
-
-         <div id="searchFriendsSection">
-    <asp:TextBox ID="txtSearchFriends" ClientIDMode="Static" CssClass="textbox" runat="server" 
-        Placeholder="Search" OnTextChanged="txtSearchFriends_TextChanged" AutoPostBack="true"></asp:TextBox>
-    <asp:ImageButton ID="btnSearchFriends" CssClass="imageButton" runat="server" 
-        ImageUrl="Icons/icons8-search-white-96.png" OnClick="btnSearchFriends_Click" 
-        Width="75" Height="75" CausesValidation="false" />
-</div>
-       
-                 <div class="friendsScrollableTableContainer">
-                    <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" AutoGenerateColumns="False" OnRowCommand="GridView1_RowCommand">
-                        <Columns>
-                            <asp:TemplateField>
-<ItemTemplate>
-    <div class="friendRow">
-        <a href="C600_View-friend-list.aspx" class="friendProfileIconLink">
-            <div class="friendProfileIcon">
-                <div class='<%# "friendProfileCircle " + GetCircleColorClass(Convert.ToInt32(Eval("iconNum"))) %>'></div>
-                <img class="friendProfileImage" src='<%# GetProfileImageUrl(Eval("iconNum")) %>' />
-            </div>
-        </a>
-        <span class="friendUsername"><%# Eval("username") %></span>
-     
-        <asp:ImageButton ID="btnAddFriend" runat="server" ImageUrl="Icons/icons8-add-new-white-96.png" CssClass="addFriendBtn" CommandName="AddFriend" CommandArgument='<%# Eval("userID") %>' />
+    <div class="header-container">
+        <h2>Find your friends</h2>
     </div>
-</ItemTemplate>
+
+    <div class="backgroundColorContainer">
+        <div class="leftSection"></div>
+        <div class="middleSection">
+            <div id="searchFriendsSection">
+                <asp:TextBox ID="txtSearchFriends" ClientIDMode="Static" CssClass="textbox" runat="server" 
+                    Placeholder="Search" OnTextChanged="txtSearchFriends_TextChanged" AutoPostBack="true" ></asp:TextBox>
+                <asp:ImageButton ID="btnSearchFriends" CssClass="imageButton" runat="server" 
+                    ImageUrl="Icons/icons8-search-white-96.png" OnClick="btnSearchFriends_Click" 
+                    Width="75" Height="75" CausesValidation="false" />
+            </div>
+       
+            <div class="friendsScrollableTableContainer">
+                <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" AutoGenerateColumns="False" OnRowCommand="GridView1_RowCommand">
+                    <Columns>
+                        <asp:TemplateField>
+                            <ItemTemplate>
+                                <div class="friendRow">
+                                    <a href="C600_View-friend-list.aspx" class="friendProfileIconLink">
+                                        <div class="friendProfileIcon">
+                                            <div class='<%# "friendProfileCircle " + GetCircleColorClass(Convert.ToInt32(Eval("iconNum"))) %>'></div>
+                                            <img class="friendProfileImage" src='<%# GetProfileImageUrl(Eval("iconNum")) %>' />
+                                        </div>
+                                    </a>
+                                    <span class="friendUsername"><%# Eval("username") %></span>
+     
+                                    <asp:ImageButton ID="btnAddFriend" runat="server" ImageUrl="Icons/icons8-add-new-white-96.png" CssClass="addFriendBtn" CommandName="AddFriend" CommandArgument='<%# Eval("userID") %>' />
+                                </div>
+                            </ItemTemplate>
                         </asp:TemplateField>
-                        </Columns>
-                    </asp:GridView>
-                </div>
-       
-       
-       </div>
+                    </Columns>
+                </asp:GridView>
+            </div>
+            <!--<div class="buttonSection">
+                <asp:Button ID="btnViewFriends" CssClass="button" runat="server" Text="View friends" OnClick="btnViewFriends_Click" />
+            </div>-->
+        </div>
+        <div class="rightSection"></div>
+        
+    </div>
 
-       <div class="rightSection">
-       </div>
-     </div>
-     </div>
-            <div id="popupHasNotifications" class="simple-popup" style="display: none;">
-            <div class="popup-pink-box">
-                <asp:HiddenField ID="hiddenSessionID" runat="server" />
-                <asp:Literal ID="litNotificationText" runat="server" />
-                <img src="Images/Notification%20Happy.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnYes" CssClass="popup-button-best-pink" runat="server" Text="Accept!" OnClick="btnYes_Click" />
-                    <asp:Button ID="btnNo" CssClass="popup-button" runat="server" Text="Decline!" OnClick="btnNo_Click" />
-                </div>
+    <div id="popupHasNotifications" class="simple-popup" style="display: none;">
+        <div class="popup-pink-box">
+            <asp:HiddenField ID="hiddenSessionID" runat="server" />
+            <asp:Literal ID="litNotificationText" runat="server" />
+            <img src="Images/Notification%20Happy.png" />
+            <br />
+            <div class="buttonSection">
+                <asp:Button ID="btnYes" CssClass="popup-button-best-pink" runat="server" Text="Accept!" OnClick="btnYes_Click" />
+                <asp:Button ID="btnNo" CssClass="popup-button" runat="server" Text="Decline!" OnClick="btnNo_Click" />
             </div>
         </div>
+    </div>
 
-        <div id="popupCalendar" class="simple-popup" style="display: none;">
-            <div class="popup-pink-box">
-                <asp:HiddenField ID="hiddenShowCalendar" runat="server" />
-                <p>Study Session has been added to your calendar!</p>
-                <img src="Images/Notification%20Happy.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnCalendar" CssClass="popup-button-best-pink" runat="server" Text="Calendar, GO!" OnClick="btnCalendar_Click" />
-                    <asp:Button ID="btnOk" CssClass="popup-button" runat="server" Text="Okay, thanks!" OnClick="btnOk_Click" />
-                </div>
+    <div id="popupCalendar" class="simple-popup" style="display: none;">
+        <div class="popup-pink-box">
+            <asp:HiddenField ID="hiddenShowCalendar" runat="server" />
+            <p>Study Session has been added to your calendar!</p>
+            <img src="Images/Notification%20Happy.png" />
+            <br />
+            <div class="buttonSection">
+                <asp:Button ID="btnCalendar" CssClass="popup-button-best-pink" runat="server" Text="Calendar, GO!" OnClick="btnCalendar_Click" />
+                <asp:Button ID="btnOk" CssClass="popup-button" runat="server" Text="Okay, thanks!" OnClick="btnOk_Click" />
             </div>
         </div>
+    </div>
 
-        <div id="popupConfirmDecline" class="simple-popup" style="display: none;">
-            <div class="popup-blue-box">
-                <asp:HiddenField ID="hiddenShowConfirmation" runat="server" />
-                <p>Are you sure you want to decline the Study Session invitation?</p>
-                <img src="Images/Notification%20Sad%20Hamster.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnSure" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnSure_Click" />
-                    <asp:Button ID="btnNotSure" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnNotSure_Click" />
-                </div>
+    <div id="popupConfirmDecline" class="simple-popup" style="display: none;">
+        <div class="popup-blue-box">
+            <asp:HiddenField ID="hiddenShowConfirmation" runat="server" />
+            <p>Are you sure you want to decline the Study Session invitation?</p>
+            <img src="Images/Notification%20Sad%20Hamster.png" />
+            <br />
+            <div class="buttonSection">
+                <asp:Button ID="btnSure" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnSure_Click" />
+                <asp:Button ID="btnNotSure" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnNotSure_Click" />
             </div>
         </div>
+    </div>
 
-        <div id="popupIsDeclined" class="simple-popup" style="display: none;">
-            <div class="popup-blue-box">
-                <asp:HiddenField ID="hiddenShowDeclineConfirmed" runat="server" />
-                <p>Study Session has been declined!</p>
-                <img src="Images/Notification%20Sad%20Hamster.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnOkayDeclined" CssClass="popup-button" runat="server" Text="Okay!" OnClick="btnOkayDeclined_Click" />
-                </div>
+    <div id="popupIsDeclined" class="simple-popup" style="display: none;">
+        <div class="popup-blue-box">
+            <asp:HiddenField ID="hiddenShowDeclineConfirmed" runat="server" />
+            <p>Study Session has been declined!</p>
+            <img src="Images/Notification%20Sad%20Hamster.png" />
+            <br />
+            <div class="buttonSection">
+                <asp:Button ID="btnOkayDeclined" CssClass="popup-button" runat="server" Text="Okay!" OnClick="btnOkayDeclined_Click" />
             </div>
         </div>
+    </div>
 
-        <div id="popup" class="simple-popup" style="display: none;">
-            <div class="popup-pink-box">
-                <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
-                <p>Study Session has started!</p>
-                <img src="Images/Notification%20Happy.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
-                </div>
+    <div id="popup" class="simple-popup" style="display: none;">
+        <div class="popup-pink-box">
+            <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
+            <p>Study Session has started!</p>
+            <img src="Images/Notification%20Happy.png" />
+            <br />
+            <div class="buttonSection">
+                <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
             </div>
         </div>
+    </div>
+
     <script type="text/javascript">
-    document.getElementById('txtSearchFriends').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            document.getElementById('<%= btnSearchFriends.ClientID %>').click();
+        document.getElementById('txtSearchFriends').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('<%= btnSearchFriends.ClientID %>').click();
         }
-    });
+        });
 
-    window.onload = function () {
-        document.getElementById('txtSearchFriends').focus();
-    };
+        window.onload = function () {
+            document.getElementById('txtSearchFriends').focus();
+        };
     </script>
+</div>
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
 </asp:Content>

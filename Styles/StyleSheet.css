@@ -3294,6 +3294,45 @@ body.page-exit .welcomeBackTextDiv {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     font-size: 16px;
 }
+
+#viewFriendListMainContent #btnSearch {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.btn.btn-primary {
+    background-color: #90A8C3;
+    border: 3px solid white;
+    border-radius: 999px;
+    color: white;
+    padding: 1vh 2vw;
+    font-size: clamp(1.2rem, 2.5vw, 2.7rem);
+    font-family: 'Lilita One', sans-serif;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 1vh;
+    transition: all 0.3s ease;
+}
+
+.btn.btn-secondary {
+    background-color: #ADA7C9 !important;
+    border: 2px solid #ADA7C9 !important;
+    border-radius: 999px;
+    color: #E0DDEB !important;
+    padding: 1vh 2vw;
+    font-size: clamp(1.2rem, 2.5vw, 2.7rem);
+    font-family: 'Lilita One', sans-serif;
+    letter-spacing: 0.1em;
+    cursor: not-allowed !important;
+    text-decoration: none;
+    margin: 1vh;
+    opacity: 0.7 !important;
+    transition: all 0.3s ease;
+}
+
 /* -------------------------------------------- FRIEND PROFILE DETAILS PAGE -------------------------------------------- */
 .friend-profile-page-container {
     margin: 2em auto;
@@ -3463,82 +3502,75 @@ body.page-exit .welcomeBackTextDiv {
     position: relative;
 }
 
-/* -------------------------------------------- Friends pages-------------------------------------------- */
+/* -------------------------------------------- SEARCH FRIENDS PAGE -------------------------------------------- */
 #SearchFriendsMainContent {
     margin: 0em auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+}
+
+#SearchFriendsMainContent h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.1em;
+    margin-top: 0;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
 
 #SearchFriendsMainContent .backgroundColorContainer {
-   display: flex;
-    flex-direction: column;
     align-items: center;
     margin: auto;
-    background-color: #ADA7C9; 
-    max-width: 55%;
+    background-color: #ADA7C9; /*dark purple*/
+    /*min-width: 60%;*/
+    max-width: 35%;
+    height: 55vh;
     border-radius: 3em;
-    padding: 1.5em;
-    height: 65vh; 
+    padding: -5em;
 }
 
-#searchFriendsSection .textbox {
-    flex: 1; 
-    min-width: 0;
+#SearchFriendsMainContent .textbox {
+    border-radius: 2rem;
+    border: 2px solid white;
     background-color: white;
-    border: none;
-    border-radius: 2em;
-    padding: 0.5em 1em;
-    font-size: 2rem;
-    height: 50px;
-    box-sizing: border-box;
+    padding: 0.2em 1em;
+    color: #ADA7C9;
+    font-size: clamp(1.2rem, 2vw, 2.5rem);
+    font-family: 'Gilda Display', serif;
+    font-weight: 200;
+    outline: none;
+    margin: 1vh auto;
     text-align: left;
+    max-width: 700px;
 }
+
+#SearchFriendsMainContent .textbox ::placeholder {
+    color: #ADA7C9; /* doesn't work yet */
+}
+
+#SearchFriendsMainContent .scrollableTableContainer {
+    height: 37vh;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 7em;
+    box-sizing: content-box;
+}
+
+#SearchFriendsMainContent {
+    width: 90%;
+}
+
+#SearchFriendsMainContent .buttonSection {
+    position: fixed;
+    padding: 0;
+    padding-top: 0.5%;
+    z-index: 0;
+}
+
 #searchFriendsSection {
     display: flex;
     align-items: center;
     gap: 0.5em;
     width: 100%;
     padding: 0 1em;
-    margin-bottom: 0em;
-}
-#viewFriendListMainContent #btnSearch {
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    flex-shrink:0;
-}
-
-.btn.btn-primary {
-    background-color: #90A8C3;
-    border: 3px solid white;
-    border-radius: 999px;
-    color: white;
-    padding: 1vh 2vw;
-    font-size: clamp(1.2rem, 2.5vw, 2.7rem);
-    font-family: 'Lilita One', sans-serif;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    text-decoration: none;
-    margin: 1vh;
-    transition: all 0.3s ease;
-}
-
-.btn.btn-secondary {
-    background-color: #ADA7C9 !important;
-    border: 2px solid #ADA7C9 !important;
-    border-radius: 999px;
-    color: #E0DDEB !important;
-    padding: 1vh 2vw;
-    font-size: clamp(1.2rem, 2.5vw, 2.7rem);
-    font-family: 'Lilita One', sans-serif;
-    letter-spacing: 0.1em;
-    cursor: not-allowed !important;
-    text-decoration: none;
-    margin: 1vh;
-    opacity: 0.7 !important;
-    transition: all 0.3s ease;
+    margin-bottom: -1em;
 }
 
 /* -------------------------------------------- BADGES PAGE -------------------------------------------- */
