@@ -69,7 +69,22 @@ public partial class B500_B800_Tags : System.Web.UI.Page
                 cmd.ExecuteNonQuery();
                 newTagID = (int)cmd.LastInsertedId;
             }
-            Response.Redirect("B200_B500_Add-event_Select_Tag.aspx?newTag=" + newTagID);
+            string from = Request.QueryString["from"];
+            string eventID = Request.QueryString["eventID"];
+
+            if (from == "editevent" && !string.IsNullOrEmpty(eventID))
+            {
+                Response.Redirect("B300-B400_Edit_Delete_Event.aspx?newTag=" + newTagID + "&eventID=" + eventID);
+            }
+            else if (from == "addevent")
+            {
+                Response.Redirect("B200_B500_Add-event_Select_Tag.aspx?newTag=" + newTagID);
+            }
+            else
+            {
+                Response.Redirect("Default.aspx");
+            }
+
         }
     }
     protected void validatorTagColour_ServerValidate(object sender, ServerValidateEventArgs e)
@@ -78,7 +93,21 @@ public partial class B500_B800_Tags : System.Web.UI.Page
     }
     protected void btnBack_Click(object sender, EventArgs e)
     {
-        Response.Redirect("B200_B500_Add-event_Select_Tag.aspx");
+        string from = Request.QueryString["from"];
+        string eventID = Request.QueryString["eventID"];
+
+        if (from == "editevent" && !string.IsNullOrEmpty(eventID))
+        {
+            Response.Redirect("B300-B400_Edit_Delete_Event.aspx?eventID=" + eventID);
+        }
+        else if (from == "addevent")
+        {
+            Response.Redirect("B200_B500_Add-event_Select_Tag.aspx");
+        }
+        else
+        {
+            Response.Redirect("Default.aspx");
+        }
     }
 
 

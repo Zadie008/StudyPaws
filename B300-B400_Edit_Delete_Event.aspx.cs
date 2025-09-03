@@ -26,18 +26,30 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
         {
             LoadTags();
 
-            if (Request.QueryString["newTag"] != null)
+            string newTagID = Request.QueryString["newTag"];
+            string selectedTagID = Request.QueryString["selectedTag"];
+            string eventIDString = Request.QueryString["eventID"];
+
+            if (!string.IsNullOrEmpty(eventIDString))
             {
-                string newTagID = Request.QueryString["newTag"];
-                if (dropdownEventTag.Items.FindByValue(newTagID) != null)
+                int eventID = int.Parse(eventIDString);
+
+                if (!string.IsNullOrEmpty(newTagID))
+                {
+                    LoadEvent(eventID, newTagID);
+                }
+                else
+                {
+                    LoadEvent(eventID);
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(newTagID) && dropdownEventTag.Items.FindByValue(newTagID) != null)
                 {
                     dropdownEventTag.SelectedValue = newTagID;
                 }
-            }
-            if (Request.QueryString["selectedTag"] != null)
-            {
-                string selectedTagID = Request.QueryString["selectedTag"];
-                if (dropdownEventTag.Items.FindByValue(selectedTagID) != null)
+                else if (!string.IsNullOrEmpty(selectedTagID) && dropdownEventTag.Items.FindByValue(selectedTagID) != null)
                 {
                     dropdownEventTag.SelectedValue = selectedTagID;
                 }
@@ -49,11 +61,6 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
                 {
                     hiddenSelectedDate.Value = selectedDate.ToString("yyyy-MM-dd");
                 }
-            }
-            if (Request.QueryString["eventID"] != null)
-            {
-                int eventID = int.Parse(Request.QueryString["eventID"]);
-                LoadEvent(eventID);
             }
         }
 
@@ -90,7 +97,7 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
 
         ShowNextInvite();
     }
-    private void LoadEvent(int eventID)
+    private void LoadEvent(int eventID, string newTagID=null)
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         using (MySqlConnection conn = new MySqlConnection(cs))
@@ -112,45 +119,27 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
                     }
 
                     int tagID = Convert.ToInt32(reader["tagID"]);
-                    string tagName = reader["tagID"].ToString();
 
                     dropdownEventTag.Items.Clear();
-                    
-                    if (tagID == 1)
+
+                    LoadTags();
+
+                    if (!string.IsNullOrEmpty(newTagID) && dropdownEventTag.Items.FindByValue(newTagID) != null)
                     {
-                        dropdownEventTag.Items.Add(new ListItem("Study Session", "1"));
-                        dropdownEventTag.SelectedValue = "1";
-                        LockStudySessionUI();
+                        dropdownEventTag.SelectedValue = newTagID;
                     }
-                    else
+                    else if (dropdownEventTag.Items.FindByValue(tagID.ToString()) != null)
                     {
-                        LoadTags();
-                        if (dropdownEventTag.Items.FindByValue(tagID.ToString()) != null)
-                        {
-                            dropdownEventTag.SelectedValue = tagID.ToString();
-                        }
+                        dropdownEventTag.SelectedValue = tagID.ToString();
                     }
                 }
             }
         }
         ViewState["EditEventID"] = eventID;
     }
-    protected void LockStudySessionUI()
-    {
-        txtEventTitle.Enabled = false;
-        txtEventDate.Enabled = false;
-        dropdownEventTag.Enabled = false;
-
-        btnSave.Visible = false;
-        btnAddTag.Visible = false;
-        btnEditTag.Visible = false;
-
-        btnBack.Visible = true;
-        btnDelete.Visible = true;
-    }
     protected void btnBack_Click(object sender, EventArgs e)
     {
-        Response.Redirect("B1600_View-dashboard.aspx");
+        Response.Redirect("B1600_View-dashboard.aspx"); // CHANGE TO ADD BACK TO CALENDAR PAGE
     }
 
     protected void btnYesDelete_Click(object sender, EventArgs e)
@@ -166,7 +155,7 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
             cmd.Parameters.AddWithValue("@eventID", eventID);
             cmd.ExecuteNonQuery();
         }
-        Response.Redirect("B1600_View-dashboard.aspx");
+        Response.Redirect("B1600_View-dashboard.aspx"); // CHANGE TO ADD BACK TO CALENDAR PAGE
     }
     protected void btnNoDelete_Click(object sender, EventArgs e)
     {
@@ -178,6 +167,14 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
     }
     protected void btnSave_Click(object sender, EventArgs e)
     {
+        if (!Page.IsValid)
+        {
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(txtEventTitle.Text)) // double check if not empty
+        {
+            return;
+        }
         int eventID = (int)ViewState["EditEventID"];
         String desc = txtEventTitle.Text;
         int userID = Convert.ToInt32(Session["userID"]);
@@ -207,12 +204,13 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
             cmd.ExecuteNonQuery();
         }
 
-        Response.Redirect("B1600_View-dashboard.aspx");
+        Response.Redirect("B1600_View-dashboard.aspx"); // CHANGE TO ADD BACK TO CALENDAR PAGE
     }
     
     protected void btnNewTag_Click(object sender, EventArgs e)
     {
-        Response.Redirect("B600_Add_Tags.aspx");
+        int eventID = (int)ViewState["EditEventID"];
+        Response.Redirect("B600_Add_Tags.aspx?from=editevent&eventID=" + eventID);
     }
     protected void LoadTags()
     {
@@ -246,7 +244,8 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
         {
             int tagID = Convert.ToInt32(dropdownEventTag.SelectedValue);
             Session["EditTagID"] = tagID;
-            Response.Redirect("B700-B800_Edit_Delete_Tags.aspx");
+            int eventID = (int)ViewState["EditEventID"];
+            Response.Redirect("B700-B800_Edit_Delete_Tags.aspx?from=editevent&eventID=" + eventID);
         }
     }
 

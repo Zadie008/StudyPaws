@@ -86,11 +86,19 @@ public partial class Default2 : System.Web.UI.Page
     }
     protected void btnBack_Click(object sender, EventArgs e)
     {
-        Response.Redirect("B1600_View-dashboard.aspx");
+        Response.Redirect("B1600_View-dashboard.aspx"); // CHANGE TO ADD BACK TO CALENDAR PAGE
     }
 
     protected void btnAdd_Click(object sender, EventArgs e)
     {
+        if (!Page.IsValid)
+        {
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(txtEventTitle.Text)) // double check if not empty
+        {
+            return; 
+        }
         String desc = txtEventTitle.Text;
         int userID = Convert.ToInt32(Session["userID"]);
 
@@ -119,11 +127,11 @@ public partial class Default2 : System.Web.UI.Page
             cmd.ExecuteNonQuery();
         }
 
-        Response.Redirect("B1600_View-dashboard.aspx");
+        Response.Redirect("B1600_View-dashboard.aspx"); // CHANGE TO ADD BACK TO CALENDAR PAGE
     }
     protected void btnNewTag_Click(object sender, EventArgs e)
     {
-        Response.Redirect("B600_Add_Tags.aspx");
+        Response.Redirect("B600_Add_Tags.aspx?from=addevent");
     }
     protected void LoadTags()
     {
@@ -157,7 +165,7 @@ public partial class Default2 : System.Web.UI.Page
         {
             int tagID = Convert.ToInt32(dropdownEventTag.SelectedValue);
             Session["EditTagID"] = tagID;
-            Response.Redirect("B700-B800_Edit_Delete_Tags.aspx");
+            Response.Redirect("B700-B800_Edit_Delete_Tags.aspx?from=addevent");
         }
     }
 
