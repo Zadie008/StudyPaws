@@ -223,6 +223,8 @@ public partial class Default2 : System.Web.UI.Page
     private void ShowGiftNotification(int index)
     {
         DataTable pendingGifts = ViewState["PendingGifts"] as DataTable;
+        string userID = Session["userID"].ToString();
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
         if (pendingGifts != null && index >= 0 && index < pendingGifts.Rows.Count)
         {
@@ -245,6 +247,7 @@ public partial class Default2 : System.Web.UI.Page
         {
             System.Diagnostics.Debug.WriteLine("No gift found at index: " + index);
         }
+        GetUserStats(cs, userID);
     }
 
     protected void btnCollectGift_Click(object sender, EventArgs e)
@@ -285,6 +288,7 @@ public partial class Default2 : System.Web.UI.Page
             GetUserStats(cs, userID);
             LoadFriends(); // Refresh the friend list to update buttons
             ShowNextGiftOrClose();
+
         }
     }
     protected void btnLaterGift_Click(object sender, EventArgs e)
@@ -355,6 +359,7 @@ public partial class Default2 : System.Web.UI.Page
         {
             System.Diagnostics.Debug.WriteLine("No friend request found at index: " + index);
         }
+      
     }
     protected void btnAcceptFriendRequest_Click(object sender, EventArgs e)
     {

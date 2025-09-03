@@ -130,7 +130,6 @@ public partial class Default2 : System.Web.UI.Page
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
-        // Check if friendship already exists to avoid duplicates
         string checkQuery = @"SELECT COUNT(*) FROM friendslist 
                          WHERE (userIDfrom = @userID AND userIDto = @friendID)
                          OR (userIDfrom = @friendID AND userIDto = @userID)";
@@ -146,14 +145,12 @@ public partial class Default2 : System.Web.UI.Page
 
             if (existingCount > 0)
             {
-                // Friendship already exists or request is pending
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "friendRequestExists",
                     "alert('Friend request already sent or you are already friends!');", true);
                 return;
             }
         }
 
-        // Insert new friend request
         string insertQuery = @"INSERT INTO friendslist (userIDfrom, userIDto, requestStatus, giftAvailable) 
                          VALUES (@userIDfrom, @userIDto, @status, 0)";
 
