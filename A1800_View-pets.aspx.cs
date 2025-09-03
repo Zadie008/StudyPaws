@@ -221,6 +221,8 @@ public partial class View_pets : System.Web.UI.Page
     // SELL PET (DELETING THE USERPETS ENTRY)
     protected void btnSell_Click(object sender, EventArgs e)
     {
+        lblPaws.Text = "running btnSell"; // debugging
+
         string selectedColourNum = hfSelectedColourNum.Value;
         userID = Session["UserID"] as string;
 
@@ -267,6 +269,8 @@ public partial class View_pets : System.Web.UI.Page
 
     protected void btnConfirmSell_Click(object sender, EventArgs e)
     {
+        lblPaws.Text = "running btnConfirmSell"; // debugging
+
         string userID = Session["UserID"] as string;
         if (Session["petID"] == null || Session["sellPrice"] == null || string.IsNullOrEmpty(userID))
             return;

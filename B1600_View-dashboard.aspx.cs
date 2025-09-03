@@ -80,18 +80,20 @@ public partial class Default2 : System.Web.UI.Page
             {
                 LoadTasks();
                 LoadTagColours(); // added to see if it fixes default black event dots
+
+                if (ViewState["SelectedCalendarTag"] != null)
+                {
+                    string selectedValue = ViewState["SelectedCalendarTag"].ToString();
+                    var item = calendarDropDown.Items.FindByValue(selectedValue);
+                    if (item != null)
+                    {
+                        calendarDropDown.SelectedValue = selectedValue;
+                    }
+                }
+
                 int year = int.Parse(hfYear.Value);
                 int month = int.Parse(hfMonth.Value);
                 LoadCalendar(year, month);
-
-                //if (ViewState["SelectedCalendarTag"]!= null)
-                //{
-                //    string selectedValue = ViewState["SelectedCalendarTag"].ToString();
-                //    if (calendarDropDown.Items.FindByValue(selectedValue) != null)
-                //    {
-                //        calendarDropDown.SelectedValue = selectedValue;
-                //    }
-                //}
             }
             //LoadTasks();
         }
@@ -113,41 +115,47 @@ public partial class Default2 : System.Web.UI.Page
             ViewState["FilterVisible"] = value;
         }
     }
-    //private bool IsCalendarFilterVisible
-    //{
-    //    get
-    //    {
-    //        return ViewState["CalendarFilterVisible"] != null && (bool)ViewState["CalendarFilterVisible"];
-    //    }
-    //    set
-    //    {
-    //        ViewState["CalendarFilterVisible"] = value;
-    //    }
-    //}
+
+    
+    private bool IsCalendarFilterVisible
+    {
+        get
+        {
+            return ViewState["CalendarFilterVisible"] != null && (bool)ViewState["CalendarFilterVisible"];
+        }
+        set
+        {
+            ViewState["CalendarFilterVisible"] = value;
+        }
+    }
+    
     private void LoadCalendar(int year, int month)
     {
-        lblMonthYear.Text = new DateTime(year, month, 1).ToString("MMMM yyyy");
-        literalCalendar.Text = GenerateCalendar(year, month);
-        hfYear.Value = year.ToString();
-        hfMonth.Value = month.ToString();
-
         if (ViewState["SelectedCalendarTag"] != null)
         {
             string selectedValue = ViewState["SelectedCalendarTag"].ToString();
-            if (calendarDropDown.Items.FindByValue(selectedValue) != null)
+            var item = calendarDropDown.Items.FindByValue(selectedValue);
+            if (item != null)
             {
                 calendarDropDown.SelectedValue = selectedValue;
             }
         }
-    }
-    //protected void calendarFilterBtn_Click(object sender, EventArgs e)
-    //{
-    //    IsCalendarFilterVisible = !IsCalendarFilterVisible;
-    //    calendarDropDown.Visible = IsCalendarFilterVisible;
 
-    //    if (IsCalendarFilterVisible)
-    //        LoadCalendarTags();
-    //}
+        lblMonthYear.Text = new DateTime(year, month, 1).ToString("MMMM yyyy");
+        literalCalendar.Text = GenerateCalendar(year, month);
+        hfYear.Value = year.ToString();
+        hfMonth.Value = month.ToString();
+    }
+    
+    protected void calendarFilterBtn_Click(object sender, EventArgs e)
+    {
+        IsCalendarFilterVisible = !IsCalendarFilterVisible;
+        calendarDropDown.Visible = IsCalendarFilterVisible;
+
+        if (IsCalendarFilterVisible)
+            LoadCalendarTags();
+    }
+    
     private void LoadCalendarTags()
     {
         calendarDropDown.Items.Clear();
@@ -158,7 +166,7 @@ public partial class Default2 : System.Web.UI.Page
             conn.Open();
             string sql = "SELECT tagID, tagName FROM CalendarEventTag";
             using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                using (MySqlDataReader reader = cmd.ExecuteReader())
+            using (MySqlDataReader reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
                 {

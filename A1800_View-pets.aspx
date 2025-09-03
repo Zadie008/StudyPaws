@@ -115,6 +115,7 @@
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div id="viewInventoryMainContent">
+        <asp:HiddenField ID="hfCurrentCategory" runat="server" Value="CAT" />
         <h2>Your inventory</h2>
         <div class="backgroundColorContainer">
             <div class="leftCategorySection">
@@ -179,7 +180,7 @@
             </div>
         </div>
 
-        <asp:HiddenField ID="hfCurrentCategory" runat="server" Value="CAT" />
+        
 
             <div id="popupSell" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
