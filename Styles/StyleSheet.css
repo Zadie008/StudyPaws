@@ -3103,19 +3103,19 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 /* SELL POP UP */
-#viewInventoryMainContent #popup .buttonSection {
+#viewInventoryMainContent .simple-popup .buttonSection {
     align-content: center;
     margin: 0;
 }
 
-#viewInventoryMainContent #popup .buttonSection .popup-button {
+#viewInventoryMainContent .simple-popup .buttonSection .popup-button {
     font-size: clamp(1rem, 2vw, 2rem);
-    width: 100%;
+    width: auto;
 }
 
-#viewInventoryMainContent #popup .buttonSection .popup-button-best-blue {
+#viewInventoryMainContent .simple-popup .buttonSection .popup-button-best-blue {
     font-size: clamp(1rem, 2vw, 2rem);
-    width: 100%;
+    width: auto;
 }
 
 #popupSellPriceTable {
