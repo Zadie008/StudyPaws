@@ -116,7 +116,7 @@
     <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
 
     <div class="friend-profile-page-container">
-        <h2>Your friends</h2>
+        
 
         <div class="friend-profile-content-container">
             <div class="friend-profile-details-card">
@@ -133,9 +133,10 @@
                 <div class="friend-profile-level-badge">
                     <asp:Label ID="lblFriendLevel" runat="server" Text="Level 12" />
                 </div>
-                <%--<div class="friend-profile-buttons-container">
-                    <asp:Button ID="btnViewBadges" runat="server" Text="View badges" 
-                        CssClass="friend-profile-badges-button" OnClick="btnViewBadges_Click" />--%>
+                <div class="buttonSection">
+     <asp:Button ID="btnViewFriendBadges" CssClass="buttonViewFriendBadges" runat="server"
+         Text="View Badges" OnClick="btnViewFriendBadges_Click" />
+ </div>
             </div>
             <div class="rightSection"></div>
         </div>
@@ -143,10 +144,7 @@
    
 
    
-    <%--<div class="buttonSection">
-        <asp:Button ID="btnViewFriendBadges" CssClass="button" runat="server"
-            Text="Back" OnClick="btnViewFriendBadges_Click" />
-    </div>--%>
+    
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

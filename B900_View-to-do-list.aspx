@@ -166,7 +166,7 @@
         <div id="popupTaskComplete" runat="server" ClientIDMode="static" class="simple-popup" style="display: none;">
             <div class="popup-pink-box">
                 <p>Congrats! You earned:</p> 
-                <p>XP   +10</p>
+                <p>XP   +1</p>
                 <img src="Images/Notification%20Happy.png" />
                 <br />
                 <div class="buttonSection">

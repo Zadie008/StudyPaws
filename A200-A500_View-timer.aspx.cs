@@ -73,7 +73,51 @@ public partial class A200_View_timer : System.Web.UI.Page
         }
 
     }
+    //COMPLETED TIMER
+    [System.Web.Services.WebMethod]
+    [System.Web.Script.Services.ScriptMethod]
+    public static string UpdateUserXP(int minutesStudied)
+    {
+        try
+        {
+            HttpContext context = HttpContext.Current;
+            if (context.Session["UserID"] == null)
+            {
+                return "Error: User not authenticated";
+            }
 
+            string userID = context.Session["UserID"].ToString();
+            int xpEarned = minutesStudied * 2; // 2 XP per minute
+            int coinsEarned = minutesStudied * 5; // 5 coins per minute
+
+            string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+            using (MySqlConnection con = new MySqlConnection(connectionString))
+            {
+                con.Open();
+
+                // Update user XP
+                string updateXPQuery = "UPDATE Users SET userXP = userXP + @xpEarned WHERE userID = @userID";
+                MySqlCommand cmd = new MySqlCommand(updateXPQuery, con);
+                cmd.Parameters.AddWithValue("@xpEarned", xpEarned);
+                cmd.Parameters.AddWithValue("@userID", userID);
+                cmd.ExecuteNonQuery();
+
+                // Update user coins
+                string updateCoinsQuery = "UPDATE Users SET userCoinCount = userCoinCount + @coinsEarned WHERE userID = @userID";
+                MySqlCommand cmdCoins = new MySqlCommand(updateCoinsQuery, con);
+                cmdCoins.Parameters.AddWithValue("@coinsEarned", coinsEarned);
+                cmdCoins.Parameters.AddWithValue("@userID", userID);
+                cmdCoins.ExecuteNonQuery();
+            }
+
+            return "Success: " + xpEarned + " XP and " + coinsEarned + " coins added";
+        }
+        catch (Exception ex)
+        {
+            return "Error: " + ex.Message;
+        }
+    }
     // EDIT TIMER (ADD MINUTES)
     [System.Web.Services.WebMethod]
     public static string UpdateTimerDuration(int addedSeconds)

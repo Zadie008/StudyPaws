@@ -261,17 +261,7 @@
         </asp:UpdatePanel>
     </div>
 
-    <!--does not have notification-->
-    <div id="popupNoNotifications" class="simple-popup" style="display: none;">
-        <div class="popup-blue-box">
-            <p>You do not have any notifications at the moment!</p>
-            <img src="Images/Notification%20Sad%20Hamster.png" />
-            <br />
-            <div class="buttonSection">
-                <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideNotificationPopup(); return false;" />
-            </div>
-        </div>
-    </div>
+  
 
     <div id="popupHasNotifications" class="simple-popup" style="display: none;">
         <div class="popup-pink-box">

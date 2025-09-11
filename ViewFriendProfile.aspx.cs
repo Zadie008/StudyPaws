@@ -119,12 +119,19 @@ public partial class Default2 : System.Web.UI.Page
             default: return "Images/ProfilePictures/CatPfp.png";
         }
     }
-    //protected void btnBack_Click(object sender, EventArgs e)
-    //{
-    //    Response.Redirect("ViewFriendList.aspx");
-    //}
+    protected void btnViewFriendBadges_Click(object sender, EventArgs e)
+    {
+        string friendUserID = Request.QueryString["friendID"];
 
-    // start: header profile code
+        if (!string.IsNullOrEmpty(friendUserID))
+        {
+            Response.Redirect("FriendBadges.aspx?friendID=" + friendUserID);
+        }
+        else
+        {
+            Response.Redirect("FriendBadges.aspx");
+        }
+    }
     private string GetUserID(string username, string connectionString)
     {
         string query = "SELECT userID FROM Users WHERE username = @username";

@@ -384,8 +384,15 @@ function confirmStop() {
 }
 
 function showTimeUpPopup() {
+    
+    const minutesStudied = Math.floor(initialTime / 60);
+    const xpEarned = minutesStudied * 2;
+    const coinsEarned = minutesStudied * 5;
+    document.getElementById("xpEarned").textContent = '+' + xpEarned;
+    document.getElementById("coinsEarned").textContent = '+' + coinsEarned;
     document.getElementById("popupTimeUp").style.display = "flex";
 
+    // Mark session as completed
     PageMethods.MarkSessionAsCompleted(function (response) {
         console.log("Session marked as completed:", response);
     }, function (error) {
@@ -394,10 +401,48 @@ function showTimeUpPopup() {
 }
 
 function hideTimeUpPopup() {
-    document.getElementById("popupTimeUp").style.display = "none";
-    window.location.href = "Default.aspx";
+    const minutesStudied = Math.floor(initialTime / 60);
+    PageMethods.UpdateUserXP(minutesStudied, function (response) {
+        console.log("Rewards updated:", response);
+        document.getElementById("popupTimeUp").style.display = "none";
+        window.location.href = "Default.aspx";
+    }, function (error) {
+        console.error("Error updating rewards:", error);
+        document.getElementById("popupTimeUp").style.display = "none";
+        window.location.href = "Default.aspx";
+    });
+}
+function showStudySessionTimeUpPopup() {
+    const minutesStudied = Math.floor(initialTime / 60);
+    const xpEarned = minutesStudied * 5; 
+    const coinsEarned = minutesStudied * 10; 
+
+    document.getElementById("xpEarned").textContent = '+' + xpEarned;
+    document.getElementById("coinsEarned").textContent = '+' + coinsEarned;
+
+    // Show the popup
+    document.getElementById("popupTimeUp").style.display = "flex";
+
+    // Mark session as completed
+    PageMethods.MarkSessionAsCompleted(function (response) {
+        console.log("Session marked as completed:", response);
+    }, function (error) {
+        console.error("Error marking session as completed:", error);
+    });
 }
 
+function hideStudySessionTimeUpPopup() {
+    const minutesStudied = Math.floor(initialTime / 60);
+    PageMethods.UpdateStudySessionRewards(minutesStudied, function (response) {
+        console.log("Study session rewards updated:", response);
+        document.getElementById("popupTimeUp").style.display = "none";
+        window.location.href = "Default.aspx";
+    }, function (error) {
+        console.error("Error updating study session rewards:", error);
+        document.getElementById("popupTimeUp").style.display = "none";
+        window.location.href = "Default.aspx";
+    });
+}
 // ---- VIEW PAST TIMER PAGE ---- //
 document.addEventListener("DOMContentLoaded", function () {
     var icon = document.getElementById("filterIcon");

@@ -1,91 +1,91 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="A200-A500_View-timer.aspx.cs" Inherits="A200_View_timer" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
+<asp:Content ID="Content1" ContentPlaceHolderID="tab" runat="Server">
     Timer
 </asp:Content>
 
-<asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-<div class="accountInfoDiv">
-    <div class="profileDiv">
-        <div class="profileIcon">
-            <div id="profileCircle" runat="server" ClientIDMode="Static"></div>
-            <asp:Image ID="profilePet" runat="server" />
-        </div>
-        <div class="profileDetails">
-            <table>
-                <tr>
-                    <td>
-                        <asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Level"></asp:Label>
-                    </td>
-                    <td>
-                        <asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server"></asp:Label>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <div class="xpProgressContainer">
-                            <asp:Label ID="lblXP" CssClass="accountInfoLabel" runat="server" Text="XP"></asp:Label>
-                            <div class="progressBarBackground">
-                                <asp:Panel ID="xpProgressBar" runat="server" CssClass="progressBarFill"></asp:Panel>
-                            </div>
-                            <asp:Label ID="lblXPPercentage" CssClass="accountInfoLabel xpPercentage" runat="server" Text="0%"></asp:Label>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="pawIcon">
-                            <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
-                            <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
-                        </div>
-                    </td>
-                    <td>
-                        <asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server" Text="---"></asp:Label>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-
-    <div class="rightInfoDiv">
-        <div class="timeNotificationWrapper">
-            <div class="notificationDetails">
-                <asp:ImageButton ID="imgNotificationNormal" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" CausesValidation="False" Enabled="False" />
+<asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" runat="Server">
+    <div class="accountInfoDiv">
+        <div class="profileDiv">
+            <div class="profileIcon">
+                <div id="profileCircle" runat="server" clientidmode="Static"></div>
+                <asp:Image ID="profilePet" runat="server" />
             </div>
+            <div class="profileDetails">
+                <table>
+                    <tr>
+                        <td>
+                            <asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Level"></asp:Label>
+                        </td>
+                        <td>
+                            <asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server"></asp:Label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="xpProgressContainer">
+                                <asp:Label ID="lblXP" CssClass="accountInfoLabel" runat="server" Text="XP"></asp:Label>
+                                <div class="progressBarBackground">
+                                    <asp:Panel ID="xpProgressBar" runat="server" CssClass="progressBarFill"></asp:Panel>
+                                </div>
+                                <asp:Label ID="lblXPPercentage" CssClass="accountInfoLabel xpPercentage" runat="server" Text="0%"></asp:Label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="pawIcon">
+                                <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
+                                <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
+                            </div>
+                        </td>
+                        <td>
+                            <asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server" Text="---"></asp:Label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
 
-            <div class="timeDateDiv">
-                <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="09:52"></asp:Label>
-                <div class="dateContainer">
-                    <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Friday"></asp:Label>
-                    <span class="dateSeparator">|</span>
-                    <asp:Label ID="lblDate" CssClass="accountInfoLabel currentDate" runat="server" Text="18 April"></asp:Label>
+        <div class="rightInfoDiv">
+            <div class="timeNotificationWrapper">
+                <div class="notificationDetails">
+                    <asp:ImageButton ID="imgNotificationNormal" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" CausesValidation="False" Enabled="False" />
+                </div>
+
+                <div class="timeDateDiv">
+                    <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="09:52"></asp:Label>
+                    <div class="dateContainer">
+                        <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Friday"></asp:Label>
+                        <span class="dateSeparator">|</span>
+                        <asp:Label ID="lblDate" CssClass="accountInfoLabel currentDate" runat="server" Text="18 April"></asp:Label>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="curved-header">
-    <svg viewBox="0 0 700 150" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-            <path id="curve" d="M50,120 Q350,20 650,120" />
-        </defs>
-        <text>
-            <textPath href="#curve" startOffset="50%" text-anchor="middle">
-                StudyP<tspan dx="0.7em">w</tspan>s
+    <div class="curved-header">
+        <svg viewBox="0 0 700 150" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <path id="curve" d="M50,120 Q350,20 650,120" />
+            </defs>
+            <text>
+                <textPath href="#curve" startOffset="50%" text-anchor="middle">
+                StudyP
+<tspan dx="0.7em">w</tspan>s
             </textPath>
-        </text>
-    </svg>
-    <img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" />
-    <h2>purrfectly productive</h2>
-</div>
+            </text>
+        </svg>
+        <img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" />
+        <h2>purrfectly productive</h2>
+    </div>
 </asp:Content>
 
-<asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
-
+<asp:Content ID="Content3" ContentPlaceHolderID="navContent" runat="Server">
 </asp:Content>
 
-<asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
+<asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" runat="Server">
     <div class="viewTimerMainContent">
         <div class="timeSection">
             <div class="leftSection">
@@ -94,15 +94,15 @@
             <div class="middleSection">
                 <div class="timerCircleWrapper">
                     <svg class="progress-ring" width="350" height="350">
-                        <circle class="progress-ring-bg" stroke="#90A8C3" stroke-width="30" fill="transparent" r="210" cx="175" cy="175"/>
-                        <circle class="progress-ring-fill" stroke="#F4CAE0" stroke-width="30" fill="transparent" r="210" cx="175" cy="175" stroke-dasharray="1319" stroke-dashoffset="0"/>
+                        <circle class="progress-ring-bg" stroke="#90A8C3" stroke-width="30" fill="transparent" r="210" cx="175" cy="175" />
+                        <circle class="progress-ring-fill" stroke="#F4CAE0" stroke-width="30" fill="transparent" r="210" cx="175" cy="175" stroke-dasharray="1319" stroke-dashoffset="0" />
                     </svg>
 
                     <div class="timerInnerContent">
                         <div id="mainContentPlaceHolder_lblCountdown" class="timerText"></div>
                         <div class="homePagePet">
                             <img id="glow" src="Images/Glow(cropped).png" />
-                            <asp:Image id="pet" runat="server" width="400" />
+                            <asp:Image ID="pet" runat="server" Width="400" />
                         </div>
                     </div>
                 </div>
@@ -113,7 +113,7 @@
         </div>
         <div class="buttonSection">
             <div class="leftSection">
-                <asp:TextBox ID="txtSessionTitle" CssClass="textbox" runat="server" ReadOnly="True" ></asp:TextBox>
+                <asp:TextBox ID="txtSessionTitle" CssClass="textbox" runat="server" ReadOnly="True"></asp:TextBox>
             </div>
             <div class="middleSection">
                 <div id="extraTimeButtons" class="extraTimeRow">
@@ -127,13 +127,15 @@
                 </div>
             </div>
             <div class="rightSection">
-                <asp:Button ID="btnViewPastTimers" CssClass="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
+                <asp:Button ID="btnViewPastTimers" CssClass="button" runat="server" Text="View past timers" Visible="False" />
+                <!--invisible but for correct spacing of other buttons-->
             </div>
         </div>
 
         <div id="popup" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
-                <p>Are you sure you want to stop the timer?<br />All XP and coins earned will be lost!</p>
+                <p>Are you sure you want to stop the timer?<br />
+                    All XP and coins earned will be lost!</p>
                 <img src="Images/Notification%20Sad%20Hamster.png" />
                 <br />
                 <div class="buttonSection">
@@ -145,11 +147,11 @@
 
         <div id="popupTimeUp" class="simple-popup" style="display: none;">
             <div class="popup-pink-box">
-                <p>Time's up! You earned:</p> <!--CHANGED: from "Congrats!" to "Time's up!"-->
+                <p>Time's up! You earned:</p>
                 <table id="popupTimeUpTable">
                     <tr>
                         <td>XP</td>
-                        <td>+10</td>
+                        <td id="xpEarned">+10</td>
                     </tr>
                     <tr>
                         <td>
@@ -158,7 +160,7 @@
                                 <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
                             </div>
                         </td>
-                        <td>+10</td>
+                        <td id="coinsEarned">+10</td>
                     </tr>
                 </table>
                 <img src="Images/Notification%20Happy.png" />
@@ -175,7 +177,6 @@
     <audio id="timerEndSound" src="Audio/timerEndSound.mp3" preload="auto"></audio>
 </asp:Content>
 
-<asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
-
+<asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" runat="Server">
 </asp:Content>
 

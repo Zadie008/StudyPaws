@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Web;
 using System.Web.Security;
@@ -12,7 +10,6 @@ using System.Web.UI.WebControls;
 
 public partial class Default2 : System.Web.UI.Page
 {
-    string connString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
     protected void Page_Load(object sender, EventArgs e)
     {
         if (Request.IsAuthenticated)
@@ -25,341 +22,169 @@ public partial class Default2 : System.Web.UI.Page
             }
         }
 
-        if (Session["userID"] != null)
+        if (!IsPostBack)
         {
-            ddlFilter.Visible = IsToDoFilterVisible;
-            userIDHidden.Value = Convert.ToString(Session["userID"]);
-            string username = Session["Username"].ToString();
-            string userID = GetUserID(username, connString);
-            if (!IsPostBack)
+            if (Session["Username"] != null)
             {
-                ViewState["SelectedFilter"] = "All";
-                ddlFilter.SelectedValue = "All";
-                LoadTasks();
-                int userXP = GetUserXP(connString, userID);
-                Tuple<int, int, int> levelInfo = GetLevelInformation(connString, userID);
-                int currentLevel = levelInfo.Item1;
-                int currentLevelXpAmount = levelInfo.Item2;
-                int nextLevelXpAmount = levelInfo.Item3;
-                lblLevelNumber.Text = currentLevel.ToString();
-                CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
+                string username = Session["Username"].ToString();
+                string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+                string userID = GetUserID(username, cs);
 
-                GetUserStats(connString, userID);
-                GetUserProfileIcon(connString, userID);
-                LoadPendingInvitesFromDB();
-                LoadUpcomingSessions();
-
+                if (!string.IsNullOrEmpty(userID))
+                {
+                    int userXP = GetUserXP(cs, userID);
+                    GetLevelInformation(cs, userID);
+                    GetUserStats(cs, userID);
+                    GetUserProfileIcon(cs, userID);
+                    Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
+                    int currentLevel = levelInfo.Item1;
+                    int currentLevelXpAmount = levelInfo.Item2;
+                    int nextLevelXpAmount = levelInfo.Item3;
+                    CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
+                    LoadUpcomingSessions();
+                    LoadPendingInvitesFromDB();
+                }
             }
             else
             {
-                LoadTasks();
+                Response.Redirect("Landing-page.aspx");
+                return;
             }
+            string friendID = Request.QueryString["friendID"];
+            bool viewingFriend = !string.IsNullOrEmpty(friendID);
+            if (viewingFriend)
+            {
+                Session["ViewingFriendID"] = friendID;
+                string friendUsername = GetUsernameFromID(friendID);
+                lblPageTitle.Text = friendUsername + "'s Badges";
+                LoadBadges(true);
+            }
+            else
+            {
+                lblPageTitle.Text = "Error. Loaded friends badges. Nobody was selected";
+                LoadBadges(false);
+                
+            }
+        }
+    }
+    private string GetUsernameFromID(string userID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string query = "SELECT username FROM Users WHERE userID = @userID";
+
+        using (MySqlConnection con = new MySqlConnection(cs))
+        using (MySqlCommand cmd = new MySqlCommand(query, con))
+        {
+            cmd.Parameters.AddWithValue("@userID", userID);
+            con.Open();
+            object result = cmd.ExecuteScalar();
+            return result != null ? result.ToString() : "Friend";
+        }
+    }
+    private void LoadBadges(bool viewingFriend = false)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string userIDToView;
+
+        if (viewingFriend)
+        {
+            userIDToView = Session["ViewingFriendID"].ToString();
         }
         else
         {
-            Response.Redirect("Login.aspx");
+            userIDToView = Session["userID"].ToString();
         }
 
-        ShowNextInvite();
-    }
-    private bool IsToDoFilterVisible
-    {
-        get
-        {
-            return ViewState["FilterVisible"] != null && (bool)ViewState["FilterVisible"];
-        }
-        set
-        {
-            ViewState["FilterVisible"] = value;
-        }
-    }
-    private void LoadTasks()
-    {
-        string filter = ddlFilter.SelectedValue ?? "All";
-        ViewState["SelectedFilter"] = filter;
+        string query = @"
+        SELECT b.badgeName, b.badgeDescBronze, b.badgeDescSilver, b.badgeDescGold, 
+               b.badgeIconNum, ub.badgeType
+        FROM Badges b
+        LEFT JOIN UserBadge ub ON b.badgeID = ub.badgeID AND ub.userID = @userID";
 
-        string whereClause = "";
-
-        if (filter == "Completed")
-            whereClause = "AND taskStatus = True";
-        else if (filter == "InProgress")
-            whereClause = "AND taskStatus = False";
-
-        DataTable dt = new DataTable();
-
-        using (MySqlConnection conn = new MySqlConnection(connString))
-        {
-            conn.Open();
-            string sql = "SELECT * FROM ToDoListTask WHERE userID = @userID " + whereClause + " ORDER BY taskStatus DESC";
-            MySqlCommand cmd = new MySqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
-            dt.Load(cmd.ExecuteReader());
-        }
-
-        rptTasks.DataSource = dt;
-        rptTasks.DataBind();
-    }
-    protected void txtNewTask_TextChanged(object sender, EventArgs e)
-    {
-        btnAdd_Click(sender, e);
-    }
-    protected void btnAdd_Click(object sender, EventArgs e)
-    {
-        string taskDesc = txtNewTask.Text.Trim();
-        if (taskDesc == "")
-            return;
-
-        using (MySqlConnection conn = new MySqlConnection(connString))
-        {
-            conn.Open();
-            string sql = "INSERT into ToDoListTask (taskDesc, taskStatus, userID) VALUES (@taskDesc, False, @userID)";
-            MySqlCommand cmd = new MySqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("@taskDesc", taskDesc);
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
-            cmd.ExecuteNonQuery();
-        }
-
-        txtNewTask.Text = "";
-        Response.Redirect(Request.RawUrl);
-    }
-
-    protected void rptTasks_ItemCommand(object source, RepeaterCommandEventArgs e)
-    {
-        int taskID = Convert.ToInt32(e.CommandArgument);
-
-        if (e.CommandName == "Toggle")
-        {
-            HiddenField taskIDHidden = (HiddenField)e.Item.FindControl("taskIDHidden");
-            bool currentStatus = GetTaskStatus(taskID);
-
-            if (!currentStatus)
-            {
-                ViewState["PendingAction"] = "Toggle";
-                ViewState["PendingTaskID"] = taskID;
-                ScriptManager.RegisterStartupScript(this, GetType(), "showTaskCompletePopup", "showTaskCompletePopup();", true);
-            }
-        }
-        else if (e.CommandName == "Delete")
-        {
-            ViewState["PendingAction"] = "Delete";
-            ViewState["PendingTaskID"] = taskID;
-
-            ScriptManager.RegisterStartupScript(this, GetType(), "showDeletePopup", "showPopupDelete();", true);
-
-        }
-        else if (e.CommandName == "Edit")
-        {
-            ViewState["EditingTaskID"] = e.CommandArgument.ToString();
-            LoadTasks();
-        }
-        else if (e.CommandName == "Save")
-        {
-            TextBox txtEditDesc = (TextBox)e.Item.FindControl("txtEditDesc");
-            string newDesc = txtEditDesc.Text.Trim();
-            if (string.IsNullOrWhiteSpace(newDesc))
-                return;
-
-            using (MySqlConnection conn = new MySqlConnection(connString))
-            {
-                conn.Open();
-                string query = "UPDATE ToDoListTask SET taskDesc = @newDesc WHERE taskID = @taskID";
-                MySqlCommand cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@newDesc", newDesc);
-                cmd.Parameters.AddWithValue("@taskID", taskID);
-                cmd.ExecuteNonQuery();
-            }
-            ViewState["EditingTaskID"] = null;
-            LoadTasks();
-        }
-    }
-
-    protected void ddlFilter_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        string selectedFilter = ddlFilter.SelectedValue;
-        ViewState["SelectedFilter"] = selectedFilter;
-        LoadTasks();
-    }
-    protected void toDoFilterBtn_Click(object sender, EventArgs e)
-    {
-        IsToDoFilterVisible = !IsToDoFilterVisible;
-        ddlFilter.Visible = IsToDoFilterVisible;
-    }
-    protected void rptTasks_ItemDataBound(object sender, RepeaterItemEventArgs e)
-    {
-        if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-        {
-            TextBox txtDesc = (TextBox)e.Item.FindControl("txtEditDesc");
-            ImageButton editBtn = (ImageButton)e.Item.FindControl("editBtn");
-            ImageButton saveBtn = (ImageButton)e.Item.FindControl("saveEditBtn");
-            HiddenField taskIDHidden = (HiddenField)e.Item.FindControl("taskIDHidden");
-
-            if (txtDesc != null && editBtn != null && saveBtn != null && taskIDHidden != null)
-            {
-                string editingTaskID = Convert.ToString(ViewState["EditingTaskID"]);
-
-
-                if (editingTaskID == taskIDHidden.Value)
-                {
-                    txtDesc.ReadOnly = false;
-                    editBtn.Visible = false;
-                    saveBtn.Visible = true;
-                    txtDesc.Focus();
-                }
-                else
-                {
-                    txtDesc.ReadOnly = true;
-                    editBtn.Visible = true;
-                    saveBtn.Visible = false;
-                }
-            }
-        }
-    }
-
-    protected void btnYesDelete_Click(object sender, EventArgs e)
-    {
-        string taskID = hiddenDeleteTaskID.Value;
-
-        if (!string.IsNullOrEmpty(taskID))
-        {
-            using (MySqlConnection conn = new MySqlConnection(connString))
-            {
-                conn.Open();
-                string query = "DELETE FROM ToDoListTask WHERE taskID = @taskID";
-                MySqlCommand cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@taskID", taskID);
-                cmd.ExecuteNonQuery();
-            }
-        }
-
-        Response.Redirect(Request.RawUrl);
-    }
-
-    protected void btnNoDelete_Click(Object sender, EventArgs e)
-    {
-        ViewState["PendingAction"] = null;
-        ViewState["PendingTaskID"] = null;
-        LoadTasks();
-    }
-    private bool GetTaskStatus(int taskID)
-    {
-        using (MySqlConnection conn = new MySqlConnection(connString))
-        {
-            conn.Open();
-            string query = "SELECT taskStatus FROM ToDoListTask WHERE taskID = @taskID";
-            MySqlCommand cmd = new MySqlCommand(query, conn);
-            cmd.Parameters.AddWithValue("@taskID", taskID);
-            var result = cmd.ExecuteScalar();
-            return result != DBNull.Value && Convert.ToBoolean(result);
-        }
-    }
-    private void ToggleTaskStatus(int taskID)
-    {
-        using (MySqlConnection conn = new MySqlConnection(connString))
-        {
-            conn.Open();
-            string query = "UPDATE ToDoListTask SET taskStatus = TRUE WHERE taskID = @taskID AND taskStatus = FALSE";
-            MySqlCommand cmd = new MySqlCommand(query, conn);
-            cmd.Parameters.AddWithValue("@taskID", taskID);
-            cmd.ExecuteNonQuery();
-        }
-        ViewState["PendingAction"] = null;
-        ViewState["PendingTaskID"] = null;
-    }
-    protected void btnYayLevelUp_Click(object sender, EventArgs e)
-    {
-        ScriptManager.RegisterStartupScript(this, GetType(), "hideLevelUp", "hideLevelUp();", false);
-    }
-
-    protected void btnThankYou_Click(object sender, EventArgs e)
-    {
-        if (ViewState["PendingAction"] != null && ViewState["PendingAction"].ToString() == "Toggle" && ViewState["PendingTaskID"] != null)
-        {
-            int taskID = Convert.ToInt32(ViewState["PendingTaskID"]);
-            ToggleTaskStatus(taskID);
-        }
-        string userID = userIDHidden.Value;
-
-        if (string.IsNullOrEmpty(userID))
-        {
-            Response.Write("<script>alert('Error: User not found.');</script>");
-            return;
-        }
-
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        List<BadgeIcon> badgeList = new List<BadgeIcon>();
 
         using (MySqlConnection con = new MySqlConnection(cs))
+        using (MySqlCommand cmd = new MySqlCommand(query, con))
         {
-            try
+            cmd.Parameters.AddWithValue("@userID", userIDToView);
+
+            con.Open();
+            using (MySqlDataReader reader = cmd.ExecuteReader())
             {
-                con.Open();
-
-                // Get current XP
-                string selectXPQuery = "SELECT userXP FROM Users WHERE userID = @userID";
-                MySqlCommand selectXPCmd = new MySqlCommand(selectXPQuery, con);
-                selectXPCmd.Parameters.AddWithValue("@userID", userID);
-
-                object xpObj = selectXPCmd.ExecuteScalar();
-                int currentXP = (xpObj != null && xpObj != DBNull.Value) ? Convert.ToInt32(xpObj) : 0;
-                int newXP = currentXP + 1;
-
-                // Update XP
-                string updateXPQuery = "UPDATE Users SET userXP = @newXP WHERE userID = @userID";
-                MySqlCommand updateXPCmd = new MySqlCommand(updateXPQuery, con);
-                updateXPCmd.Parameters.AddWithValue("@newXP", newXP);
-                updateXPCmd.Parameters.AddWithValue("@userID", userID);
-                updateXPCmd.ExecuteNonQuery();
-
-                // Check new level
-                string getNewLevelQuery = "SELECT MAX(levelNum) FROM Level WHERE xpAmount <= @newXP";
-                MySqlCommand getNewLevelCmd = new MySqlCommand(getNewLevelQuery, con);
-                getNewLevelCmd.Parameters.AddWithValue("@newXP", newXP);
-
-                object newLevelObj = getNewLevelCmd.ExecuteScalar();
-                int newLevelNum = (newLevelObj != null && newLevelObj != DBNull.Value) ? Convert.ToInt32(newLevelObj) : 1;
-
-                // Get current level
-                string getCurrentLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
-                MySqlCommand getCurrentLevelCmd = new MySqlCommand(getCurrentLevelQuery, con);
-                getCurrentLevelCmd.Parameters.AddWithValue("@userID", userID);
-
-                object currentLevelObj = getCurrentLevelCmd.ExecuteScalar();
-                int currentLevel = (currentLevelObj != null && currentLevelObj != DBNull.Value) ? Convert.ToInt32(currentLevelObj) : 1;
-
-                if (newLevelNum > currentLevel)
+                while (reader.Read())
                 {
-                    // Update level
-                    string updateLevelQuery = "UPDATE CurrentLevel SET levelID = @newLevelNum WHERE userID = @userID";
-                    MySqlCommand updateLevelCmd = new MySqlCommand(updateLevelQuery, con);
-                    updateLevelCmd.Parameters.AddWithValue("@newLevelNum", newLevelNum);
-                    updateLevelCmd.Parameters.AddWithValue("@userID", userID);
-                    updateLevelCmd.ExecuteNonQuery();
-
-                    // Show Level Up popup
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowLevelUp", "showLevelUp();", true);
+                    BadgeIcon badge = new BadgeIcon
+                    {
+                        badgeName = reader["badgeName"].ToString(),
+                        badgeDescBronze = reader["badgeDescBronze"].ToString(),
+                        badgeDescSilver = reader["badgeDescSilver"].ToString(),
+                        badgeDescGold = reader["badgeDescGold"].ToString(),
+                        badgeIconNum = GetBadgeImagePath(Convert.ToInt32(reader["badgeIconNum"])),
+                        badgeType = reader["badgeType"] == DBNull.Value ? "none" : reader["badgeType"].ToString().ToLower()
+                    };
+                    badgeList.Add(badge);
                 }
-            }
-            catch (Exception ex)
-            {
-                Response.Write("<script>alert('An error occurred: " + ex.Message + "');</script>");
             }
         }
 
-        UpdateXPDisplay(userID);
-        LoadTasks();
+        rpPets.DataSource = badgeList;
+        rpPets.DataBind();
     }
 
-    private void UpdateXPDisplay(string userID)
+    private string GetBadgeImagePath(int badgeImageID)
     {
-        int userXP = GetUserXP(connString, userID);
-        var levelInfo = GetLevelInformation(connString, userID);
-        int currentLevel = levelInfo.Item1;
-        int currentLevelXpAmount = levelInfo.Item2;
-        int nextLevelXpAmount = levelInfo.Item3;
-        lblLevelNumber.Text = currentLevel.ToString();
-        CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
+        switch (badgeImageID)
+        {
+            case 1: return "~/Images/Badges/1_Busy-Bee.png";
+            case 2: return "~/Images/Badges/2_Lone-Woof.png";
+            case 3: return "~/Images/Badges/3_Early-Bird.png";
+            case 4: return "~/Images/Badges/4_Night-Owl.png";
+            case 5: return "~/Images/Badges/5_Slothing-On-The-Job.png";
+            case 6: return "~/Images/Badges/6_Country-Club.png";
+            case 7: return "~/Images/Badges/7_Ring-Leader.png";
+            case 8: return "~/Images/Badges/8_Cancelotl.png";
+            case 9: return "~/Images/Badges/9_Not-My-Bloblem.png";
+            case 10: return "~/Images/Badges/10_Academic-Weapon.png";
+            case 11: return "~/Images/Badges/11_Collector.png";
+            case 12: return "~/Images/Badges/12_Meanie.png";
+            case 13: return "~/Images/Badges/13_Friends-Purrever.png";
+            case 14: return "~/Images/Badges/14_Pesky-Little-Pelican.png";
+            case 15: return "~/Images/Badges/15_Puffing-Popular.png";
+            case 16: return "~/Images/Badges/16_Rising-Star.png";
+            case 17: return "~/Images/Badges/17_In-Tentacles'-Reach.png";
+            case 18: return "~/Images/Badges/18_Whale-Hello-There!.png";
+            case 19: return "~/Images/Badges/19_Trick-or-Study.png";
+            case 20: return "~/Images/Badges/20_The-Study-Spirit.png";
+            default: return "~/Images/Badges/1_Busy-Bee.png";
+        }
     }
+    public class BadgeIcon
+    {
+        public string badgeName { get; set; }
+        public string badgeDescBronze { get; set; }
+        public string badgeDescSilver { get; set; }
+        public string badgeDescGold { get; set; }
+        public string badgeIconNum { get; set; }
+        public string badgeType { get; set; }
+    }
+    protected string GetStarHtml(string badgeType)
+    {
+        int stars = 0;
+        if (badgeType == "bronze") stars = 1;
+        else if (badgeType == "silver") stars = 2;
+        else if (badgeType == "gold") stars = 3;
 
-    // start: header profile code
+        string filledStar = "<img src='Icons/icons8-star-filled-white-96.png' class='star-icon' />";
+        string emptyStar = "<img src='Icons/icons8-star-white-96.png' class='star-icon' />";
+
+        string html = "";
+        for (int i = 0; i < 3; i++)
+        {
+            html += i < stars ? filledStar : emptyStar;
+        }
+
+        return html;
+    }
     private string GetUserID(string username, string connectionString)
     {
         string query = "SELECT userID FROM Users WHERE username = @username";
@@ -746,7 +571,7 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnOk_Click(object sender, EventArgs e)
     {
-        Response.Redirect("Default.aspx");
+        Response.Redirect("C1400_View-badges.aspx");
     }
 
     protected void btnSure_Click(object sender, EventArgs e)
@@ -770,12 +595,12 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnNotSure_Click(object sender, EventArgs e)
     {
-        Response.Redirect("Default.aspx");
+        Response.Redirect("C1400_View-badges.aspx");
     }
 
     protected void btnOkayDeclined_Click(object sender, EventArgs e)
     {
-        Response.Redirect("Default.aspx");
+        Response.Redirect("C1400_View-badges.aspx");
     }
 
     protected void btnJoin_Click(object sender, EventArgs e)

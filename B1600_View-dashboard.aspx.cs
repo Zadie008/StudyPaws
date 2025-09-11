@@ -613,7 +613,7 @@ public partial class Default2 : System.Web.UI.Page
 
                 object xpObj = selectXPCmd.ExecuteScalar();
                 int currentXP = (xpObj != null && xpObj != DBNull.Value) ? Convert.ToInt32(xpObj) : 0;
-                int newXP = currentXP + 10;
+                int newXP = currentXP + 1;
 
                 // Update XP
                 string updateXPQuery = "UPDATE Users SET userXP = @newXP WHERE userID = @userID";

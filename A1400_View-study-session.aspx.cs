@@ -101,7 +101,50 @@ public partial class View_study_session : System.Web.UI.Page
             }
         }
     }
+    [System.Web.Services.WebMethod]
+    [System.Web.Script.Services.ScriptMethod]
+    public static string UpdateStudySessionRewards(int minutesStudied)
+    {
+        try
+        {
+            HttpContext context = HttpContext.Current;
+            if (context.Session["UserID"] == null)
+            {
+                return "Error: User not authenticated";
+            }
 
+            string userID = context.Session["UserID"].ToString();
+            int xpEarned = minutesStudied * 5; 
+            int coinsEarned = minutesStudied * 10; 
+
+            string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+            using (MySqlConnection con = new MySqlConnection(connectionString))
+            {
+                con.Open();
+
+                // Update user XP
+                string updateXPQuery = "UPDATE Users SET userXP = userXP + @xpEarned WHERE userID = @userID";
+                MySqlCommand cmd = new MySqlCommand(updateXPQuery, con);
+                cmd.Parameters.AddWithValue("@xpEarned", xpEarned);
+                cmd.Parameters.AddWithValue("@userID", userID);
+                cmd.ExecuteNonQuery();
+
+                // Update user coins
+                string updateCoinsQuery = "UPDATE Users SET userCoinCount = userCoinCount + @coinsEarned WHERE userID = @userID";
+                MySqlCommand cmdCoins = new MySqlCommand(updateCoinsQuery, con);
+                cmdCoins.Parameters.AddWithValue("@coinsEarned", coinsEarned);
+                cmdCoins.Parameters.AddWithValue("@userID", userID);
+                cmdCoins.ExecuteNonQuery();
+            }
+
+            return "Success: " + xpEarned + " XP and " + coinsEarned + " coins added";
+        }
+        catch (Exception ex)
+        {
+            return "Error: " + ex.Message;
+        }
+    }
     // STOP STUDY SESSION (DELETING THE STUDY SESSION ENTRY FOR CURRENT USER)
     protected void btnYes_Click(object sender, EventArgs e)
     {
