@@ -1,127 +1,127 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="B1400_View-shop.aspx.cs" Inherits="Default2" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="B1400_View-shop-fuzzy.aspx.cs" Inherits="B1400_View_shop_fuzzy" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
-    Pet Shop Cats
+    Pet Shop Fuzzy
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-    <div class="accountInfoDiv">
-        <div class="profileDiv">
-            <a href="C100-C500_Profile.aspx" class="profileIconLink">
-                <div class="profileIcon">
-                    <div id="profileCircle" runat="server" ClientIDMode="Static"></div>
-                    <asp:Image ID="profilePet" runat="server" />
-                </div>
-            </a>
-            <div class="profileDetails">
-                <table>
-                    <tr>
-                        <td>
-                            <asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Level"></asp:Label>
-                        </td>
-                        <td>
-                            <asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server"></asp:Label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <div class="xpProgressContainer">
-                                <asp:Label ID="lblXP" CssClass="accountInfoLabel" runat="server" Text="XP"></asp:Label>
-                                <div class="progressBarBackground">
-                                    <asp:Panel ID="xpProgressBar" runat="server" CssClass="progressBarFill"></asp:Panel>
-                                </div>
-                                <asp:Label ID="lblXPPercentage" CssClass="accountInfoLabel xpPercentage" runat="server" Text="0%"></asp:Label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="pawIcon">
-                                <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
-                                <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
-                            </div>
-                        </td>
-                        <td>
-                            <asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server" Text="---"></asp:Label>
-                        </td>
-                    </tr>
-                </table>
+        <div class="accountInfoDiv">
+    <div class="profileDiv">
+        <a href="C100-C500_Profile.aspx" class="profileIconLink">
+            <div class="profileIcon">
+                <div id="profileCircle" runat="server" ClientIDMode="Static"></div>
+                <asp:Image ID="profilePet" runat="server" />
             </div>
+        </a>
+        <div class="profileDetails">
+            <table>
+                <tr>
+                    <td>
+                        <asp:Label ID="lblLevel" CssClass="accountInfoTableLabel" runat="server" Text="Level"></asp:Label>
+                    </td>
+                    <td>
+                        <asp:Label ID="lblLevelNumber" CssClass="accountInfoTableLabelRight" runat="server"></asp:Label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="xpProgressContainer">
+                            <asp:Label ID="lblXP" CssClass="accountInfoLabel" runat="server" Text="XP"></asp:Label>
+                            <div class="progressBarBackground">
+                                <asp:Panel ID="xpProgressBar" runat="server" CssClass="progressBarFill"></asp:Panel>
+                            </div>
+                            <asp:Label ID="lblXPPercentage" CssClass="accountInfoLabel xpPercentage" runat="server" Text="0%"></asp:Label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="pawIcon">
+                            <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
+                            <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
+                        </div>
+                    </td>
+                    <td>
+                        <asp:Label ID="lblPaws" CssClass="accountInfoTableLabelRight" runat="server" Text="---"></asp:Label>
+                    </td>
+                </tr>
+            </table>
         </div>
+    </div>
 
-        <div class="rightInfoDiv">
-            <div class="timeNotificationWrapper">
-                <div class="notificationDetails">
-                    <asp:ImageButton ID="imgNotificationRinging" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-ringing-white-96.png" OnClientClick="showNotificationPopup(true); return false;" />
-                    <asp:ImageButton ID="imgNotificationNormal" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" OnClientClick="showNotificationPopup(false); return false;" />
-                    <div id="notificationBadge" runat="server" class="notificationBadge"></div>
-                </div>
+    <div class="rightInfoDiv">
+        <div class="timeNotificationWrapper">
+            <div class="notificationDetails">
+                <asp:ImageButton ID="imgNotificationRinging" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-ringing-white-96.png" OnClientClick="showNotificationPopup(true); return false;" />
+                <asp:ImageButton ID="imgNotificationNormal" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" OnClientClick="showNotificationPopup(false); return false;" />
+                <div id="notificationBadge" runat="server" class="notificationBadge"></div>
+            </div>
 
-                <div class="timeDateDiv">
-                    <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="09:52"></asp:Label>
-                    <div class="dateContainer">
-                        <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Friday"></asp:Label>
-                        <span class="dateSeparator">|</span>
-                        <asp:Label ID="lblDate" CssClass="accountInfoLabel currentDate" runat="server" Text="18 April"></asp:Label>
-                    </div>
+            <div class="timeDateDiv">
+                <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="09:52"></asp:Label>
+                <div class="dateContainer">
+                    <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Friday"></asp:Label>
+                    <span class="dateSeparator">|</span>
+                    <asp:Label ID="lblDate" CssClass="accountInfoLabel currentDate" runat="server" Text="18 April"></asp:Label>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="curved-header">
-        <svg viewBox="0 0 700 150" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <path id="curve" d="M50,120 Q350,20 650,120" />
-            </defs>
-            <text>
-                <textPath href="#curve" startOffset="50%" text-anchor="middle">
-                    <a href="Default.aspx" class="curvedHeaderLink">
-                        StudyP<tspan dx="0.7em">w</tspan>s
-                    </a>
-                </textPath>
-            </text>
-        </svg>
-        <a href="Default.aspx"><img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" /></a>
-        <h2><a href="Default.aspx">purrfectly productive</a></h2>
-    </div>
+<div class="curved-header">
+    <svg viewBox="0 0 700 150" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <path id="curve" d="M50,120 Q350,20 650,120" />
+        </defs>
+        <text>
+            <textPath href="#curve" startOffset="50%" text-anchor="middle">
+                <a href="Default.aspx" class="curvedHeaderLink">
+                    StudyP<tspan dx="0.7em">w</tspan>s
+                </a>
+            </textPath>
+        </text>
+    </svg>
+    <a href="Default.aspx"><img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" /></a>
+    <h2><a href="Default.aspx">purrfectly productive</a></h2>
+</div>
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
-    <!--navigation to copy and paste-->
-    <div class="collapsedNav">
-        <div class="navbar">
-            <asp:Menu ID="MenuLeft" runat="server" Orientation="Vertical" CssClass="nav-left" StaticDisplayLevels="1" StaticMenuItemStyle-CssClass="menu-item">
-                <Items>
-                    <asp:MenuItem NavigateUrl="~\B1600_View-dashboard.aspx" Text="Dashboard" Value="Dashboard"></asp:MenuItem>
-                    <asp:MenuItem NavigateUrl="~\B100_View-calendar.aspx" Text="Calendar" Value="Calendar"></asp:MenuItem>
-                    <asp:MenuItem NavigateUrl="~\B900_View-to-do-list.aspx" Text="To-do List" Value="To-do List"></asp:MenuItem>
-                    <asp:MenuItem NavigateUrl="~\A100_Create-timer.aspx" Text="Timer" Value="Timer"></asp:MenuItem>
-                    <asp:MenuItem NavigateUrl="~\A700_Create-study-session.aspx" Text="Study Session" Value="Study Session"></asp:MenuItem>
-                </Items>
-            </asp:Menu>
-            <asp:Menu ID="MenuRight" runat="server" Orientation="Vertical" CssClass="nav-right" StaticDisplayLevels="1" StaticMenuItemStyle-CssClass="menu-item">
-                <Items>
-                    <asp:MenuItem NavigateUrl="~\B1400_View-shop.aspx" Text="Pet Shop" Value="Pet Shop"></asp:MenuItem>
-                    <asp:MenuItem NavigateUrl="~\A1800_View-pets.aspx" Text="Inventory" Value="Inventory"></asp:MenuItem>
-                    <asp:MenuItem NavigateUrl="~\C600_View-friend-list.aspx" Text="Friends" Value="Friends"></asp:MenuItem>
-                    <asp:MenuItem NavigateUrl="~\C1400_View-badges.aspx" Text="Badges" Value="Badges"></asp:MenuItem>
-                    <asp:MenuItem NavigateUrl="~\About.aspx" Text="About" Value="About"></asp:MenuItem>
-                </Items>
-            </asp:Menu>
-        </div>
+        <!--navigation to copy and paste-->
+<div class="collapsedNav">
+    <div class="navbar">
+        <asp:Menu ID="MenuLeft" runat="server" Orientation="Vertical" CssClass="nav-left" StaticDisplayLevels="1" StaticMenuItemStyle-CssClass="menu-item">
+            <Items>
+                <asp:MenuItem NavigateUrl="~\B1600_View-dashboard.aspx" Text="Dashboard" Value="Dashboard"></asp:MenuItem>
+                <asp:MenuItem NavigateUrl="~\B100_View-calendar.aspx" Text="Calendar" Value="Calendar"></asp:MenuItem>
+                <asp:MenuItem NavigateUrl="~\B900_View-to-do-list.aspx" Text="To-do List" Value="To-do List"></asp:MenuItem>
+                <asp:MenuItem NavigateUrl="~\A100_Create-timer.aspx" Text="Timer" Value="Timer"></asp:MenuItem>
+                <asp:MenuItem NavigateUrl="~\A700_Create-study-session.aspx" Text="Study Session" Value="Study Session"></asp:MenuItem>
+            </Items>
+        </asp:Menu>
+        <asp:Menu ID="MenuRight" runat="server" Orientation="Vertical" CssClass="nav-right" StaticDisplayLevels="1" StaticMenuItemStyle-CssClass="menu-item">
+            <Items>
+                <asp:MenuItem NavigateUrl="~\B1400_View-shop.aspx" Text="Pet Shop" Value="Pet Shop"></asp:MenuItem>
+                <asp:MenuItem NavigateUrl="~\A1800_View-pets.aspx" Text="Inventory" Value="Inventory"></asp:MenuItem>
+                <asp:MenuItem NavigateUrl="~\C600_View-friend-list.aspx" Text="Friends" Value="Friends"></asp:MenuItem>
+                <asp:MenuItem NavigateUrl="~\C1400_View-badges.aspx" Text="Badges" Value="Badges"></asp:MenuItem>
+                <asp:MenuItem NavigateUrl="~\About.aspx" Text="About" Value="About"></asp:MenuItem>
+            </Items>
+        </asp:Menu>
     </div>
+</div>
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-    <div id="viewShopMainContent">
+            <div id="viewShopMainContent">
         <asp:HiddenField ID="hfCurrentCategory" runat="server" Value="CAT" />
         <h2>Welcome to the Pet Shop!</h2>
         <div class="backgroundColorContainer">
                 <div class="leftCategorySection">
-        <asp:Button ID="btnCats" runat="server" CssClass="button buttonSelected" Text="Cats" OnClick="btnCats_Click" />
+        <asp:Button ID="btnCats" runat="server" CssClass="button" Text="Cats" OnClick="btnCats_Click" />
         <asp:Button ID="btnDogs" runat="server" CssClass="button" Text="Dogs" OnClick="btnDogs_Click" />
-        <asp:Button ID="btnFuzzy" runat="server" CssClass="button" Text="Fuzzy" OnClick="btnFuzzy_Click" />
+        <asp:Button ID="btnFuzzy" runat="server" CssClass="button buttonSelected" Text="Fuzzy" OnClick="btnFuzzy_Click" />
         <asp:Button ID="btnFarm" runat="server" CssClass="button" Text="Farm" OnClick="btnFarm_Click" />
         <asp:Button ID="btnSpecial" runat="server" CssClass="button" Text="Special" OnClick="btnSpecial_Click" />
     </div>
@@ -130,31 +130,31 @@
             <tr>
                 <td><div class="petIconShop">
                         <div id="circle1" class="petCircleShop" runat="server"></div>
-                        <asp:Image ID="imgPet1" runat="server" CssClass="petImageShop" ImageUrl="Images/Cat 1.png" Width="130" />
+                        <asp:Image ID="imgPet1" runat="server" CssClass="petImageShop" ImageUrl="Images/Fuzzy 1.png" Width="130" />
                     </div>
                 </td>
                 <td>
                     <div class="petIconShop">
                         <div id="circle2" class="petCircleShop" runat="server"></div>
-                        <asp:Image ID="imgPet2" runat="server" CssClass="petImageShop" ImageUrl="Images/Cat 2.png" Width="130" />
+                        <asp:Image ID="imgPet2" runat="server" CssClass="petImageShop" ImageUrl="Images/Fuzzy 2.png" Width="130" />
                     </div>
                 </td>
                 <td>
                     <div class="petIconShop">
                         <div id="circle3" class="petCircleShop" runat="server"></div>
-                        <asp:Image ID="imgPet3" runat="server" CssClass="petImageShop" ImageUrl="Images/Cat 3.png" Width="130" />
+                        <asp:Image ID="imgPet3" runat="server" CssClass="petImageShop" ImageUrl="Images/Fuzzy 3.png" Width="130" />
                     </div>
                 </td>
                 <td>
                     <div class="petIconShop">
                         <div id="circle4" class="petCircleShop" runat="server"></div>
-                        <asp:Image ID="imgPet4" runat="server" CssClass="petImageShop" ImageUrl="Images/Cat 4.png" Width="130" />
+                        <asp:Image ID="imgPet4" runat="server" CssClass="petImageShop" ImageUrl="Images/Fuzzy 4.png" Width="130" />
                     </div>
                 </td>
                 <td>
                     <div class="petIconShop">
                         <div id="circle5" class="petCircleShop" runat="server"></div>
-                        <asp:Image ID="imgPet5" runat="server" CssClass="petImageShop" ImageUrl="Images/Cat 5.png" Width="130" />
+                        <asp:Image ID="imgPet5" runat="server" CssClass="petImageShop" ImageUrl="Images/Fuzzy 5.png" Width="130" />
                     </div>
                 </td>
             </tr>
@@ -256,10 +256,8 @@
                 </div>
             </div>
         </div>
-    
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
-
 </asp:Content>
 

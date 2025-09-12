@@ -2267,7 +2267,303 @@ body.page-exit .welcomeBackTextDiv {
 .toDoListPage .popup-pink-box p {
     font-size: 2.2rem;
 }
+/* -------------------------------------------- PET SHOP PAGE -------------------------------------------- */
 
+    #viewShopMainContent .backgroundColorContainer {
+        align-items: center;
+        margin: auto;
+        background-color: #F4CAE0; /*pink*/
+        min-width: 85%;
+        max-width: 85%;
+        height: 63vh;
+        border-radius: 3em;
+        padding: 0.5em;
+    }
+
+    /* NOTIFICATION POPUP */
+    #viewShopMainContent .popup-pink-box table tr td p {
+        text-align: left;
+        padding: 0 0.2em 0 0.2em;
+    }
+
+    #viewShopMainContent .popup-pink-box p {
+        font-size: 2.2rem;
+    }
+/* -------------------------------------------- PET SHOP PAGE -------------------------------------------- */
+#viewShopMainContent {
+    margin: 1em 4em 4em 4em;
+}
+
+    #viewShopMainContent h2 {
+        font-size: 2.5rem;
+        margin-bottom: 0.1em;
+        margin-top: 0;
+        text-shadow: 0px 0px 5px dimgrey; /* text shadow */
+    }
+
+    #viewShopMainContent .backgroundColorContainer {
+        align-items: center;
+        margin: auto;
+        background-color: #F4CAE0; /*pink*/
+        min-width: 85%;
+        max-width: 85%;
+        height: 63vh;
+        border-radius: 3em;
+        padding: 0.5em;
+        display: flex;
+    }
+
+    #viewShopMainContent .buttonSection {
+        margin: -6em 0 0 0;
+    }
+
+        #viewShopMainContent .buttonSection .buttonRow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1vh;
+            flex-wrap: wrap; /*if screen gets too small*/
+        }
+
+    #viewShopMainContent .button {
+        background-color: #ADA7C9; /*dark purple*/
+    }
+
+    #viewShopMainContent .leftCategorySection {
+        flex: 1;
+        z-index: 12;
+    }
+
+        #viewShopMainContent .leftCategorySection .button {
+            background-color: transparent;
+            border: 3px solid white;
+            border-radius: 2rem;
+            width: 6em;
+            padding: 0.3em;
+            text-shadow: 0px 0px 5px dimgrey; /* text shadow */
+        }
+
+        /* SELECTED CATEGORY BUTTON */
+        #viewShopMainContent .leftCategorySection .buttonSelected {
+            background-color: #D7B9D5; /*light purple*/
+        }
+
+    #viewShopMainContent table {
+        width: auto;
+    }
+
+    #viewShopMainContent .rightPetsSection {
+        flex: 4;
+        z-index: 12;
+        padding: 0 2em;
+        display: flex;
+    }
+
+        #viewShopMainContent .rightPetsSection .button.locked {
+            /*background-color: transparent;*/
+            border: 3px solid white;
+            border-radius: 2rem;
+            width: 8vw;
+            max-width: 147px;
+            padding: 0.3em;
+            font-size: 1.8rem;
+            text-align: center;
+            margin: 0.5em 1em;
+            /*padding-left: 35px;*/
+            text-shadow: 0px 0px 5px dimgrey; /* text shadow */
+            opacity:0.5;
+            cursor:not-allowed;
+        }
+        #viewShopMainContent .rightPetsSection .soldButton {
+            background-color: transparent;
+            border: 3px solid white;
+            border-radius: 2rem;
+            width: 8vw;
+            max-width: 147px;
+            padding: 0.3em;
+            font-size: 1.8rem;
+            text-align: center;
+            margin: 0.5em 1em;
+            text-shadow: 0px 0px 5px dimgrey; /* text shadow */
+        }
+        #viewShopMainContent .rightPetsSection .priceButton {
+            background-color: #D7B9D5; /*light purple*/
+            border: 3px solid white;
+            border-radius: 2rem;
+            width: 8vw;
+            max-width: 147px;
+            padding: 0.3em;
+            font-size: 1.8rem;
+            text-align: center;
+            margin: 0.5em 1em;
+            padding-left: 35px; /*ADDED*/
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 0px 0px 5px dimgrey;
+            z-index: -1; /* text shadow */
+        }
+            #viewShopMainContent .rightPetsSection .priceButton::before {
+                content: "";
+                position: absolute;
+                left: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 30px;
+                height: 30px;
+                background-image: url('../Icons/icons8-circle-white-96.png');
+                background-size:contain;
+                background-repeat:no-repeat;
+                z-index:1;
+            }
+            #viewShopMainContent .rightPetsSection .priceButton::after {
+                content: "";
+                position: absolute;
+                left: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 30px;
+                height: 30px;
+                background-image: url('../Icons/icons8-cat-footprint-filled-white-96.png');
+                background-size: contain;
+                background-repeat: no-repeat;
+                z-index: 2;
+            }
+            /* SELECTED PET BUTTON */
+            #viewShopMainContent .rightPetsSection .buttonSelected {
+                background-color: #ADA7C9; /*dark purple*/
+            }
+
+.petIconShop {
+    position: relative;
+    width: 8vw;
+    max-width: auto;
+    aspect-ratio: 1;
+    flex-direction: row;
+    margin: 0 1.7em;
+}
+
+    .petIconShop img {
+        margin-top: 3%;
+        max-width: 90%;
+        max-height: 90%;
+    }
+
+        .petIconShop img.petImageShop {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            z-index: 1;
+        }
+
+    .petIconShop .petCircleShop.owned {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: transparent; /*CHANGED*/
+        border: 3px solid white;
+        border-radius: 50%;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+    .petIconShop .petCircleShop.unowned {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #D7B9D5; /*light purple*/
+        border: 3px solid white;
+        border-radius: 50%;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+    .petIconShop .petCircleShop.locked{
+        opacity: 0.5;
+    }
+    .petIconShop img.locked {
+        opacity: 0.5;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        z-index: 1;
+    }
+
+/* SELL POP UP */
+#viewInventoryMainContent .simple-popup .buttonSection {
+    align-content: center;
+    margin: 0;
+}
+
+    #viewInventoryMainContent .simple-popup .buttonSection .popup-button {
+        font-size: clamp(1rem, 2vw, 2rem);
+        width: auto;
+    }
+
+    #viewInventoryMainContent .simple-popup .buttonSection .popup-button-best-blue {
+        font-size: clamp(1rem, 2vw, 2rem);
+        width: auto;
+    }
+
+#popupSellPriceTable {
+    margin: -1em auto -0.5em auto;
+    padding: 0;
+    font-size: 40px;
+}
+
+    #popupSellPriceTable td {
+        padding: 3px;
+    }
+
+    #popupSellPriceTable .pawIcon {
+        position: relative;
+        min-width: 4vw;
+        aspect-ratio: 1;
+    }
+
+        #popupSellPriceTable .pawIcon img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #popupSellPriceTable .pawIcon .paw {
+            z-index: 1;
+            width: 35%;
+        }
+
+        #popupSellPriceTable .pawIcon .circle {
+            z-index: 0;
+            width: 100%;
+        }
+
+/* CAT 1 POP UP */
+#viewInventoryMainContent #popupCannotSell .buttonSection {
+    align-content: center;
+    margin: 0;
+}
+
+    #viewInventoryMainContent #popupCannotSell .buttonSection .popup-button {
+        font-size: clamp(1rem, 2vw, 2rem);
+    }
+
+/* NOTIFICATION POPUP */
+#viewInventoryMainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
+
+#viewInventoryMainContent .popup-pink-box p {
+    font-size: 2.2rem;
+}
 /* -------------------------------------------- CREATE TIMER PAGES A100 -------------------------------------------- */
 /* page 1 (back, create, view past timers) */
 .createTimerMainContent {
@@ -3126,39 +3422,6 @@ body.page-exit .welcomeBackTextDiv {
 #selectDateTimeSection .textbox {
     width: 80px;
     font-size: 3.2rem;
-}
-
-/* -------------------------------------------- PET SHOP PAGE -------------------------------------------- */
-#viewShopMainContent {
-    margin: 1em 4em 4em 4em;
-}
-
-#viewShopMainContent h2 {
-    font-size: 2.5rem;
-    margin-bottom: 0.1em;
-    margin-top: 0;
-    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
-}
-
-#viewShopMainContent .backgroundColorContainer {
-    align-items: center;
-    margin: auto;
-    background-color: #F4CAE0; /*pink*/
-    min-width: 85%;
-    max-width: 85%;
-    height: 63vh;
-    border-radius: 3em;
-    padding: 0.5em;
-}
-
-/* NOTIFICATION POPUP */
-#viewShopMainContent .popup-pink-box table tr td p {
-    text-align: left;
-    padding: 0 0.2em 0 0.2em;
-}
-
-#viewShopMainContent .popup-pink-box p {
-    font-size: 2.2rem;
 }
 
 /* -------------------------------------------- INVENTORY PAGE -------------------------------------------- */

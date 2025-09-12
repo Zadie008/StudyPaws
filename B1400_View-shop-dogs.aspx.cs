@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Drawing;
 using System.Linq;
 using System.Web;
 using System.Web.Security;
@@ -10,7 +9,7 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
-public partial class Default2 : System.Web.UI.Page
+public partial class B1400_View_shop_dogs : System.Web.UI.Page
 {
     private string userID;
     protected void Page_Load(object sender, EventArgs e)
@@ -95,6 +94,8 @@ public partial class Default2 : System.Web.UI.Page
 
         //get user XP level
         int userXP = GetUserXP(cs, userID);
+        //Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
+        //int currentLevel = levelInfo.Item1;
 
         //load all pets
         string allPetsCommand = "SELECT petID, colourNum, xpCost, coinCost FROM Pet WHERE Pet.petType = @petType";
@@ -103,7 +104,7 @@ public partial class Default2 : System.Web.UI.Page
         using (MySqlConnection con = new MySqlConnection(cs))
         using (MySqlCommand cmd = new MySqlCommand(allPetsCommand, con))
         {
-            cmd.Parameters.AddWithValue("@petType", "Cat"); // PET TYPE~~~~
+            cmd.Parameters.AddWithValue("@petType", "Dog"); // PET TYPE~~~~
 
             try
             {
@@ -134,7 +135,7 @@ public partial class Default2 : System.Web.UI.Page
         using (MySqlCommand cmd = new MySqlCommand(ownedPetsCommand, con))
         {
             cmd.Parameters.AddWithValue("@userID", userID);
-            cmd.Parameters.AddWithValue("@petType", "Cat"); // PET TYPE~~~~
+            cmd.Parameters.AddWithValue("@petType", "Dog"); // PET TYPE~~~~
 
             try
             {
@@ -154,9 +155,9 @@ public partial class Default2 : System.Web.UI.Page
         }
 
         //display pets
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < allPets.Count; i++)
         {
-            int displayIndex = i+1;
+            int displayIndex = i + 1;
             Pet pet = allPets[i];
             bool isOwned = ownedPetIDs.Contains(pet.PetID);
             bool isLocked = userXP < pet.xpCost;
@@ -168,7 +169,7 @@ public partial class Default2 : System.Web.UI.Page
             if (petImg != null && selectBtn != null && circleDiv != null)
             {
                 //image
-                petImg.ImageUrl = string.Format("Images/Cat {0}.png", pet.ColourNum); // PET TYPE~~~~
+                petImg.ImageUrl = string.Format("Images/Dog {0}.png", pet.ColourNum); // PET TYPE~~~~
                 petImg.Visible = true;
 
                 //circle
