@@ -2431,7 +2431,7 @@ body.page-exit .welcomeBackTextDiv {
                 z-index: 2;
             }
             /* SELECTED PET BUTTON */
-            #viewShopMainContent .rightPetsSection .buttonSelected {
+            #viewShopMainContent .rightPetsSection .priceButton .buttonSelected {
                 background-color: #ADA7C9; /*dark purple*/
             }
 

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
@@ -211,18 +212,20 @@ public partial class Default2 : System.Web.UI.Page
                 {
                     selectBtn.Text = "SOLD";
                     selectBtn.CssClass = "button soldButton";
-                    selectBtn.OnClientClick = "showAlreadyOwnedPopup(); return false;";
+                    //selectBtn.OnClientClick = "showAlreadyOwnedPopup(); return false;";
                 }
                 else
                 {
                     selectBtn.Text = pet.coinCost.ToString();
                     selectBtn.CssClass = "button priceButton";
                     selectBtn.Enabled = !isLocked;
-                    selectBtn.OnClientClick = "showBuyButton('" + pet.PetID + "', '" + pet.coinCost + "'); return false;"; 
+                    //selectBtn.OnClientClick = "showBuyButton('" + pet.PetID "', '" + pet.coinCost "');";
                 }
                 if (isLocked)
                 {
                     selectBtn.CssClass += " locked";
+                    Label lblLocked = (Label)content.FindControl("lblLocked");
+                    lblLocked.Visible = true;
                 }
                 circleDiv.Visible = true;
             }
@@ -238,6 +241,70 @@ public partial class Default2 : System.Web.UI.Page
         {
             btnBuy.Visible = false;
             lblLocked.Visible = false;
+        }
+    }
+    public void btnSelect_Clicked(object sender, EventArgs e)
+    {
+        Button clickedBtn = (Button)sender;
+        ContentPlaceHolder content = (ContentPlaceHolder)Master.FindControl("mainContentPlaceHolder");
+        Button buyBtn = (Button)content.FindControl("btnBuy");
+
+        //for (int i = 1; i <=5; i++)
+        //{
+        //    Button selectBtn = (Button)content.FindControl("btnSelect" + i);
+        //    if (selectBtn!=null && selectBtn!= clickedBtn && selectBtn.CssClass.Contains("buttonSelected")){
+        //        clickedBtn.CssClass = "button priceButton";
+        //        buyBtn.Visible = false;
+        //    }
+        //}
+
+
+        //if (clickedBtn.CssClass.Contains("soldButton"))
+        //{
+        //    ScriptManager.RegisterStartupScript(this, this.GetType(), "showAlreadyOwnedPopup", "showAlreadyOwnedPopup();", true);
+        //    buyBtn.Visible = false;
+        //}
+        //else
+        //{
+        //    // toggle select
+        //    if (clickedBtn.CssClass.Contains("buttonSelected"))
+        //    {
+        //        clickedBtn.CssClass = clickedBtn.CssClass.Replace(" buttonSelected", "");
+        //        buyBtn.Visible = false;
+        //        hfSelectedPetID.Value = "";
+        //        hfSelectedPetPrice.Value = "";
+        //    }
+        //    else
+        //    {
+        //        clickedBtn.CssClass += " buttonSelected";
+        //        buyBtn.Visible = true;
+
+        //        // ✅ set hidden fields so Buy button knows which pet
+        //        hfSelectedPetID.Value = clickedBtn.Attributes["data-petid"];
+        //        hfSelectedPetPrice.Value = clickedBtn.Attributes["data-price"];
+        //    }
+        //}
+
+        if (clickedBtn.CssClass == "button priceButton buttonSelected")
+        {
+            clickedBtn.CssClass = "button priceButton";
+            buyBtn.Visible = false;
+        }
+        else
+        {
+            if (clickedBtn.CssClass == "button soldButton")
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "showAlreadyOwnedPopup", "showAlreadyOwnedPopup();", true);
+                buyBtn.Visible = false;
+            }
+            else
+            {
+                clickedBtn.CssClass = "button priceButton buttonSelected";
+                buyBtn.Visible = true;
+                
+                hfSelectedPetID.Value = clickedBtn.Attributes["data-petid"];
+                hfSelectedPetPrice.Value = clickedBtn.Attributes["data-price"];
+            }
         }
     }
     private int GetUserCoins(string cs, string userID)
@@ -263,15 +330,15 @@ public partial class Default2 : System.Web.UI.Page
     protected void btnBuy_Click(object sender,  EventArgs e)
     {
         String petID = hfSelectedPetID.Value;
-        String priceStr = hfSelectedPetPrice.Value;
+        //String priceStr = hfSelectedPetPrice.Value;
 
-        if (!string.IsNullOrEmpty(petID) && !string.IsNullOrEmpty(priceStr))
+        if (!string.IsNullOrEmpty(petID) /*&& !string.IsNullOrEmpty(priceStr)*/)
         {
-            int price = Convert.ToInt32(priceStr);
-            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            int userCoins = GetUserCoins(cs, userID);
+            //int price = Convert.ToInt32(priceStr);
+            //string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            int userCoins = int.Parse(lblPaws.Text);
 
-            if (userCoins >= price)
+            if (userCoins >= 100)
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "showConfirmBuyPopup", "showConfirmBuyPopup();", true);
             }
@@ -288,7 +355,8 @@ public partial class Default2 : System.Web.UI.Page
 
         if (!string.IsNullOrEmpty(petID) && !string.IsNullOrEmpty(priceStr))
         {
-            int price = Convert.ToInt32(priceStr);
+            int price = 100; // CHANGED
+            int newUserCoins = int.Parse(lblPaws.Text) - price; //ADDED
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
             try
             {
@@ -299,39 +367,56 @@ public partial class Default2 : System.Web.UI.Page
                     {
                         try
                         {
-                            string checkQuery = "SELECT userCoinCount FROM Users WHERE userID = @userID";
-                            MySqlCommand checkCmd = new MySqlCommand(checkQuery, con, transaction);
-                            checkCmd.Parameters.AddWithValue("@userID", userID);
-                            int currentCoins = Convert.ToInt32(checkCmd.ExecuteScalar());
+                            string updateCoinsQuery = "UPDATE Users SET userCoinCount = @price WHERE userID = @userID";
+                            MySqlCommand updateCoinsCmd = new MySqlCommand(updateCoinsQuery, con, transaction);
+                            updateCoinsCmd.Parameters.AddWithValue("@price", newUserCoins);
+                            updateCoinsCmd.Parameters.AddWithValue("@userID", userID);
+                            updateCoinsCmd.ExecuteNonQuery();
 
-                            if (currentCoins >= price)
-                            {
-                                string updateCoinsQuery = "UPDATE Users SET userCoinCount = userCoinCount - @price WHERE userID = @userID";
-                                MySqlCommand updateCoinsCmd = new MySqlCommand(updateCoinsQuery, con, transaction);
-                                updateCoinsCmd.Parameters.AddWithValue("@price", price);
-                                updateCoinsCmd.Parameters.AddWithValue("@userID", userID);
-                                updateCoinsCmd.ExecuteNonQuery();
+                            string addPetQuery = "INSERT INTO UserPets (userID, petID, equippedStatus) VALUES (@userID, @petID, 0)";
+                            MySqlCommand addPetCmd = new MySqlCommand(addPetQuery, con, transaction);
+                            addPetCmd.Parameters.AddWithValue("@userID", userID);
+                            addPetCmd.Parameters.AddWithValue("@petID", petID);
+                            addPetCmd.ExecuteNonQuery();
 
-                                string addPetQuery = "INSERT INTO UserPets (userID, petID, equippedStatus) VALUES (@userID, @petID, 0)";
-                                MySqlCommand addPetCmd = new MySqlCommand(addPetQuery, con, transaction);
-                                addPetCmd.Parameters.AddWithValue("@userID", userID);
-                                addPetCmd.Parameters.AddWithValue("@petID", petID);
-                                addPetCmd.ExecuteNonQuery();
+                            transaction.Commit();
 
-                                transaction.Commit();
+                            Response.Redirect(Request.RawUrl);
 
-                                Response.Redirect(Request.RawUrl);
-                            }
-                            else
-                            {
-                                transaction.Rollback();
-                                ScriptManager.RegisterStartupScript(this, this.GetType(), "showInsufficientCoinsPopup", "showInsufficientCoinsPopup();", true);
-                            }
+                            //string checkQuery = "SELECT userCoinCount FROM Users WHERE userID = @userID";
+                            //MySqlCommand checkCmd = new MySqlCommand(checkQuery, con, transaction);
+                            //checkCmd.Parameters.AddWithValue("@userID", userID);
+                            //int currentCoins = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                            //if (currentCoins >= price)
+                            //{
+                            //    string updateCoinsQuery = "UPDATE Users SET userCoinCount = userCoinCount - @price WHERE userID = @userID";
+                            //    MySqlCommand updateCoinsCmd = new MySqlCommand(updateCoinsQuery, con, transaction);
+                            //    updateCoinsCmd.Parameters.AddWithValue("@price", price);
+                            //    updateCoinsCmd.Parameters.AddWithValue("@userID", userID);
+                            //    updateCoinsCmd.ExecuteNonQuery();
+
+                            //    string addPetQuery = "INSERT INTO UserPets (userID, petID, equippedStatus) VALUES (@userID, @petID, 0)";
+                            //    MySqlCommand addPetCmd = new MySqlCommand(addPetQuery, con, transaction);
+                            //    addPetCmd.Parameters.AddWithValue("@userID", userID);
+                            //    addPetCmd.Parameters.AddWithValue("@petID", petID);
+                            //    addPetCmd.ExecuteNonQuery();
+
+                            //    transaction.Commit();
+
+                            //    Response.Redirect(Request.RawUrl);
+                            //}
+                            //else
+                            //{
+                            //    transaction.Rollback();
+                            //    ScriptManager.RegisterStartupScript(this, this.GetType(), "showInsufficientCoinsPopup", "showInsufficientCoinsPopup();", true);
+                            //}
                         }
                         catch (Exception ex)
                         {
                             transaction.Rollback();
                             Console.WriteLine(ex);
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "showInsufficientCoinsPopup", "showInsufficientCoinsPopup();", true);
                         }
                     }
                 }
@@ -339,6 +424,7 @@ public partial class Default2 : System.Web.UI.Page
             catch(Exception ex)
             {
                 Console.WriteLine(ex);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "showInsufficientCoinsPopup", "showInsufficientCoinsPopup();", true);
             }
         }
         hfSelectedPetID.Value = "";

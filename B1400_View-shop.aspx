@@ -161,11 +161,11 @@
                 </td>
             </tr>
             <tr>
-                <td><asp:Button ID="btnSelect1" runat="server" CssClass="button" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
-                <td><asp:Button ID="btnSelect2" runat="server" CssClass="button" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
-                <td><asp:Button ID="btnSelect3" runat="server" CssClass="button" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
-                <td><asp:Button ID="btnSelect4" runat="server" CssClass="button" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
-                <td><asp:Button ID="btnSelect5" runat="server" CssClass="button" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
+                <td><asp:Button ID="btnSelect1" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
+                <td><asp:Button ID="btnSelect2" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
+                <td><asp:Button ID="btnSelect3" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
+                <td><asp:Button ID="btnSelect4" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
+                <td><asp:Button ID="btnSelect5" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
             </tr>
         </table>
     </div>
@@ -174,9 +174,9 @@
     <div class="leftSection">
     </div>
     <div class="middleSection buttonRow">
-        <asp:Button ID="btnBuy" class="button" runat="server" Text="Buy" Style="display: none;" OnClick="btnBuy_Click" />
+        <asp:Button ID="btnBuy" class="button" runat="server" Text="Buy" Visible="false" OnClick="btnBuy_Click" />
         <asp:HiddenField ID="hfSelectedColourNum" runat="server" />
-        <asp:Label ID="lblLocked" class="button" runat="server" Text="UNLOCKS AT LEVEL 1" Style="display: none;" />
+        <asp:Label ID="lblLocked" class="button" runat="server" Text="UNLOCKS AT LEVEL 1" Visible="false" />
     </div>
     <div class="rightSection">
     </div>
@@ -332,20 +332,7 @@
             var popup = document.getElementById('insufficientCoinsPopup');
             if (popup) popup.style.display = 'none';
         }
-        function showBuyButton(petID, price) {
-            document.getElementById('<%= hfSelectedPetID.ClientID %>').value = petID;
-            document.getElementById('<%= hfSelectedPetPrice.ClientID %>').value = price;
-
-            var buyButton = document.getElementById('<%= btnBuy.ClientID %>');
-            var lockedLabel = document.getElementById('<%= lblLocked.ClientID %>');
-
-            if (buyButton) {
-                buyButton.style.display = 'inline-block';
-            }
-            if (lockedLabel) {
-                lockedLabel.style.display = 'none';
-            }
-        }
+        
     </script>
     
 </asp:Content>
