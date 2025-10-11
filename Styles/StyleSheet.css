@@ -4475,7 +4475,7 @@ footer {
     text-align: center;
     position: fixed;
     bottom: 0;
-    padding: 1vh 0;
+    padding: 0.7vh 0;
     background-color: white;
     width: 100%;
     box-sizing: border-box;
@@ -4483,7 +4483,7 @@ footer {
 
 footer p {
     color: #446791;
-    font-size: clamp(1rem, 1.3vw, 1.3rem);
+    font-size: clamp(0.8rem, 1vw, 1rem);
 }
 
 /* -------------------------------------------- LANDING PAGE -------------------------------------------- */
