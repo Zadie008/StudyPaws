@@ -232,6 +232,21 @@
         </div>
     </div>
 </div>
+
+    <!-- purchase success pop-up -->
+    <div id="purchaseSuccessPopup" class="simple-popup" style="display: none;">
+        <div class="popup-pink-box">
+            <p>Congrats! You now own this pet!</p>
+            <p>Do you want to go to your inventory?</p>
+            <img src="Images/Notification%20Happy.png" />
+            <br />
+            <div class="buttonSection">
+                <asp:Button ID="btnGoToInventory" CssClass="popup-button-best-pink" runat="server" Text="Inventory, GO!" OnClick="btnGoToInventory_Click" />
+                <asp:Button ID="btnStayInShop" CssClass="popup-button" runat="server" Text="No, thanks!" OnClick="btnStayInShop_Click" />
+            </div>
+        </div>
+    </div>
+
         <!--does not have notification-->
         <div id="popupNoNotifications" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
@@ -332,9 +347,15 @@
             var popup = document.getElementById('insufficientCoinsPopup');
             if (popup) popup.style.display = 'none';
         }
-        
+        function showPurchaseSuccessPopup() {
+            var popup = document.getElementById('purchaseSuccessPopup');
+            if (popup) popup.style.display = 'flex';
+        }
+        function hidePurchaseSuccessPopup() {
+            var popup = document.getElementById('purchaseSuccessPopup');
+            if (popup) popup.style.display = 'none';
+        }
     </script>
-    
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

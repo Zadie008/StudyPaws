@@ -246,8 +246,13 @@
             const btnEdit = document.getElementById('<%= btnEditTag.ClientID%>');
 
             dropdownList.addEventListener('change', function () {
+                const selectedValue = dropdownList.value;
                 if (dropdownList.selectedIndex === 0 || dropdownList.value === "") {
                     btnAdd.style.display = 'inline-block';
+                    btnEdit.style.display = 'none';
+                }
+                else if (selectedValue === "2") {
+                    btnAdd.style.display = 'none';
                     btnEdit.style.display = 'none';
                 }
                 else {

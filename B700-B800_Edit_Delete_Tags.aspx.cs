@@ -144,14 +144,22 @@ public partial class B700_B800_Edit_Delete_Tags : System.Web.UI.Page
         if (Session["EditTagID"] != null)
         {
             int tagID = (int)Session["EditTagID"];
+            int userID = Convert.ToInt32(Session["userID"]);
 
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
             using (MySqlConnection conn = new MySqlConnection(cs))
             {
                 conn.Open();
-                string query = "DELETE FROM CalendarEventTag WHERE tagID = @tagID";
+                string eventsQuery = "UPDATE CalendarEvent SET tagID = 2 WHERE tagID = @tagID AND userID = @userID";
+                MySqlCommand cmdEvents = new MySqlCommand(eventsQuery, conn);
+                cmdEvents.Parameters.AddWithValue("@tagID", tagID);
+                cmdEvents.Parameters.AddWithValue("@userID", userID);
+                cmdEvents.ExecuteNonQuery();
+
+                string query = "DELETE FROM CalendarEventTag WHERE tagID = @tagID AND userIDLink = @userID";
                 MySqlCommand cmd = new MySqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@tagID", tagID);
+                cmd.Parameters.AddWithValue("@userID", userID);
                 cmd.ExecuteNonQuery();
             }
 

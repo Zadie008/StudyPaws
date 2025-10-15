@@ -90,7 +90,7 @@ public partial class Default2 : System.Web.UI.Page
         using (MySqlConnection conn = new MySqlConnection(connString))
         {
             conn.Open();
-            string sql = "SELECT * FROM ToDoListTask WHERE userID = @userID " + whereClause + " ORDER BY taskStatus DESC";
+            string sql = "SELECT * FROM ToDoListTask WHERE userID = @userID " + whereClause + " ORDER BY taskStatus ASC, taskID DESC";
             MySqlCommand cmd = new MySqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@userID", Session["userID"]);
             dt.Load(cmd.ExecuteReader());

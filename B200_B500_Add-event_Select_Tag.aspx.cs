@@ -159,12 +159,14 @@ public partial class Default2 : System.Web.UI.Page
     }
     protected void LoadTags()
     {
+        int userID = Convert.ToInt32(Session["userID"]);
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         using (MySqlConnection conn = new MySqlConnection(cs))
         {
             conn.Open();
-            string query = "SELECT tagID, tagName FROM CalendarEventTag";
+            string query = "SELECT tagID, tagName FROM CalendarEventTag WHERE userIDLink = 0 OR userIDLink = @userID";
             MySqlCommand cmd = new MySqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@userID", userID);
             using (MySqlDataReader reader = cmd.ExecuteReader())
             {
                 dropdownEventTag.Items.Clear();
@@ -188,6 +190,10 @@ public partial class Default2 : System.Web.UI.Page
         if (!string.IsNullOrEmpty(dropdownEventTag.SelectedValue))
         {
             int tagID = Convert.ToInt32(dropdownEventTag.SelectedValue);
+            if (tagID == 1 || tagID == 2)
+            {
+                return;
+            }
             Session["EditTagID"] = tagID;
             Response.Redirect("B700-B800_Edit_Delete_Tags.aspx?from=addevent");
         }

@@ -2431,7 +2431,7 @@ body.page-exit .welcomeBackTextDiv {
                 z-index: 2;
             }
             /* SELECTED PET BUTTON */
-            #viewShopMainContent .rightPetsSection .priceButton .buttonSelected {
+            #viewShopMainContent .rightPetsSection .priceButton.buttonSelected {
                 background-color: #ADA7C9; /*dark purple*/
             }
 
@@ -2483,6 +2483,9 @@ body.page-exit .welcomeBackTextDiv {
         height: 100%;
         z-index: -1;
     }
+.petIcon .petCircleShop.unowned.selected {
+    background-color: #ADA7C9;
+}
     .petIconShop .petCircleShop.locked{
         opacity: 0.5;
     }

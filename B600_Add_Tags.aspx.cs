@@ -56,16 +56,18 @@ public partial class B500_B800_Tags : System.Web.UI.Page
         {
             String tagName = txtTagTitle.Text.Trim();
             int tagColourNum = int.Parse(hfTagColourNum.Value);
+            int userID = Convert.ToInt32(Session["userID"]);
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
             int newTagID = 0;
 
             using (MySqlConnection conn = new MySqlConnection(cs))
             {
                 conn.Open();
-                string query = "INSERT into CalendarEventTag (tagName, tagColourNum) VALUES (@tagName, @tagColourNum)";
+                string query = "INSERT into CalendarEventTag (tagName, tagColourNum, userIDLink) VALUES (@tagName, @tagColourNum, @userIDLink)";
                 MySqlCommand cmd = new MySqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@tagName", tagName);
                 cmd.Parameters.AddWithValue("@tagColourNum", tagColourNum);
+                cmd.Parameters.AddWithValue("@userIDLink", userID);
                 cmd.ExecuteNonQuery();
                 newTagID = (int)cmd.LastInsertedId;
             }

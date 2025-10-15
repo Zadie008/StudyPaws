@@ -27,26 +27,14 @@ public partial class Default2 : System.Web.UI.Page
         if (Session["userID"] != null)
         {
             string username = Session["Username"].ToString();
-
-            //calendarDropDown.Visible = IsToDoFilterVisible;
             userIDHidden.Value = Convert.ToString(Session["userID"]);
 
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
             string userID = GetUserID(username, cs);
 
+            LoadTagColours(); // CHANGED
             if (!IsPostBack)
             {
-                LoadCalendarTags();
-                //ViewState["SelectedFilter"] = "All";
-
-                LoadTagColours();
-
-                if (calendarDropDown.Items.FindByValue("0") != null)
-                {
-                    calendarDropDown.SelectedValue = "0";
-                }
-                ViewState["SelectedCalendarTag"] = calendarDropDown.SelectedValue;
-
                 DateTime currentDate = DateTime.Today;
                 hfYear.Value = currentDate.Year.ToString();
                 hfMonth.Value = DateTime.Today.Month.ToString();
@@ -68,21 +56,7 @@ public partial class Default2 : System.Web.UI.Page
             }
             else
             {
-                LoadTagColours(); 
-
-                if (ViewState["SelectedCalendarTag"] != null)
-                {
-                    string selectedValue = ViewState["SelectedCalendarTag"].ToString();
-                    var item = calendarDropDown.Items.FindByValue(selectedValue);
-                    if (item != null)
-                    {
-                        calendarDropDown.SelectedValue = selectedValue;
-                    }
-                }
-
-                int year = int.Parse(hfYear.Value);
-                int month = int.Parse(hfMonth.Value);
-                LoadCalendar(year, month);
+                LoadTagColours();
             }
         }
         else
@@ -92,71 +66,12 @@ public partial class Default2 : System.Web.UI.Page
 
         ShowNextInvite();
     }
-    private bool IsCalendarFilterVisible
-    {
-        get
-        {
-            return ViewState["CalendarFilterVisible"] != null && (bool)ViewState["CalendarFilterVisible"];
-        }
-        set
-        {
-            ViewState["CalendarFilterVisible"] = value;
-        }
-    }
     private void LoadCalendar(int year, int month)
     {
-        if (ViewState["SelectedCalendarTag"] != null)
-        {
-            string selectedValue = ViewState["SelectedCalendarTag"].ToString();
-            var item = calendarDropDown.Items.FindByValue(selectedValue);
-            if (item != null)
-            {
-                calendarDropDown.SelectedValue = selectedValue;
-            }
-        }
-
         lblMonthYear.Text = new DateTime(year, month, 1).ToString("MMMM yyyy");
         literalCalendar.Text = GenerateCalendar(year, month);
         hfYear.Value = year.ToString();
         hfMonth.Value = month.ToString();
-    }
-
-    protected void calendarFilterBtn_Click(object sender, EventArgs e)
-    {
-        IsCalendarFilterVisible = !IsCalendarFilterVisible;
-        calendarDropDown.Visible = IsCalendarFilterVisible;
-
-        if (IsCalendarFilterVisible)
-            LoadCalendarTags();
-    }
-
-    private void LoadCalendarTags()
-    {
-        calendarDropDown.Items.Clear();
-        calendarDropDown.Items.Add(new ListItem("All Tags", "0"));
-
-        using (MySqlConnection conn = new MySqlConnection(connString))
-        {
-            conn.Open();
-            string sql = "SELECT tagID, tagName FROM CalendarEventTag";
-            using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-            using (MySqlDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    int tagID = Convert.ToInt32(reader["tagID"]);
-                    string tagName = reader["tagName"].ToString();
-                    calendarDropDown.Items.Add(new ListItem(tagName, tagID.ToString()));
-                }
-            }
-        }
-    }
-    protected void calendarDropDown_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        ViewState["SelectedCalendarTag"] = calendarDropDown.SelectedValue;
-        int year = int.Parse(hfYear.Value);
-        int month = int.Parse(hfMonth.Value);
-        LoadCalendar(year, month);
     }
     private String GenerateCalendar(int year, int month)
     {
@@ -255,27 +170,13 @@ public partial class Default2 : System.Web.UI.Page
         List<string> events = new List<string>();
         int userID = Convert.ToInt32(Session["userID"]);
 
-        int selectedTagID = 0;
-        if (ViewState["SelectedCalendarTag"] != null)
-        {
-            selectedTagID = Convert.ToInt32(ViewState["SelectedCalendarTag"]);
-        }
-
         using (MySqlConnection conn = new MySqlConnection(connString))
         {
             conn.Open();
             string loadEvents = "SELECT eventID, eventDesc, tagID FROM CalendarEvent " + "WHERE userID=@userID AND eventDate=@eventDate";
-            if (selectedTagID > 0)
-            {
-                loadEvents += " AND tagID=@tagID";
-            }
             MySqlCommand cmd = new MySqlCommand(loadEvents, conn);
             cmd.Parameters.AddWithValue("@userID", userID);
             cmd.Parameters.AddWithValue("@eventDate", day.Date);
-            if (selectedTagID > 0)
-            {
-                cmd.Parameters.AddWithValue("@tagID", selectedTagID);
-            }
             using (MySqlDataReader reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
@@ -283,7 +184,6 @@ public partial class Default2 : System.Web.UI.Page
                     int eventID = Convert.ToInt32(reader["eventID"]);
                     String desc = reader["eventDesc"].ToString();
                     int tagID = reader["tagID"] != DBNull.Value ? Convert.ToInt32(reader["tagID"]) : 0;
-                    //int tagID = Convert.ToInt32(reader["tagID"]);
 
                     string tagColour = (tagColours != null && tagColours.ContainsKey(tagID)) ? tagColours[tagID] : "#000000";
 
@@ -295,7 +195,6 @@ public partial class Default2 : System.Web.UI.Page
                                        "<a href='" + targetPage + "?eventID=" + eventID + "&from=" + source + "' style='color:inherit;text-decoration:none;'>" +
                                        HttpUtility.HtmlEncode(desc) +
                                        "</a></div>";
-                    //string eventHtml = "<div class='eventItem'><span class='eventDot' style='background-color:" + tagColour + ";'></span>" + "<a href='B300-B400_Edit_Delete_Event.aspx?eventID=" + eventID + "' styler='color:inherit;text-decoration:none;'>" + HttpUtility.HtmlEncode(desc) + "</a></div>";
                     events.Add(eventHtml);
                 }
             }
@@ -306,46 +205,50 @@ public partial class Default2 : System.Web.UI.Page
     private void LoadTagColours()
     {
         tagColours = new Dictionary<int, string>();
+        int userID = Convert.ToInt32(Session["userID"]);
         using (MySqlConnection conn = new MySqlConnection(connString))
         {
             conn.Open();
-            String sql = "SELECT tagID, tagColourNum FROM CalendarEventTag";
+            String sql = "SELECT tagID, tagColourNum FROM CalendarEventTag WHERE userIDLink = 0 OR userIDLink = @userID";
             using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-            using (MySqlDataReader reader = cmd.ExecuteReader())
             {
-                while (reader.Read())
+                cmd.Parameters.AddWithValue("@userID", userID);
+                using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    int tagID = Convert.ToInt32(reader["tagID"]);
-                    string colourNum = reader["tagColourNum"].ToString();
-
-                    string tagColour;
-                    switch (colourNum)
+                    while (reader.Read())
                     {
-                        case "1":
-                            tagColour = "#F4CAE0";
-                            break;
-                        case "2":
-                            tagColour = "#BE95C4";
-                            break;
-                        case "3":
-                            tagColour = "#ADA7C9";
-                            break;
-                        case "4":
-                            tagColour = "#90A8C3";
-                            break;
-                        case "5":
-                            tagColour = "#64A6BD";
-                            break;
-                        case "6":
-                            tagColour = "#446791";
-                            break;
-                        default:
-                            tagColour = "#000000";
-                            break;
+                        int tagID = Convert.ToInt32(reader["tagID"]);
+                        string colourNum = reader["tagColourNum"].ToString();
+
+                        string tagColour;
+                        switch (colourNum)
+                        {
+                            case "1":
+                                tagColour = "#F4CAE0";
+                                break;
+                            case "2":
+                                tagColour = "#BE95C4";
+                                break;
+                            case "3":
+                                tagColour = "#ADA7C9";
+                                break;
+                            case "4":
+                                tagColour = "#90A8C3";
+                                break;
+                            case "5":
+                                tagColour = "#64A6BD";
+                                break;
+                            case "6":
+                                tagColour = "#446791";
+                                break;
+                            default:
+                                tagColour = "#000000";
+                                break;
+                        }
+                        tagColours[tagID] = tagColour;
                     }
-                    tagColours[tagID] = tagColour;
                 }
-            }
+            } 
         }
     }
     protected void btnPrevMonth_Click(Object sender, EventArgs e)
