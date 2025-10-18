@@ -252,7 +252,6 @@
             <div class="popup-blue-box">
                 <p>You do not have any notifications at the moment!</p>
                 <img src="Images/Notification%20Sad%20Hamster.png" />
-                <br />
                 <div class="buttonSection">
                     <asp:Button ID="Button1" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideNotificationPopup(); return false;" />
                 </div>

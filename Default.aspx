@@ -110,6 +110,7 @@
                 <div class="popup-blue-box">
                     <p>You do not have any notifications at the moment!</p>
                     <br />
+                    <br />
                     <img src="Images/Notification%20Sad%20Hamster.png" />
                     <br />
                     <div class="buttonSection">
@@ -152,6 +153,8 @@
                 <div class="popup-blue-box">
                     <asp:HiddenField ID="hiddenShowConfirmation" runat="server" />
                     <p>Are you sure you want to decline the Study Session invitation?</p>
+                    <br />
+                    <br />
                     <img src="Images/Notification%20Sad%20Hamster.png" />
                     <br />
                     <div class="buttonSection">

@@ -486,6 +486,22 @@ public partial class _Default : System.Web.UI.Page
             int sessionID = Convert.ToInt32(Session["sessionID"]);
             int userID = Convert.ToInt32(Session["userID"]);
 
+            bool joined = StudySessionHelper.JoinStudySession(sessionID, userID);
+
+            if (joined)
+            {
+                Response.Redirect("A1400_View-study-session.aspx");
+            }
+        }
+    }
+
+    /*protected void btnJoin_Click(object sender, EventArgs e)
+    {
+        if (Session["sessionID"] != null && Session["userID"] != null)
+        {
+            int sessionID = Convert.ToInt32(Session["sessionID"]);
+            int userID = Convert.ToInt32(Session["userID"]);
+
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
             string updateQuery = "UPDATE StudySessionParticipants SET joined = true WHERE sessionID = @sessionID AND userID = @userID";
 
@@ -503,7 +519,7 @@ public partial class _Default : System.Web.UI.Page
                 }
             }
         }
-    }
+    }*/
     // end: notification bell code
 
     // ---- COPY ----

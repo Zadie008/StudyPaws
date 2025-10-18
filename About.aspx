@@ -166,11 +166,11 @@
             </table>
         </div>
 
-        <%-- please copy this code for the notifications that appear on each page--%>
-        <%--reminder to copy all this code--%>
-                <div id="popupNoNotifications" class="simple-popup" style="display: none;">
+        <!--does not have notification-->
+        <div id="popupNoNotifications" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
                 <p>You do not have any notifications at the moment!</p>
+                <br />
                 <img src="Images/Notification%20Sad%20Hamster.png" />
                 <br />
                 <div class="buttonSection">
@@ -179,10 +179,12 @@
             </div>
         </div>
 
+        <!--has notifications-->
         <div id="popupHasNotifications" class="simple-popup" style="display: none;">
             <div class="popup-pink-box">
                 <asp:HiddenField ID="hiddenSessionID" runat="server" />
                 <asp:Literal ID="litNotificationText" runat="server" />
+                <br />
                 <img src="Images/Notification%20Happy.png" />
                 <br />
                 <div class="buttonSection">
@@ -243,10 +245,7 @@
                 </div>
             </div>
         </div>
-<%--        This is where the notification code ends--%>
-<%--        on line 243 is where you stop copying--%>
     </div>
-   
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

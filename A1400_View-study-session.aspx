@@ -7,10 +7,12 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" runat="Server">
     <div class="accountInfoDiv">
         <div class="profileDiv">
-            <div class="profileIcon">
-                <div id="profileCircle" runat="server" clientidmode="Static"></div>
-                <asp:Image ID="profilePet" runat="server" />
-            </div>
+            <a href="C100-C500_Profile.aspx" class="profileIconLink">
+                <div class="profileIcon">
+                    <div id="profileCircle" runat="server" ClientIDMode="Static"></div>
+                    <asp:Image ID="profilePet" runat="server" />
+                </div>
+            </a>
             <div class="profileDetails">
                 <table>
                     <tr>
@@ -50,15 +52,17 @@
         <div class="rightInfoDiv">
             <div class="timeNotificationWrapper">
                 <div class="notificationDetails">
-                    <asp:ImageButton ID="imgNotificationNormal" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" CausesValidation="False" Enabled="False" />
+                    <asp:ImageButton ID="imgNotificationRinging" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-ringing-white-96.png" OnClientClick="showNotificationPopup(true); return false;" />
+                    <asp:ImageButton ID="imgNotificationNormal" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" OnClientClick="showNotificationPopup(false); return false;" />
+                    <div id="notificationBadge" runat="server" class="notificationBadge"></div>
                 </div>
 
                 <div class="timeDateDiv">
                     <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="--:--"></asp:Label>
                     <div class="dateContainer">
-                        <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Day"></asp:Label>
+                        <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Week Day"></asp:Label>
                         <span class="dateSeparator">|</span>
-                        <asp:Label ID="lblDate" CssClass="accountInfoLabel currentDate" runat="server" Text="18 April"></asp:Label>
+                        <asp:Label ID="lblDate" CssClass="accountInfoLabel currentDate" runat="server" Text="Day Month"></asp:Label>
                     </div>
                 </div>
             </div>
@@ -72,13 +76,14 @@
             </defs>
             <text>
                 <textPath href="#curve" startOffset="50%" text-anchor="middle">
-                StudyP
-<tspan dx="0.7em">w</tspan>s
-            </textPath>
+                    <a href="Default.aspx" class="curvedHeaderLink">
+                        StudyP<tspan dx="0.7em">w</tspan>s
+                    </a>
+                </textPath>
             </text>
         </svg>
-        <img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" />
-        <h2>purrfectly productive</h2>
+        <a href="Default.aspx"><img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" /></a>
+        <h2><a href="Default.aspx">purrfectly productive</a></h2>
     </div>
 </asp:Content>
 
@@ -90,7 +95,27 @@
         <div class="timeSection">
             <div class="leftSection">
                 <div class="inSessionDiv">
-
+                    <h2 class="inSessionHeading">In session</h2>
+                    <div class="scrollableTableContainer">
+                        <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" AutoGenerateColumns="False" OnRowCommand="GridView1_RowCommand">
+                            <Columns>
+                                <asp:TemplateField>
+                                    <ItemTemplate>
+                                        <div class="friendRow">
+                                            <a href="C600_View-friend-list.aspx" class="friendProfileIconLink">
+                                                <div class="friendProfileIcon">
+                                                    <div class="friendProfileCircle"></div>
+                                                    <img class="friendProfileImage" src='<%# GetProfileImagePath(Convert.ToInt32(Eval("iconNum"))) %>' />
+                                                </div>
+                                            </a>
+                                            <span class="friendUsername"><%# Eval("username") %></span>
+                                            <asp:ImageButton ID="btnAddFriend" runat="server" CssClass="addFriendBtn" CommandName="ToggleInvite" CommandArgument='<%# Eval("username") %>' ImageUrl='<%# GetAddButtonImage(Eval("username").ToString()) %>' />
+                                        </div>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                            </Columns>
+                        </asp:GridView>
+                    </div>
                 </div>
             </div>
             <div class="middleSection">
@@ -178,6 +203,42 @@
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" />
     <audio id="timerStartSound" src="Audio/timerStartSound.mp3" preload="auto"></audio>
     <audio id="timerEndSound" src="Audio/timerEndSound.mp3" preload="auto"></audio>
+
+    <script type="text/javascript">
+    function loadInSessionUsers() {
+        PageMethods.GetJoinedUsers(function (users) {
+            const table = document.getElementById('<%= GridView1.ClientID %>');
+            if (!table) return;
+
+            let html = "";
+            users.forEach(u => {
+                const imgSrc = getProfileImagePath(u.iconNum);
+                html += `
+                    <div class="friendRow">
+                        <div class="friendProfileIcon">
+                            <img class="friendProfileImage" src="${imgSrc}" />
+                        </div>
+                        <span class="friendUsername">${u.username}</span>
+                    </div>`;
+            });
+
+            table.innerHTML = html;
+        });
+    }
+
+    function getProfileImagePath(iconNum) {
+        switch (iconNum) {
+            case 1: return "Images/ProfilePictures/CatPfp.png";
+            case 2: return "Images/ProfilePictures/DogPfp.png";
+            case 3: return "Images/ProfilePictures/BunnyPfp.png";
+            case 4: return "Images/ProfilePictures/CowPfp.png";
+            case 5: return "Images/ProfilePictures/UnicornPfp.png";
+            default: return "Images/ProfilePictures/CatPfp.png";
+        }
+    }
+
+    setInterval(loadInSessionUsers, 5000); // refresh every 5 seconds
+    </script>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" runat="Server">

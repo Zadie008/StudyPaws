@@ -62,7 +62,7 @@ body {
 }
 
 p {
-    font-size: 40px;
+    font-size: 1.1rem;
     text-align: center;
     font-family: 'Gilda Display', serif;
     font-weight: 200;
@@ -2931,25 +2931,6 @@ body.page-exit .welcomeBackTextDiv {
     transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
     opacity:1;
 }
-.toDoListSection .scrollableTasksContainer {
-    max-height: 36vh;
-    min-width: 97%;
-    max-width: 97%;
-}
-
-.toggleToDoListBtn {
-    width: 32px;
-    height: 32px;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    padding: 0;
-    margin: 0;
-    flex-shrink: 0;
-}
-.toggleToDoListBtn img{
-    width:30px;
-}
 
 .viewTimerMainContent .buttonSection {
     display: flex;
@@ -4378,6 +4359,10 @@ font-size: 2.2rem;
     font-size: 1.5rem;
 }
 
+#aboutMainContent .simple-popup p {
+    font-size: 1.7rem;
+}
+
 #aboutMainContent .backgroundColorContainer {
     align-items: center;
     margin: auto;
@@ -5466,6 +5451,13 @@ table {
     #selectDateTimeSection table {
         margin-top: -0.5em;
         padding: 1em;
+    }
+
+    /* ---------------------- VIEW STUDY SESSION PAGE ---------------------- */
+    .inSessionHeading {
+        text-align: center;
+        font-family: 'Lilita One', sans-serif;
+        font-size: clamp(0.8rem, 2vw, 2rem); /* responsive font size */
     }
 
     /* ---------------------- PET SHOP PAGE ---------------------- */

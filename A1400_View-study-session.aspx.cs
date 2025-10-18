@@ -145,6 +145,7 @@ public partial class View_study_session : System.Web.UI.Page
             return "Error: " + ex.Message;
         }
     }
+
     // STOP STUDY SESSION (DELETING THE STUDY SESSION ENTRY FOR CURRENT USER)
     protected void btnYes_Click(object sender, EventArgs e)
     {
@@ -211,6 +212,50 @@ public partial class View_study_session : System.Web.UI.Page
             return "error: " + ex.Message;
         }
     }
+
+    // IN SESSION BLOCK
+    public string GetAddButtonImage(string username)
+    {
+        var list = Session["invitedFriends"] as List<string> ?? new List<string>();
+        return list.Contains(username) ? "Icons/icons8-check-white-96.png" : "Icons/icons8-add-new-white-96.png";
+    }
+
+    [System.Web.Services.WebMethod]
+    public static List<object> GetJoinedUsers()
+    {
+        List<object> users = new List<object>();
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+        if (HttpContext.Current.Session["sessionID"] == null)
+            return users;
+
+        int sessionID = Convert.ToInt32(HttpContext.Current.Session["sessionID"]);
+
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            string query = "SELECT u.username, u.iconNum FROM StudySessionParticipants sp JOIN Users u ON sp.userID = u.userID WHERE sp.sessionID = @sessionID AND sp.hasJoined = 1;";
+
+            using (MySqlCommand cmd = new MySqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@sessionID", sessionID);
+                con.Open();
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        users.Add(new
+                        {
+                            username = reader["username"].ToString(),
+                            iconNum = Convert.ToInt32(reader["iconNum"])
+                        });
+                    }
+                }
+            }
+        }
+
+        return users;
+    }
+
 
     // start: header profile code
     private string GetUserID(string username, string connectionString)
@@ -393,7 +438,7 @@ public partial class View_study_session : System.Web.UI.Page
         }
     }
 
-    private string GetProfileImagePath(int iconNum)
+    public static string GetProfileImagePath(int iconNum)
     {
         switch (iconNum)
         {

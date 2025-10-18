@@ -250,7 +250,6 @@
                 <asp:HiddenField ID="hiddenShowCalendar" runat="server" />
                 <p>Study Session has been added to your calendar!</p>
                 <br />
-                <br />
                 <img src="Images/Notification%20Happy.png" />
                 <br />
                 <div class="buttonSection">
