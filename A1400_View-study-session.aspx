@@ -54,9 +54,9 @@
                 </div>
 
                 <div class="timeDateDiv">
-                    <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="09:52"></asp:Label>
+                    <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="--:--"></asp:Label>
                     <div class="dateContainer">
-                        <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Friday"></asp:Label>
+                        <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Day"></asp:Label>
                         <span class="dateSeparator">|</span>
                         <asp:Label ID="lblDate" CssClass="accountInfoLabel currentDate" runat="server" Text="18 April"></asp:Label>
                     </div>
@@ -89,6 +89,9 @@
     <div class="viewTimerMainContent">
         <div class="timeSection">
             <div class="leftSection">
+                <div class="inSessionDiv">
+
+                </div>
             </div>
             <div class="middleSection">
                 <div class="timerCircleWrapper">
@@ -107,11 +110,6 @@
                 </div>
             </div>
             <div class="rightSection">
-                <div class="toDoListSection">
-                    <img src="Icons/icons8-double-left-white-96.png" />
-                    <img src="Icons/icons8-double-right-white-96.png" />
-                    <h1>To-do List</h1>
-                </div>
             </div>
         </div>
         <div class="buttonSection">

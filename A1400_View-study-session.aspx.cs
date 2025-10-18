@@ -114,8 +114,8 @@ public partial class View_study_session : System.Web.UI.Page
             }
 
             string userID = context.Session["UserID"].ToString();
-            int xpEarned = minutesStudied * 5; 
-            int coinsEarned = minutesStudied * 10; 
+            int xpEarned = minutesStudied * 2; // 2 XP per minute
+            int coinsEarned = minutesStudied * 2; // 2 coins per minute
 
             string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 

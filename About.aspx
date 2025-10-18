@@ -60,7 +60,7 @@
                 <div class="timeDateDiv">
                     <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="--:--"></asp:Label>
                     <div class="dateContainer">
-                        <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Someday"></asp:Label>
+                        <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Week Day"></asp:Label>
                         <span class="dateSeparator">|</span>
                         <asp:Label ID="lblDate" CssClass="accountInfoLabel currentDate" runat="server" Text="Day Month"></asp:Label>
                     </div>
@@ -85,13 +85,7 @@
         <a href="Default.aspx"><img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" /></a>
         <h2><a href="Default.aspx">purrfectly productive</a></h2>
     </div>
-
-    <script>
-        document.body.classList.add('is-default');
-    </script>
 </asp:Content>
-<%--need to copy all of the above--%>
-<%--this contains all the information for the header--%>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
 <div class="collapsedNav">

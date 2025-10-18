@@ -87,8 +87,8 @@ public partial class A200_View_timer : System.Web.UI.Page
             }
 
             string userID = context.Session["UserID"].ToString();
-            int xpEarned = minutesStudied * 2; // 2 XP per minute
-            int coinsEarned = minutesStudied * 5; // 5 coins per minute
+            int xpEarned = minutesStudied * 1; // 1 XP per minute
+            int coinsEarned = minutesStudied * 1; // 1 coin per minute
 
             string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
