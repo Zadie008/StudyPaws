@@ -5,7 +5,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
-<div class="accountInfoDiv">
+    <div class="accountInfoDiv">
     <div class="profileDiv">
         <a href="C100-C500_Profile.aspx" class="profileIconLink">
             <div class="profileIcon">
@@ -89,127 +89,130 @@
 
 <asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
     <!--navigation to copy and paste-->
-<div class="collapsedNav">
-    <div class="navbar">
-        <asp:Menu ID="MenuLeft" runat="server" Orientation="Vertical" CssClass="nav-left" StaticDisplayLevels="1" StaticMenuItemStyle-CssClass="menu-item">
-            <Items>
-                <asp:MenuItem NavigateUrl="~\B1600_View-dashboard.aspx" Text="Dashboard" Value="Dashboard"></asp:MenuItem>
-                <asp:MenuItem NavigateUrl="~\B100_View-calendar.aspx" Text="Calendar" Value="Calendar"></asp:MenuItem>
-                <asp:MenuItem NavigateUrl="~\B900_View-to-do-list.aspx" Text="To-do List" Value="To-do List"></asp:MenuItem>
-                <asp:MenuItem NavigateUrl="~\A100_Create-timer.aspx" Text="Timer" Value="Timer"></asp:MenuItem>
-                <asp:MenuItem NavigateUrl="~\A700_Create-study-session.aspx" Text="Study Session" Value="Study Session"></asp:MenuItem>
-            </Items>
-        </asp:Menu>
-        <asp:Menu ID="MenuRight" runat="server" Orientation="Vertical" CssClass="nav-right" StaticDisplayLevels="1" StaticMenuItemStyle-CssClass="menu-item">
-            <Items>
-                <asp:MenuItem NavigateUrl="~\B1400_View-shop.aspx" Text="Pet Shop" Value="Pet Shop"></asp:MenuItem>
-                <asp:MenuItem NavigateUrl="~\A1800_View-pets.aspx" Text="Inventory" Value="Inventory"></asp:MenuItem>
-                <asp:MenuItem NavigateUrl="~\C600_View-friend-list.aspx" Text="Friends" Value="Friends"></asp:MenuItem>
-                <asp:MenuItem NavigateUrl="~\C1400_View-badges.aspx" Text="Badges" Value="Badges"></asp:MenuItem>
-                <asp:MenuItem NavigateUrl="~\About.aspx" Text="About" Value="About"></asp:MenuItem>
-            </Items>
-        </asp:Menu>
+    <div class="collapsedNav">
+        <div class="navbar">
+            <asp:Menu ID="MenuLeft" runat="server" Orientation="Vertical" CssClass="nav-left" StaticDisplayLevels="1" StaticMenuItemStyle-CssClass="menu-item">
+                <Items>
+                    <asp:MenuItem NavigateUrl="~\B1600_View-dashboard.aspx" Text="Dashboard" Value="Dashboard"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~\B100_View-calendar.aspx" Text="Calendar" Value="Calendar"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~\B900_View-to-do-list.aspx" Text="To-do List" Value="To-do List"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~\A100_Create-timer.aspx" Text="Timer" Value="Timer"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~\A700_Create-study-session.aspx" Text="Study Session" Value="Study Session"></asp:MenuItem>
+                </Items>
+            </asp:Menu>
+            <asp:Menu ID="MenuRight" runat="server" Orientation="Vertical" CssClass="nav-right" StaticDisplayLevels="1" StaticMenuItemStyle-CssClass="menu-item">
+                <Items>
+                    <asp:MenuItem NavigateUrl="~\B1400_View-shop.aspx" Text="Pet Shop" Value="Pet Shop"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~\A1800_View-pets.aspx" Text="Inventory" Value="Inventory"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~\C600_View-friend-list.aspx" Text="Friends" Value="Friends"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~\C1400_View-badges.aspx" Text="Badges" Value="Badges"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~\About.aspx" Text="About" Value="About"></asp:MenuItem>
+                </Items>
+            </asp:Menu>
+        </div>
     </div>
-</div>
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-            <div id="CalenderMainContent">
-                <div class="calendarPage">
-    <div class="calendarHeader">
-        <asp:Label ID="lblMonthYear" runat="server" Text="" CssClass="calendarTitle"></asp:Label>
-        <div class="controlsCalendarPage">
-            <asp:ImageButton ID="btnPrevMonth" class="prevMonth" runat="server" OnClick="btnPrevMonth_Click" ImageUrl ="~/Icons/icons8-arrow-left-white-96.png" />
-            <asp:Button ID="btnToday" class="dateCalendar" runat="server" Text="Today" OnClick="btnToday_Click" />
-            <asp:ImageButton ID="btnNextMonth" class="nextMonth" runat="server" OnClick="btnNextMonth_Click" ImageUrl="~/Icons/icons8-arrow-right-white-96.png" />
-            <asp:HiddenField ID="hfYear" runat="server" />
-            <asp:HiddenField ID="hfMonth" runat="server" />
-        </div>
-    </div>
+    <div id="CalenderMainContent">
+        <div class="calendarPage">
+            <div class="calendarHeader">
+                <asp:Label ID="lblMonthYear" runat="server" Text="" CssClass="calendarTitle"></asp:Label>
+                <div class="controlsCalendarPage">
+                    <asp:ImageButton ID="btnPrevMonth" class="prevMonth" runat="server" OnClick="btnPrevMonth_Click" ImageUrl ="~/Icons/icons8-arrow-left-white-96.png" />
+                    <asp:Button ID="btnToday" class="dateCalendar" runat="server" Text="Today" OnClick="btnToday_Click" />
+                    <asp:ImageButton ID="btnNextMonth" class="nextMonth" runat="server" OnClick="btnNextMonth_Click" ImageUrl="~/Icons/icons8-arrow-right-white-96.png" />
+                    <asp:HiddenField ID="hfYear" runat="server" />
+                    <asp:HiddenField ID="hfMonth" runat="server" />
+                </div>
+            </div>
     
-    <div class="calendarBox">
-        <asp:Literal ID="literalCalendar" runat="server"></asp:Literal>
-    </div>
-                    <asp:HiddenField ID="userIDHidden" runat="server" />
-</div>
-    
-    <div id="popupNoNotifications" class="simple-popup" style="display: none;">
-    <div class="popup-blue-box">
-        <p>You do not have any notifications at the moment!</p>
-        <img src="Images/Notification%20Sad%20Hamster.png" />
-        <br />
-        <div class="buttonSection">
-            <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideNotificationPopup(); return false;" />
+            <div class="calendarBox">
+                <asp:Literal ID="literalCalendar" runat="server"></asp:Literal>
+            </div>
+            <asp:HiddenField ID="userIDHidden" runat="server" />
         </div>
-    </div>
-</div>
 
-<!--has notifications-->
-<div id="popupHasNotifications" class="simple-popup" style="display: none;">
-    <div class="popup-pink-box">
-        <asp:HiddenField ID="hiddenSessionID" runat="server" />
-        <asp:Literal ID="litNotificationText" runat="server" />
-        <img src="Images/Notification%20Happy.png" />
-        <br />
-        <div class="buttonSection">
-            <asp:Button ID="btnYes" CssClass="popup-button-best-pink" runat="server" Text="Accept!" OnClick="btnYes_Click" />
-            <asp:Button ID="btnNo" CssClass="popup-button" runat="server" Text="Decline!" OnClick="btnNo_Click" />
+        <!--does not have notification-->
+        <div id="popupNoNotifications" class="simple-popup" style="display: none;">
+            <div class="popup-blue-box">
+                <p>You do not have any notifications at the moment!</p>
+                <br />
+                <img src="Images/Notification%20Sad%20Hamster.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideNotificationPopup(); return false;" />
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<div id="popupCalendar" class="simple-popup" style="display: none;">
-    <div class="popup-pink-box">
-        <asp:HiddenField ID="hiddenShowCalendar" runat="server" />
-        <p>Study Session has been added to your calendar!</p>
-        <br />
-        <br />
-        <img src="Images/Notification%20Happy.png" />
-        <br />
-        <div class="buttonSection">
-            <asp:Button ID="btnCalendar" CssClass="popup-button-best-pink" runat="server" Text="Calendar, GO!" OnClick="btnCalendar_Click" />
-            <asp:Button ID="btnOk" CssClass="popup-button" runat="server" Text="Okay, thanks!" OnClick="btnOk_Click" />
+        <!--has notifications-->
+        <div id="popupHasNotifications" class="simple-popup" style="display: none;">
+            <div class="popup-pink-box">
+                <asp:HiddenField ID="hiddenSessionID" runat="server" />
+                <asp:Literal ID="litNotificationText" runat="server" />
+                <br />
+                <img src="Images/Notification%20Happy.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnYes" CssClass="popup-button-best-pink" runat="server" Text="Accept!" OnClick="btnYes_Click" />
+                    <asp:Button ID="btnNo" CssClass="popup-button" runat="server" Text="Decline!" OnClick="btnNo_Click" />
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<div id="popupConfirmDecline" class="simple-popup" style="display: none;">
-    <div class="popup-blue-box">
-        <asp:HiddenField ID="hiddenShowConfirmation" runat="server" />
-        <p>Are you sure you want to decline the Study Session invitation?</p>
-        <img src="Images/Notification%20Sad%20Hamster.png" />
-        <br />
-        <div class="buttonSection">
-            <asp:Button ID="btnSure" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnSure_Click" />
-            <asp:Button ID="btnNotSure" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnNotSure_Click" />
+        <div id="popupCalendar" class="simple-popup" style="display: none;">
+            <div class="popup-pink-box">
+                <asp:HiddenField ID="hiddenShowCalendar" runat="server" />
+                <p>Study Session has been added to your calendar!</p>
+                <br />
+                <br />
+                <img src="Images/Notification%20Happy.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnCalendar" CssClass="popup-button-best-pink" runat="server" Text="Calendar, GO!" OnClick="btnCalendar_Click" />
+                    <asp:Button ID="btnOk" CssClass="popup-button" runat="server" Text="Okay, thanks!" OnClick="btnOk_Click" />
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<div id="popupIsDeclined" class="simple-popup" style="display: none;">
-    <div class="popup-blue-box">
-        <asp:HiddenField ID="hiddenShowDeclineConfirmed" runat="server" />
-        <p>Study Session has been declined!</p>
-        <img src="Images/Notification%20Sad%20Hamster.png" />
-        <br />
-        <div class="buttonSection">
-            <asp:Button ID="btnOkayDeclined" CssClass="popup-button" runat="server" Text="Okay!" OnClick="btnOkayDeclined_Click" />
+        <div id="popupConfirmDecline" class="simple-popup" style="display: none;">
+            <div class="popup-blue-box">
+                <asp:HiddenField ID="hiddenShowConfirmation" runat="server" />
+                <p>Are you sure you want to decline the Study Session invitation?</p>
+                <img src="Images/Notification%20Sad%20Hamster.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnSure" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnSure_Click" />
+                    <asp:Button ID="btnNotSure" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnNotSure_Click" />
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<div id="popup" class="simple-popup" style="display: none;">
-    <div class="popup-pink-box">
-        <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
-        <p>Study Session has started!</p>
-        <img src="Images/Notification%20Happy.png" />
-        <br />
-        <div class="buttonSection">
-            <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
+        <div id="popupIsDeclined" class="simple-popup" style="display: none;">
+            <div class="popup-blue-box">
+                <asp:HiddenField ID="hiddenShowDeclineConfirmed" runat="server" />
+                <p>Study Session has been declined!</p>
+                <img src="Images/Notification%20Sad%20Hamster.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnOkayDeclined" CssClass="popup-button" runat="server" Text="Okay!" OnClick="btnOkayDeclined_Click" />
+                </div>
+            </div>
+        </div>
+
+        <div id="popup" class="simple-popup" style="display: none;">
+            <div class="popup-pink-box">
+                <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
+                <p>Study Session has started!</p>
+                <img src="Images/Notification%20Happy.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
