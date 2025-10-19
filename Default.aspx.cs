@@ -25,8 +25,7 @@ public partial class _Default : System.Web.UI.Page
         {
             lblLoggedInUserName.Text = Session["Username"].ToString() + "!";
 
-            string username = Session["Username"].ToString(); //need this on every page
-
+            string username = Session["Username"].ToString();
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
             string userID = GetUserID(username, cs);
 

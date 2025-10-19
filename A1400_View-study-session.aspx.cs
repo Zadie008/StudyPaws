@@ -29,9 +29,17 @@ public partial class View_study_session : System.Web.UI.Page
         }
 
         int sessionID = (int)Session["sessionID"];
+        LoadJoinedParticipants(sessionID);
 
         if (!IsPostBack)
         {
+            LoadJoinedParticipants(sessionID);
+
+            if (Session["userID"] != null)
+            {
+                LoadFriends();
+            }
+
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
             using (MySqlConnection con = new MySqlConnection(cs))
             {
@@ -101,6 +109,7 @@ public partial class View_study_session : System.Web.UI.Page
             }
         }
     }
+
     [System.Web.Services.WebMethod]
     [System.Web.Script.Services.ScriptMethod]
     public static string UpdateStudySessionRewards(int minutesStudied)
@@ -214,6 +223,33 @@ public partial class View_study_session : System.Web.UI.Page
     }
 
     // IN SESSION BLOCK
+    private void LoadFriends(string searchTerm = "")
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            string command = "SELECT username, iconNum FROM Users WHERE userID IN (SELECT IF(userIDfrom = @id, userIDto, userIDfrom) FROM FriendsList WHERE userIDfrom = @id OR userIDto = @id)";
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                command += " AND username LIKE @search";
+            }
+
+            MySqlCommand cmd = new MySqlCommand(command, con);
+            cmd.Parameters.AddWithValue("@id", Session["userID"]);
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                cmd.Parameters.AddWithValue("@search", "%" + searchTerm + "%");
+            }
+
+            con.Open();
+            MySqlDataReader rdr = cmd.ExecuteReader();
+            GridView1.DataSource = rdr;
+            GridView1.DataBind();
+        }
+    }
     public string GetAddButtonImage(string username)
     {
         var list = Session["invitedFriends"] as List<string> ?? new List<string>();
@@ -256,6 +292,46 @@ public partial class View_study_session : System.Web.UI.Page
         return users;
     }
 
+    private void LoadJoinedParticipants(int sessionID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string query = "SELECT u.username, u.iconNum FROM Users u INNER JOIN StudySessionParticipants ssp ON u.userID = ssp.userID WHERE ssp.sessionID = @sessionID AND ssp.joined = TRUE";
+
+        using (MySqlConnection conn = new MySqlConnection(cs))
+        using (MySqlCommand cmd = new MySqlCommand(query, conn))
+        {
+            cmd.Parameters.AddWithValue("@sessionID", sessionID);
+            conn.Open();
+
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                GridView1.DataSource = reader;
+                GridView1.DataBind();
+            }
+        }
+    }
+
+    protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        if (e.CommandName == "ToggleInvite")
+        {
+            string username = e.CommandArgument.ToString();
+
+            // Retrieve the invited friends list from session
+            List<string> invitedFriends = Session["invitedFriends"] as List<string> ?? new List<string>();
+
+            // Toggle friend in the list
+            if (invitedFriends.Contains(username))
+                invitedFriends.Remove(username);
+            else
+                invitedFriends.Add(username);
+
+            Session["invitedFriends"] = invitedFriends;
+
+            // Rebind GridView to update icons
+            LoadFriends();
+        }
+    }
 
     // start: header profile code
     private string GetUserID(string username, string connectionString)

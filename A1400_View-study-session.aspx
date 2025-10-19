@@ -7,12 +7,10 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" runat="Server">
     <div class="accountInfoDiv">
         <div class="profileDiv">
-            <a href="C100-C500_Profile.aspx" class="profileIconLink">
-                <div class="profileIcon">
-                    <div id="profileCircle" runat="server" ClientIDMode="Static"></div>
-                    <asp:Image ID="profilePet" runat="server" />
-                </div>
-            </a>
+            <div class="profileIcon">
+                <div id="profileCircle" runat="server" clientidmode="Static"></div>
+                <asp:Image ID="profilePet" runat="server" />
+            </div>
             <div class="profileDetails">
                 <table>
                     <tr>
@@ -52,17 +50,15 @@
         <div class="rightInfoDiv">
             <div class="timeNotificationWrapper">
                 <div class="notificationDetails">
-                    <asp:ImageButton ID="imgNotificationRinging" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-ringing-white-96.png" OnClientClick="showNotificationPopup(true); return false;" />
-                    <asp:ImageButton ID="imgNotificationNormal" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" OnClientClick="showNotificationPopup(false); return false;" />
-                    <div id="notificationBadge" runat="server" class="notificationBadge"></div>
+                    <asp:ImageButton ID="imgNotificationNormal" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" CausesValidation="False" Enabled="False" />
                 </div>
 
                 <div class="timeDateDiv">
-                    <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="--:--"></asp:Label>
+                    <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="09:52"></asp:Label>
                     <div class="dateContainer">
-                        <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Week Day"></asp:Label>
+                        <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Friday"></asp:Label>
                         <span class="dateSeparator">|</span>
-                        <asp:Label ID="lblDate" CssClass="accountInfoLabel currentDate" runat="server" Text="Day Month"></asp:Label>
+                        <asp:Label ID="lblDate" CssClass="accountInfoLabel currentDate" runat="server" Text="18 April"></asp:Label>
                     </div>
                 </div>
             </div>
@@ -76,14 +72,12 @@
             </defs>
             <text>
                 <textPath href="#curve" startOffset="50%" text-anchor="middle">
-                    <a href="Default.aspx" class="curvedHeaderLink">
-                        StudyP<tspan dx="0.7em">w</tspan>s
-                    </a>
+                    StudyP<tspan dx="0.7em">w</tspan>s
                 </textPath>
             </text>
         </svg>
-        <a href="Default.aspx"><img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" /></a>
-        <h2><a href="Default.aspx">purrfectly productive</a></h2>
+        <img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" />
+        <h2>purrfectly productive</h2>
     </div>
 </asp:Content>
 

@@ -72,9 +72,8 @@
             </defs>
             <text>
                 <textPath href="#curve" startOffset="50%" text-anchor="middle">
-                StudyP
-<tspan dx="0.7em">w</tspan>s
-            </textPath>
+                    StudyP<tspan dx="0.7em">w</tspan>s
+                </textPath>
             </text>
         </svg>
         <img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" />
