@@ -202,7 +202,6 @@
     <audio id="timerStartSound" src="Audio/timerStartSound.mp3" preload="auto"></audio>
     <audio id="timerEndSound" src="Audio/timerEndSound.mp3" preload="auto"></audio>
 
-    // Update the JavaScript to include userID
     <script type="text/javascript">
         function loadInSessionUsers() {
             PageMethods.GetJoinedUsers(function (users) {
