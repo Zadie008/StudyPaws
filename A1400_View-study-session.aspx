@@ -103,7 +103,11 @@
                                                 </div>
                                             </a>
                                             <span class="friendUsername"><%# Eval("username") %></span>
-                                            <asp:ImageButton ID="btnAddFriend" runat="server" CssClass="addFriendBtn" CommandName="ToggleInvite" CommandArgument='<%# Eval("username") %>' ImageUrl='<%# GetAddButtonImage(Eval("username").ToString()) %>' />
+                                            <asp:ImageButton ID="btnAddFriend" runat="server" CssClass="addFriendBtn" 
+                                                CommandName="SendFriendRequest" 
+                                                CommandArgument='<%# Eval("userID") + "|" + Eval("username") %>' 
+                                                ImageUrl='<%# IsFriend(Convert.ToInt32(Eval("userID"))) ? "Icons/icons8-check-white-96.png" : "Icons/icons8-add-new-white-96.png" %>'
+                                                Visible='<%# !IsCurrentUser(Convert.ToInt32(Eval("userID"))) && !IsFriend(Convert.ToInt32(Eval("userID"))) %>' />
                                         </div>
                                     </ItemTemplate>
                                 </asp:TemplateField>
@@ -198,10 +202,11 @@
     <audio id="timerStartSound" src="Audio/timerStartSound.mp3" preload="auto"></audio>
     <audio id="timerEndSound" src="Audio/timerEndSound.mp3" preload="auto"></audio>
 
+    // Update the JavaScript to include userID
     <script type="text/javascript">
-    function loadInSessionUsers() {
-        PageMethods.GetJoinedUsers(function (users) {
-            const table = document.getElementById('<%= GridView1.ClientID %>');
+        function loadInSessionUsers() {
+            PageMethods.GetJoinedUsers(function (users) {
+                const table = document.getElementById('<%= GridView1.ClientID %>');
             if (!table) return;
 
             let html = "";
@@ -218,20 +223,20 @@
 
             table.innerHTML = html;
         });
-    }
-
-    function getProfileImagePath(iconNum) {
-        switch (iconNum) {
-            case 1: return "Images/ProfilePictures/CatPfp.png";
-            case 2: return "Images/ProfilePictures/DogPfp.png";
-            case 3: return "Images/ProfilePictures/BunnyPfp.png";
-            case 4: return "Images/ProfilePictures/CowPfp.png";
-            case 5: return "Images/ProfilePictures/UnicornPfp.png";
-            default: return "Images/ProfilePictures/CatPfp.png";
         }
-    }
 
-    setInterval(loadInSessionUsers, 5000); // refresh every 5 seconds
+        function getProfileImagePath(iconNum) {
+            switch (iconNum) {
+                case 1: return "Images/ProfilePictures/CatPfp.png";
+                case 2: return "Images/ProfilePictures/DogPfp.png";
+                case 3: return "Images/ProfilePictures/BunnyPfp.png";
+                case 4: return "Images/ProfilePictures/CowPfp.png";
+                case 5: return "Images/ProfilePictures/UnicornPfp.png";
+                default: return "Images/ProfilePictures/CatPfp.png";
+            }
+        }
+
+        setInterval(loadInSessionUsers, 5000); // refresh every 5 seconds
     </script>
 </asp:Content>
 

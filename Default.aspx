@@ -189,6 +189,27 @@
             </div>
         <!--COPY END: NOTIFICATION BELL POPUPS-->
     </div>
+
+    <script>
+        // JOIN STUDY SESSION POPUP
+        function showJoinPopup() {
+            document.getElementById("popup").style.display = "flex";
+        }
+
+        function hideJoinPopup() {
+            document.getElementById("popup").style.display = "none";
+        }
+
+        // Auto-show join popup when page loads if there's a session to join
+        window.addEventListener('load', function () {
+            var joinSessionID = document.getElementById("mainContentPlaceHolder_hiddenJoinSessionID");
+            if (joinSessionID && joinSessionID.value) {
+                setTimeout(function () {
+                    showJoinPopup();
+                }, 1000);
+            }
+        });
+    </script>
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="navContent" Runat="Server">

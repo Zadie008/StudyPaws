@@ -26,7 +26,7 @@ public static class StudySessionHelper
         return rowsAffected > 0;
     }
 
-    // checks if a study session is starting soon (within 1 minute)
+    // checks if a study session is starting soon (within join window: 1 minute before to session start)
     public static bool ShouldPromptJoin(int sessionID)
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -48,7 +48,8 @@ public static class StudySessionHelper
                         DateTime now = DateTime.Now;
                         DateTime oneMinuteBefore = startTime.AddMinutes(-1);
 
-                        if (now >= oneMinuteBefore && now < startTime)
+                        // Allow joining from 1 minute before to session start time
+                        if (now >= oneMinuteBefore && now <= startTime)
                         {
                             return true;
                         }
