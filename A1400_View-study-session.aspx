@@ -206,36 +206,37 @@
         function loadInSessionUsers() {
             PageMethods.GetJoinedUsers(function (users) {
                 const table = document.getElementById('<%= GridView1.ClientID %>');
-            if (!table) return;
+                if (!table) return;
 
-            let html = "";
-            users.forEach(u => {
-                const imgSrc = getProfileImagePath(u.iconNum);
-                html += `
-                    <div class="friendRow">
-                        <div class="friendProfileIcon">
-                            <img class="friendProfileImage" src="${imgSrc}" />
-                        </div>
-                        <span class="friendUsername">${u.username}</span>
-                    </div>`;
+                let html = "";
+                users.forEach(u => {
+                    const imgSrc = getProfileImagePath(u.iconNum);
+                    html += `
+                        <div class="friendRow">
+                            <div class="friendProfileIcon">
+                                <img class="friendProfileImage" src="${imgSrc}" />
+                            </div>
+                            <span class="friendUsername">${u.username}</span>
+                        </div>`;
+                });
+
+                // Update the table body
+                const tbody = table.getElementsByTagName('tbody')[0];
+                if (tbody) {
+                    tbody.innerHTML = html;
+                } else {
+                    table.innerHTML = html;
+                }
             });
+        }
 
-            table.innerHTML = html;
+        // Refresh every 3 seconds to show real-time updates
+        setInterval(loadInSessionUsers, 3000);
+
+        // Load immediately when page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            loadInSessionUsers();
         });
-        }
-
-        function getProfileImagePath(iconNum) {
-            switch (iconNum) {
-                case 1: return "Images/ProfilePictures/CatPfp.png";
-                case 2: return "Images/ProfilePictures/DogPfp.png";
-                case 3: return "Images/ProfilePictures/BunnyPfp.png";
-                case 4: return "Images/ProfilePictures/CowPfp.png";
-                case 5: return "Images/ProfilePictures/UnicornPfp.png";
-                default: return "Images/ProfilePictures/CatPfp.png";
-            }
-        }
-
-        setInterval(loadInSessionUsers, 5000); // refresh every 5 seconds
     </script>
 </asp:Content>
 

@@ -145,10 +145,10 @@ function checkForSessionStart() {
     const now = new Date();
     for (let i = 0; i < upcomingSessions.length; i++) {
         const session = upcomingSessions[i];
-        const sessionTime = new Date(session.time);
-        const diff = sessionTime - now;
+        const joinTime = new Date(session.time); // This is now 1 minute before session start
+        const diff = joinTime - now;
 
-        if (diff <= 0 && diff > -60000) { // if current time is within 1 minute past the session start
+        if (diff <= 0 && diff > -60000) { // If current time is within 1 minute past the join window start
             document.getElementById("popup").style.display = "flex";
             document.getElementById("hiddenJoinSessionID").value = session.sessionID;
             upcomingSessions.splice(i, 1);
