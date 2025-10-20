@@ -42,12 +42,10 @@ nav.addEventListener("mouseleave", () => {
 
 // NOTIFICATIONS FOR STUDY SESSION INVITATIONS
 function showNotificationPopup(hasNotifications) {
-    if (hasNotifications)
-    {
+    if (hasNotifications) {
         document.getElementById("popupHasNotifications").style.display = "flex";
     }
-    else
-    {
+    else {
         document.getElementById("popupNoNotifications").style.display = "flex";
     }
 }
@@ -145,10 +143,10 @@ function checkForSessionStart() {
     const now = new Date();
     for (let i = 0; i < upcomingSessions.length; i++) {
         const session = upcomingSessions[i];
-        const joinTime = new Date(session.time); // This is now 1 minute before session start
-        const diff = joinTime - now;
+        const sessionTime = new Date(session.time);
+        const diff = sessionTime - now;
 
-        if (diff <= 0 && diff > -60000) { // If current time is within 1 minute past the join window start
+        if (diff <= 0 && diff > -60000) { // if current time is within 1 minute past the session start
             document.getElementById("popup").style.display = "flex";
             document.getElementById("hiddenJoinSessionID").value = session.sessionID;
             upcomingSessions.splice(i, 1);
@@ -363,13 +361,13 @@ function addExtraTime(mins) {
         },
         body: JSON.stringify({ addedSeconds: addedSeconds })
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Update success:", data);
-    })
-    .catch(error => {
-        console.error("Update failed:", error);
-    });
+        .then(response => response.json())
+        .then(data => {
+            console.log("Update success:", data);
+        })
+        .catch(error => {
+            console.error("Update failed:", error);
+        });
     return false;
 }
 
@@ -384,7 +382,7 @@ function confirmStop() {
 }
 
 function showTimeUpPopup() {
-    
+
     const minutesStudied = Math.floor(initialTime / 60);
     const xpEarned = minutesStudied * 2;
     const coinsEarned = minutesStudied * 5;
@@ -414,8 +412,8 @@ function hideTimeUpPopup() {
 }
 function showStudySessionTimeUpPopup() {
     const minutesStudied = Math.floor(initialTime / 60);
-    const xpEarned = minutesStudied * 5; 
-    const coinsEarned = minutesStudied * 10; 
+    const xpEarned = minutesStudied * 5;
+    const coinsEarned = minutesStudied * 10;
 
     document.getElementById("xpEarned").textContent = '+' + xpEarned;
     document.getElementById("coinsEarned").textContent = '+' + coinsEarned;
@@ -688,4 +686,3 @@ if (window.location.pathname.toLowerCase().includes("c100_register.aspx")) {
         }
     });
 }
-

@@ -32,9 +32,6 @@ public partial class View_study_session : System.Web.UI.Page
 
         if (!IsPostBack)
         {
-            // Mark user as joined when they access this page
-            MarkUserAsJoined(sessionID);
-
             if (Session["userID"] != null)
             {
                 LoadJoinedUsers();
@@ -65,6 +62,18 @@ public partial class View_study_session : System.Web.UI.Page
 
                             // Initialize session with waiting room logic
                             InitializeSessionTimer(sessionDateTime, totalSeconds);
+
+                            int hours = totalSeconds / 3600;
+                            int minutes = (totalSeconds % 3600) / 60;
+                            int seconds = totalSeconds % 60;
+
+                            string formattedTime = hours.ToString("D2") + ":" + minutes.ToString("D2") + ":" + seconds.ToString("D2");
+
+                            ClientScript.RegisterStartupScript(this.GetType(), "timerDurationScript", "var initialTime = " + totalSeconds + ";", true);
+
+                            string countdownScript = "document.addEventListener('DOMContentLoaded', function() {" + " document.getElementById('mainContentPlaceHolder_lblCountdown').textContent = '" + formattedTime + "';" + " });";
+
+                            ClientScript.RegisterStartupScript(this.GetType(), "initialCountdownText", countdownScript, true);
                         }
                     }
                 }
@@ -78,38 +87,28 @@ public partial class View_study_session : System.Web.UI.Page
             if (Session["Username"] != null)
             {
                 string username = Session["Username"].ToString();
+
                 string userID = GetUserID(username, cs);
 
-                int userXP = GetUserXP(cs, userID);
-                Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
-                int currentLevel = levelInfo.Item1;
-                int currentLevelXpAmount = levelInfo.Item2;
-                int nextLevelXpAmount = levelInfo.Item3;
+                if (!IsPostBack)
+                {
+                    int userXP = GetUserXP(cs, userID);
+                    Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
+                    int currentLevel = levelInfo.Item1;
+                    int currentLevelXpAmount = levelInfo.Item2;
+                    int nextLevelXpAmount = levelInfo.Item3;
 
-                lblLevelNumber.Text = currentLevel.ToString();
-                CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
-                GetUserStats(cs, userID);
-                GetUserProfileIcon(cs, userID);
+                    lblLevelNumber.Text = currentLevel.ToString();
+
+                    CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
+                    GetUserStats(cs, userID);
+                    GetUserProfileIcon(cs, userID);
+                }
             }
             else
             {
                 Response.Redirect("Landing-page.aspx");
             }
-        }
-    }
-
-    private void MarkUserAsJoined(int sessionID)
-    {
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string updateQuery = "UPDATE StudySessionParticipants SET joined = true WHERE sessionID = @sessionID AND userID = @userID";
-
-        using (MySqlConnection conn = new MySqlConnection(cs))
-        using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn))
-        {
-            cmd.Parameters.AddWithValue("@sessionID", sessionID);
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
-            conn.Open();
-            cmd.ExecuteNonQuery();
         }
     }
 
@@ -133,31 +132,31 @@ public partial class View_study_session : System.Web.UI.Page
     private void ShowWaitingRoom(double secondsUntilStart, int sessionDuration)
     {
         string script = string.Format(@"
-    document.addEventListener('DOMContentLoaded', function() {{
-        // Show waiting room message
-        var timerElement = document.getElementById('mainContentPlaceHolder_lblCountdown');
-        if (timerElement) {{
-            timerElement.innerHTML = 'Waiting for session to start...<br/><span style=""font-size: 0.7em;"">Starting in: <span id=""waitingCountdown"">{0}</span> seconds</span>';
-        }}
-        
-        // Start waiting countdown
-        var waitingSeconds = Math.round({0});
-        var waitingInterval = setInterval(function() {{
-            waitingSeconds--;
-            var waitingElement = document.getElementById('waitingCountdown');
-            if (waitingElement) {{
-                waitingElement.textContent = waitingSeconds;
+        document.addEventListener('DOMContentLoaded', function() {{
+            // Show waiting room message
+            var timerElement = document.getElementById('mainContentPlaceHolder_lblCountdown');
+            if (timerElement) {{
+                timerElement.innerHTML = 'Waiting for session to start...<br/><span style=""font-size: 0.7em;"">Starting in: <span id=""waitingCountdown"">{0}</span> seconds</span>';
             }}
             
-            if (waitingSeconds <= 0) {{
-                clearInterval(waitingInterval);
-                startTimer({1}); // Start the actual study timer
-                if (timerElement) {{
-                    timerElement.innerHTML = ''; // Clear waiting message
+            // Start waiting countdown
+            var waitingSeconds = Math.round({0});
+            var waitingInterval = setInterval(function() {{
+                waitingSeconds--;
+                var waitingElement = document.getElementById('waitingCountdown');
+                if (waitingElement) {{
+                    waitingElement.textContent = waitingSeconds;
                 }}
-            }}
-        }}, 1000);
-    }});", secondsUntilStart, sessionDuration);
+                
+                if (waitingSeconds <= 0) {{
+                    clearInterval(waitingInterval);
+                    startTimer({1}); // Start the actual study timer
+                    if (timerElement) {{
+                        timerElement.innerHTML = ''; // Clear waiting message
+                    }}
+                }}
+            }}, 1000);
+        }});", secondsUntilStart, sessionDuration);
 
         ClientScript.RegisterStartupScript(this.GetType(), "WaitingRoomScript", script, true);
     }
@@ -165,9 +164,9 @@ public partial class View_study_session : System.Web.UI.Page
     private void StartStudyTimer(int totalSeconds)
     {
         string script = string.Format(@"
-    document.addEventListener('DOMContentLoaded', function() {{
-        startTimer({0});
-    }});", totalSeconds);
+        document.addEventListener('DOMContentLoaded', function() {{
+            startTimer({0});
+        }});", totalSeconds);
         ClientScript.RegisterStartupScript(this.GetType(), "StartTimerScript", script, true);
     }
 
@@ -292,10 +291,17 @@ public partial class View_study_session : System.Web.UI.Page
 
         using (MySqlConnection con = new MySqlConnection(cs))
         {
-            string command = "SELECT u.userID, u.username, u.iconNum FROM StudySessionParticipants sp JOIN Users u ON sp.userID = u.userID WHERE sp.sessionID = @sessionID AND sp.joined = true";
+            string command = @"
+            SELECT u.userID, u.username, u.iconNum 
+            FROM StudySessionParticipants sp 
+            JOIN Users u ON sp.userID = u.userID 
+            WHERE sp.sessionID = @sessionID 
+            AND sp.joined = 'yes'
+            AND u.userID != @currentUserID";
 
             MySqlCommand cmd = new MySqlCommand(command, con);
             cmd.Parameters.AddWithValue("@sessionID", sessionID);
+            cmd.Parameters.AddWithValue("@currentUserID", currentUserID);
 
             con.Open();
             MySqlDataReader rdr = cmd.ExecuteReader();
@@ -317,7 +323,11 @@ public partial class View_study_session : System.Web.UI.Page
 
         using (MySqlConnection con = new MySqlConnection(cs))
         {
-            string query = "SELECT u.userID, u.username, u.iconNum FROM StudySessionParticipants sp JOIN Users u ON sp.userID = u.userID WHERE sp.sessionID = @sessionID AND sp.joined = true";
+            string query = @"SELECT u.userID, u.username, u.iconNum 
+                        FROM StudySessionParticipants sp 
+                        JOIN Users u ON sp.userID = u.userID 
+                        WHERE sp.sessionID = @sessionID 
+                        AND sp.joined = 'yes'";
 
             using (MySqlCommand cmd = new MySqlCommand(query, con))
             {

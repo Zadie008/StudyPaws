@@ -404,7 +404,7 @@ public partial class _Default : System.Web.UI.Page
     private void LoadUpcomingSessions()
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string query = "SELECT StudySession.sessionID, StudySession.sessionStart FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = @userID AND StudySessionParticipants.accepted = true AND StudySessionParticipants.joined = false";
+        string query = "SELECT StudySession.sessionID, StudySession.sessionStart FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = @userID AND StudySessionParticipants.accepted = true";
 
         List<string> jsSessionTimes = new List<string>();
 
@@ -420,14 +420,11 @@ public partial class _Default : System.Web.UI.Page
                     int foundSessionID = Convert.ToInt32(reader["sessionID"]);
                     DateTime sessionStart = Convert.ToDateTime(reader["sessionStart"]);
 
-                    // Calculate 1 minute before session start
-                    DateTime joinWindowStart = sessionStart.AddMinutes(-1);
-
-                    string jsObject = "{ sessionID: " + foundSessionID + ", time: '" + joinWindowStart.ToString("yyyy-MM-ddTHH:mm:ss") + "' }";
+                    string jsObject = "{ sessionID: " + foundSessionID + ", time: '" + sessionStart.ToString("yyyy-MM-ddTHH:mm:ss") + "' }";
                     jsSessionTimes.Add(jsObject);
 
-                    TimeSpan timeUntilJoinWindow = joinWindowStart - DateTime.Now;
-                    if (timeUntilJoinWindow.TotalMinutes <= 1 && timeUntilJoinWindow.TotalSeconds >= -60)
+                    TimeSpan timeUntilStart = sessionStart - DateTime.Now;
+                    if (timeUntilStart.TotalMinutes >= 0 && timeUntilStart.TotalMinutes <= 10)
                     {
                         Session["sessionID"] = foundSessionID;
                     }
