@@ -30,7 +30,7 @@ public partial class MasterPage : System.Web.UI.MasterPage
             string selectQuery = "SELECT ss.sessionID, ss.sessionTitle, ss.sessionStart FROM StudySession ss INNER JOIN StudySessionParticipants ssp ON ss.sessionID = ssp.sessionID WHERE ssp.userID = ?userID AND ssp.accepted = 'yes' AND ssp.joined = 'no' AND ss.sessionStart BETWEEN ?joinWindowStart AND ?joinWindowEnd LIMIT 1";
 
             DateTime joinWindowStart = DateTime.Now.AddMinutes(-1); // 1 minute ago
-            DateTime joinWindowEnd = DateTime.Now.AddMinutes(1);    // 1 minute from now
+            DateTime joinWindowEnd = DateTime.Now;
 
             using (MySqlCommand cmd = new MySqlCommand(selectQuery, conn))
             {
