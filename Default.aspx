@@ -168,6 +168,8 @@
                 <div class="popup-blue-box">
                     <asp:HiddenField ID="hiddenShowDeclineConfirmed" runat="server" />
                     <p>Study Session has been declined!</p>
+                    <br />
+                    <br />
                     <img src="Images/Notification%20Sad%20Hamster.png" />
                     <br />
                     <div class="buttonSection">

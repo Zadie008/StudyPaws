@@ -452,13 +452,32 @@ public partial class _Default : System.Web.UI.Page
     protected void btnSure_Click(object sender, EventArgs e)
     {
         int sessionID = int.Parse(hiddenSessionID.Value);
+        int userID = Convert.ToInt32(Session["userID"]);
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+        // Increment declinedStudySessionInvitations counter
+        using (MySqlConnection con1 = new MySqlConnection(cs))
+        {
+            string updateCommand = "UPDATE Users SET declinedStudySessionInvitations = declinedStudySessionInvitations + 1 WHERE userID = @userID";
+            using (MySqlCommand cmd = new MySqlCommand(updateCommand, con1))
+            {
+                cmd.Parameters.AddWithValue("@userID", userID);
+                con1.Open();
+                cmd.ExecuteNonQuery();
+                con1.Close();
+            }
+        }
+
+        // Check for declined invitation badges after incrementing
+        CheckDeclinedStudySessionInvitationBadges(userID);
+
+        // Delete study session participant
         string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = @sessionID AND userID = @userID AND accepted = false";
         using (MySqlConnection conn = new MySqlConnection(cs))
         using (MySqlCommand cmd = new MySqlCommand(deleteQuery, conn))
         {
             cmd.Parameters.AddWithValue("@sessionID", sessionID);
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
+            cmd.Parameters.AddWithValue("@userID", userID);
             conn.Open();
             cmd.ExecuteNonQuery();
         }
@@ -466,6 +485,83 @@ public partial class _Default : System.Web.UI.Page
         hiddenShowDeclineConfirmed.Value = "true";
 
         RemoveInviteAndShowNext(sessionID);
+    }
+
+    // FOR GETTING DECLINED STUDY SESSION INVITATION BADGE
+    public void CheckDeclinedStudySessionInvitationBadges(int userID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            con.Open();
+
+            // Get current declined study session invitations count
+            string getCountQuery = "SELECT declinedStudySessionInvitations FROM Users WHERE userID = @userID";
+            int declinedCount = 0;
+            using (MySqlCommand getCountCmd = new MySqlCommand(getCountQuery, con))
+            {
+                getCountCmd.Parameters.AddWithValue("@userID", userID);
+                object result = getCountCmd.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                {
+                    declinedCount = Convert.ToInt32(result);
+                }
+            }
+
+            // Check and award badges based on declined study session invitations count
+            if (declinedCount >= 15)
+            {
+                AwardBadge(con, userID, 9, "Gold");
+            }
+            else if (declinedCount >= 10)
+            {
+                AwardBadge(con, userID, 9, "Silver");
+            }
+            else if (declinedCount >= 5)
+            {
+                AwardBadge(con, userID, 9, "Bronze");
+            }
+
+            con.Close();
+        }
+    }
+
+    private void AwardBadge(MySqlConnection con, int userID, int badgeID, string badgeType)
+    {
+        // Check if user already has any type of this badge
+        string checkBadgeQuery = "SELECT COUNT(*) FROM UserBadge WHERE userID = @userID AND badgeID = @badgeID";
+        int badgeCount = 0;
+        using (MySqlCommand checkBadgeCmd = new MySqlCommand(checkBadgeQuery, con))
+        {
+            checkBadgeCmd.Parameters.AddWithValue("@userID", userID);
+            checkBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+            badgeCount = Convert.ToInt32(checkBadgeCmd.ExecuteScalar());
+        }
+
+        if (badgeCount == 0)
+        {
+            // No entry exists - INSERT new record
+            string insertBadgeQuery = "INSERT INTO UserBadge (userID, badgeID, badgeType) VALUES (@userID, @badgeID, @badgeType)";
+            using (MySqlCommand insertBadgeCmd = new MySqlCommand(insertBadgeQuery, con))
+            {
+                insertBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                insertBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+                insertBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+                insertBadgeCmd.ExecuteNonQuery();
+            }
+        }
+        else
+        {
+            // Entry exists - UPDATE with new badgeType
+            string updateBadgeQuery = "UPDATE UserBadge SET badgeType = @badgeType WHERE userID = @userID AND badgeID = @badgeID";
+            using (MySqlCommand updateBadgeCmd = new MySqlCommand(updateBadgeQuery, con))
+            {
+                updateBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                updateBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+                updateBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+                updateBadgeCmd.ExecuteNonQuery();
+            }
+        }
     }
 
     protected void btnNotSure_Click(object sender, EventArgs e)

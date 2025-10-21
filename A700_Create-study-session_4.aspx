@@ -143,7 +143,6 @@
             <div class="popup-pink-box">
                 <p>Study Session scheduled!</p>
                 <img src="Images/Notification%20Happy.png" />
-                <br />
                 <div class="buttonSection">
                     <asp:Button ID="btnSuccess" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideSuccessPopup(); return false;" />
                 </div>
