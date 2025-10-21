@@ -187,8 +187,7 @@
             </div>
         </div>
 
-        <!--does not have notification-->
-        <div id="popupNoNotifications" class="simple-popup" style="display: none;">
+        <!--<div id="popupNoNotifications" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
                 <p>You do not have any notifications at the moment!</p>
                 <img src="Images/Notification%20Sad%20Hamster.png" />
@@ -199,7 +198,6 @@
             </div>
         </div>
 
-        <!--has notifications-->
         <div id="popupHasNotifications" class="simple-popup" style="display: none;">
             <div class="popup-pink-box">
                 <asp:HiddenField ID="hiddenSessionID" runat="server" />
@@ -263,7 +261,7 @@
                     <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
                 </div>
             </div>
-        </div>
+        </div>-->
 
         <%-- this is the code for the level up panel--%>
         <div id="popupLevelUp" class="simple-popup" style="display: none;">
@@ -277,7 +275,8 @@
             </div>
         </div>
 
-        <script type="text/javascript">
+        <!--OLD SCRIPT CODE
+            <script type="text/javascript">
             // To-Do List Popups
             function showTaskCompletePopup() {
                 var popup = document.getElementById('popupTaskComplete');
@@ -304,6 +303,30 @@
                 showPopupDelete();
             }
 
+            // Level Up Popup
+            function showLevelUp() {
+                var popup = document.getElementById('popupLevelUp');
+                if (popup) popup.style.display = 'flex';
+            }
+
+            function hideLevelUp() {
+                var popup = document.getElementById('popupLevelUp');
+                if (popup) popup.style.display = 'none';
+            }
+        </script>-->
+        <script type="text/javascript">
+            function showPopup() {
+                document.getElementById('popupTaskComplete').style.display = 'flex';
+            }
+            function hidePopup() {
+                document.getElementById('popupTaskComplete').style.display = 'none';
+            }
+            function showPopupDelete() {
+                document.getElementById('popupDeleteTask').style.display = 'flex';
+            }
+            function hideDeletePopup() {
+                document.getElementById('popupDeleteTask').style.display = 'none';
+            }
             // Level Up Popup
             function showLevelUp() {
                 var popup = document.getElementById('popupLevelUp');

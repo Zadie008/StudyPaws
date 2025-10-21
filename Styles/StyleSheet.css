@@ -2272,6 +2272,10 @@ body.page-exit .welcomeBackTextDiv {
 .toDoListPage .popup-pink-box p {
     font-size: 2.2rem;
 }
+
+.toDoListPage .simple-popup img {
+    margin-bottom: -1.4em;
+}
 /* -------------------------------------------- PET SHOP PAGE -------------------------------------------- */
 
     #viewShopMainContent .backgroundColorContainer {
