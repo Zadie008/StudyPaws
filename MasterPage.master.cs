@@ -18,49 +18,42 @@ public partial class MasterPage : System.Web.UI.MasterPage
 
     private void CheckUpcomingStudySessions()
     {
-        if (Session["UserID"] == null) return;
-
-        int userID = Convert.ToInt32(Session["UserID"]);
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        List<int> sessionIds = new List<int>();
 
         using (MySqlConnection conn = new MySqlConnection(cs))
         {
             conn.Open();
+            string selectQuery = "SELECT sessionID FROM StudySession WHERE sessionStart BETWEEN ?startWindowBegin AND ?startWindowEnd";
 
-            string selectQuery = "SELECT ss.sessionID, ss.sessionTitle, ss.sessionStart FROM StudySession ss INNER JOIN StudySessionParticipants ssp ON ss.sessionID = ssp.sessionID WHERE ssp.userID = ?userID AND ssp.accepted = 'yes' AND ssp.joined = 'no' AND ss.sessionStart BETWEEN ?joinWindowStart AND ?joinWindowEnd LIMIT 1";
-
-            DateTime joinWindowStart = DateTime.Now.AddMinutes(-1); // 1 minute ago
-            DateTime joinWindowEnd = DateTime.Now.AddMinutes(1);    // 1 minute from now
+            DateTime startWindowBegin = DateTime.Now.AddMinutes(0);
+            DateTime startWindowEnd = DateTime.Now.AddMinutes(1); // 1 minute before session, it will delete if not enough people
 
             using (MySqlCommand cmd = new MySqlCommand(selectQuery, conn))
             {
-                cmd.Parameters.AddWithValue("?userID", userID);
-                cmd.Parameters.AddWithValue("?joinWindowStart", joinWindowStart);
-                cmd.Parameters.AddWithValue("?joinWindowEnd", joinWindowEnd);
+                cmd.Parameters.AddWithValue("?startWindowBegin", startWindowBegin);
+                cmd.Parameters.AddWithValue("?startWindowEnd", startWindowEnd);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    if (reader.Read())
+                    while (reader.Read())
                     {
-                        int sessionID = Convert.ToInt32(reader["sessionID"]);
-                        string sessionTitle = reader["sessionTitle"].ToString();
-
-                        Session["sessionID"] = sessionID;
-
-                        string script = string.Format(@"
-                        setTimeout(function() {{
-                            document.getElementById('mainContentPlaceHolder_hiddenJoinSessionID').value = '{0}';
-                            document.getElementById('popup').style.display = 'flex';
-                        }}, 1000);", sessionID);
-
-                        ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowJoinPopup", script, true);
+                        sessionIds.Add(Convert.ToInt32(reader["sessionID"]));
                     }
                 }
             }
         }
+
+        foreach (int sessionID in sessionIds)
+        {
+            using (MySqlConnection conn = new MySqlConnection(cs))
+            {
+                conn.Open();
+                HandleSessionParticipants(sessionID, conn);
+            }
+        }
     }
 
-    // OLD CODE:
     private void HandleSessionParticipants(int sessionID, MySqlConnection conn)
     {
         using (MySqlTransaction transaction = conn.BeginTransaction())
@@ -81,7 +74,7 @@ public partial class MasterPage : System.Web.UI.MasterPage
                 using (MySqlCommand countCmd = new MySqlCommand(countQuery, conn, transaction))
                 {
                     countCmd.Parameters.AddWithValue("?sessionID", sessionID);
-                    remaining = Convert.ToInt32(countCmd.ExecuteNonQuery());
+                    remaining = Convert.ToInt32(countCmd.ExecuteScalar());
                 }
 
                 if (remaining <= 1) // only leader or no one left
