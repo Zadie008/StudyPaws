@@ -60,9 +60,6 @@ public partial class View_study_session : System.Web.UI.Page
                             Session["sessionDuration"] = totalSeconds;
                             Session["sessionDateTime"] = sessionDateTime;
 
-                            // Initialize session with waiting room logic
-                            InitializeSessionTimer(sessionDateTime, totalSeconds);
-
                             int hours = totalSeconds / 3600;
                             int minutes = (totalSeconds % 3600) / 60;
                             int seconds = totalSeconds % 60;
@@ -110,64 +107,6 @@ public partial class View_study_session : System.Web.UI.Page
                 Response.Redirect("Landing-page.aspx");
             }
         }
-    }
-
-    private void InitializeSessionTimer(DateTime sessionStart, int totalSeconds)
-    {
-        DateTime now = DateTime.Now;
-        TimeSpan timeUntilSession = sessionStart - now;
-
-        if (timeUntilSession.TotalSeconds <= 0)
-        {
-            // Session should have already started - start timer immediately
-            StartStudyTimer(totalSeconds);
-        }
-        else
-        {
-            // Show waiting room with countdown to session start
-            ShowWaitingRoom(timeUntilSession.TotalSeconds, totalSeconds);
-        }
-    }
-
-    private void ShowWaitingRoom(double secondsUntilStart, int sessionDuration)
-    {
-        string script = string.Format(@"
-        document.addEventListener('DOMContentLoaded', function() {{
-            // Show waiting room message
-            var timerElement = document.getElementById('mainContentPlaceHolder_lblCountdown');
-            if (timerElement) {{
-                timerElement.innerHTML = 'Waiting for session to start...<br/><span style=""font-size: 0.7em;"">Starting in: <span id=""waitingCountdown"">{0}</span> seconds</span>';
-            }}
-            
-            // Start waiting countdown
-            var waitingSeconds = Math.round({0});
-            var waitingInterval = setInterval(function() {{
-                waitingSeconds--;
-                var waitingElement = document.getElementById('waitingCountdown');
-                if (waitingElement) {{
-                    waitingElement.textContent = waitingSeconds;
-                }}
-                
-                if (waitingSeconds <= 0) {{
-                    clearInterval(waitingInterval);
-                    startTimer({1}); // Start the actual study timer
-                    if (timerElement) {{
-                        timerElement.innerHTML = ''; // Clear waiting message
-                    }}
-                }}
-            }}, 1000);
-        }});", secondsUntilStart, sessionDuration);
-
-        ClientScript.RegisterStartupScript(this.GetType(), "WaitingRoomScript", script, true);
-    }
-
-    private void StartStudyTimer(int totalSeconds)
-    {
-        string script = string.Format(@"
-        document.addEventListener('DOMContentLoaded', function() {{
-            startTimer({0});
-        }});", totalSeconds);
-        ClientScript.RegisterStartupScript(this.GetType(), "StartTimerScript", script, true);
     }
 
     [System.Web.Services.WebMethod]
@@ -380,6 +319,8 @@ public partial class View_study_session : System.Web.UI.Page
                     {
                         // Check for completed study session badges
                         CheckCompletedStudySessionBadges(userID);
+                        // Check for the combined completion badge (completedTasks, completedTimers, completedStudySessions)
+                        CheckCombinedCompletionBadges(userID);
                         return "success";
                     }
                     return "no_rows_updated";
@@ -465,6 +406,52 @@ public partial class View_study_session : System.Web.UI.Page
                 updateBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
                 updateBadgeCmd.ExecuteNonQuery();
             }
+        }
+    }
+
+    // FOR GETTING COMBINED COMPLETION BADGE (completedTasks, completedTimers, completedStudySessions)
+    private static void CheckCombinedCompletionBadges(int userID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            con.Open();
+
+            // Get current counts for all three completion types
+            string getCountsQuery = "SELECT completedTasks, completedTimers, completedStudySessions FROM Users WHERE userID = @userID";
+            int completedTasks = 0;
+            int completedTimers = 0;
+            int completedStudySessions = 0;
+
+            using (MySqlCommand getCountsCmd = new MySqlCommand(getCountsQuery, con))
+            {
+                getCountsCmd.Parameters.AddWithValue("@userID", userID);
+                using (MySqlDataReader reader = getCountsCmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        completedTasks = reader["completedTasks"] != DBNull.Value ? Convert.ToInt32(reader["completedTasks"]) : 0;
+                        completedTimers = reader["completedTimers"] != DBNull.Value ? Convert.ToInt32(reader["completedTimers"]) : 0;
+                        completedStudySessions = reader["completedStudySessions"] != DBNull.Value ? Convert.ToInt32(reader["completedStudySessions"]) : 0;
+                    }
+                }
+            }
+
+            // Check if ALL three values meet the requirements for each badge level
+            if (completedTasks >= 50 && completedTimers >= 50 && completedStudySessions >= 50)
+            {
+                AwardBadgeStatic(con, userID, 10, "Gold");
+            }
+            else if (completedTasks >= 25 && completedTimers >= 25 && completedStudySessions >= 25)
+            {
+                AwardBadgeStatic(con, userID, 10, "Silver");
+            }
+            else if (completedTasks >= 10 && completedTimers >= 10 && completedStudySessions >= 10)
+            {
+                AwardBadgeStatic(con, userID, 10, "Bronze");
+            }
+
+            con.Close();
         }
     }
 
