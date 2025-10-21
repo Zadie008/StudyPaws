@@ -73,6 +73,7 @@ public partial class A200_View_timer : System.Web.UI.Page
         }
 
     }
+
     //COMPLETED TIMER
     [System.Web.Services.WebMethod]
     [System.Web.Script.Services.ScriptMethod]
@@ -109,6 +110,30 @@ public partial class A200_View_timer : System.Web.UI.Page
                 cmdCoins.Parameters.AddWithValue("@coinsEarned", coinsEarned);
                 cmdCoins.Parameters.AddWithValue("@userID", userID);
                 cmdCoins.ExecuteNonQuery();
+
+                // Increment completedTimers counter
+                string updateTimersQuery = "UPDATE Users SET completedTimers = completedTimers + 1 WHERE userID = @userID";
+                MySqlCommand cmdTimers = new MySqlCommand(updateTimersQuery, con);
+                cmdTimers.Parameters.AddWithValue("@userID", userID);
+                cmdTimers.ExecuteNonQuery();
+
+                // Get current time to check for time based badges
+                DateTime currentTime = DateTime.Now;
+                int currentHour = currentTime.Hour;
+
+                CheckTimerCompletionBadges(con, Convert.ToInt32(userID));
+
+                // 04:00-08:00
+                if (currentHour >= 4 && currentHour < 8)
+                {
+                    CheckEarlyMorningTimerBadges(con, Convert.ToInt32(userID));
+                }
+
+                // 22:00-02:00
+                if (currentHour >= 22 || currentHour < 2)
+                {
+                    CheckLateNightTimerBadges(con, Convert.ToInt32(userID));
+                }
             }
 
             return "Success: " + xpEarned + " XP and " + coinsEarned + " coins added";
@@ -118,6 +143,149 @@ public partial class A200_View_timer : System.Web.UI.Page
             return "Error: " + ex.Message;
         }
     }
+
+    // FOR GETTING TIMER COMPLETION BADGE
+    private static void CheckTimerCompletionBadges(MySqlConnection con, int userID)
+    {
+        string getCountQuery = "SELECT completedTimers FROM Users WHERE userID = @userID";
+        int completedCount = 0;
+        using (MySqlCommand getCountCmd = new MySqlCommand(getCountQuery, con))
+        {
+            getCountCmd.Parameters.AddWithValue("@userID", userID);
+            object result = getCountCmd.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                completedCount = Convert.ToInt32(result);
+            }
+        }
+
+        if (completedCount >= 150)
+        {
+            AwardBadgeStatic(con, userID, 2, "Gold");
+        }
+        else if (completedCount >= 50)
+        {
+            AwardBadgeStatic(con, userID, 2, "Silver");
+        }
+        else if (completedCount >= 10)
+        {
+            AwardBadgeStatic(con, userID, 2, "Bronze");
+        }
+    }
+
+    // FOR GETTING EARLY MORNING TIMER BADGE
+    private static void CheckEarlyMorningTimerBadges(MySqlConnection con, int userID)
+    {
+        string getCountQuery = "SELECT completedTimersEarly FROM Users WHERE userID = @userID";
+        int earlyMorningCount = 0;
+        using (MySqlCommand getCountCmd = new MySqlCommand(getCountQuery, con))
+        {
+            getCountCmd.Parameters.AddWithValue("@userID", userID);
+            object result = getCountCmd.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                earlyMorningCount = Convert.ToInt32(result);
+            }
+        }
+
+        string updateQuery = "UPDATE Users SET completedTimersEarly = completedTimersEarly + 1 WHERE userID = @userID";
+        using (MySqlCommand updateCmd = new MySqlCommand(updateQuery, con))
+        {
+            updateCmd.Parameters.AddWithValue("@userID", userID);
+            updateCmd.ExecuteNonQuery();
+        }
+
+        earlyMorningCount++;
+
+        if (earlyMorningCount >= 15)
+        {
+            AwardBadgeStatic(con, userID, 3, "Gold");
+        }
+        else if (earlyMorningCount >= 10)
+        {
+            AwardBadgeStatic(con, userID, 3, "Silver");
+        }
+        else if (earlyMorningCount >= 5)
+        {
+            AwardBadgeStatic(con, userID, 3, "Bronze");
+        }
+    }
+
+    // FOR GETTING LATE NIGHT TIMER BADGE
+    private static void CheckLateNightTimerBadges(MySqlConnection con, int userID)
+    {
+        string getCountQuery = "SELECT completedTimersLate FROM Users WHERE userID = @userID";
+        int lateNightCount = 0;
+        using (MySqlCommand getCountCmd = new MySqlCommand(getCountQuery, con))
+        {
+            getCountCmd.Parameters.AddWithValue("@userID", userID);
+            object result = getCountCmd.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                lateNightCount = Convert.ToInt32(result);
+            }
+        }
+
+        string updateQuery = "UPDATE Users SET completedTimersLate = completedTimersLate + 1 WHERE userID = @userID";
+        using (MySqlCommand updateCmd = new MySqlCommand(updateQuery, con))
+        {
+            updateCmd.Parameters.AddWithValue("@userID", userID);
+            updateCmd.ExecuteNonQuery();
+        }
+
+        lateNightCount++;
+
+        if (lateNightCount >= 15)
+        {
+            AwardBadgeStatic(con, userID, 4, "Gold");
+        }
+        else if (lateNightCount >= 10)
+        {
+            AwardBadgeStatic(con, userID, 4, "Silver");
+        }
+        else if (lateNightCount >= 5)
+        {
+            AwardBadgeStatic(con, userID, 4, "Bronze");
+        }
+    }
+
+    private static void AwardBadgeStatic(MySqlConnection con, int userID, int badgeID, string badgeType)
+    {
+        string checkBadgeQuery = "SELECT COUNT(*) FROM UserBadge WHERE userID = @userID AND badgeID = @badgeID";
+        int badgeCount = 0;
+        using (MySqlCommand checkBadgeCmd = new MySqlCommand(checkBadgeQuery, con))
+        {
+            checkBadgeCmd.Parameters.AddWithValue("@userID", userID);
+            checkBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+            badgeCount = Convert.ToInt32(checkBadgeCmd.ExecuteScalar());
+        }
+
+        if (badgeCount == 0)
+        {
+            // No entry exists - INSERT new record
+            string insertBadgeQuery = "INSERT INTO UserBadge (userID, badgeID, badgeType) VALUES (@userID, @badgeID, @badgeType)";
+            using (MySqlCommand insertBadgeCmd = new MySqlCommand(insertBadgeQuery, con))
+            {
+                insertBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                insertBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+                insertBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+                insertBadgeCmd.ExecuteNonQuery();
+            }
+        }
+        else
+        {
+            // Entry exists - UPDATE with new badgeType
+            string updateBadgeQuery = "UPDATE UserBadge SET badgeType = @badgeType WHERE userID = @userID AND badgeID = @badgeID";
+            using (MySqlCommand updateBadgeCmd = new MySqlCommand(updateBadgeQuery, con))
+            {
+                updateBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                updateBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+                updateBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+                updateBadgeCmd.ExecuteNonQuery();
+            }
+        }
+    }
+
     // EDIT TIMER (ADD MINUTES)
     [System.Web.Services.WebMethod]
     public static string UpdateTimerDuration(int addedSeconds)
@@ -155,8 +323,24 @@ public partial class A200_View_timer : System.Web.UI.Page
         if (Session["userID"] != null && Session["timerID"] != null)
         {
             int thisTimerID = Convert.ToInt32(Session["timerID"]);
+            int userID = Convert.ToInt32(Session["userID"]);
 
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+            using (MySqlConnection con1 = new MySqlConnection(cs))
+            {
+                string updateCommand = "UPDATE Users SET stoppedTimers = stoppedTimers + 1 WHERE userID = @userID";
+                using (MySqlCommand cmd = new MySqlCommand(updateCommand, con1))
+                {
+                    cmd.Parameters.AddWithValue("@userID", userID);
+                    con1.Open();
+                    cmd.ExecuteNonQuery();
+                    con1.Close();
+                }
+            }
+
+            CheckStoppedTimersBadges(userID);
+
             using (MySqlConnection con2 = new MySqlConnection(cs))
             {
                 string deleteCommand = "DELETE FROM Timer WHERE timerID = @timerID";
@@ -173,6 +357,80 @@ public partial class A200_View_timer : System.Web.UI.Page
                         Response.Redirect("Default.aspx");
                     }
                 }
+            }
+        }
+    }
+
+    // FOR GETTING STOPPED TIMERS BADGE
+    private void CheckStoppedTimersBadges(int userID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            con.Open();
+
+            string getCountQuery = "SELECT stoppedTimers FROM Users WHERE userID = @userID";
+            int stoppedCount = 0;
+            using (MySqlCommand getCountCmd = new MySqlCommand(getCountQuery, con))
+            {
+                getCountCmd.Parameters.AddWithValue("@userID", userID);
+                object result = getCountCmd.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                {
+                    stoppedCount = Convert.ToInt32(result);
+                }
+            }
+
+            if (stoppedCount >= 15)
+            {
+                AwardBadge(con, userID, 5, "Gold");
+            }
+            else if (stoppedCount >= 10)
+            {
+                AwardBadge(con, userID, 5, "Silver");
+            }
+            else if (stoppedCount >= 5)
+            {
+                AwardBadge(con, userID, 5, "Bronze");
+            }
+
+            con.Close();
+        }
+    }
+
+    private void AwardBadge(MySqlConnection con, int userID, int badgeID, string badgeType)
+    {
+        string checkBadgeQuery = "SELECT COUNT(*) FROM UserBadge WHERE userID = @userID AND badgeID = @badgeID";
+        int badgeCount = 0;
+        using (MySqlCommand checkBadgeCmd = new MySqlCommand(checkBadgeQuery, con))
+        {
+            checkBadgeCmd.Parameters.AddWithValue("@userID", userID);
+            checkBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+            badgeCount = Convert.ToInt32(checkBadgeCmd.ExecuteScalar());
+        }
+
+        if (badgeCount == 0)
+        {
+            // No entry exists - INSERT new record
+            string insertBadgeQuery = "INSERT INTO UserBadge (userID, badgeID, badgeType) VALUES (@userID, @badgeID, @badgeType)";
+            using (MySqlCommand insertBadgeCmd = new MySqlCommand(insertBadgeQuery, con))
+            {
+                insertBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                insertBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+                insertBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+                insertBadgeCmd.ExecuteNonQuery();
+            }
+        }
+        else
+        {
+            // Entry exists - UPDATE with new badgeType
+            string updateBadgeQuery = "UPDATE UserBadge SET badgeType = @badgeType WHERE userID = @userID AND badgeID = @badgeID";
+            using (MySqlCommand updateBadgeCmd = new MySqlCommand(updateBadgeQuery, con))
+            {
+                updateBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                updateBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+                updateBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+                updateBadgeCmd.ExecuteNonQuery();
             }
         }
     }

@@ -118,120 +118,120 @@
         <asp:HiddenField ID="hfCurrentCategory" runat="server" Value="CAT" />
         <asp:HiddenField ID="hfSelectedPetID" runat="server"/>
         <asp:HiddenField ID="hfSelectedPetPrice" runat="server" />
+
         <h2>Welcome to the Pet Shop!</h2>
         <div class="backgroundColorContainer">
-                <div class="leftCategorySection">
-        <asp:Button ID="btnCats" runat="server" CssClass="button buttonSelected" Text="Cats" OnClick="btnCats_Click" />
-        <asp:Button ID="btnDogs" runat="server" CssClass="button" Text="Dogs" OnClick="btnDogs_Click" />
-        <asp:Button ID="btnFuzzy" runat="server" CssClass="button" Text="Fuzzy" OnClick="btnFuzzy_Click" />
-        <asp:Button ID="btnFarm" runat="server" CssClass="button" Text="Farm" OnClick="btnFarm_Click" />
-        <asp:Button ID="btnSpecial" runat="server" CssClass="button" Text="Special" OnClick="btnSpecial_Click" />
-    </div>
-    <div class="rightPetsSection">
-        <table>
-            <tr>
-                <td><div class="petIconShop">
-                        <div id="circle1" class="petCircleShop" runat="server"></div>
-                        <asp:Image ID="imgPet1" runat="server" CssClass="petImageShop" ImageUrl="Images/Cat 1.png" Width="130" />
-                    </div>
-                </td>
-                <td>
-                    <div class="petIconShop">
-                        <div id="circle2" class="petCircleShop" runat="server"></div>
-                        <asp:Image ID="imgPet2" runat="server" CssClass="petImageShop" ImageUrl="Images/Cat 2.png" Width="130" />
-                    </div>
-                </td>
-                <td>
-                    <div class="petIconShop">
-                        <div id="circle3" class="petCircleShop" runat="server"></div>
-                        <asp:Image ID="imgPet3" runat="server" CssClass="petImageShop" ImageUrl="Images/Cat 3.png" Width="130" />
-                    </div>
-                </td>
-                <td>
-                    <div class="petIconShop">
-                        <div id="circle4" class="petCircleShop" runat="server"></div>
-                        <asp:Image ID="imgPet4" runat="server" CssClass="petImageShop" ImageUrl="Images/Cat 4.png" Width="130" />
-                    </div>
-                </td>
-                <td>
-                    <div class="petIconShop">
-                        <div id="circle5" class="petCircleShop" runat="server"></div>
-                        <asp:Image ID="imgPet5" runat="server" CssClass="petImageShop" ImageUrl="Images/Cat 5.png" Width="130" />
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><asp:Button ID="btnSelect1" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
-                <td><asp:Button ID="btnSelect2" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
-                <td><asp:Button ID="btnSelect3" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
-                <td><asp:Button ID="btnSelect4" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
-                <td><asp:Button ID="btnSelect5" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
-            </tr>
-        </table>
-    </div>
-</div>
-<div class="buttonSection">
-    <div class="leftSection">
-    </div>
-    <div class="middleSection buttonRow">
-        <asp:Button ID="btnBuy" class="button" runat="server" Text="Buy" Visible="false" OnClick="btnBuy_Click" />
-        <asp:HiddenField ID="hfSelectedColourNum" runat="server" />
-        <asp:Label ID="lblLocked" class="button" runat="server" Text="UNLOCKS AT LEVEL 1" Visible="false" />
-    </div>
-    <div class="rightSection">
-    </div>
-</div>
+            <div class="leftCategorySection">
+                <asp:Button ID="btnCats" runat="server" CssClass="button buttonSelected" Text="Cats" OnClick="btnCats_Click" />
+                <asp:Button ID="btnDogs" runat="server" CssClass="button" Text="Dogs" OnClick="btnDogs_Click" />
+                <asp:Button ID="btnFuzzy" runat="server" CssClass="button" Text="Fuzzy" OnClick="btnFuzzy_Click" />
+                <asp:Button ID="btnFarm" runat="server" CssClass="button" Text="Farm" OnClick="btnFarm_Click" />
+                <asp:Button ID="btnSpecial" runat="server" CssClass="button" Text="Special" OnClick="btnSpecial_Click" />
+            </div>
+            <div class="rightPetsSection">
+                <table>
+                    <tr>
+                        <td><div class="petIconShop">
+                                <div id="circle1" class="petCircleShop" runat="server"></div>
+                                <asp:Image ID="imgPet1" runat="server" CssClass="petImageShop" ImageUrl="Images/Cat 1.png" Width="130" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="petIconShop">
+                                <div id="circle2" class="petCircleShop" runat="server"></div>
+                                <asp:Image ID="imgPet2" runat="server" CssClass="petImageShop" ImageUrl="Images/Cat 2.png" Width="130" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="petIconShop">
+                                <div id="circle3" class="petCircleShop" runat="server"></div>
+                                <asp:Image ID="imgPet3" runat="server" CssClass="petImageShop" ImageUrl="Images/Cat 3.png" Width="130" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="petIconShop">
+                                <div id="circle4" class="petCircleShop" runat="server"></div>
+                                <asp:Image ID="imgPet4" runat="server" CssClass="petImageShop" ImageUrl="Images/Cat 4.png" Width="130" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="petIconShop">
+                                <div id="circle5" class="petCircleShop" runat="server"></div>
+                                <asp:Image ID="imgPet5" runat="server" CssClass="petImageShop" ImageUrl="Images/Cat 5.png" Width="130" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><asp:Button ID="btnSelect1" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
+                        <td><asp:Button ID="btnSelect2" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
+                        <td><asp:Button ID="btnSelect3" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
+                        <td><asp:Button ID="btnSelect4" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
+                        <td><asp:Button ID="btnSelect5" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
+                    </tr>
+                </table>
+            </div>
         </div>
+        <div class="buttonSection">
+            <div class="leftSection">
+            </div>
+            <div class="middleSection buttonRow">
+                <asp:Button ID="btnBuy" class="button" runat="server" Text="Buy" Visible="false" OnClick="btnBuy_Click" />
+                <asp:HiddenField ID="hfSelectedColourNum" runat="server" />
+                <asp:Label ID="lblLocked" class="button" runat="server" Text="UNLOCKS AT LEVEL 1" Visible="false" />
+            </div>
+            <div class="rightSection">
+            </div>
+        </div>
+    </div>
 
     <!-- pop ups for pets -->
     <div id="alreadyOwnedPopup" class="simple-popup" style="display: none;">
-    <div class="popup-pink-box">
-        <asp:HiddenField ID="HiddenField1" runat="server" />
-        <p>You already own this pet!</p>
-        <img src="Images/Notification%20Happy.png" />
-        <br />
-        <div class="buttonSection">
-            <asp:Button ID="btnCloseAlreadyOwned" CssClass="popup-button" runat="server" Text="Okay!" OnClick="btnCloseAlreadyOwned_Click" />
+        <div class="popup-pink-box">
+            <asp:HiddenField ID="HiddenField1" runat="server" />
+            <p>You already own this pet!</p>
+            <img src="Images/Notification%20Happy.png" />
+            <div class="buttonSection">
+                <asp:Button ID="btnCloseAlreadyOwned" CssClass="popup-button" runat="server" Text="Okay!" OnClick="btnCloseAlreadyOwned_Click" />
+            </div>
         </div>
     </div>
-</div>
 
     <div id="confirmBuyPopup" class="simple-popup" style="display: none;">
-    <div class="popup-pink-box">
-        <p>Are you sure you want to buy this pet for</p>
-        <br />
-        <table id="popupSellPriceTable">
-            <tr>
-                <td>
-                    <div class="pawIcon">
-                        <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
-                        <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
-                    </div>
-                </td>
-                <td><asp:Label ID="lblSellPrice" runat="server" Text="100"></asp:Label></td>
-                <td>?</td>
-            </tr>
-        </table>
-        <br />
-        <img src="Images/Notification%20Happy.png" />
+        <div class="popup-pink-box">
+            <p>Are you sure you want to buy this pet for</p>
+            <br />
+            <table id="popupSellPriceTable">
+                <tr>
+                    <td>
+                        <div class="pawIcon">
+                            <img class="circle" src="Icons/icons8-circle-white-96.png" width="50" />
+                            <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
+                        </div>
+                    </td>
+                    <td><asp:Label ID="lblSellPrice" runat="server" Text="100"></asp:Label></td>
+                    <td>?</td>
+                </tr>
+            </table>
+            <br />
+            <img src="Images/Notification%20Happy.png" />
 
-        <div class="buttonSection">
-            <asp:Button ID="btnYesBuy" CssClass="popup-button-best-pink" runat="server" Text="Yes, I'm sure!" OnClick="btnYesBuy_Click" />
-            <asp:Button ID="btnNoBuy" CssClass="popup-button" runat="server" Text="No, not sure!" OnClick="btnNoBuy_Click" />
+            <div class="buttonSection">
+                <asp:Button ID="btnYesBuy" CssClass="popup-button-best-pink" runat="server" Text="Yes, I'm sure!" OnClick="btnYesBuy_Click" />
+                <asp:Button ID="btnNoBuy" CssClass="popup-button" runat="server" Text="No, not sure!" OnClick="btnNoBuy_Click" />
+            </div>
         </div>
     </div>
-</div>
 
     <div id="insufficientCoinsPopup" class="simple-popup" style="display: none;">
-    <div class="popup-blue-box">
-        <p>Sorry, you don't have enough pawprints!</p>
-        <img src="Images/Notification%20Sad%20Hamster.png" />
-        <br />
-        <div class="buttonSection">
-            <asp:Button ID="btnCloseInsufficientCoins" CssClass="popup-button" runat="server" Text="Okay!" OnClick="btnCloseInsufficientCoins_Click" />
+        <div class="popup-blue-box">
+            <p>Sorry, you don't have enough pawprints!</p>
+            <img src="Images/Notification%20Sad%20Hamster.png" />
+            <br />
+            <div class="buttonSection">
+                <asp:Button ID="btnCloseInsufficientCoins" CssClass="popup-button" runat="server" Text="Okay!" OnClick="btnCloseInsufficientCoins_Click" />
+            </div>
         </div>
     </div>
-</div>
 
     <!-- purchase success pop-up -->
     <div id="purchaseSuccessPopup" class="simple-popup" style="display: none;">
@@ -246,6 +246,7 @@
             </div>
         </div>
     </div>
+
 
         <!--does not have notification-->
         <div id="popupNoNotifications" class="simple-popup" style="display: none;">
@@ -323,6 +324,7 @@
                 </div>
             </div>
         </div>
+
     <script>
         function showAlreadyOwnedPopup() {
             var popup = document.getElementById('alreadyOwnedPopup');
