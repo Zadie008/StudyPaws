@@ -72,9 +72,8 @@
             </defs>
             <text>
                 <textPath href="#curve" startOffset="50%" text-anchor="middle">
-                StudyP
-<tspan dx="0.7em">w</tspan>s
-            </textPath>
+                    StudyP<tspan dx="0.7em">w</tspan>s
+                </textPath>
             </text>
         </svg>
         <img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" />
@@ -89,6 +88,33 @@
     <div class="viewTimerMainContent">
         <div class="timeSection">
             <div class="leftSection">
+                <div class="inSessionDiv">
+                    <h2 class="inSessionHeading">In session</h2>
+                    <div class="scrollableTableContainer">
+                        <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" AutoGenerateColumns="False" OnRowCommand="GridView1_RowCommand">
+                            <Columns>
+                                <asp:TemplateField>
+                                    <ItemTemplate>
+                                        <div class="friendRow">
+                                            <a href="C600_View-friend-list.aspx" class="friendProfileIconLink">
+                                                <div class="friendProfileIcon">
+                                                    <div class="friendProfileCircle"></div>
+                                                    <img class="friendProfileImage" src='<%# GetProfileImagePath(Convert.ToInt32(Eval("iconNum"))) %>' />
+                                                </div>
+                                            </a>
+                                            <span class="friendUsername"><%# Eval("username") %></span>
+                                            <asp:ImageButton ID="btnAddFriend" runat="server" CssClass="addFriendBtn" 
+                                                CommandName="SendFriendRequest" 
+                                                CommandArgument='<%# Eval("userID") + "|" + Eval("username") %>' 
+                                                ImageUrl='<%# IsFriend(Convert.ToInt32(Eval("userID"))) ? "Icons/icons8-check-white-96.png" : "Icons/icons8-add-new-white-96.png" %>'
+                                                Visible='<%# !IsCurrentUser(Convert.ToInt32(Eval("userID"))) && !IsFriend(Convert.ToInt32(Eval("userID"))) %>' />
+                                        </div>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                            </Columns>
+                        </asp:GridView>
+                    </div>
+                </div>
             </div>
             <div class="middleSection">
                 <div class="timerCircleWrapper">
@@ -107,11 +133,6 @@
                 </div>
             </div>
             <div class="rightSection">
-                <div class="toDoListSection">
-                    <img src="Icons/icons8-double-left-white-96.png" />
-                    <img src="Icons/icons8-double-right-white-96.png" />
-                    <h1>To-do List</h1>
-                </div>
             </div>
         </div>
         <div class="buttonSection">
@@ -180,6 +201,42 @@
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" />
     <audio id="timerStartSound" src="Audio/timerStartSound.mp3" preload="auto"></audio>
     <audio id="timerEndSound" src="Audio/timerEndSound.mp3" preload="auto"></audio>
+
+    <script type="text/javascript">
+        function loadInSessionUsers() {
+            PageMethods.GetJoinedUsers(function (users) {
+                const table = document.getElementById('<%= GridView1.ClientID %>');
+            if (!table) return;
+
+            let html = "";
+            users.forEach(u => {
+                const imgSrc = getProfileImagePath(u.iconNum);
+                html += `
+                    <div class="friendRow">
+                        <div class="friendProfileIcon">
+                            <img class="friendProfileImage" src="${imgSrc}" />
+                        </div>
+                        <span class="friendUsername">${u.username}</span>
+                    </div>`;
+            });
+
+            table.innerHTML = html;
+        });
+        }
+
+        function getProfileImagePath(iconNum) {
+            switch (iconNum) {
+                case 1: return "Images/ProfilePictures/CatPfp.png";
+                case 2: return "Images/ProfilePictures/DogPfp.png";
+                case 3: return "Images/ProfilePictures/BunnyPfp.png";
+                case 4: return "Images/ProfilePictures/CowPfp.png";
+                case 5: return "Images/ProfilePictures/UnicornPfp.png";
+                default: return "Images/ProfilePictures/CatPfp.png";
+            }
+        }
+
+        setInterval(loadInSessionUsers, 5000); // refresh every 5 seconds
+    </script>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" runat="Server">

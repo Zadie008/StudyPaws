@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
-using System.Drawing;
 using System.Web.Security;
 using System.Web.UI;
 
@@ -26,8 +25,7 @@ public partial class _Default : System.Web.UI.Page
         {
             lblLoggedInUserName.Text = Session["Username"].ToString() + "!";
 
-            string username = Session["Username"].ToString(); //need this on every page
-
+            string username = Session["Username"].ToString();
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
             string userID = GetUserID(username, cs);
 
@@ -487,6 +485,108 @@ public partial class _Default : System.Web.UI.Page
             int sessionID = Convert.ToInt32(Session["sessionID"]);
             int userID = Convert.ToInt32(Session["userID"]);
 
+            // Check if it's within the join window (1 minute before to session start)
+            if (StudySessionHelper.ShouldPromptJoin(sessionID) || IsWithinJoinGracePeriod(sessionID))
+            {
+                bool joined = StudySessionHelper.JoinStudySession(sessionID, userID);
+
+                if (joined)
+                {
+                    // Hide the popup
+                    string hideScript = "document.getElementById('popup').style.display = 'none';";
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "HidePopup", hideScript, true);
+
+                    // Redirect to study session page
+                    Response.Redirect("A1400_View-study-session.aspx");
+                }
+            }
+            else
+            {
+                // Show message that it's not time to join yet or join window expired
+                string message = GetJoinTimeMessage(sessionID);
+                string script = "alert('{message}');";
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "JoinTimeMessage", script, true);
+            }
+        }
+    }
+
+    private bool IsWithinJoinGracePeriod(int sessionID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            string query = "SELECT sessionStart FROM StudySession WHERE sessionID = @sessionID";
+            using (MySqlCommand cmd = new MySqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@sessionID", sessionID);
+                con.Open();
+                DateTime sessionStart = Convert.ToDateTime(cmd.ExecuteScalar());
+
+                DateTime now = DateTime.Now;
+                TimeSpan timeSinceSessionStart = now - sessionStart;
+
+                // Allow joining for 1 minute after session start
+                return timeSinceSessionStart.TotalMinutes <= 1;
+            }
+        }
+    }
+
+    private string GetJoinTimeMessage(int sessionID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            string query = "SELECT sessionStart FROM StudySession WHERE sessionID = @sessionID";
+            using (MySqlCommand cmd = new MySqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@sessionID", sessionID);
+                con.Open();
+                DateTime sessionStart = Convert.ToDateTime(cmd.ExecuteScalar());
+
+                DateTime now = DateTime.Now;
+                TimeSpan timeUntilSession = sessionStart - now;
+
+                if (timeUntilSession.TotalMinutes > 1)
+                {
+                    return "You can join this study session starting at {sessionStart.AddMinutes(-1):HH:mm}";
+                }
+                else
+                {
+                    return "The join window for this study session has ended. You can no longer join.";
+                }
+            }
+        }
+    }
+
+    private bool IsWithinJoinWindow(int sessionID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            string query = "SELECT sessionStart FROM StudySession WHERE sessionID = @sessionID";
+            using (MySqlCommand cmd = new MySqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@sessionID", sessionID);
+                con.Open();
+                DateTime sessionStart = Convert.ToDateTime(cmd.ExecuteScalar());
+
+                DateTime now = DateTime.Now;
+                TimeSpan timeUntilSession = sessionStart - now;
+
+                // Allow joining from 1 minute before to 1 minute after session start
+                return timeUntilSession.TotalMinutes <= 1 && timeUntilSession.TotalSeconds >= -60;
+            }
+        }
+    }
+
+    // OLD JOIN LOGIC WHERE IT INSTANTLY JOINS AS IT REACHES START TIME OF STUDY SESSION
+    /*protected void btnJoin_Click(object sender, EventArgs e)
+    {
+        if (Session["sessionID"] != null && Session["userID"] != null)
+        {
+            int sessionID = Convert.ToInt32(Session["sessionID"]);
+            int userID = Convert.ToInt32(Session["userID"]);
+
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
             string updateQuery = "UPDATE StudySessionParticipants SET joined = true WHERE sessionID = @sessionID AND userID = @userID";
 
@@ -504,7 +604,7 @@ public partial class _Default : System.Web.UI.Page
                 }
             }
         }
-    }
+    }*/
     // end: notification bell code
 
     // ---- COPY ----

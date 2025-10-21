@@ -32,10 +32,15 @@ public partial class View_study_session : System.Web.UI.Page
 
         if (!IsPostBack)
         {
+            if (Session["userID"] != null)
+            {
+                LoadJoinedUsers();
+            }
+
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
             using (MySqlConnection con = new MySqlConnection(cs))
             {
-                string query = "SELECT StudySession.sessionTitle, StudySession.sessionDuration FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySession.sessionID = @sessionID";
+                string query = "SELECT StudySession.sessionTitle, StudySession.sessionDuration, StudySession.sessionStart FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySession.sessionID = @sessionID";
 
                 using (MySqlCommand cmd = new MySqlCommand(query, con))
                 {
@@ -47,11 +52,16 @@ public partial class View_study_session : System.Web.UI.Page
                         {
                             string sessionTitle = reader["sessionTitle"].ToString();
                             int totalSeconds = Convert.ToInt32(reader["sessionDuration"]);
+                            DateTime sessionDateTime = Convert.ToDateTime(reader["sessionStart"]);
 
                             txtSessionTitle.Text = sessionTitle;
 
                             Session["sessionTitle"] = sessionTitle;
                             Session["sessionDuration"] = totalSeconds;
+                            Session["sessionDateTime"] = sessionDateTime;
+
+                            // Initialize session with waiting room logic
+                            InitializeSessionTimer(sessionDateTime, totalSeconds);
 
                             int hours = totalSeconds / 3600;
                             int minutes = (totalSeconds % 3600) / 60;
@@ -101,6 +111,65 @@ public partial class View_study_session : System.Web.UI.Page
             }
         }
     }
+
+    private void InitializeSessionTimer(DateTime sessionStart, int totalSeconds)
+    {
+        DateTime now = DateTime.Now;
+        TimeSpan timeUntilSession = sessionStart - now;
+
+        if (timeUntilSession.TotalSeconds <= 0)
+        {
+            // Session should have already started - start timer immediately
+            StartStudyTimer(totalSeconds);
+        }
+        else
+        {
+            // Show waiting room with countdown to session start
+            ShowWaitingRoom(timeUntilSession.TotalSeconds, totalSeconds);
+        }
+    }
+
+    private void ShowWaitingRoom(double secondsUntilStart, int sessionDuration)
+    {
+        string script = string.Format(@"
+        document.addEventListener('DOMContentLoaded', function() {{
+            // Show waiting room message
+            var timerElement = document.getElementById('mainContentPlaceHolder_lblCountdown');
+            if (timerElement) {{
+                timerElement.innerHTML = 'Waiting for session to start...<br/><span style=""font-size: 0.7em;"">Starting in: <span id=""waitingCountdown"">{0}</span> seconds</span>';
+            }}
+            
+            // Start waiting countdown
+            var waitingSeconds = Math.round({0});
+            var waitingInterval = setInterval(function() {{
+                waitingSeconds--;
+                var waitingElement = document.getElementById('waitingCountdown');
+                if (waitingElement) {{
+                    waitingElement.textContent = waitingSeconds;
+                }}
+                
+                if (waitingSeconds <= 0) {{
+                    clearInterval(waitingInterval);
+                    startTimer({1}); // Start the actual study timer
+                    if (timerElement) {{
+                        timerElement.innerHTML = ''; // Clear waiting message
+                    }}
+                }}
+            }}, 1000);
+        }});", secondsUntilStart, sessionDuration);
+
+        ClientScript.RegisterStartupScript(this.GetType(), "WaitingRoomScript", script, true);
+    }
+
+    private void StartStudyTimer(int totalSeconds)
+    {
+        string script = string.Format(@"
+        document.addEventListener('DOMContentLoaded', function() {{
+            startTimer({0});
+        }});", totalSeconds);
+        ClientScript.RegisterStartupScript(this.GetType(), "StartTimerScript", script, true);
+    }
+
     [System.Web.Services.WebMethod]
     [System.Web.Script.Services.ScriptMethod]
     public static string UpdateStudySessionRewards(int minutesStudied)
@@ -114,8 +183,8 @@ public partial class View_study_session : System.Web.UI.Page
             }
 
             string userID = context.Session["UserID"].ToString();
-            int xpEarned = minutesStudied * 5;
-            int coinsEarned = minutesStudied * 10;
+            int xpEarned = minutesStudied * 2; // 2 XP per minute
+            int coinsEarned = minutesStudied * 2; // 2 coins per minute
 
             string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
@@ -145,6 +214,7 @@ public partial class View_study_session : System.Web.UI.Page
             return "Error: " + ex.Message;
         }
     }
+
     // STOP STUDY SESSION (DELETING THE STUDY SESSION ENTRY FOR CURRENT USER)
     protected void btnYes_Click(object sender, EventArgs e)
     {
@@ -209,6 +279,163 @@ public partial class View_study_session : System.Web.UI.Page
         catch (Exception ex)
         {
             return "error: " + ex.Message;
+        }
+    }
+
+    // IN SESSION BLOCK - UPDATED TO SHOW ONLY JOINED USERS
+    private void LoadJoinedUsers()
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        int sessionID = Convert.ToInt32(Session["sessionID"]);
+        int currentUserID = Convert.ToInt32(Session["userID"]);
+
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            string command = @"
+            SELECT u.userID, u.username, u.iconNum 
+            FROM StudySessionParticipants sp 
+            JOIN Users u ON sp.userID = u.userID 
+            WHERE sp.sessionID = @sessionID 
+            AND sp.joined = 'yes'
+            AND u.userID != @currentUserID";
+
+            MySqlCommand cmd = new MySqlCommand(command, con);
+            cmd.Parameters.AddWithValue("@sessionID", sessionID);
+            cmd.Parameters.AddWithValue("@currentUserID", currentUserID);
+
+            con.Open();
+            MySqlDataReader rdr = cmd.ExecuteReader();
+            GridView1.DataSource = rdr;
+            GridView1.DataBind();
+        }
+    }
+
+    [System.Web.Services.WebMethod]
+    public static List<object> GetJoinedUsers()
+    {
+        List<object> users = new List<object>();
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+        if (HttpContext.Current.Session["sessionID"] == null)
+            return users;
+
+        int sessionID = Convert.ToInt32(HttpContext.Current.Session["sessionID"]);
+
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            string query = @"SELECT u.userID, u.username, u.iconNum 
+                        FROM StudySessionParticipants sp 
+                        JOIN Users u ON sp.userID = u.userID 
+                        WHERE sp.sessionID = @sessionID 
+                        AND sp.joined = 'yes'";
+
+            using (MySqlCommand cmd = new MySqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@sessionID", sessionID);
+                con.Open();
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        users.Add(new
+                        {
+                            userID = Convert.ToInt32(reader["userID"]),
+                            username = reader["username"].ToString(),
+                            iconNum = Convert.ToInt32(reader["iconNum"])
+                        });
+                    }
+                }
+            }
+        }
+
+        return users;
+    }
+
+    // Check if a user is already a friend
+    public bool IsFriend(int targetUserID)
+    {
+        int currentUserID = Convert.ToInt32(Session["userID"]);
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            string query = @"SELECT COUNT(*) FROM FriendsList 
+                       WHERE ((userIDfrom = @currentUserID AND userIDto = @targetUserID) 
+                       OR (userIDfrom = @targetUserID AND userIDto = @currentUserID))
+                       AND requestStatus = 'Accepted'";
+
+            using (MySqlCommand cmd = new MySqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@currentUserID", currentUserID);
+                cmd.Parameters.AddWithValue("@targetUserID", targetUserID);
+                con.Open();
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                return count > 0;
+            }
+        }
+    }
+
+    private bool SendFriendRequest(int fromUserID, int toUserID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            // Check if friend request already exists
+            string checkQuery = @"SELECT COUNT(*) FROM FriendsList 
+                            WHERE (userIDfrom = @fromUserID AND userIDto = @toUserID) 
+                            OR (userIDfrom = @toUserID AND userIDto = @fromUserID)";
+
+            using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, con))
+            {
+                checkCmd.Parameters.AddWithValue("@fromUserID", fromUserID);
+                checkCmd.Parameters.AddWithValue("@toUserID", toUserID);
+                con.Open();
+                int existingCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                if (existingCount > 0)
+                {
+                    return false; // Friend request or friendship already exists
+                }
+            }
+
+            // Send friend request
+            string insertQuery = "INSERT INTO FriendsList (userIDfrom, userIDto, requestStatus) VALUES (@fromUserID, @toUserID, 'Pending')";
+            using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, con))
+            {
+                insertCmd.Parameters.AddWithValue("@fromUserID", fromUserID);
+                insertCmd.Parameters.AddWithValue("@toUserID", toUserID);
+                int rowsAffected = insertCmd.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
+        }
+    }
+
+    // Check if the user is the current user
+    public bool IsCurrentUser(int userID)
+    {
+        return userID == Convert.ToInt32(Session["userID"]);
+    }
+
+    // Handle friend request
+    protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        if (e.CommandName == "SendFriendRequest")
+        {
+            string[] args = e.CommandArgument.ToString().Split('|');
+            int targetUserID = Convert.ToInt32(args[0]);
+            string targetUsername = args[1];
+            int currentUserID = Convert.ToInt32(Session["userID"]);
+
+            if (SendFriendRequest(currentUserID, targetUserID))
+            {
+                // Refresh the grid to update the button
+                LoadJoinedUsers();
+
+                // Show success message
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "friendRequestSent",
+                    "alert('Friend request sent to " + targetUsername + "!');", true);
+            }
         }
     }
 
@@ -393,7 +620,7 @@ public partial class View_study_session : System.Web.UI.Page
         }
     }
 
-    private string GetProfileImagePath(int iconNum)
+    public static string GetProfileImagePath(int iconNum)
     {
         switch (iconNum)
         {
