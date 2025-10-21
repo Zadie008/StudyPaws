@@ -50,11 +50,11 @@
 
     <div class="rightInfoDiv">
         <div class="timeNotificationWrapper">
-            <div class="notificationDetails">
+            <!--<div class="notificationDetails">
                 <asp:ImageButton ID="imgNotificationRinging" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-ringing-white-96.png" OnClientClick="showNotificationPopup(true); return false;" />
                 <asp:ImageButton ID="imgNotificationNormal" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" OnClientClick="showNotificationPopup(false); return false;" />
                 <div id="notificationBadge" runat="server" class="notificationBadge"></div>
-            </div>
+            </div>-->
 
             <div class="timeDateDiv">
                 <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="09:52"></asp:Label>

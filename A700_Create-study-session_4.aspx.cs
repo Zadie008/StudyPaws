@@ -291,20 +291,19 @@ public partial class Default2 : System.Web.UI.Page
 
     private void AwardBadge(MySqlConnection con, int userID, int badgeID, string badgeType)
     {
-        // Check if user already has it
-        string checkBadgeQuery = "SELECT COUNT(*) FROM UserBadge WHERE userID = @userID AND badgeID = @badgeID AND badgeType = @badgeType";
+        // Check if user already has any type of this badge
+        string checkBadgeQuery = "SELECT COUNT(*) FROM UserBadge WHERE userID = @userID AND badgeID = @badgeID";
         int badgeCount = 0;
         using (MySqlCommand checkBadgeCmd = new MySqlCommand(checkBadgeQuery, con))
         {
             checkBadgeCmd.Parameters.AddWithValue("@userID", userID);
             checkBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
-            checkBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
             badgeCount = Convert.ToInt32(checkBadgeCmd.ExecuteScalar());
         }
 
-        // otherwise award it
         if (badgeCount == 0)
         {
+            // No entry exists - INSERT new record
             string insertBadgeQuery = "INSERT INTO UserBadge (userID, badgeID, badgeType) VALUES (@userID, @badgeID, @badgeType)";
             using (MySqlCommand insertBadgeCmd = new MySqlCommand(insertBadgeQuery, con))
             {
@@ -312,6 +311,18 @@ public partial class Default2 : System.Web.UI.Page
                 insertBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
                 insertBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
                 insertBadgeCmd.ExecuteNonQuery();
+            }
+        }
+        else
+        {
+            // Entry exists - UPDATE with new badgeType
+            string updateBadgeQuery = "UPDATE UserBadge SET badgeType = @badgeType WHERE userID = @userID AND badgeID = @badgeID";
+            using (MySqlCommand updateBadgeCmd = new MySqlCommand(updateBadgeQuery, con))
+            {
+                updateBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                updateBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+                updateBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+                updateBadgeCmd.ExecuteNonQuery();
             }
         }
     }

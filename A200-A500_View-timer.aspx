@@ -49,9 +49,9 @@
 
         <div class="rightInfoDiv">
             <div class="timeNotificationWrapper">
-                <div class="notificationDetails">
+                <!--<div class="notificationDetails">
                     <asp:ImageButton ID="imgNotificationNormal" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" CausesValidation="False" Enabled="False" />
-                </div>
+                </div>-->
 
                 <div class="timeDateDiv">
                     <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="09:52"></asp:Label>
