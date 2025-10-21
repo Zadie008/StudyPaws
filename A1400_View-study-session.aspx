@@ -93,26 +93,21 @@
                     <div class="scrollableTableContainer">
                         <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" 
                         AutoGenerateColumns="False" OnRowCommand="GridView1_RowCommand">
-                        <Columns>
-                            <asp:TemplateField>
-                                <ItemTemplate>
-                                    <div class="friendRow">
-                                        <div class="friendProfileIcon">
-                                            <div class="friendProfileCircle"></div>
-                                            <img class="friendProfileImage" src='<%# GetProfileImagePath(Convert.ToInt32(Eval("iconNum"))) %>' />
+                            <Columns>
+                                <asp:TemplateField>
+                                    <ItemTemplate>
+                                        <div class="friendRow">
+                                            <div class="friendProfileIcon">
+                                                <div class="friendProfileCircle"></div>
+                                                <img class="friendProfileImage" src='<%# GetProfileImageUrl(Eval("iconNum")) %>' />
+                                            </div>
+                                            <span class="friendUsername"><%# Eval("username") %></span>
                                         </div>
-                                        <span class="friendUsername"><%# Eval("username") %></span>
-                                        <asp:ImageButton ID="btnAddFriend" runat="server" CssClass="addFriendBtn" 
-                                            CommandName="SendFriendRequest" 
-                                            CommandArgument='<%# Eval("userID") + "|" + Eval("username") %>' 
-                                            ImageUrl="~/Icons/icons8-add-friend.png" 
-                                            Visible='<%# !IsCurrentUser(Convert.ToInt32(Eval("userID"))) && !IsFriend(Convert.ToInt32(Eval("userID"))) %>' />
-                                    </div>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                        </Columns>
-                    </asp:GridView>
-</div>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                            </Columns>
+                        </asp:GridView>
+                    </div>
                 </div>
             </div>
             <div class="middleSection">
@@ -202,25 +197,72 @@
     <audio id="timerEndSound" src="Audio/timerEndSound.mp3" preload="auto"></audio>
 
     <script type="text/javascript">
+        // Set circle colors on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            setCircleColors();
+        });
+
+        function setCircleColors() {
+            const profileImages = document.querySelectorAll('.friendProfileImage');
+
+            profileImages.forEach(img => {
+                const circle = img.closest('.friendProfileIcon').querySelector('.friendProfileCircle');
+                const src = img.getAttribute('src').toLowerCase();
+                let colorClass = 'circle-cat';
+
+                if (src.includes('cat')) colorClass = 'circle-cat';
+                else if (src.includes('dog')) colorClass = 'circle-dog';
+                else if (src.includes('bunny')) colorClass = 'circle-bunny';
+                else if (src.includes('cow')) colorClass = 'circle-cow';
+                else if (src.includes('unicorn')) colorClass = 'circle-unicorn';
+
+                // Remove existing color classes
+                circle.className = 'friendProfileCircle';
+                // Add the correct color class
+                circle.classList.add(colorClass);
+            });
+        }
+
         function loadInSessionUsers() {
             PageMethods.GetJoinedUsers(function (users) {
-                const table = document.getElementById('<%= GridView1.ClientID %>');
-            if (!table) return;
+                updateUserList(users);
+            });
+        }
 
-            let html = "";
+        function updateUserList(users) {
+            const gridView = document.getElementById('<%= GridView1.ClientID %>');
+            if (!gridView) return;
+
+            let tbody = gridView.querySelector('tbody');
+            if (!tbody) {
+                tbody = document.createElement('tbody');
+                gridView.appendChild(tbody);
+            }
+
+            // Build rows for each user - simple and clean
+            let html = '';
             users.forEach(u => {
                 const imgSrc = getProfileImagePath(u.iconNum);
+                const circleClass = getCircleColorClass(u.iconNum);
+
                 html += `
-                    <div class="friendRow">
-                        <div class="friendProfileIcon">
-                            <img class="friendProfileImage" src="${imgSrc}" />
+                <tr>
+                    <td>
+                        <div class="friendRow">
+                            <div class="friendProfileIcon">
+                                <div class="friendProfileCircle ${circleClass}"></div>
+                                <img class="friendProfileImage" src="${imgSrc}" />
+                            </div>
+                            <span class="friendUsername">${u.username}</span>
                         </div>
-                        <span class="friendUsername">${u.username}</span>
-                    </div>`;
+                    </td>
+                </tr>`;
             });
 
-            table.innerHTML = html;
-        });
+            tbody.innerHTML = html;
+
+            // Re-apply circle colors after updating
+            setTimeout(setCircleColors, 100);
         }
 
         function getProfileImagePath(iconNum) {
@@ -234,7 +276,21 @@
             }
         }
 
-        setInterval(loadInSessionUsers, 5000); // refresh every 5 seconds
+        function getCircleColorClass(iconNum) {
+            switch (iconNum) {
+                case 1: return "circle-cat";
+                case 2: return "circle-dog";
+                case 3: return "circle-bunny";
+                case 4: return "circle-cow";
+                case 5: return "circle-unicorn";
+                default: return "circle-cat";
+            }
+        }
+
+        // Start refreshing after page is fully loaded
+        setTimeout(loadInSessionUsers, 1000);
+        // Refresh every 10 seconds
+        setInterval(loadInSessionUsers, 3000);
     </script>
 </asp:Content>
 

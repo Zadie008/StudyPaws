@@ -5325,7 +5325,7 @@ table {
 
     /* VIEW TIMER PAGE */
     .viewTimerMainContent {
-        margin: 2em 4em 0em 4em;
+        margin: 3em 4em 0em 4em;
     }
 
     .viewTimerMainContent .timeSection {
@@ -5337,8 +5337,12 @@ table {
     }
 
     .viewTimerMainContent .buttonSection {
-        margin-top: 0em;
+        margin-top: 1em; /*old: 0*/
         margin-bottom: 0em;
+    }
+
+    .viewTimerMainContent .simple-popup .buttonSection {
+        margin-top: 0em;
     }
 
     .buttonRow {
@@ -5451,9 +5455,17 @@ table {
 
     /* ---------------------- VIEW STUDY SESSION PAGE ---------------------- */
     .inSessionHeading {
+        padding: 0.5em 0;
         text-align: center;
         font-family: 'Lilita One', sans-serif;
         font-size: clamp(0.8rem, 2vw, 2rem); /* responsive font size */
+    }
+
+    .inSessionDiv {
+        padding: 0.5em 0em;
+        width: 25vw;
+        border-radius: 2em;
+        background-color: #64A6BD; /*turquoise*/
     }
 
     /* ---------------------- PET SHOP PAGE ---------------------- */

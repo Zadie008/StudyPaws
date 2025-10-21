@@ -217,6 +217,23 @@ public partial class Default2 : System.Web.UI.Page
 
                         transaction.Commit();
 
+                        // Increment scheduledStudySessions counter and check for badges
+                        int thisUserID = Convert.ToInt32(Session["userID"]);
+                        using (MySqlConnection con2 = new MySqlConnection(cs))
+                        {
+                            string updateCommand = "UPDATE Users SET scheduledStudySessions = scheduledStudySessions + 1 WHERE userID = @userID";
+                            using (MySqlCommand cmd = new MySqlCommand(updateCommand, con2))
+                            {
+                                cmd.Parameters.AddWithValue("@userID", thisUserID);
+                                con2.Open();
+                                cmd.ExecuteNonQuery();
+                                con2.Close();
+                            }
+                        }
+
+                        // Check for scheduled study session badges
+                        CheckScheduledStudySessionBadges(thisUserID);
+
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "showSuccessPopup();", true);
                     }
                     catch (Exception ex)
@@ -232,6 +249,70 @@ public partial class Default2 : System.Web.UI.Page
         {
             minTotalTimeValidator.ErrorMessage = "An error occurred: " + ex.Message;
             minTotalTimeValidator.IsValid = false;
+        }
+    }
+
+    // FOR GETTING SCHEDULED STUDY SESSIONS BADGE
+    public void CheckScheduledStudySessionBadges(int userID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            con.Open();
+
+            string getCountQuery = "SELECT scheduledStudySessions FROM Users WHERE userID = @userID";
+            int scheduledCount = 0;
+            using (MySqlCommand getCountCmd = new MySqlCommand(getCountQuery, con))
+            {
+                getCountCmd.Parameters.AddWithValue("@userID", userID);
+                object result = getCountCmd.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                {
+                    scheduledCount = Convert.ToInt32(result);
+                }
+            }
+
+            if (scheduledCount >= 15)
+            {
+                AwardBadge(con, userID, 7, "Gold");
+            }
+            else if (scheduledCount >= 10)
+            {
+                AwardBadge(con, userID, 7, "Silver");
+            }
+            else if (scheduledCount >= 5)
+            {
+                AwardBadge(con, userID, 7, "Bronze");
+            }
+
+            con.Close();
+        }
+    }
+
+    private void AwardBadge(MySqlConnection con, int userID, int badgeID, string badgeType)
+    {
+        // Check if user already has it
+        string checkBadgeQuery = "SELECT COUNT(*) FROM UserBadge WHERE userID = @userID AND badgeID = @badgeID AND badgeType = @badgeType";
+        int badgeCount = 0;
+        using (MySqlCommand checkBadgeCmd = new MySqlCommand(checkBadgeQuery, con))
+        {
+            checkBadgeCmd.Parameters.AddWithValue("@userID", userID);
+            checkBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+            checkBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+            badgeCount = Convert.ToInt32(checkBadgeCmd.ExecuteScalar());
+        }
+
+        // otherwise award it
+        if (badgeCount == 0)
+        {
+            string insertBadgeQuery = "INSERT INTO UserBadge (userID, badgeID, badgeType) VALUES (@userID, @badgeID, @badgeType)";
+            using (MySqlCommand insertBadgeCmd = new MySqlCommand(insertBadgeQuery, con))
+            {
+                insertBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                insertBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+                insertBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+                insertBadgeCmd.ExecuteNonQuery();
+            }
         }
     }
 

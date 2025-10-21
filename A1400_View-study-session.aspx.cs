@@ -22,7 +22,7 @@ public partial class View_study_session : System.Web.UI.Page
             }
         }
 
-        if (Session["sessionID"] == null)
+        if (Session["sessionID"] == null && Session["userID"] == null)
         {
             Response.Redirect("Login.aspx");
             return;
@@ -224,6 +224,24 @@ public partial class View_study_session : System.Web.UI.Page
             int thisUserID = Convert.ToInt32(Session["userID"]);
 
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+            // Increment stoppedStudySessions counter
+            using (MySqlConnection con1 = new MySqlConnection(cs))
+            {
+                string updateCommand = "UPDATE Users SET stoppedStudySessions = stoppedStudySessions + 1 WHERE userID = @userID";
+                using (MySqlCommand cmd = new MySqlCommand(updateCommand, con1))
+                {
+                    cmd.Parameters.AddWithValue("@userID", thisUserID);
+                    con1.Open();
+                    cmd.ExecuteNonQuery();
+                    con1.Close();
+                }
+            }
+
+            // Check for badges after incrementing
+            CheckStoppedStudySessionBadges(thisUserID);
+
+            // Delete study session participant
             using (MySqlConnection con2 = new MySqlConnection(cs))
             {
                 string deleteCommand = "DELETE FROM StudySessionParticipants WHERE sessionID = @sessionID AND userID = @userID";
@@ -245,6 +263,71 @@ public partial class View_study_session : System.Web.UI.Page
         }
     }
 
+    // FOR GETTING STOP STUDY SESSIONS BADGE
+    public void CheckStoppedStudySessionBadges(int userID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            con.Open();
+
+            // Get current stopped study sessions count
+            string getCountQuery = "SELECT stoppedStudySessions FROM Users WHERE userID = @userID";
+            int stoppedCount = 0;
+            using (MySqlCommand getCountCmd = new MySqlCommand(getCountQuery, con))
+            {
+                getCountCmd.Parameters.AddWithValue("@userID", userID);
+                object result = getCountCmd.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                {
+                    stoppedCount = Convert.ToInt32(result);
+                }
+            }
+
+            if (stoppedCount >= 15)
+            {
+                AwardBadge(con, userID, 8, "Gold");
+            }
+            else if (stoppedCount >= 10)
+            {
+                AwardBadge(con, userID, 8, "Silver");
+            }
+            else if (stoppedCount >= 5)
+            {
+                AwardBadge(con, userID, 8, "Bronze");
+            }
+
+            con.Close();
+        }
+    }
+
+    private void AwardBadge(MySqlConnection con, int userID, int badgeID, string badgeType)
+    {
+        // Check if user already has it
+        string checkBadgeQuery = "SELECT COUNT(*) FROM UserBadge WHERE userID = @userID AND badgeID = @badgeID AND badgeType = @badgeType";
+        int badgeCount = 0;
+        using (MySqlCommand checkBadgeCmd = new MySqlCommand(checkBadgeQuery, con))
+        {
+            checkBadgeCmd.Parameters.AddWithValue("@userID", userID);
+            checkBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+            checkBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+            badgeCount = Convert.ToInt32(checkBadgeCmd.ExecuteScalar());
+        }
+
+        // otherwise award it
+        if (badgeCount == 0)
+        {
+            string insertBadgeQuery = "INSERT INTO UserBadge (userID, badgeID, badgeType) VALUES (@userID, @badgeID, @badgeType)";
+            using (MySqlCommand insertBadgeCmd = new MySqlCommand(insertBadgeQuery, con))
+            {
+                insertBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                insertBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+                insertBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+                insertBadgeCmd.ExecuteNonQuery();
+            }
+        }
+    }
+
     // COMPLETE STUDY SESSION (UPDATING COMPLETED ATTRIBUTE)
     [System.Web.Services.WebMethod]
     public static string MarkSessionAsCompleted()
@@ -257,6 +340,21 @@ public partial class View_study_session : System.Web.UI.Page
                 int userID = Convert.ToInt32(HttpContext.Current.Session["userID"]);
 
                 string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+                // Increment completedStudySessions counter
+                using (MySqlConnection con1 = new MySqlConnection(cs))
+                {
+                    string updateCommand = "UPDATE Users SET completedStudySessions = completedStudySessions + 1 WHERE userID = @userID";
+                    using (MySqlCommand cmd = new MySqlCommand(updateCommand, con1))
+                    {
+                        cmd.Parameters.AddWithValue("@userID", userID);
+                        con1.Open();
+                        cmd.ExecuteNonQuery();
+                        con1.Close();
+                    }
+                }
+
+                // Update the study session participant record
                 string updateQuery = "UPDATE StudySessionParticipants SET completed = true WHERE sessionID = @sessionID AND userID = @userID";
 
                 using (MySqlConnection conn = new MySqlConnection(cs))
@@ -269,6 +367,8 @@ public partial class View_study_session : System.Web.UI.Page
 
                     if (rowsAffected > 0)
                     {
+                        // Check for completed study session badges
+                        CheckCompletedStudySessionBadges(userID);
                         return "success";
                     }
                     return "no_rows_updated";
@@ -279,6 +379,70 @@ public partial class View_study_session : System.Web.UI.Page
         catch (Exception ex)
         {
             return "error: " + ex.Message;
+        }
+    }
+
+    // FOR GETTING COMPLETED STUDY SESSIONS BADGE
+    private static void CheckCompletedStudySessionBadges(int userID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            con.Open();
+
+            string getCountQuery = "SELECT completedStudySessions FROM Users WHERE userID = @userID";
+            int completedCount = 0;
+            using (MySqlCommand getCountCmd = new MySqlCommand(getCountQuery, con))
+            {
+                getCountCmd.Parameters.AddWithValue("@userID", userID);
+                object result = getCountCmd.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                {
+                    completedCount = Convert.ToInt32(result);
+                }
+            }
+
+            if (completedCount >= 15)
+            {
+                AwardBadgeStatic(con, userID, 6, "Gold");
+            }
+            else if (completedCount >= 10)
+            {
+                AwardBadgeStatic(con, userID, 6, "Silver");
+            }
+            else if (completedCount >= 5)
+            {
+                AwardBadgeStatic(con, userID, 6, "Bronze");
+            }
+
+            con.Close();
+        }
+    }
+
+    private static void AwardBadgeStatic(MySqlConnection con, int userID, int badgeID, string badgeType)
+    {
+        // Check if user already has it
+        string checkBadgeQuery = "SELECT COUNT(*) FROM UserBadge WHERE userID = @userID AND badgeID = @badgeID AND badgeType = @badgeType";
+        int badgeCount = 0;
+        using (MySqlCommand checkBadgeCmd = new MySqlCommand(checkBadgeQuery, con))
+        {
+            checkBadgeCmd.Parameters.AddWithValue("@userID", userID);
+            checkBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+            checkBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+            badgeCount = Convert.ToInt32(checkBadgeCmd.ExecuteScalar());
+        }
+
+        // otherwise award it
+        if (badgeCount == 0)
+        {
+            string insertBadgeQuery = "INSERT INTO UserBadge (userID, badgeID, badgeType) VALUES (@userID, @badgeID, @badgeType)";
+            using (MySqlCommand insertBadgeCmd = new MySqlCommand(insertBadgeQuery, con))
+            {
+                insertBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                insertBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+                insertBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+                insertBadgeCmd.ExecuteNonQuery();
+            }
         }
     }
 
@@ -307,40 +471,21 @@ public partial class View_study_session : System.Web.UI.Page
             GridView1.DataBind();
         }
     }
-
     public string GetProfileImageUrl(object iconNumObj)
     {
         if (iconNumObj == null || iconNumObj == DBNull.Value)
             return GetProfileImagePath(1);
 
         int iconNum = Convert.ToInt32(iconNumObj);
-        return GetProfileImagePath(iconNum);
-    }
-    private void LoadFriends(string searchTerm = "")
-    {
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
-        using (MySqlConnection con = new MySqlConnection(cs))
+        switch (iconNum)
         {
-            string command = "SELECT username, iconNum FROM Users WHERE userID IN (SELECT IF(userIDfrom = @id, userIDto, userIDfrom) FROM FriendsList WHERE userIDfrom = @id OR userIDto = @id)";
-
-            if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
-                command += " AND username LIKE @search";
-            }
-
-            MySqlCommand cmd = new MySqlCommand(command, con);
-            cmd.Parameters.AddWithValue("@id", Session["userID"]);
-
-            if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
-                cmd.Parameters.AddWithValue("@search", "%" + searchTerm + "%");
-            }
-
-            con.Open();
-            MySqlDataReader rdr = cmd.ExecuteReader();
-            GridView1.DataSource = rdr;
-            GridView1.DataBind();
+            case 1: return "Images/ProfilePictures/CatPfp.png";
+            case 2: return "Images/ProfilePictures/DogPfp.png";
+            case 3: return "Images/ProfilePictures/BunnyPfp.png";
+            case 4: return "Images/ProfilePictures/CowPfp.png";
+            case 5: return "Images/ProfilePictures/UnicornPfp.png";
+            default: return "Images/ProfilePictures/CatPfp.png";
         }
     }
 
@@ -358,10 +503,10 @@ public partial class View_study_session : System.Web.UI.Page
         using (MySqlConnection con = new MySqlConnection(cs))
         {
             string query = @"SELECT u.userID, u.username, u.iconNum 
-                        FROM StudySessionParticipants sp 
-                        JOIN Users u ON sp.userID = u.userID 
-                        WHERE sp.sessionID = @sessionID 
-                        AND sp.joined = 'yes'";
+                    FROM StudySessionParticipants sp 
+                    JOIN Users u ON sp.userID = u.userID 
+                    WHERE sp.sessionID = @sessionID 
+                    AND sp.joined = true";
 
             using (MySqlCommand cmd = new MySqlCommand(query, con))
             {

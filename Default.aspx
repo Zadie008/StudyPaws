@@ -180,6 +180,8 @@
                 <div class="popup-pink-box">
                     <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
                     <p>Study Session has started!</p>
+                    <br />
+                    <br />
                     <img src="Images/Notification%20Happy.png" />
                     <br />
                     <div class="buttonSection">
