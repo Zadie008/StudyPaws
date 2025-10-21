@@ -175,9 +175,8 @@
                 <p>Congrats! You earned:</p> 
                 <p>XP   +1</p>
                 <img src="Images/Notification%20Happy.png" />
-                <br />
                 <div class="buttonSection">
-                    <asp:Button ID="btnThankYou" CssClass="popup-button-best-pink" runat="server" Text="Thank you!" OnClick="btnThankYou_Click" />
+                    <asp:Button ID="btnThankYou" CssClass="popup-button" runat="server" Text="Thank you!" OnClick="btnThankYou_Click" />
                 </div>
             </div>
         </div>
@@ -186,7 +185,6 @@
             <div class="popup-blue-box">
                 <p>Are you sure you want to delete this task?</p>
                 <img src="Images/Notification%20Sad%20Hamster.png" />
-                <br />
                 <div class="buttonSection">
                     <asp:Button ID="btnYesDelete" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnYesDelete_Click" />
                     <asp:Button ID="btnNo" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnNoDelete_Click"  />
