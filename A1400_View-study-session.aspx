@@ -91,29 +91,28 @@
                 <div class="inSessionDiv">
                     <h2 class="inSessionHeading">In session</h2>
                     <div class="scrollableTableContainer">
-                        <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" AutoGenerateColumns="False" OnRowCommand="GridView1_RowCommand">
-                            <Columns>
-                                <asp:TemplateField>
-                                    <ItemTemplate>
-                                        <div class="friendRow">
-                                            <a href="C600_View-friend-list.aspx" class="friendProfileIconLink">
-                                                <div class="friendProfileIcon">
-                                                    <div class="friendProfileCircle"></div>
-                                                    <img class="friendProfileImage" src='<%# GetProfileImagePath(Convert.ToInt32(Eval("iconNum"))) %>' />
-                                                </div>
-                                            </a>
-                                            <span class="friendUsername"><%# Eval("username") %></span>
-                                            <asp:ImageButton ID="btnAddFriend" runat="server" CssClass="addFriendBtn" 
-                                                CommandName="SendFriendRequest" 
-                                                CommandArgument='<%# Eval("userID") + "|" + Eval("username") %>' 
-                                                ImageUrl='<%# IsFriend(Convert.ToInt32(Eval("userID"))) ? "Icons/icons8-check-white-96.png" : "Icons/icons8-add-new-white-96.png" %>'
-                                                Visible='<%# !IsCurrentUser(Convert.ToInt32(Eval("userID"))) && !IsFriend(Convert.ToInt32(Eval("userID"))) %>' />
+                        <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" 
+                        AutoGenerateColumns="False" OnRowCommand="GridView1_RowCommand">
+                        <Columns>
+                            <asp:TemplateField>
+                                <ItemTemplate>
+                                    <div class="friendRow">
+                                        <div class="friendProfileIcon">
+                                            <div class="friendProfileCircle"></div>
+                                            <img class="friendProfileImage" src='<%# GetProfileImagePath(Convert.ToInt32(Eval("iconNum"))) %>' />
                                         </div>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                            </Columns>
-                        </asp:GridView>
-                    </div>
+                                        <span class="friendUsername"><%# Eval("username") %></span>
+                                        <asp:ImageButton ID="btnAddFriend" runat="server" CssClass="addFriendBtn" 
+                                            CommandName="SendFriendRequest" 
+                                            CommandArgument='<%# Eval("userID") + "|" + Eval("username") %>' 
+                                            ImageUrl="~/Icons/icons8-add-friend.png" 
+                                            Visible='<%# !IsCurrentUser(Convert.ToInt32(Eval("userID"))) && !IsFriend(Convert.ToInt32(Eval("userID"))) %>' />
+                                    </div>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                        </Columns>
+                    </asp:GridView>
+</div>
                 </div>
             </div>
             <div class="middleSection">

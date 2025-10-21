@@ -291,17 +291,51 @@ public partial class View_study_session : System.Web.UI.Page
 
         using (MySqlConnection con = new MySqlConnection(cs))
         {
-            string command = @"
-            SELECT u.userID, u.username, u.iconNum 
-            FROM StudySessionParticipants sp 
-            JOIN Users u ON sp.userID = u.userID 
-            WHERE sp.sessionID = @sessionID 
-            AND sp.joined = 'yes'
-            AND u.userID != @currentUserID";
+            string command = @"SELECT u.username, u.iconNum, u.userID 
+                          FROM Users u 
+                          WHERE u.userID IN (
+                              SELECT userID FROM StudySessionParticipants 
+                              WHERE sessionID = @sessionID AND accepted = true AND joined = true
+                          )";
 
             MySqlCommand cmd = new MySqlCommand(command, con);
             cmd.Parameters.AddWithValue("@sessionID", sessionID);
-            cmd.Parameters.AddWithValue("@currentUserID", currentUserID);
+
+            con.Open();
+            MySqlDataReader rdr = cmd.ExecuteReader();
+            GridView1.DataSource = rdr;
+            GridView1.DataBind();
+        }
+    }
+
+    public string GetProfileImageUrl(object iconNumObj)
+    {
+        if (iconNumObj == null || iconNumObj == DBNull.Value)
+            return GetProfileImagePath(1);
+
+        int iconNum = Convert.ToInt32(iconNumObj);
+        return GetProfileImagePath(iconNum);
+    }
+    private void LoadFriends(string searchTerm = "")
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            string command = "SELECT username, iconNum FROM Users WHERE userID IN (SELECT IF(userIDfrom = @id, userIDto, userIDfrom) FROM FriendsList WHERE userIDfrom = @id OR userIDto = @id)";
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                command += " AND username LIKE @search";
+            }
+
+            MySqlCommand cmd = new MySqlCommand(command, con);
+            cmd.Parameters.AddWithValue("@id", Session["userID"]);
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                cmd.Parameters.AddWithValue("@search", "%" + searchTerm + "%");
+            }
 
             con.Open();
             MySqlDataReader rdr = cmd.ExecuteReader();

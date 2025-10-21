@@ -478,7 +478,7 @@ public partial class _Default : System.Web.UI.Page
         Response.Redirect("Default.aspx");
     }
 
-    protected void btnJoin_Click(object sender, EventArgs e)
+    /*protected void btnJoin_Click(object sender, EventArgs e)
     {
         if (Session["sessionID"] != null && Session["userID"] != null)
         {
@@ -577,10 +577,10 @@ public partial class _Default : System.Web.UI.Page
                 return timeUntilSession.TotalMinutes <= 1 && timeUntilSession.TotalSeconds >= -60;
             }
         }
-    }
+    }*/
 
     // OLD JOIN LOGIC WHERE IT INSTANTLY JOINS AS IT REACHES START TIME OF STUDY SESSION
-    /*protected void btnJoin_Click(object sender, EventArgs e)
+    protected void btnJoin_Click(object sender, EventArgs e)
     {
         if (Session["sessionID"] != null && Session["userID"] != null)
         {
@@ -604,7 +604,7 @@ public partial class _Default : System.Web.UI.Page
                 }
             }
         }
-    }*/
+    }
     // end: notification bell code
 
     // ---- COPY ----
