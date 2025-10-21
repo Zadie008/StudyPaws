@@ -59,11 +59,11 @@
                 </div>
 
                 <div class="timeDateDiv">
-                    <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="--:--"></asp:Label>
+                    <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="09:52"></asp:Label>
                     <div class="dateContainer">
-                        <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Week Day"></asp:Label>
+                        <asp:Label ID="lblDay" CssClass="accountInfoLabel currentDate" runat="server" Text="Friday"></asp:Label>
                         <span class="dateSeparator">|</span>
-                        <asp:Label ID="lblDate" CssClass="accountInfoLabel currentDate" runat="server" Text="Day Month"></asp:Label>
+                        <asp:Label ID="lblDate" CssClass="accountInfoLabel currentDate" runat="server" Text="18 April"></asp:Label>
                     </div>
                 </div>
             </div>
@@ -110,7 +110,6 @@
                 <div class="popup-blue-box">
                     <p>You do not have any notifications at the moment!</p>
                     <br />
-                    <br />
                     <img src="Images/Notification%20Sad%20Hamster.png" />
                     <br />
                     <div class="buttonSection">
@@ -138,8 +137,6 @@
                 <div class="popup-pink-box">
                     <asp:HiddenField ID="hiddenShowCalendar" runat="server" />
                     <p>Study Session has been added to your calendar!</p>
-                    <br />
-                    <br />
                     <img src="Images/Notification%20Happy.png" />
                     <br />
                     <div class="buttonSection">
@@ -153,8 +150,6 @@
                 <div class="popup-blue-box">
                     <asp:HiddenField ID="hiddenShowConfirmation" runat="server" />
                     <p>Are you sure you want to decline the Study Session invitation?</p>
-                    <br />
-                    <br />
                     <img src="Images/Notification%20Sad%20Hamster.png" />
                     <br />
                     <div class="buttonSection">
@@ -189,27 +184,6 @@
             </div>
         <!--COPY END: NOTIFICATION BELL POPUPS-->
     </div>
-
-    <script>
-        // JOIN STUDY SESSION POPUP
-        function showJoinPopup() {
-            document.getElementById("popup").style.display = "flex";
-        }
-
-        function hideJoinPopup() {
-            document.getElementById("popup").style.display = "none";
-        }
-
-        // Auto-show join popup when page loads if there's a session to join
-        window.addEventListener('load', function () {
-            var joinSessionID = document.getElementById("mainContentPlaceHolder_hiddenJoinSessionID");
-            if (joinSessionID && joinSessionID.value) {
-                setTimeout(function () {
-                    showJoinPopup();
-                }, 1000);
-            }
-        });
-    </script>
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="navContent" Runat="Server">

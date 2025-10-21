@@ -27,7 +27,7 @@ public partial class MasterPage : System.Web.UI.MasterPage
             string selectQuery = "SELECT sessionID FROM StudySession WHERE sessionStart BETWEEN ?startWindowBegin AND ?startWindowEnd";
 
             DateTime startWindowBegin = DateTime.Now.AddMinutes(0);
-            DateTime startWindowEnd = DateTime.Now.AddMinutes(1); // change this for the amt of time you have before it deletes the session
+            DateTime startWindowEnd = DateTime.Now.AddMinutes(1); // minutes before it deletes the study session
 
             using (MySqlCommand cmd = new MySqlCommand(selectQuery, conn))
             {
