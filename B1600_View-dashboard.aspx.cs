@@ -44,16 +44,9 @@ public partial class Default2 : System.Web.UI.Page
             LoadTagColours();
             if (!IsPostBack)
             {
-                //LoadCalendarTags();
                 ViewState["SelectedFilter"] = "All";
                 ddlFilter.SelectedValue = "All";
                 LoadTasks();
-
-                //if (calendarDropDown.Items.FindByValue("0") != null)
-                //{
-                //    calendarDropDown.SelectedValue = "0";
-                //}
-                //ViewState["SelectedCalendarTag"] = calendarDropDown.SelectedValue;
 
                 DateTime currentDate = DateTime.Today;
                 hfYear.Value = currentDate.Year.ToString();
@@ -71,36 +64,18 @@ public partial class Default2 : System.Web.UI.Page
                 CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
                 GetUserStats(cs, userID);
                 GetUserProfileIcon(cs, userID);
-                //LoadPendingInvitesFromDB();
-                //LoadUpcomingSessions();
             }
             else
             {
                 LoadTasks();
                 LoadTagColours();
-
-                //if (ViewState["SelectedCalendarTag"] != null)
-                //{
-                //    string selectedValue = ViewState["SelectedCalendarTag"].ToString();
-                //    var item = calendarDropDown.Items.FindByValue(selectedValue);
-                //    if (item != null)
-                //    {
-                //        calendarDropDown.SelectedValue = selectedValue;
-                //    }
-                //}
-
-                //int year = int.Parse(hfYear.Value);
-                //int month = int.Parse(hfMonth.Value);
-                //LoadCalendar(year, month);
             }
-            //LoadTasks();
         }
         else
         {
             Response.Redirect("Login.aspx");
         }
 
-        //ShowNextInvite();
     }
     private bool IsToDoFilterVisible
     {
@@ -116,16 +91,6 @@ public partial class Default2 : System.Web.UI.Page
     
     private void LoadCalendar(int year, int month)
     {
-        //if (ViewState["SelectedCalendarTag"] != null)
-        //{
-        //    string selectedValue = ViewState["SelectedCalendarTag"].ToString();
-        //    var item = calendarDropDown.Items.FindByValue(selectedValue);
-        //    if (item != null)
-        //    {
-        //        calendarDropDown.SelectedValue = selectedValue;
-        //    }
-        //}
-
         lblMonthYear.Text = new DateTime(year, month, 1).ToString("MMMM yyyy");
         literalCalendar.Text = GenerateCalendar(year, month);
         hfYear.Value = year.ToString();
@@ -228,27 +193,15 @@ public partial class Default2 : System.Web.UI.Page
         List<string> events = new List<string>();
         int userID = Convert.ToInt32(Session["userID"]);
 
-        //int selectedTagID = 0;
-        //if (ViewState["SelectedCalendarTag"] != null)
-        //{
-        //    selectedTagID = Convert.ToInt32(ViewState["SelectedCalendarTag"]);
-        //}
-
         using (MySqlConnection conn = new MySqlConnection(connString))
         {
             conn.Open();
             string loadEvents = "SELECT eventID, eventDesc, tagID FROM CalendarEvent " +  "WHERE userID=@userID AND eventDate=@eventDate";
-            //if (selectedTagID > 0)
-            //{
-            //    loadEvents += " AND tagID=@tagID";
-            //}
+            
             MySqlCommand cmd = new MySqlCommand(loadEvents, conn);
             cmd.Parameters.AddWithValue("@userID", userID);
             cmd.Parameters.AddWithValue("@eventDate", day.Date);
-            //if (selectedTagID > 0)
-            //{
-            //    cmd.Parameters.AddWithValue("@tagID", selectedTagID);
-            //}
+            
             using (MySqlDataReader reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
@@ -256,7 +209,7 @@ public partial class Default2 : System.Web.UI.Page
                     int eventID = Convert.ToInt32(reader["eventID"]);
                     String desc = reader["eventDesc"].ToString();
                     int tagID = reader["tagID"] != DBNull.Value ? Convert.ToInt32(reader["tagID"]) : 0;
-                    //int tagID = Convert.ToInt32(reader["tagID"]);
+                   
                     
                     string tagColour = (tagColours!=null && tagColours.ContainsKey(tagID)) ? tagColours[tagID] : "#000000";
 
@@ -268,7 +221,7 @@ public partial class Default2 : System.Web.UI.Page
                                        "<a href='" + targetPage + "?eventID=" + eventID + "&from=" + source + "' style='color:inherit;text-decoration:none;'>" +
                                        HttpUtility.HtmlEncode(desc) +
                                        "</a></div>";
-                    //string eventHtml = "<div class='eventItem'><span class='eventDot' style='background-color:" + tagColour + ";'></span>" + "<a href='B300-B400_Edit_Delete_Event.aspx?eventID=" + eventID + "' styler='color:inherit;text-decoration:none;'>" + HttpUtility.HtmlEncode(desc) + "</a></div>";
+                  
                     events.Add(eventHtml);
                 }
             }
@@ -378,10 +331,20 @@ public partial class Default2 : System.Web.UI.Page
     }
     protected void txtNewTask_TextChanged(object sender, EventArgs e)
     {
-        btnAdd_Click(sender, e);
+        if (ViewState["TaskJustAdded"] == null || !(bool)ViewState["TaskJustAdded"])
+        {
+            btnAdd_Click(sender, e);
+            ViewState["TaskJustAdded"] = true;
+        }
+        //btnAdd_Click(sender, e);
     }
     protected void btnAdd_Click(object sender, EventArgs e)
     {
+        if (ViewState["TaskJustAdded"] != null && (bool)ViewState["TaskJustAdded"])
+        {
+            ViewState["TaskJustAdded"] = null;
+            return;
+        }
         string taskDesc = txtNewTask.Text.Trim();
         if (taskDesc == "")
             return;
@@ -397,6 +360,7 @@ public partial class Default2 : System.Web.UI.Page
         }
 
         txtNewTask.Text = "";
+        ViewState["TaskJustAdded"] = true;
         Response.Redirect(Request.RawUrl);
     }
 
@@ -531,16 +495,107 @@ public partial class Default2 : System.Web.UI.Page
     }
     private void ToggleTaskStatus(int taskID)
     {
+        string userID = Session["userID"].ToString();
+        if (string.IsNullOrEmpty(userID))
+        {
+            return;
+        }
         using (MySqlConnection conn = new MySqlConnection(connString))
         {
             conn.Open();
-            string query = "UPDATE ToDoListTask SET taskStatus = TRUE WHERE taskID = @taskID AND taskStatus = FALSE";
-            MySqlCommand cmd = new MySqlCommand(query, conn);
-            cmd.Parameters.AddWithValue("@taskID", taskID);
-            cmd.ExecuteNonQuery();
+            using (MySqlTransaction transaction = conn.BeginTransaction())
+            {
+                try
+                {
+                    string query = "UPDATE ToDoListTask SET taskStatus = TRUE WHERE taskID = @taskID AND taskStatus = FALSE";
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@taskID", taskID);
+                    cmd.ExecuteNonQuery();
+
+                    //updated collected pets badge
+                    string completedTasksQuery = "UPDATE Users SET completedTasks = completedTasks + 1 WHERE userID = @userID";
+                    MySqlCommand updateCompletedTasksCmd = new MySqlCommand(completedTasksQuery, conn, transaction);
+                    updateCompletedTasksCmd.Parameters.AddWithValue("@userID", userID);
+                    updateCompletedTasksCmd.ExecuteNonQuery();
+
+                    transaction.Commit();
+
+                    CheckCompletedTasksBadge(conn, Convert.ToInt32(userID));
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine("Transaction error: " + ex.Message);
+                }
+            }
+
         }
         ViewState["PendingAction"] = null;
         ViewState["PendingTaskID"] = null;
+    }
+    // CHECKING COMPLETED TASKS BADGE
+    private static void CheckCompletedTasksBadge(MySqlConnection con, int userID)
+    {
+        string getCountQuery = "SELECT completedTasks FROM Users WHERE userID = @userID";
+        int completedCount = 0;
+        using (MySqlCommand getCountCmd = new MySqlCommand(getCountQuery, con))
+        {
+            getCountCmd.Parameters.AddWithValue("@userID", userID);
+            object result = getCountCmd.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                completedCount = Convert.ToInt32(result);
+            }
+        }
+
+        if (completedCount >= 150)
+        {
+            AwardBadgeStatic(con, userID, 1, "Gold");
+        }
+        else if (completedCount >= 100)
+        {
+            AwardBadgeStatic(con, userID, 1, "Silver");
+        }
+        else if (completedCount >= 50)
+        {
+            AwardBadgeStatic(con, userID, 1, "Bronze");
+        }
+    }
+    private static void AwardBadgeStatic(MySqlConnection con, int userID, int badgeID, string badgeType)
+    {
+        string checkBadgeQuery = "SELECT COUNT(*) FROM UserBadge WHERE userID = @userID AND badgeID = @badgeID";
+        int badgeCount = 0;
+        using (MySqlCommand checkBadgeCmd = new MySqlCommand(checkBadgeQuery, con))
+        {
+            checkBadgeCmd.Parameters.AddWithValue("@userID", userID);
+            checkBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+            badgeCount = Convert.ToInt32(checkBadgeCmd.ExecuteScalar());
+        }
+
+        if (badgeCount == 0)
+        {
+            // No entry exists - INSERT new record
+            string insertBadgeQuery = "INSERT INTO UserBadge (userID, badgeID, badgeType) VALUES (@userID, @badgeID, @badgeType)";
+            using (MySqlCommand insertBadgeCmd = new MySqlCommand(insertBadgeQuery, con))
+            {
+                insertBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                insertBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+                insertBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+                insertBadgeCmd.ExecuteNonQuery();
+            }
+        }
+        else
+        {
+            // Entry exists - UPDATE with new badgeType
+            string updateBadgeQuery = "UPDATE UserBadge SET badgeType = @badgeType WHERE userID = @userID AND badgeID = @badgeID";
+            using (MySqlCommand updateBadgeCmd = new MySqlCommand(updateBadgeQuery, con))
+            {
+                updateBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                updateBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+                updateBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+                updateBadgeCmd.ExecuteNonQuery();
+            }
+        }
     }
     protected void btnThankYou_Click(object sender, EventArgs e)
     {

@@ -93,7 +93,7 @@ public partial class B1400_View_shop_fuzzy : System.Web.UI.Page
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
         //get user XP level and coins
-        int userXP = GetXPAmount(cs, userID);
+        int userXPLevel = GetXPLevel(cs, userID);
         int userCoins = GetUserCoins(cs, userID);
         //load all pets
         string allPetsCommand = "SELECT petID, colourNum, xpCost, coinCost FROM Pet WHERE Pet.petType = @petType";
@@ -170,7 +170,7 @@ public partial class B1400_View_shop_fuzzy : System.Web.UI.Page
             int displayIndex = i + 1;
             Pet pet = allPets[i];
             bool isOwned = ownedPetIDs.Contains(pet.PetID);
-            bool isLocked = userXP < pet.xpCost;
+            bool isLocked = userXPLevel < 10;
             if (isLocked)
             {
                 allPetsLocked = true;
@@ -178,6 +178,7 @@ public partial class B1400_View_shop_fuzzy : System.Web.UI.Page
 
             System.Web.UI.WebControls.Image petImg = (System.Web.UI.WebControls.Image)content.FindControl("imgPet" + displayIndex);
             Button selectBtn = (Button)content.FindControl("btnSelect" + displayIndex);
+            ImageButton pawIconBtn = (ImageButton)content.FindControl("btnPaw" + displayIndex);
             HtmlGenericControl circleDiv = (HtmlGenericControl)content.FindControl("circle" + displayIndex);
 
             if (petImg != null && selectBtn != null && circleDiv != null)
@@ -205,26 +206,32 @@ public partial class B1400_View_shop_fuzzy : System.Web.UI.Page
 
                 //button
                 selectBtn.Visible = true;
+                pawIconBtn.Visible = true;
                 selectBtn.CommandArgument = pet.PetID.ToString();
                 selectBtn.Attributes["data-petid"] = pet.PetID.ToString();
                 selectBtn.Attributes["data-price"] = pet.coinCost.ToString();
+                pawIconBtn.Attributes["data-petid"] = pet.PetID.ToString();
+                pawIconBtn.Attributes["data-price"] = pet.coinCost.ToString();
 
                 if (isOwned)
                 {
                     selectBtn.Text = "SOLD";
                     selectBtn.CssClass = "button soldButton";
-                    //selectBtn.OnClientClick = "showAlreadyOwnedPopup(); return false;";
+                    pawIconBtn.Visible = false;
                 }
                 else
                 {
                     selectBtn.Text = pet.coinCost.ToString();
                     selectBtn.CssClass = "button priceButton";
                     selectBtn.Enabled = !isLocked;
-                    //selectBtn.OnClientClick = "showBuyButton('" + pet.PetID "', '" + pet.coinCost "');";
+                    pawIconBtn.CssClass = "pawIconButton";
+                    pawIconBtn.Enabled = !isLocked;
                 }
                 if (isLocked)
                 {
                     selectBtn.CssClass += " locked";
+                    pawIconBtn.ImageUrl = string.Format("Icons/icons8-lock-white-96.png");
+                    pawIconBtn.CssClass += " locked";
                 }
                 circleDiv.Visible = true;
             }
@@ -244,28 +251,43 @@ public partial class B1400_View_shop_fuzzy : System.Web.UI.Page
     }
     public void btnSelect_Clicked(object sender, EventArgs e) // CHANGED
     {
-        Button clickedBtn = (Button)sender;
+        Control clickedBtn = (Control)sender;
         ContentPlaceHolder content = (ContentPlaceHolder)Master.FindControl("mainContentPlaceHolder");
         Button buyBtn = (Button)content.FindControl("btnBuy");
 
+        string controlID = clickedBtn.ID;
+        string petNum = controlID.Replace("btnSelect", "").Replace("btnPaw", "");
+
+        Button selectBtn = (Button)content.FindControl("btnSelect" + petNum);
+        ImageButton pawBtn = (ImageButton)content.FindControl("btnPaw" + petNum);
+        HtmlGenericControl circleDiv = (HtmlGenericControl)content.FindControl("circle" + petNum);
+
         for (int i = 1; i <= 5; i++)
         {
-            Button selectBtn = (Button)content.FindControl("btnSelect" + i);
-            HtmlGenericControl circleDiv = (HtmlGenericControl)content.FindControl("circle" + i);
-            if (selectBtn != null && selectBtn != clickedBtn)
+            if (i.ToString() != petNum)
             {
-                selectBtn.CssClass = selectBtn.CssClass.Replace(" buttonSelected", "");
-                if (circleDiv != null)
+                Button otherSelectBtn = (Button)content.FindControl("btnSelect" + i);
+                ImageButton otherPawBtn = (ImageButton)content.FindControl("btnPaw" + i);
+                HtmlGenericControl otherCircleDiv = (HtmlGenericControl)content.FindControl("circle" + i);
+                if (otherSelectBtn != null)
                 {
-                    string circleClass = circleDiv.Attributes["class"];
+                    otherSelectBtn.CssClass = otherSelectBtn.CssClass.Replace(" buttonSelected", "");
+                }
+                if (otherPawBtn != null)
+                {
+                    otherPawBtn.CssClass = otherPawBtn.CssClass.Replace(" buttonSelected", "");
+                }
+                if (otherCircleDiv != null)
+                {
+                    string circleClass = otherCircleDiv.Attributes["class"];
                     if (circleClass != null && circleClass.Contains(" selected"))
                     {
-                        circleDiv.Attributes["class"] = circleClass.Replace(" selected", "");
+                        otherCircleDiv.Attributes["class"] = circleClass.Replace(" selected", "");
                     }
                 }
             }
         }
-        if (clickedBtn.CssClass.Contains("soldButton"))
+        if (selectBtn != null && selectBtn.CssClass.Contains("soldButton"))
         {
             ScriptManager.RegisterStartupScript(this, this.GetType(), "showAlreadyOwnedPopup", "showAlreadyOwnedPopup();", true);
             buyBtn.Visible = false;
@@ -273,55 +295,77 @@ public partial class B1400_View_shop_fuzzy : System.Web.UI.Page
             hfSelectedPetPrice.Value = "";
             return;
         }
-        string btnId = clickedBtn.ID.Replace("btnSelect", "");
-        HtmlGenericControl clickedCircle = (HtmlGenericControl)content.FindControl("circle" + btnId);
-
-        if (clickedBtn.CssClass.Contains("buttonSelected"))
+        bool isCurrentlySelected = selectBtn != null && selectBtn.CssClass.Contains("buttonSelected");
+        if (isCurrentlySelected)
         {
-            clickedBtn.CssClass = clickedBtn.CssClass.Replace(" buttonSelected", "");
+            if (selectBtn != null)
+            {
+                selectBtn.CssClass = selectBtn.CssClass.Replace(" buttonSelected", "");
+            }
+            if (pawBtn != null)
+            {
+                pawBtn.CssClass = pawBtn.CssClass.Replace(" buttonSelected", "");
+            }
             buyBtn.Visible = false;
             hfSelectedPetID.Value = "";
             hfSelectedPetPrice.Value = "";
-            if (clickedCircle != null)
+            if (circleDiv != null)
             {
-                string circleClass = clickedCircle.Attributes["class"];
+                string circleClass = circleDiv.Attributes["class"];
                 if (!string.IsNullOrEmpty(circleClass) && circleClass.Contains(" selected"))
                 {
-                    clickedCircle.Attributes["class"] = circleClass.Replace(" selected", "");
+                    circleDiv.Attributes["class"] = circleClass.Replace(" selected", "");
                 }
             }
         }
         else
         {
-            clickedBtn.CssClass = "button priceButton buttonSelected";
-            buyBtn.Visible = true;
-
-            hfSelectedPetID.Value = clickedBtn.Attributes["data-petid"];
-            hfSelectedPetPrice.Value = clickedBtn.Attributes["data-price"];
-
-            if (clickedCircle != null)
+            if (selectBtn != null && !selectBtn.CssClass.Contains("buttonSelected"))
             {
-                string circleClass = clickedCircle.Attributes["class"];
+                selectBtn.CssClass += " buttonSelected";
+            }
+            if (pawBtn != null && !pawBtn.CssClass.Contains("buttonSelected"))
+            {
+                pawBtn.CssClass += " buttonSelected";
+            }
+            buyBtn.Visible = true;
+            string petID = "";
+            string price = "";
+            if (selectBtn != null && selectBtn.Attributes["data-petid"] != null)
+            {
+                petID = selectBtn.Attributes["data-petid"];
+                price = selectBtn.Attributes["data-price"];
+            }
+            else if (pawBtn != null && pawBtn.Attributes["data-petid"] != null)
+            {
+                petID = pawBtn.Attributes["data-petid"];
+                price = pawBtn.Attributes["data-price"];
+            }
+            hfSelectedPetID.Value = petID;
+            hfSelectedPetPrice.Value = price;
+            if (circleDiv != null)
+            {
+                string circleClass = circleDiv.Attributes["class"];
                 if (!string.IsNullOrEmpty(circleClass) && !circleClass.Contains("locked") && !circleClass.Contains(" selected"))
                 {
-                    clickedCircle.Attributes["class"] = circleClass + " selected";
+                    circleDiv.Attributes["class"] = circleClass + " selected";
                 }
             }
         }
     }
-    private int GetXPAmount(string cs, string userID) // CHANGED
+    private int GetXPLevel(string cs, string userID) // CHANGED
     {
-        int amount = 0;
-        string currentLevelQuery = "SELECT userXP FROM Users WHERE userID = @userID";
+        int level = 0;
+        string currentLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
         using (MySqlConnection con = new MySqlConnection(cs))
         using (MySqlCommand cmdCurrentLevel = new MySqlCommand(currentLevelQuery, con))
         {
             cmdCurrentLevel.Parameters.AddWithValue("@userID", userID);
             con.Open();
             object result = cmdCurrentLevel.ExecuteScalar();
-            if (result != null && int.TryParse(result.ToString(), out amount))
+            if (result != null && int.TryParse(result.ToString(), out level))
             {
-                return amount;
+                return level;
             }
             else
             {
@@ -421,11 +465,18 @@ public partial class B1400_View_shop_fuzzy : System.Web.UI.Page
                                 addPetCmd.Parameters.AddWithValue("@petID", petID);
                                 addPetCmd.ExecuteNonQuery();
 
+                                //updated collected pets badge
+                                string collectedPetsQuery = "UPDATE Users SET collectedPets = collectedPets + 1 WHERE userID = @userID";
+                                MySqlCommand updateCollectedPetsCmd = new MySqlCommand(collectedPetsQuery, con, transaction);
+                                updateCollectedPetsCmd.Parameters.AddWithValue("@userID", userID);
+                                updateCollectedPetsCmd.ExecuteNonQuery();
+
                                 transaction.Commit();
 
                                 hfSelectedPetID.Value = ""; // ADDED
                                 hfSelectedPetPrice.Value = ""; // ADDED
 
+                                CheckCollectedPetsBadge(con, Convert.ToInt32(userID));
                                 //close pop-up
                                 ScriptManager.RegisterStartupScript(this, this.GetType(), "hideConfirmBuyPopup", "hideConfirmBuyPopup();", true); // ADDED
                                 //show confirmation pop-up
@@ -454,6 +505,70 @@ public partial class B1400_View_shop_fuzzy : System.Web.UI.Page
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "showInsufficientCoinsPopup", "showInsufficientCoinsPopup();", true);
             }
 
+        }
+    }
+    // CHECKING COLLECTED PETS BADGE
+    private static void CheckCollectedPetsBadge(MySqlConnection con, int userID)
+    {
+        string getCountQuery = "SELECT collectedPets FROM Users WHERE userID = @userID";
+        int collectedCount = 0;
+        using (MySqlCommand getCountCmd = new MySqlCommand(getCountQuery, con))
+        {
+            getCountCmd.Parameters.AddWithValue("@userID", userID);
+            object result = getCountCmd.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                collectedCount = Convert.ToInt32(result);
+            }
+        }
+
+        if (collectedCount >= 25)
+        {
+            AwardBadgeStatic(con, userID, 11, "Gold");
+        }
+        else if (collectedCount >= 15)
+        {
+            AwardBadgeStatic(con, userID, 11, "Silver");
+        }
+        else if (collectedCount >= 5)
+        {
+            AwardBadgeStatic(con, userID, 11, "Bronze");
+        }
+    }
+    private static void AwardBadgeStatic(MySqlConnection con, int userID, int badgeID, string badgeType)
+    {
+        string checkBadgeQuery = "SELECT COUNT(*) FROM UserBadge WHERE userID = @userID AND badgeID = @badgeID";
+        int badgeCount = 0;
+        using (MySqlCommand checkBadgeCmd = new MySqlCommand(checkBadgeQuery, con))
+        {
+            checkBadgeCmd.Parameters.AddWithValue("@userID", userID);
+            checkBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+            badgeCount = Convert.ToInt32(checkBadgeCmd.ExecuteScalar());
+        }
+
+        if (badgeCount == 0)
+        {
+            // No entry exists - INSERT new record
+            string insertBadgeQuery = "INSERT INTO UserBadge (userID, badgeID, badgeType) VALUES (@userID, @badgeID, @badgeType)";
+            using (MySqlCommand insertBadgeCmd = new MySqlCommand(insertBadgeQuery, con))
+            {
+                insertBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                insertBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+                insertBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+                insertBadgeCmd.ExecuteNonQuery();
+            }
+        }
+        else
+        {
+            // Entry exists - UPDATE with new badgeType
+            string updateBadgeQuery = "UPDATE UserBadge SET badgeType = @badgeType WHERE userID = @userID AND badgeID = @badgeID";
+            using (MySqlCommand updateBadgeCmd = new MySqlCommand(updateBadgeQuery, con))
+            {
+                updateBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                updateBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+                updateBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+                updateBadgeCmd.ExecuteNonQuery();
+            }
         }
     }
     protected void btnNoBuy_Click(object sender, EventArgs e) // CHANGED

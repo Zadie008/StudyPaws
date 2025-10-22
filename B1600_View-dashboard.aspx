@@ -148,7 +148,7 @@
             </div>
             <div class="newTaskContainer">
                 <asp:ImageButton ID="btnAdd" runat="server" CommandName="Add" class="addTaskBtn" OnClick="btnAdd_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png"/>
-                <asp:TextBox ID="txtNewTask" runat="server" CssClass="addTaskText" AutoPostBack="true" OnTextChanged="txtNewTask_TextChanged" Placeholder="Add a new task..."></asp:TextBox>
+                <asp:TextBox ID="txtNewTask" runat="server" CssClass="addTaskText" OnTextChanged="txtNewTask_TextChanged" Placeholder="Add a new task..."></asp:TextBox>
             </div>
             <div class="scrollableTasksContainer">
                 

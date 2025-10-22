@@ -2350,7 +2350,7 @@ body.page-exit .welcomeBackTextDiv {
 #viewShopMainContent .rightPetsSection {
     flex: 4;
     z-index: 12;
-    padding: 0 2em;
+    padding: 0 1em;
     display: flex;
 }
 
@@ -2358,12 +2358,12 @@ body.page-exit .welcomeBackTextDiv {
     /*background-color: transparent;*/
     border: 3px solid white;
     border-radius: 2rem;
-    width: 8vw;
-    max-width: 147px;
+    width: 7.25vw;
+    max-width: 145px;
     padding: 0.3em;
     font-size: 1.8rem;
     text-align: center;
-    margin: 0.5em 1em;
+    margin: 0.5em 0.12em;
     /*padding-left: 35px;*/
     text-shadow: 0px 0px 5px dimgrey; /* text shadow */
     opacity:0.5;
@@ -2373,62 +2373,68 @@ body.page-exit .welcomeBackTextDiv {
     background-color: transparent;
     border: 3px solid white;
     border-radius: 2rem;
-    width: 8vw;
+    width: 7.25vw;
     max-width: 147px;
     padding: 0.3em;
     font-size: 1.8rem;
     text-align: center;
-    margin: 0.5em 1em;
+    margin: 0.5em 0.1em;
     text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
 #viewShopMainContent .rightPetsSection .priceButton {
     background-color: #D7B9D5; /*light purple*/
     border: 3px solid white;
     border-radius: 2rem;
-    width: 8vw;
+    width: 7.25vw;
     max-width: 147px;
     padding: 0.3em;
     font-size: 1.8rem;
     text-align: center;
-    margin: 0.5em 1em;
-    padding-left: 35px; /*ADDED*/
-    display: flex;
+    margin: 0.5em 0.12em;
+    cursor:pointer;
+    /*flex:3;*/
+    /*padding-left: 35px;*/ /*ADDED*/
+    /*display: flex;*/
     align-items: center;
     justify-content: center;
     text-shadow: 0px 0px 5px dimgrey;
-    z-index: -1; /* text shadow */
+    /*z-index: -1;*/ /* text shadow */
 }
-#viewShopMainContent .rightPetsSection .priceButton::before {
-    content: "";
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 30px;
-    height: 30px;
-    background-image: url('../Icons/icons8-circle-white-96.png');
-    background-size:contain;
-    background-repeat:no-repeat;
-    z-index:1;
+    #viewShopMainContent .rightPetsSection .pawIconButton {
+        background-color: #D7B9D5; /*light purple*/
+        border: 3px solid white;
+        border-radius: 50%;
+        width: 50px;
+        height:50px;
+        /*max-width: 147px;*/
+        padding: 8px;
+        margin: 0.5em 0em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor:pointer;
+    }
+#viewShopMainContent .rightPetsSection .pawIconButton img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
 }
-#viewShopMainContent .rightPetsSection .priceButton::after {
-    content: "";
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 30px;
-    height: 30px;
-    background-image: url('../Icons/icons8-cat-footprint-filled-white-96.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    z-index: 2;
+#viewShopMainContent .rightPetsSection .pawIconButton.buttonSelected{
+    background-color: #ADA7C9;
 }
-/* SELECTED PET BUTTON */
-#viewShopMainContent .rightPetsSection .priceButton.buttonSelected {
-    background-color: #ADA7C9; /*dark purple*/
+        
+        /* SELECTED PET BUTTON */
+        #viewShopMainContent .rightPetsSection .priceButton.buttonSelected {
+            background-color: #ADA7C9; /*dark purple*/
+        }
+.priceButtonContainer{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    /*gap:0.1em;*/
+    margin: 0.1em 0em;
+    position: relative;
 }
-
 .petIconShop {
     position: relative;
     width: 8vw;
@@ -2477,11 +2483,18 @@ body.page-exit .welcomeBackTextDiv {
     height: 100%;
     z-index: -1;
 }
-.petIcon .petCircleShop.unowned.selected {
+.petIconShop .petCircleShop.unowned.selected {
     background-color: #ADA7C9;
 }
 .petIconShop .petCircleShop.locked{
     opacity: 0.5;
+}
+#viewShopMainContent .rightPetsSection .pawIconButton.locked{
+    opacity:0.5 !important;
+    cursor:not-allowed !important;
+}
+#viewShopMainContent .rightPetsSection .pawIconButton.locked img {
+    opacity: 0.5 !important;
 }
 .petIconShop img.locked {
     opacity: 0.5;

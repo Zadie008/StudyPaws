@@ -160,11 +160,36 @@
                 </td>
             </tr>
             <tr>
-                <td><asp:Button ID="btnSelect1" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
-<td><asp:Button ID="btnSelect2" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
-<td><asp:Button ID="btnSelect3" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
-<td><asp:Button ID="btnSelect4" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
-<td><asp:Button ID="btnSelect5" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" /></td>
+                <td>
+    <div class="priceButtonContainer">
+        <asp:ImageButton ID="btnPaw1" runat="server" CssClass="pawIconBtn" ImageUrl="~/Icons/icons8-cat-footprint-filled-white-96.png" UseSubmitBehavior="false" OnClick="btnSelect_Clicked"/>
+        <asp:Button ID="btnSelect1" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" />
+    </div>
+</td>
+<td>
+    <div class="priceButtonContainer">
+        <asp:ImageButton ID="btnPaw2" runat="server" CssClass="pawIconBtn" ImageUrl="~/Icons/icons8-cat-footprint-filled-white-96.png" UseSubmitBehavior="false" OnClick="btnSelect_Clicked"/>
+        <asp:Button ID="btnSelect2" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" />
+    </div>
+</td>
+<td>
+    <div class="priceButtonContainer">
+        <asp:ImageButton ID="btnPaw3" runat="server" CssClass="pawIconBtn" ImageUrl="~/Icons/icons8-cat-footprint-filled-white-96.png" UseSubmitBehavior="false" OnClick="btnSelect_Clicked"/>
+        <asp:Button ID="btnSelect3" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" />
+    </div>
+</td>
+<td>
+    <div class="priceButtonContainer">
+        <asp:ImageButton ID="btnPaw4" runat="server" CssClass="pawIconBtn" ImageUrl="~/Icons/icons8-cat-footprint-filled-white-96.png" UseSubmitBehavior="false" OnClick="btnSelect_Clicked"/>
+        <asp:Button ID="btnSelect4" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" />
+    </div>
+</td>
+<td>
+    <div class="priceButtonContainer">
+        <asp:ImageButton ID="btnPaw5" runat="server" CssClass="pawIconBtn" ImageUrl="~/Icons/icons8-cat-footprint-filled-white-96.png" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" />
+        <asp:Button ID="btnSelect5" runat="server" CssClass="button" UseSubmitBehavior="false" OnClick="btnSelect_Clicked" />
+    </div>
+</td>
             </tr>
         </table>
     </div>
