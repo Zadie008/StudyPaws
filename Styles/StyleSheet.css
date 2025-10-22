@@ -1614,9 +1614,9 @@ body.page-exit .welcomeBackTextDiv {
     outline: none;
     margin: 1vh auto;
     text-align: left;
-    max-width: 10em;
-    width: 10em;
-    min-width:10em;
+    max-width: 350px;
+    width: 350px;
+    min-width: 350px;
     box-sizing: border-box;
     display: block;
 }
@@ -1639,9 +1639,9 @@ body.page-exit .welcomeBackTextDiv {
     outline: none;
     /*margin: 1vh auto;*/
     text-align: left;
-    width: 50em;
-    max-width: 50em;
-    min-width:50em;
+    width: 350px;
+    max-width: 350px;
+    min-width: 350px;
     /*box-sizing: border-box;
     display: block;*/
 }
@@ -1762,10 +1762,10 @@ body.page-exit .welcomeBackTextDiv {
     vertical-align:middle;
     display:none; /*ADDED*/
 }
-    .createEventMainContent .eventTitleTagSection .rightSection .addTagBtn img {
-        width: 2.2vh;
-        max-width: 3vh;
-    }
+.createEventMainContent .eventTitleTagSection .rightSection .addTagBtn img {
+    width: 2.2vh; /*check this with pencil (edit tag btn)*/
+    max-width: 3vh;
+}
     
     /* NOTIFICATION POPUP */
     .createEventMainContent .popup-pink-box table tr td p {
@@ -1918,6 +1918,11 @@ body.page-exit .welcomeBackTextDiv {
 #editDeleteEvent .eventTitleTagSection { /* LEA ADDED THIS, YOU CAN CHANGE AMOUNTS */
     padding: 6% 0 4% 0;
 }
+
+.createEventMainContent .buttonSection {
+    margin-top: 5%;
+}
+
 .eventDateBox {
     width: 350px;
     min-width: 350px;
@@ -1931,12 +1936,13 @@ body.page-exit .welcomeBackTextDiv {
     color: white;
     box-sizing: border-box;
     display: block;
+    margin: 1vh auto;
 }
 
-    .eventDateBox::-webkit-calendar-picker-indicator { /* browser calendar icon */
-        opacity: 0;
-        cursor: pointer;
-    }
+.eventDateBox::-webkit-calendar-picker-indicator { /* browser calendar icon */
+    opacity: 0;
+    cursor: pointer;
+}
 
 .dropDownListEditEvents {
     border-radius: 2rem;
@@ -2002,19 +2008,19 @@ body.page-exit .welcomeBackTextDiv {
     flex: 0 0 30px;
 }
 
-    .checkbox.checked {
-        order: 1;
-        background-image: url('../Icons/icons8-check-white-96.png');
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: 30px;
-        background-color: transparent;
-        border: none;
-        flex: 0 0 30px;
-    }
+.checkbox.checked {
+    order: 1;
+    background-image: url('../Icons/icons8-check-white-96.png');
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 30px;
+    background-color: transparent;
+    border: none;
+    flex: 0 0 30px;
+}
 
 .taskCompleted {
     text-decoration: line-through;
@@ -2054,9 +2060,9 @@ body.page-exit .welcomeBackTextDiv {
     z-index: 100;
 }
 
-    .deleteBtn img {
-        max-width: 24px;
-    }
+.deleteBtn img {
+    max-width: 24px;
+}
 
 .editBtn {
     flex: 0 0 24px;
@@ -2067,9 +2073,9 @@ body.page-exit .welcomeBackTextDiv {
     z-index: 100;
 }
 
-    .editBtn img {
-        max-width: 24px;
-    }
+.editBtn img {
+    max-width: 24px;
+}
 
 .saveEditBtn {
     flex: 0 0 24px;
