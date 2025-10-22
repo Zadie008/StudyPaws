@@ -263,19 +263,18 @@
             </div>
         </div>-->
 
-        <%-- this is the code for the level up panel--%>
-        <div id="popupLevelUp" class="simple-popup" style="display: none;">
-            <div class="popup-pink-box">
-                <p>Congrats! You have leveled up!</p> 
-                <img src="Images/Notification%20Happy.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnYayLevelUp" CssClass="popup-button" runat="server" Text="Thank you!" OnClick="btnYayLevelUp_Click" />
+            <%-- this is the code for the level up panel--%>
+            <div id="popupLevelUp" class="simple-popup" style="display: none;">
+                <div class="popup-pink-box">
+                    <p>Congrats! You have leveled up!</p> 
+                    <img src="Images/Notification%20Happy.png" />
+                    <br />
+                    <div class="buttonSection">
+                        <asp:Button ID="btnYayLevelUp" CssClass="popup-button" runat="server" Text="Thank you!" OnClick="btnYayLevelUp_Click" />
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!--OLD SCRIPT CODE
             <script type="text/javascript">
             // To-Do List Popups
             function showTaskCompletePopup() {
@@ -303,30 +302,6 @@
                 showPopupDelete();
             }
 
-            // Level Up Popup
-            function showLevelUp() {
-                var popup = document.getElementById('popupLevelUp');
-                if (popup) popup.style.display = 'flex';
-            }
-
-            function hideLevelUp() {
-                var popup = document.getElementById('popupLevelUp');
-                if (popup) popup.style.display = 'none';
-            }
-        </script>-->
-        <script type="text/javascript">
-            function showPopup() {
-                document.getElementById('popupTaskComplete').style.display = 'flex';
-            }
-            function hidePopup() {
-                document.getElementById('popupTaskComplete').style.display = 'none';
-            }
-            function showPopupDelete() {
-                document.getElementById('popupDeleteTask').style.display = 'flex';
-            }
-            function hideDeletePopup() {
-                document.getElementById('popupDeleteTask').style.display = 'none';
-            }
             // Level Up Popup
             function showLevelUp() {
                 var popup = document.getElementById('popupLevelUp');
