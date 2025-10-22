@@ -183,7 +183,7 @@
                         <img src="Images/Notification%20Happy.png" alt="Gift sent" />
                         <br />
                         <div class="buttonSection">
-                            <asp:Button ID="btnGiftSentOkay" CssClass="popup-button-best-pink" runat="server" Text="Okay!" OnClientClick="hideAllPopups(); return false;" />
+                            <asp:Button ID="btnGiftSentOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideAllPopups(); return false;" />
                         </div>
                     </div>
                 </div>
