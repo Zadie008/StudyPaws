@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -521,6 +522,7 @@ public partial class Default2 : System.Web.UI.Page
                     transaction.Commit();
 
                     CheckCompletedTasksBadge(conn, Convert.ToInt32(userID));
+                    CheckCombinedCompletionBadges(conn, Convert.ToInt32(userID));
                 }
                 catch (Exception ex)
                 {
@@ -559,6 +561,41 @@ public partial class Default2 : System.Web.UI.Page
         else if (completedCount >= 50)
         {
             AwardBadgeStatic(con, userID, 1, "Bronze");
+        }
+    }
+    // FOR GETTING COMBINED COMPLETION BADGE (completedTasks, completedTimers, completedStudySessions)
+    private static void CheckCombinedCompletionBadges(MySqlConnection con, int userID)
+    {
+        string getCountsQuery = "SELECT completedTasks, completedTimers, completedStudySessions FROM Users WHERE userID = @userID";
+        int completedTasks = 0;
+        int completedTimers = 0;
+        int completedStudySessions = 0;
+
+        using (MySqlCommand getCountsCmd = new MySqlCommand(getCountsQuery, con))
+        {
+            getCountsCmd.Parameters.AddWithValue("@userID", userID);
+            using (MySqlDataReader reader = getCountsCmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    completedTasks = reader["completedTasks"] != DBNull.Value ? Convert.ToInt32(reader["completedTasks"]) : 0;
+                    completedTimers = reader["completedTimers"] != DBNull.Value ? Convert.ToInt32(reader["completedTimers"]) : 0;
+                    completedStudySessions = reader["completedStudySessions"] != DBNull.Value ? Convert.ToInt32(reader["completedStudySessions"]) : 0;
+                }
+            }
+        }
+
+        if (completedTasks >= 50 && completedTimers >= 50 && completedStudySessions >= 50)
+        {
+            AwardBadgeStatic(con, userID, 10, "Gold");
+        }
+        else if (completedTasks >= 25 && completedTimers >= 25 && completedStudySessions >= 25)
+        {
+            AwardBadgeStatic(con, userID, 10, "Silver");
+        }
+        else if (completedTasks >= 10 && completedTimers >= 10 && completedStudySessions >= 10)
+        {
+            AwardBadgeStatic(con, userID, 10, "Bronze");
         }
     }
     private static void AwardBadgeStatic(MySqlConnection con, int userID, int badgeID, string badgeType)

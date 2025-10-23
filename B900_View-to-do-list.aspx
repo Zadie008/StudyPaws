@@ -140,7 +140,7 @@
                 
                 <asp:UpdatePanel ID="upTasks" runat="server" UpdateMode="Conditional">
                     <ContentTemplate>
-                        <div class="scrollableTasksContainer">
+                        <div class="scrollableTasksContainerPage">
                             <asp:Repeater ID="rptTasks" runat="server" EnableViewState="false" OnItemCommand="rptTasks_ItemCommand" OnItemDataBound="rptTasks_ItemDataBound">
                                 <ItemTemplate>
                                     <div class="task">

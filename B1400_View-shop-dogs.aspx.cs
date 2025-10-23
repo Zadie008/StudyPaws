@@ -218,6 +218,7 @@ public partial class B1400_View_shop_dogs : System.Web.UI.Page
                 {
                     selectBtn.CssClass += " locked";
                     pawIconBtn.ImageUrl = string.Format("Icons/icons8-lock-white-96.png");
+                    pawIconBtn.CssClass += " locked";
                 }
                 circleDiv.Visible = true;
             }

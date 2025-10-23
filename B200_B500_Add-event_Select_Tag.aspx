@@ -116,14 +116,14 @@
             <table>
                 <tr>
                     <td></td>
-                    <td><asp:RequiredFieldValidator ID="errorTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title" EnableClientScript="true" ControlToValidate="txtEventTitle"></asp:RequiredFieldValidator></td>
+                    <td><asp:RequiredFieldValidator ID="errorTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title" EnableClientScript="true" ControlToValidate="txtEventTitle" ValidationGroup="EventValidation"></asp:RequiredFieldValidator></td>
                 </tr>
                 <tr>
                     <td><div class="tagControls">
                         <asp:ImageButton ID="btnAddTag" runat="server" CommandName="AddTag" CausesValidation="false" class="addTagBtn" OnClick="btnNewTag_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png" /></div>
                         <asp:ImageButton ID="btnEditTag" runat="server" CausesValidation="false" CssClass="addTagBtn" ImageUrl="~/Icons/icons8-edit-white-96.png" OnClick="btnEditTag_Click"/>
                     </td>
-                    <td><asp:RequiredFieldValidator ID="errorDropDown" class="validationError" runat="server" ErrorMessage="Please select a Tag" EnableClientScript="true" ControlToValidate="dropdownEventTag" InitialValue="" ></asp:RequiredFieldValidator></td>
+                    <td><asp:RequiredFieldValidator ID="errorDropDown" class="validationError" runat="server" ErrorMessage="Please select a Tag" EnableClientScript="true" ControlToValidate="dropdownEventTag" InitialValue="" ValidationGroup="EventValidation"></asp:RequiredFieldValidator></td>
                 </tr>
             </table>
         </div>
@@ -133,7 +133,7 @@
         </div>
         <div class="middleSection">
             <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="False" />
-            <asp:Button ID="btnAdd" class="button" runat="server" Text="Add" OnClick="btnAdd_Click" />
+            <asp:Button ID="btnAdd" class="button" runat="server" Text="Add" OnClick="btnAdd_Click" ValidationGroup="EventValidation"/>
         </div>
         <div class="rightSection">
             <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past timers" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
@@ -225,9 +225,18 @@
                 const dropdownList = document.getElementById('dropdownEventTag');
                 const btnAdd = document.getElementById('<%= btnAddTag.ClientID%>');
                 const btnEdit = document.getElementById('<%= btnEditTag.ClientID%>');
+                const tagValidator = document.getElementById('<%= errorDropDown.ClientID%>');
 
                 dropdownList.addEventListener('change', function () {
                     const selectedValue = dropdownList.value;
+                    if (selectedValue && selectedValue !== "") {
+                        if (tagValidator) {
+                            tagValidator.style.display = 'none';
+                            if (typeof ValidatorEnable! == 'undefined') {
+                                ValidatorEnable(tagValidator, false);
+                            }
+                        }
+                    }
                     if (dropdownList.selectedIndex === 0 || dropdownList.value === "") {
                         btnAdd.style.display = 'inline-block';
                         btnEdit.style.display = 'none';

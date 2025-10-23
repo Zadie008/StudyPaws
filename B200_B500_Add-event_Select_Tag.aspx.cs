@@ -26,6 +26,11 @@ public partial class Default2 : System.Web.UI.Page
         {
             LoadTags();
 
+            if (Session["PendingEventTitle"] != null)
+            {
+                txtEventTitle.Text = Session["PendingEventTitle"].ToString();
+                Session.Remove("PendingEventTitle");
+            }
             if (Request.QueryString["newTag"] != null)
             {
                 string newTagID = Request.QueryString["newTag"];
@@ -103,6 +108,7 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnAdd_Click(object sender, EventArgs e)
     {
+        Page.Validate("EventValidation");
         if (!Page.IsValid)
         {
             return;
@@ -155,6 +161,10 @@ public partial class Default2 : System.Web.UI.Page
     }
     protected void btnNewTag_Click(object sender, EventArgs e)
     {
+        if (!string.IsNullOrWhiteSpace(txtEventTitle.Text))
+        {
+            Session["PendingEventTitle"] = txtEventTitle.Text;
+        }
         Response.Redirect("B600_Add_Tags.aspx?from=addevent");
     }
     protected void LoadTags()
@@ -193,6 +203,10 @@ public partial class Default2 : System.Web.UI.Page
             if (tagID == 1 || tagID == 2)
             {
                 return;
+            }
+            if (!string.IsNullOrWhiteSpace(txtEventTitle.Text))
+            {
+                Session["PendingEventTitle"] = txtEventTitle.Text;
             }
             Session["EditTagID"] = tagID;
             Response.Redirect("B700-B800_Edit_Delete_Tags.aspx?from=addevent");

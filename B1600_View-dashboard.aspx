@@ -150,7 +150,7 @@
                 <asp:ImageButton ID="btnAdd" runat="server" CommandName="Add" class="addTaskBtn" OnClick="btnAdd_Click" ImageUrl="~/Icons/icons8-add-new-white-96.png"/>
                 <asp:TextBox ID="txtNewTask" runat="server" CssClass="addTaskText" OnTextChanged="txtNewTask_TextChanged" Placeholder="Add a new task..."></asp:TextBox>
             </div>
-            <div class="scrollableTasksContainer">
+            <div class="scrollableTasksContainerDashboard">
                 
                 <asp:Repeater ID="rptTasks" runat="server" EnableViewState="false" OnItemCommand="rptTasks_ItemCommand" OnItemDataBound="rptTasks_ItemDataBound">
                     <ItemTemplate>

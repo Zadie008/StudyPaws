@@ -26,6 +26,8 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
         {
             LoadTags();
 
+            bool hasPendingTitle = Session["PendingEventTitle"] != null;
+
             string newTagID = Request.QueryString["newTag"];
             string selectedTagID = Request.QueryString["selectedTag"];
             string eventIDString = Request.QueryString["eventID"];
@@ -53,6 +55,12 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
                 {
                     dropdownEventTag.SelectedValue = selectedTagID;
                 }
+            }
+
+            if (hasPendingTitle && Session["PendingEventTitle"] != null)
+            {
+                txtEventTitle.Text = Session["PendingEventTitle"].ToString();
+                Session.Remove("PendingEventTitle");
             }
             if (Request.QueryString["date"] != null)
             {
@@ -97,7 +105,7 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
 
         ShowNextInvite();
     }
-    private void LoadEvent(int eventID, string newTagID=null)
+    private void LoadEvent(int eventID, string newTagID=null, bool preserveTitle = false)
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         using (MySqlConnection conn = new MySqlConnection(cs))
@@ -110,7 +118,10 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
             {
                 if (reader.Read())
                 {
-                    txtEventTitle.Text = reader["eventDesc"].ToString();
+                    if (!preserveTitle)
+                    {
+                        txtEventTitle.Text = reader["eventDesc"].ToString();
+                    }
                     
                     if (reader["eventDate"] != DBNull.Value)
                     {
@@ -245,6 +256,10 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
     
     protected void btnNewTag_Click(object sender, EventArgs e)
     {
+        if (!string.IsNullOrWhiteSpace(txtEventTitle.Text))
+        {
+            Session["PendingEventTitle"] = txtEventTitle.Text;
+        }
         int eventID = (int)ViewState["EditEventID"];
         Response.Redirect("B600_Add_Tags.aspx?from=editevent&eventID=" + eventID);
     }
@@ -284,6 +299,10 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
             if (tagID == 1 || tagID == 2)
             {
                 return;
+            }
+            if (!string.IsNullOrWhiteSpace(txtEventTitle.Text))
+            {
+                Session["PendingEventTitle"] = txtEventTitle.Text;
             }
             Session["EditTagID"] = tagID;
             int eventID = (int)ViewState["EditEventID"];
