@@ -65,14 +65,27 @@ public partial class Default2 : System.Web.UI.Page
     protected void btnSchedule_Click(object sender, EventArgs e)
     {
         Page.Validate("timerValidation");
-        minTotalTimeValidator.Validate();
 
         if (!Page.IsValid)
         {
-            minTotalTimeValidator.ErrorMessage = "Study Session must be at least 1 minute";
-            minTotalTimeValidator.IsValid = false;
             ScriptManager.RegisterStartupScript(this, GetType(), "showValidation",
-                "document.getElementById('" + minTotalTimeValidator.ClientID + "').style.display = 'inline';", true);
+                "validateAllFields();", true);
+            return;
+        }
+
+        // Client-side date validation will prevent the postback if date is invalid
+        DateTime sessionDate;
+        if (!DateTime.TryParse(txtFilterDate.Text, out sessionDate))
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDateError",
+                "document.getElementById('dateValidationError').textContent = 'Please enter a valid date'; document.getElementById('dateValidationError').style.display = 'inline';", true);
+            return;
+        }
+
+        if (sessionDate.Date < DateTime.Today)
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "showDateError",
+                "document.getElementById('dateValidationError').textContent = 'Cannot schedule study session for a past date'; document.getElementById('dateValidationError').style.display = 'inline';", true);
             return;
         }
 
@@ -92,14 +105,6 @@ public partial class Default2 : System.Web.UI.Page
         try
         {
             // parse date and time values
-            DateTime sessionDate;
-            if (!DateTime.TryParse(txtFilterDate.Text, out sessionDate))
-            {
-                minTotalTimeValidator.ErrorMessage = "Please enter a valid date";
-                minTotalTimeValidator.IsValid = false;
-                return;
-            }
-
             int startHours = int.Parse(txtStartTimeHours.Text);
             int startMinutes = int.Parse(txtStartTimeMinutes.Text);
             int endHours = int.Parse(txtEndTimeHours.Text);
@@ -107,6 +112,17 @@ public partial class Default2 : System.Web.UI.Page
 
             DateTime sessionStart = sessionDate.AddHours(startHours).AddMinutes(startMinutes);
             DateTime sessionEnd = sessionDate.AddHours(endHours).AddMinutes(endMinutes);
+
+            // Check if end time is before start time
+            if (sessionEnd <= sessionStart)
+            {
+                minTotalTimeValidator.ErrorMessage = "End time must be after start time";
+                minTotalTimeValidator.IsValid = false;
+                ScriptManager.RegisterStartupScript(this, GetType(), "showValidation",
+                    "validateAllFields();", true);
+                return;
+            }
+
             TimeSpan duration = sessionEnd - sessionStart;
             int totalSeconds = (int)duration.TotalSeconds;
 
@@ -114,6 +130,8 @@ public partial class Default2 : System.Web.UI.Page
             {
                 minTotalTimeValidator.ErrorMessage = "Study Session must be at least 1 minute";
                 minTotalTimeValidator.IsValid = false;
+                ScriptManager.RegisterStartupScript(this, GetType(), "showValidation",
+                    "validateAllFields();", true);
                 return;
             }
 
@@ -249,6 +267,8 @@ public partial class Default2 : System.Web.UI.Page
         {
             minTotalTimeValidator.ErrorMessage = "An error occurred: " + ex.Message;
             minTotalTimeValidator.IsValid = false;
+            ScriptManager.RegisterStartupScript(this, GetType(), "showValidation",
+                "validateAllFields();", true);
         }
     }
 

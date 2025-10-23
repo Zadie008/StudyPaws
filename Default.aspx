@@ -105,7 +105,7 @@
         </div>
 
         <!--COPY START: NOTIFICATION BELL POPUPS-->
-            <!--does not have notification-->
+            <!-- does not have notifications -->
             <div id="popupNoNotifications" class="simple-popup" style="display: none;">
                 <div class="popup-blue-box">
                     <p>You do not have any notifications at the moment!</p>
@@ -119,7 +119,7 @@
                 </div>
             </div>
 
-            <!--has notifications-->
+            <!-- has study session invitations -->
             <div id="popupHasNotifications" class="simple-popup" style="display: none;">
                 <div class="popup-pink-box">
                     <asp:HiddenField ID="hiddenSessionID" runat="server" />
@@ -134,6 +134,7 @@
                 </div>
             </div>
 
+            <!-- after accepting a study session invitation -->
             <div id="popupCalendar" class="simple-popup" style="display: none;">
                 <div class="popup-pink-box">
                     <asp:HiddenField ID="hiddenShowCalendar" runat="server" />
@@ -149,6 +150,7 @@
                 </div>
             </div>
 
+            <!-- after declining a study session invitation -->
             <div id="popupConfirmDecline" class="simple-popup" style="display: none;">
                 <div class="popup-blue-box">
                     <asp:HiddenField ID="hiddenShowConfirmation" runat="server" />
@@ -164,6 +166,7 @@
                 </div>
             </div>
 
+            <!-- confirmation that study session invitation has been declined -->
             <div id="popupIsDeclined" class="simple-popup" style="display: none;">
                 <div class="popup-blue-box">
                     <asp:HiddenField ID="hiddenShowDeclineConfirmed" runat="server" />
@@ -178,6 +181,7 @@
                 </div>
             </div>
 
+            <!-- study session has started (popup stays for 1 minute) -->
             <div id="popup" class="simple-popup" style="display: none;">
                 <div class="popup-pink-box">
                     <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />

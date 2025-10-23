@@ -485,19 +485,19 @@ h2 {
 
 .notificationIcon {
     position: absolute;
-    bottom: 1.5em;
-    left: 0;
-    width: 50px; /*same width*/
-    height: 50px;
+    bottom: 1.1em;
+    left: 5em;
+    width: 70px; /*same width*/
+    height: 70px;
     cursor: pointer;
 }
 
 .notificationBadge {
     position: absolute;
-    top: -0.6em;
-    right: -1px;
-    width: 25px;
-    height: 25px;
+    bottom: 1.6em;
+    left: 3.4em;
+    width: 35px;
+    height: 35px;
     background-color: #EB9FC6; /*Amaranth pink*/ /*#FF369E; Rose Bonbon*/
     border-radius: 50%;
     border: 3px solid white;
@@ -5130,6 +5130,7 @@ table {
     font-family: 'Gilda Display', serif;
     display: block;
     visibility: visible;
+    padding: 10px;
 }
 
 .validationError[style*="inline"] {
@@ -5142,6 +5143,7 @@ table {
     text-align: center;
     font-family: 'Gilda Display', serif;
     display: block;
+    padding: 10px;
 }
 
 .validationErrorCustom[style*="inline"] {
@@ -5379,6 +5381,35 @@ table {
     }
 
     /* ---------------------- HOME PAGE ---------------------- */
+    /* notifications */
+    .notificationDetails {
+        position: relative;
+        width: 30px; /*same width*/
+        height: 30px;
+    }
+
+    .notificationIcon {
+        position: absolute;
+        bottom: 1em;
+        left: 3em;
+        width: 50px; /*same width*/
+        height: 50px;
+        cursor: pointer;
+    }
+
+    .notificationBadge {
+        position: absolute;
+        bottom: 1.3em;
+        left: 2.2em;
+        width: 25px;
+        height: 25px;
+        background-color: #EB9FC6; /*Amaranth pink*/ /*#FF369E; Rose Bonbon*/
+        border-radius: 50%;
+        border: 3px solid white;
+        z-index: 10;
+        cursor: pointer;
+    }
+
     .homePagePet {
         width: min(90vw, 350px);
     }
@@ -5620,6 +5651,12 @@ table {
 
     #createSession4MainContent .simple-popup img {
         margin-bottom: -1.2em;
+    }
+
+    #dateValidationError {
+        color: white !important;
+        text-align: left !important;
+        display: none;
     }
 
     /* ---------------------- VIEW STUDY SESSION PAGE ---------------------- */

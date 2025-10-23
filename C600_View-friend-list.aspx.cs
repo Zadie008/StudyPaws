@@ -648,11 +648,7 @@ public partial class Default2 : System.Web.UI.Page
     }
     private string GetLastGiftSender(string connectionString, string userID1, string userID2)
     {
-        string query = @"
-    SELECT lastGiftSender
-    FROM FriendsList 
-    WHERE (userIDfrom = @userID1 AND userIDto = @userID2)
-       OR (userIDfrom = @userID2 AND userIDto = @userID1)";
+        string query = "SELECT lastGiftSender FROM FriendsList WHERE (userIDfrom = @userID1 AND userIDto = @userID2) OR (userIDfrom = @userID2 AND userIDto = @userID1)";
 
         using (MySqlConnection con = new MySqlConnection(connectionString))
         using (MySqlCommand cmd = new MySqlCommand(query, con))
@@ -678,7 +674,6 @@ public partial class Default2 : System.Web.UI.Page
         }
     }
 
-
     protected void btnCancelFriend_Click(object sender, EventArgs e)
     {
         pnlDeleteFriend.Visible = false;
@@ -686,7 +681,7 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnConfirmDeleteFriend_Click(object sender, EventArgs e)
     {
-        string friendID = ViewState["FriendToDelete"] as string;
+        string friendID = hiddenFriendToDelete.Value;
         string userID = Session["userID"] as string;
 
         if (!string.IsNullOrEmpty(friendID) && !string.IsNullOrEmpty(userID))
@@ -696,10 +691,7 @@ public partial class Default2 : System.Web.UI.Page
             using (MySqlConnection con = new MySqlConnection(cs))
             {
                 con.Open();
-                string deleteFriendQuery = @"
-                DELETE FROM friendslist 
-                WHERE (userIDfrom = @userID AND userIDto = @friendID)
-                    OR (userIDfrom = @friendID AND userIDto = @userID)";
+                string deleteFriendQuery = "DELETE FROM friendslist WHERE (userIDfrom = @userID AND userIDto = @friendID) OR (userIDfrom = @friendID AND userIDto = @userID)";
 
                 using (MySqlCommand cmd = new MySqlCommand(deleteFriendQuery, con))
                 {
