@@ -82,6 +82,11 @@ public partial class Default2 : System.Web.UI.Page
         Response.Redirect("C600_View-friend-list.aspx");
     }
 
+    protected void btnFriendRequestSentOkay_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("C700_Search-Friends.aspx");
+    }
+
     private void SearchFriends(string searchTerm)
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -133,53 +138,64 @@ public partial class Default2 : System.Web.UI.Page
             string friendID = e.CommandArgument.ToString();
             string currentUserID = Session["UserID"].ToString();
 
-            CreateFriendRequest(currentUserID, friendID, "Pending");
-            SearchFriends(txtSearchFriends.Text.Trim());
-        }
-    }
-
-    private void CreateFriendRequest(string userID, string friendID, string status)
-    {
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-
-        string checkQuery = @"SELECT COUNT(*) FROM friendslist 
-                         WHERE (userIDfrom = @userID AND userIDto = @friendID)
-                         OR (userIDfrom = @friendID AND userIDto = @userID)";
-
-        using (MySqlConnection con = new MySqlConnection(cs))
-        using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, con))
-        {
-            checkCmd.Parameters.AddWithValue("@userID", userID);
-            checkCmd.Parameters.AddWithValue("@friendID", friendID);
-
-            con.Open();
-            int existingCount = Convert.ToInt32(checkCmd.ExecuteScalar());
-
-            if (existingCount > 0)
+            if (CreateFriendRequest(currentUserID, friendID, "Pending"))
             {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "friendRequestExists",
-                    "alert('Friend request already sent or you are already friends!');", true);
-                return;
+                // Register script to show popup after postback
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "showFriendPopup",
+                    "setTimeout(function() { showFriendRequestSentPopup(); }, 100);", true);
+
+                SearchFriends(txtSearchFriends.Text.Trim());
+            }
+            else
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "friendRequestFailed",
+                    "alert('Unable to send friend request. You may have already sent one or are already friends.');", true);
             }
         }
+    }
 
-        string insertQuery = @"INSERT INTO friendslist (userIDfrom, userIDto, requestStatus, giftAvailable) 
-                         VALUES (@userIDfrom, @userIDto, @status, 0)";
+    private bool CreateFriendRequest(string userID, string friendID, string status)
+{
+    string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
-        using (MySqlConnection con = new MySqlConnection(cs))
-        using (MySqlCommand cmd = new MySqlCommand(insertQuery, con))
+    // Check if friend request already exists or users are already friends
+    string checkQuery = @"SELECT COUNT(*) FROM friendslist 
+                     WHERE (userIDfrom = @userID AND userIDto = @friendID)
+                     OR (userIDfrom = @friendID AND userIDto = @userID)";
+
+    using (MySqlConnection con = new MySqlConnection(cs))
+    using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, con))
+    {
+        checkCmd.Parameters.AddWithValue("@userID", userID);
+        checkCmd.Parameters.AddWithValue("@friendID", friendID);
+
+        con.Open();
+        int existingCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+        if (existingCount > 0)
         {
-            cmd.Parameters.AddWithValue("@userIDfrom", userID);
-            cmd.Parameters.AddWithValue("@userIDto", friendID);
-            cmd.Parameters.AddWithValue("@status", status);
-
-            con.Open();
-            cmd.ExecuteNonQuery();
-
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "friendRequestSent",
-                "alert('Friend request sent successfully!');", true);
+            return false; // Request already exists
         }
     }
+
+    // Insert new friend request
+    string insertQuery = @"INSERT INTO friendslist (userIDfrom, userIDto, requestStatus, giftAvailable) 
+                     VALUES (@userIDfrom, @userIDto, @status, 0)";
+
+    using (MySqlConnection con = new MySqlConnection(cs))
+    using (MySqlCommand cmd = new MySqlCommand(insertQuery, con))
+    {
+        cmd.Parameters.AddWithValue("@userIDfrom", userID);
+        cmd.Parameters.AddWithValue("@userIDto", friendID);
+        cmd.Parameters.AddWithValue("@status", status);
+
+        con.Open();
+        int rowsAffected = cmd.ExecuteNonQuery();
+        
+        return rowsAffected > 0; // Return true if insert was successful
+    }
+
+}
     public string GetProfileImageUrl(object iconNum)
     {
         int num = Convert.ToInt32(iconNum);

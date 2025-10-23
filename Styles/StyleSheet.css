@@ -3691,20 +3691,48 @@ body.page-exit .welcomeBackTextDiv {
     border-radius: 3em;
     padding: -5em;
 }
-#viewFriendListMainContent .friendRow {
-    display: flex;
-    align-items: center;
-    gap: 0.5em; /* Ensures consistent spacing */
-    padding: -200em;
+
+.darkPurpleText {
+    color: #ADA7C9; /*dark purple*/
 }
+
+#viewFriendListMainContent .scrollableTableContainer {
+    margin: auto 0.5em;
+    margin-bottom: -3em;
+    padding-top: 0.5em;
+    padding-left: 1em;
+    height: auto;
+    max-height: 50vh;
+    min-width: 95%;
+    max-width: 95%;
+    padding-right: 7em;
+}
+
+#viewFriendListMainContent .scrollableTableContainer::-webkit-scrollbar {
+    width: 0.7em;
+}
+
+#viewFriendListMainContent .scrollableTableContainer::-webkit-scrollbar-track {
+    background: white;
+    border-radius: 100px;
+}
+
+#viewFriendListMainContent .scrollableTableContainer::-webkit-scrollbar-thumb {
+    background-color: #446791;
+    border-radius: 100px;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+#viewFriendListMainContent .friendUsername {
+    min-width: 8em;
+}
+
 #viewFriendListMainContent .imageButton {
     width: 50px;
     height: 50px;
     cursor: pointer;
 }
-#viewFriendListMainContent .friendsScrollableTableContainer {
-    padding: 0em;
-}
+
 .friend-card {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 15px;
@@ -3714,10 +3742,10 @@ body.page-exit .welcomeBackTextDiv {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-    .friend-card:hover {
-        transform: translateY(-5px);
-        background: rgba(255, 255, 255, 0.2);
-    }
+.friend-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.2);
+}
 
 .friend-avatar {
     width: 90px;
@@ -3728,11 +3756,11 @@ body.page-exit .welcomeBackTextDiv {
     border: 3px solid rgba(255, 255, 255, 0.3);
 }
 
-    .friend-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
+.friend-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
 .friend-name {
     font-weight: 600;

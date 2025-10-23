@@ -143,16 +143,17 @@
                                     </a>
                                     <span class="friendUsername"><%# Eval("username") %></span>
      
-                                    <asp:ImageButton ID="btnAddFriend" runat="server" ImageUrl="Icons/icons8-add-new-white-96.png" CssClass="addFriendBtn" CommandName="AddFriend" CommandArgument='<%# Eval("userID") %>' />
+                                    <asp:ImageButton ID="btnAddFriend" runat="server" 
+                                    ImageUrl="Icons/icons8-add-new-white-96.png" 
+                                    CssClass="addFriendBtn" 
+                                    CommandName="AddFriend" 
+                                    CommandArgument='<%# Eval("userID") %>' />
                                 </div>
                             </ItemTemplate>
                         </asp:TemplateField>
                     </Columns>
                 </asp:GridView>
             </div>
-            <!--<div class="buttonSection">
-                <asp:Button ID="btnViewFriends" CssClass="button" runat="server" Text="View friends" OnClick="btnViewFriends_Click" />
-            </div>-->
         </div>
         <div class="rightSection"></div>
         
@@ -161,6 +162,18 @@
      <!-- Edit Friends Button -->
     <div class="buttonSection">
         <asp:Button ID="btnEdit" CssClass="button" runat="server" Text="View friends" OnClick="btnEditFriends_Click" />
+    </div>
+
+     <!-- Friend Request Sent Confirmation Panel -->
+    <div id="popupFriendRequestSent" class="simple-popup" style="display: none;">
+        <div class="popup-pink-box">
+            <p>Friend request sent successfully!</p>
+            <br />
+            <img src="Images/Notification%20Happy.png" alt="Friend Request sent" />
+            <div class="buttonSection">
+                <asp:Button ID="btnFriendRequestSentOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClick="btnFriendRequestSentOkay_Click" />
+            </div>
+        </div>
     </div>
 
     <div id="popupHasNotifications" class="simple-popup" style="display: none;">
@@ -229,6 +242,66 @@
     </div>
 
     <script type="text/javascript">
+        function showFriendRequestSentPopup() {
+            hideAllPopups();
+            var popup = document.getElementById('popupFriendRequestSent');
+            if (popup) {
+                popup.style.display = 'block';
+            }
+        }
+
+        function hideAllPopups() {
+            var popups = document.querySelectorAll('.simple-popup');
+            popups.forEach(function (popup) {
+                popup.style.display = 'none';
+            });
+        }
+
+        function redirectToSearchFriends() {
+            window.location.href = 'C700_Search-Friends.aspx';
+        }
+
+        // Function to send friend request via AJAX
+        function sendFriendRequest(userID) {
+            // Show loading state if needed
+            var btn = event.target;
+            var originalSrc = btn.src;
+            btn.src = "Icons/icons8-loading-white-96.png"; // Optional: loading icon
+
+            // Create AJAX request
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "C700_Search-Friends.aspx/SendFriendRequest", true);
+            xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    btn.src = originalSrc; // Restore original icon
+
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.d.success) {
+                            showFriendRequestSentPopup();
+                            // Optional: Remove the row from the grid
+                            var row = btn.closest('.friendRow');
+                            if (row) {
+                                row.style.display = 'none';
+                            }
+                        } else {
+                            alert('Unable to send friend request: ' + response.d.message);
+                        }
+                    } else {
+                        alert('Error sending friend request. Please try again.');
+                    }
+                }
+            };
+
+            var data = JSON.stringify({
+                friendID: userID
+            });
+
+            xhr.send(data);
+        }
+
         document.getElementById('txtSearchFriends').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 e.preventDefault();

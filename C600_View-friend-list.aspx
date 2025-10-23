@@ -202,7 +202,8 @@
                 <div class="backgroundColorContainer">
                     <div class="leftSection"></div>
                     <div class="middleSection">
-                        <div class="friendsScrollableTableContainer">
+                        <p class="darkPurpleText">nothing</p>
+                        <div class="scrollableTableContainer">
                             <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable"
                                 AutoGenerateColumns="False" OnRowDataBound="GridView1_RowDataBound"
                                 OnRowCommand="GridView1_RowCommand">
