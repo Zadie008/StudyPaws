@@ -26,97 +26,190 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <br />
     <br />
-    <asp:ScriptManager ID="ScriptManager1" runat="server" />
-    <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="true">
-        <ContentTemplate>
-            <div id="registerPageDiv">
-                <asp:Panel ID="registerPanel" runat="server" DefaultButton="btnRegister">
-                    <table>
-                        <tr>
-                            <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>
-                            <td>
-                                <asp:TextBox ID="txtUsername" class="textbox" runat="server"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="rfvUsername" runat="server" ControlToValidate="txtUsername" 
-                                    ErrorMessage="Username is required" ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><asp:Label ID="lblPassword" class="label" runat="server" Text="Password"></asp:Label></td>
-                            <td>
-                                <asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="rfvPassword" runat="server" ControlToValidate="txtPassword" 
-                                    ErrorMessage="Password is required" ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><asp:Label ID="lblConfirmPassword" class="label" runat="server" Text="Confirm Password"></asp:Label></td>
-                            <td>
-                                <asp:TextBox ID="txtConfirmPassword" class="textbox" runat="server" TextMode="Password"></asp:TextBox>
-                                <asp:Label ID="lblPasswordMismatch" runat="server" Text="Password does not match" CssClass="errorLabel" Visible="false" />
-                                <asp:RequiredFieldValidator ID="rfvConfirmPassword" runat="server" ControlToValidate="txtConfirmPassword" 
-                                    ErrorMessage="Confirm Password is required" ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
-                            </td>
-                        </tr>
-                    </table>
-                    <br />
-                    <div class="buttonSection">
-                        <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="false" />
-                        <asp:Button ID="btnRegister" class="button" runat="server" Text="Register" OnClick="btnRegister_Click1" />
-                    </div>
-                </asp:Panel>
+    
+    <!-- JavaScript Functions -->
+    <script type="text/javascript">
+        function showPanel(panelId) {
+            var panel = document.getElementById(panelId);
+            if (panel) {
+                panel.style.display = 'flex';
+                console.log('Showing panel: ' + panelId);
+            } else {
+                console.log('Panel not found: ' + panelId);
+            }
+        }
 
-                <%-- Panel for successful registration confirmation --%>
-                <asp:Panel ID="pnlConfirm" runat="server" Visible="false">
-                    <div id="popupConfirm" class="simple-popup">
-                        <div class="popup-pink-box">
-                            <p>You have been registered!</p>
-                            <img src="Images/Notification%20Happy.png" alt="Success" />
-                            <br />
-                            <div class="buttonSection">
-                                <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClick="btnOkay_Click" />
-                            </div>
-                        </div>
-                    </div>
-                </asp:Panel>
+        function hidePanel(panelId) {
+            var panel = document.getElementById(panelId);
+            if (panel) {
+                panel.style.display = 'none';
+                console.log('Hiding panel: ' + panelId);
+            }
+        }
 
-                <%-- Panel for tutorial prompt --%>
-                <asp:Panel ID="pnlTut" runat="server" Visible="false">
-                    <div id="popupTut" class="simple-popup">
-                        <div class="popup-pink-box">
-                            <p>Would you like to learn how to use the home page?</p>
-                            <img src="Images/Notification%20Happy.png" alt="Tutorial" />
-                            <br />
-                            <div class="buttonSection">
-                                <asp:Button ID="btnWatchtut" CssClass="popup-button-best-pink" runat="server" Text="Yes, please!" OnClick="btnWatchtut_Click" />
-                                <asp:Button ID="BtnNotut" CssClass="popup-button" runat="server" Text="No, thank you!" OnClick="BtnNotut_Click" />
-                            </div>
-                        </div>
-                    </div>
-                </asp:Panel>
+        function hideAllPanels() {
+            hidePanel('<%= pnlConfirm.ClientID %>');
+            hidePanel('<%= pnlTut.ClientID %>');
+            hidePanel('<%= pnlProfileExists.ClientID %>');
+            var mismatchLabel = document.getElementById('<%= lblPasswordMismatch.ClientID %>');
+            if (mismatchLabel) {
+                mismatchLabel.style.display = 'none';
+            }
+        }
 
-                <%-- Panel for "Username Already Exists" error --%>
-                <asp:Panel ID="pnlProfileExists" runat="server" Visible="false">
-                    <div id="popupProfileExists" class="simple-popup">
-                        <div class="popup-blue-box">
-                            <p>Sorry! This user already exists</p>
-                            <img src="Images/Notification%20Sad%20Hamster.png" alt="Error" />
-                            <br />
-                            <div class="buttonSection">
-                               <asp:Button ID="btnUnderstandExists" CssClass="popup-button" runat="server" Text="I understand :(" OnClick="btnUnderstandExists_Click" />
-                            </div>
+        function showPasswordMismatch() {
+            var mismatchLabel = document.getElementById('<%= lblPasswordMismatch.ClientID %>');
+            if (mismatchLabel) {
+                mismatchLabel.style.display = 'inline';
+                mismatchLabel.style.visibility = 'visible';
+            }
+        }
+
+        function hidePasswordMismatch() {
+            var mismatchLabel = document.getElementById('<%= lblPasswordMismatch.ClientID %>');
+            if (mismatchLabel) {
+                mismatchLabel.style.display = 'none';
+            }
+        }
+
+        // Client-side click handlers for popup buttons
+        function onOkayClick() {
+            hidePanel('<%= pnlConfirm.ClientID %>');
+            showPanel('<%= pnlTut.ClientID %>');
+            return false; // Prevent postback
+        }
+
+        function onUnderstandExistsClick() {
+            hidePanel('<%= pnlProfileExists.ClientID %>');
+            return false; // Prevent postback
+        }
+
+        function onWatchTutClick() {
+            hidePanel('<%= pnlTut.ClientID %>');
+            // Allow the postback to happen for redirect
+            return true;
+        }
+
+        function onNoTutClick() {
+            hidePanel('<%= pnlTut.ClientID %>');
+            // Allow the postback to happen for redirect
+            return true;
+        }
+
+        // Password visibility toggle functions
+        function togglePasswordVisibility(fieldId, iconId) {
+            var passwordField = document.getElementById(fieldId);
+            var eyeIcon = document.getElementById(iconId);
+
+            if (passwordField.type === 'password') {
+                // Show password
+                passwordField.type = 'text';
+                eyeIcon.src = 'Icons/icons8-invisible-white-96.png'; 
+                eyeIcon.style.opacity = '1';
+            } else {
+                // Hide password
+                passwordField.type = 'password';
+                eyeIcon.src = 'Icons/icons8-eye-white-96.png';
+                eyeIcon.style.opacity = '0.6';
+            }
+        }
+
+        function togglePassword() {
+            togglePasswordVisibility('<%= txtPassword.ClientID %>', 'passwordToggle');
+        }
+
+        function toggleConfirmPassword() {
+            togglePasswordVisibility('<%= txtConfirmPassword.ClientID %>', 'confirmPasswordToggle');
+        }
+    </script>
+
+    <div id="registerPageDiv">
+        <asp:Panel ID="registerPanel" runat="server" DefaultButton="btnRegister">
+            <table>
+                <tr>
+                    <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>
+                    <td>
+                        <asp:TextBox ID="txtUsername" class="textbox" runat="server"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvUsername" runat="server" ControlToValidate="txtUsername" 
+                            ErrorMessage="Username is required" ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
+                    </td>
+                </tr>
+                <tr>
+                    <td><asp:Label ID="lblPassword" class="label" runat="server" Text="Password"></asp:Label></td>
+                    <td>
+                        <div style="position: relative; display: inline-block;">
+                            <asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password" style="padding-right: 40px; width: 100%;"></asp:TextBox>
+                            <img id="passwordToggle" src="Icons/icons8-eye-white-96.png" 
+                                 style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; width: 24px; height: 24px; opacity: 0.6;" 
+                                 onclick="togglePassword()" 
+                                 title="Show Password" />
                         </div>
-                    </div>
-                </asp:Panel>
+                        <asp:RequiredFieldValidator ID="rfvPassword" runat="server" ControlToValidate="txtPassword" 
+                            ErrorMessage="Password is required" ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
+                    </td>
+                </tr>
+                <tr>
+                    <td><asp:Label ID="lblConfirmPassword" class="label" runat="server" Text="Confirm Password"></asp:Label></td>
+                    <td>
+                        <div style="position: relative; display: inline-block;">
+                            <asp:TextBox ID="txtConfirmPassword" class="textbox" runat="server" TextMode="Password" style="padding-right: 40px; width: 100%;"></asp:TextBox>
+                            <img id="confirmPasswordToggle" src="Icons/icons8-eye-white-96.png" 
+                                 style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; width: 24px; height: 24px; opacity: 0.6;" 
+                                 onclick="toggleConfirmPassword()" 
+                                 title="Show Password" />
+                        </div>
+                        <asp:Label ID="lblPasswordMismatch" runat="server" Text="Password does not match" CssClass="errorLabel" style="display: none; color: red;" />
+                        <asp:RequiredFieldValidator ID="rfvConfirmPassword" runat="server" ControlToValidate="txtConfirmPassword" 
+                            ErrorMessage="Confirm Password is required" ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <div class="buttonSection">
+                <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="false" />
+                <asp:Button ID="btnRegister" class="button" runat="server" Text="Register" OnClick="btnRegister_Click1" />
             </div>
-        </ContentTemplate>
-        <Triggers>
-            <asp:AsyncPostBackTrigger ControlID="btnRegister" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="btnOkay" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="btnWatchtut" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="BtnNotut" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="btnUnderstandExists" EventName="Click" />
-        </Triggers>
-    </asp:UpdatePanel>
+        </asp:Panel>
+
+        <%-- Panel for successful registration confirmation --%>
+        <asp:Panel ID="pnlConfirm" runat="server" CssClass="simple-popup" style="display: none;">
+            <div class="popup-pink-box">
+                <p>You have been registered!</p>
+                <img src="Images/Notification%20Happy.png" alt="Success" />
+                <br />
+                <div class="buttonSection">
+                    <%-- Use OnClientClick instead of OnClick for client-side handling --%>
+                    <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="return onOkayClick();" />
+                </div>
+            </div>
+        </asp:Panel>
+
+        <%-- Panel for tutorial prompt --%>
+        <asp:Panel ID="pnlTut" runat="server" CssClass="simple-popup" style="display: none;">
+            <div class="popup-pink-box">
+                <p>Would you like to learn how to use the home page?</p>
+                <img src="Images/Notification%20Happy.png" alt="Tutorial" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnWatchtut" CssClass="popup-button-best-pink" runat="server" Text="Yes, please!" OnClick="btnWatchtut_Click" OnClientClick="return onWatchTutClick();" />
+                    <asp:Button ID="BtnNotut" CssClass="popup-button" runat="server" Text="No, thank you!" OnClick="BtnNotut_Click" OnClientClick="return onNoTutClick();" />
+                </div>
+            </div>
+        </asp:Panel>
+
+        <%-- Panel for "Username Already Exists" error --%>
+        <asp:Panel ID="pnlProfileExists" runat="server" CssClass="simple-popup" style="display: none;">
+            <div class="popup-blue-box">
+                <p>Sorry! This user already exists</p>
+                <img src="Images/Notification%20Sad%20Hamster.png" alt="Error" />
+                <br />
+                <div class="buttonSection">
+                   <%-- Use OnClientClick instead of OnClick for client-side handling --%>
+                   <asp:Button ID="btnUnderstandExists" CssClass="popup-button" runat="server" Text="I understand :(" OnClientClick="return onUnderstandExistsClick();" />
+                </div>
+            </div>
+        </asp:Panel>
+    </div>
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="navContent" Runat="Server">

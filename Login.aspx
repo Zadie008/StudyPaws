@@ -35,10 +35,18 @@
                 <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>
                 <td><asp:TextBox ID="txtUsername" class="textbox" runat="server"></asp:TextBox></td>
             </tr>
-            <tr>
-                <td><asp:Label ID="lblPassword" class="label" runat="server" Text="Password"></asp:Label></td>
-                <td><asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password"></asp:TextBox></td>
-            </tr>
+          <tr>
+    <td><asp:Label ID="lblPassword" class="label" runat="server" Text="Password"></asp:Label></td>
+    <td>
+        <div style="position: relative; display: inline-block;">
+            <asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password" style="padding-right: 40px;"></asp:TextBox>
+            <img id="passwordToggle" src="Icons/icons8-eye-white-96.png" 
+                 style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; width: 24px; height: 24px; opacity: 0.6;" 
+                 onclick="togglePasswordVisibility()" 
+                  />
+        </div>
+    </td>
+</tr>
         </table>
         <br />
         <div class="buttonSection">
@@ -48,19 +56,42 @@
     </div>
     </asp:Panel>
 
-    <asp:Panel ID="pnlLogin" runat="server" Visible="false">
-         <div id="popup" class="simple-popup">
-        <div class="popup-blue-box">
-            <p>Sorry! Your username or password is incorrect</p>
-            <img src="Images/Notification%20Sad%20Hamster.png" />
-            <br />
-            <div class="buttonSection">
-                <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay :(" OnClientClick="hidePopup(); return false;" />
-            </div>
+<div id="popup" class="simple-popup" style="display: none;">
+    <div class="popup-blue-box">
+        <p>Sorry! Your username or password is incorrect</p>
+        <img src="Images/Notification%20Sad%20Hamster.png" alt="Sad hamster" />
+        <br />
+        <div class="buttonSection">
+            <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay :(" OnClientClick="hidePopup(); return false;" />
         </div>
     </div>
-    </asp:Panel>
+    
+</div>
+    <script type="text/javascript">
+    function showPopup() {
+        document.getElementById('popup').style.display = 'block';
+    }
+    
+    function hidePopup() {
+        document.getElementById('popup').style.display = 'none';
+        }
+        function togglePasswordVisibility() {
+            var passwordField = document.getElementById('<%= txtPassword.ClientID %>');
+         var eyeIcon = document.getElementById('passwordToggle');
 
+         if (passwordField.type === 'password') {
+             // Show password
+             passwordField.type = 'text';
+             eyeIcon.src = 'Icons/icons8-invisible-white-96.png'; 
+             eyeIcon.style.opacity = '1';
+         } else {
+             // Hide password
+             passwordField.type = 'password';
+             eyeIcon.src = 'Icons/icons8-eye-white-96.png';
+             eyeIcon.style.opacity = '0.6';
+         }
+     }
+    </script>
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="navContent" Runat="Server">

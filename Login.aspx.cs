@@ -63,8 +63,7 @@ public partial class Login : System.Web.UI.Page
                 }
                 else
                 {
-                    pnlLogin.Visible = true;
-                    ScriptManager.RegisterStartupScript(this, GetType(), "popup", "showPopup();", true);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showPopup", "showPopup();", true);
                 }
                 con.Close();
             }
