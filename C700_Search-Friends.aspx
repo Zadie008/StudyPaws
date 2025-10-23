@@ -129,6 +129,8 @@
                     Width="65" Height="65" CausesValidation="false" />
             </div>
        
+            <br />
+            <p class="darkPurpleText">nothing</p>
             <div class="scrollableTableContainer">
                 <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" AutoGenerateColumns="False" OnRowCommand="GridView1_RowCommand">
                     <Columns>

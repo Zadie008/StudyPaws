@@ -3696,6 +3696,19 @@ body.page-exit .welcomeBackTextDiv {
     color: #ADA7C9; /*dark purple*/
 }
 
+#viewFriendListMainContent .simple-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
 #viewFriendListMainContent .scrollableTableContainer {
     margin: auto 0.5em;
     margin-bottom: -3em;
@@ -4051,8 +4064,25 @@ body.page-exit .welcomeBackTextDiv {
     padding: -5em;
 }
 
-#SearchFriendsMainContent #searchFriendsSection {
-    margin-bottom: 0.2em;
+#SearchFriendsMainContent .simple-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 9999;
+}
+
+#SearchFriendsMainContent .simple-popup .popup-pink-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
 }
 
 #SearchFriendsMainContent .textbox {
@@ -4115,6 +4145,7 @@ body.page-exit .welcomeBackTextDiv {
     padding: 0 1em;
     margin-bottom: -1em;
 }
+
 .buttonViewFriendBadges {
     display: inline-block;
     background-color: #ADA7C9;
@@ -4128,6 +4159,7 @@ body.page-exit .welcomeBackTextDiv {
     font-family: 'Lilita One', sans-serif;
     letter-spacing: 0.5px;
 }
+
 /* -------------------------------------------- FRIENDS BADGES PAGE -------------------------------------------- */
 #friendsBadgesPage {
     margin: 1em 4em 0 4em;

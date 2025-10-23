@@ -272,7 +272,7 @@ public partial class Default2 : System.Web.UI.Page
                 updateCoinsCmd.Parameters.AddWithValue("@userID", userID);
                 updateCoinsCmd.ExecuteNonQuery();
 
-                // Reset gift status and clear last sender - FIXED COLUMN NAME
+                // Reset gift status and clear last sender
                 string updateGiftQuery = @"
             UPDATE FriendsList 
             SET giftAvailable = 0, lastGiftSender = NULL
@@ -288,7 +288,7 @@ public partial class Default2 : System.Web.UI.Page
             GetUserStats(cs, userID);
             LoadFriends(); // Refresh the friend list to update buttons
             ShowNextGiftOrClose();
-
+            Response.Redirect("C600_View-friend-list.aspx");
         }
     }
     protected void btnLaterGift_Click(object sender, EventArgs e)

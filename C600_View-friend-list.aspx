@@ -186,13 +186,17 @@
 
                 <!-- Delete Confirmation Panel -->
                 <asp:Panel ID="pnlDeleteFriend" runat="server" Visible="false">
-                    <div id="popup-blue-box" class="simple-popup">
+                    <div id="popupDeleteFriend" class="simple-popup">
                         <div class="popup-blue-box">
                             <p>Are you sure you want to delete your friend? You will no longer be able to view them or schedule study sessions with them!</p>
                             <img src="Images/Notification%20Sad%20Hamster.png" />
                             <div class="buttonSection">
-                                <asp:Button ID="btnConfirmDeleteFriend" CssClass="popup-button" runat="server" Text="Yes, I am sure" OnClick="btnConfirmDeleteFriend_Click" />
-                                <asp:Button ID="btnCancelDeleteFriend" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnCancelDeleteFriend_Click" />
+                                <asp:Button ID="btnConfirmDeleteFriend" CssClass="popup-button"
+                                    runat="server" Text="Yes, I am sure"
+                                    OnClick="btnConfirmDeleteFriend_Click" />
+                                <asp:Button ID="btnCancelDeleteFriend" CssClass="popup-button-best-blue"
+                                    runat="server" Text="No, not sure!"
+                                    OnClick="btnCancelDeleteFriend_Click" />
                             </div>
                         </div>
                     </div>
@@ -357,6 +361,21 @@
             }
         }
 
+        function showDeleteFriendPopup(friendID) {
+            hideAllPopups();
+            // Store the friend ID in the hidden field
+            document.getElementById('<%= hiddenFriendToDelete.ClientID %>').value = friendID;
+    
+            // Show the delete confirmation panel
+            var panel = document.getElementById('<%= pnlDeleteFriend.ClientID %>');
+            if (panel) {
+                panel.style.display = 'flex';
+                console.log('Delete friend popup shown for friend ID: ' + friendID);
+            } else {
+                console.log('Delete panel not found!');
+            }
+        }
+
         function hideAllPopups() {
             // Hide all popup panels
             var popups = document.querySelectorAll('.simple-popup');
@@ -365,7 +384,7 @@
             });
 
             // Also hide ASP.NET panels
-            var aspNetPanels = document.querySelectorAll('[id*="pnlFriendRequests"], [id*="pnlGiftNotifications"]');
+            var aspNetPanels = document.querySelectorAll('[id*="pnlFriendRequests"], [id*="pnlGiftNotifications"], [id*="pnlDeleteFriend"]');
             aspNetPanels.forEach(function (panel) {
                 panel.style.display = 'none';
             });
