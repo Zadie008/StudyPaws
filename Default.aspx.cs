@@ -54,8 +54,153 @@ public partial class _Default : System.Web.UI.Page
             Response.Redirect("Landing-page.aspx");
             lblLoggedInUserName.Text = "You are not logged in";
         }
+        if (Request.Form["__EVENTTARGET"] == "checkNovember30Badge")
+        {
+            CheckAndAwardNovember30Badge();
+        }
+        else if (Request.Form["__EVENTTARGET"] == "checkChristmasBadge")
+        {
+            CheckAndAwardChristmasBadge();
+        }
     }
+    private void CheckAndAwardNovember30Badge()
+    {
+        DateTime today = DateTime.Now;
+        if (today.Month == 11 && today.Day == 30) 
+        {
+            if (Session["UserID"] != null)
+            {
+                int userID = Convert.ToInt32(Session["UserID"]);
+                AwardNovember30Badge(userID);
+            }
+            else if (Request.IsAuthenticated)
+            {
+                var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+                if (authCookie != null)
+                {
+                    var ticket = FormsAuthentication.Decrypt(authCookie.Value);
+                    int userID = Convert.ToInt32(ticket.UserData);
+                    AwardNovember30Badge(userID);
+                }
+            }
+        }
+    }
+    private void CheckAndAwardChristmasBadge()
+    {
+        DateTime today = DateTime.Now;
+        if (today.Month == 12 && today.Day == 25)
+        {
+            if (Session["UserID"] != null)
+            {
+                int userID = Convert.ToInt32(Session["UserID"]);
+                AwardChristmasBadge(userID);
+            }
+            else if (Request.IsAuthenticated)
+            {
+                var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+                if (authCookie != null)
+                {
+                    var ticket = FormsAuthentication.Decrypt(authCookie.Value);
+                    int userID = Convert.ToInt32(ticket.UserData);
+                    AwardChristmasBadge(userID);
+                }
+            }
+        }
+    }
+    private void AwardChristmasBadge(int userID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            con.Open();
+
+            try
+            {
+                string checkBadgeQuery = "SELECT COUNT(*) FROM UserBadge WHERE userID = @userID AND badgeID = @badgeID";
+                MySqlCommand checkBadgeCmd = new MySqlCommand(checkBadgeQuery, con);
+                checkBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                checkBadgeCmd.Parameters.AddWithValue("@badgeID", 20);
+
+                int existingBadgeCount = Convert.ToInt32(checkBadgeCmd.ExecuteScalar());
+
+                if (existingBadgeCount == 0)
+                {
+                    string updateLoginQuery = "UPDATE Users SET logInChristmas = 1 WHERE userID = @userID";
+                    MySqlCommand updateLoginCmd = new MySqlCommand(updateLoginQuery, con);
+                    updateLoginCmd.Parameters.AddWithValue("@userID", userID);
+                    updateLoginCmd.ExecuteNonQuery();
+                    string insertBadgeQuery = "INSERT INTO UserBadge (userID, badgeID, badgeType) VALUES (@userID, @badgeID, @badgeType)";
+                    MySqlCommand insertBadgeCmd = new MySqlCommand(insertBadgeQuery, con);
+                    insertBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                    insertBadgeCmd.Parameters.AddWithValue("@badgeID", 20);
+                    insertBadgeCmd.Parameters.AddWithValue("@badgeType", "Gold");
+
+                    int rowsInserted = insertBadgeCmd.ExecuteNonQuery();
+
+                    if (rowsInserted > 0)
+                    {
+                        System.Diagnostics.Debug.WriteLine(string.Format("Awarded Christmas gold badge to user {0}", userID));
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine(string.Format("User {0} already has Christmas badge", userID));
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(string.Format("Error awarding Christmas badge: {0}", ex.Message));
+            }
+        }
+    }
+    private void AwardNovember30Badge(int userID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            con.Open();
+
+            try
+            {
+                string checkBadgeQuery = "SELECT COUNT(*) FROM UserBadge WHERE userID = @userID AND badgeID = @badgeID";
+                MySqlCommand checkBadgeCmd = new MySqlCommand(checkBadgeQuery, con);
+                checkBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                checkBadgeCmd.Parameters.AddWithValue("@badgeID", 19);
+
+                int existingBadgeCount = Convert.ToInt32(checkBadgeCmd.ExecuteScalar());
+
+                if (existingBadgeCount == 0)
+                {
+                    string updateLoginQuery = "UPDATE Users SET logInHalloween = 1 WHERE userID = @userID";
+                    MySqlCommand updateLoginCmd = new MySqlCommand(updateLoginQuery, con);
+                    updateLoginCmd.Parameters.AddWithValue("@userID", userID);
+                    updateLoginCmd.ExecuteNonQuery();
+                    string insertBadgeQuery = "INSERT INTO UserBadge (userID, badgeID, badgeType) VALUES (@userID, @badgeID, @badgeType)";
+                    MySqlCommand insertBadgeCmd = new MySqlCommand(insertBadgeQuery, con);
+                    insertBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                    insertBadgeCmd.Parameters.AddWithValue("@badgeID", 19);
+                    insertBadgeCmd.Parameters.AddWithValue("@badgeType", "Gold");
+
+                    int rowsInserted = insertBadgeCmd.ExecuteNonQuery();
+
+                    if (rowsInserted > 0)
+                    {
+                        System.Diagnostics.Debug.WriteLine(string.Format("Awarded November 30 gold badge to user {0}", userID));
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine(string.Format("User {0} already has November 30 badge", userID));
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(string.Format("Error awarding November 30 badge: {0}", ex.Message));
+            }
+        }
+    }
     // ---- COPY ----
     // ---- START ----
 

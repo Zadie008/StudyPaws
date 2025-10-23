@@ -61,17 +61,19 @@ public partial class Default2 : System.Web.UI.Page
 
                     using (MySqlConnection con = new MySqlConnection(cs))
                     {
-                        string query = "UPDATE Users SET iconNum = ?iconNum WHERE userID = ?userID";
+                        string query = "UPDATE Users SET iconNum = ?iconNum, changedProfileIcon = 1 WHERE userID = ?userID";
                         using (MySqlCommand cmd = new MySqlCommand(query, con))
                         {
                             cmd.Parameters.AddWithValue("?iconNum", iconNum);
                             cmd.Parameters.AddWithValue("?userID", userId);
                             con.Open();
                             int rowsAffected = cmd.ExecuteNonQuery();
-                            con.Close();
 
                             if (rowsAffected > 0)
                             {
+                          
+                                CheckAndAwardProfileIconBadge(con, userId);
+
                                 pnlConfirmPfpf.Visible = true;
                                 GetUserProfileIcon(cs, Session["UserID"].ToString());
                             }
@@ -97,7 +99,37 @@ public partial class Default2 : System.Web.UI.Page
             Response.Write("<script>alert('No icon selected.');</script>");
         }
     }
+    private void CheckAndAwardProfileIconBadge(MySqlConnection con, int userID)
+    {
+        string checkBadgeQuery = @"
+        SELECT COUNT(*) 
+        FROM UserBadge 
+        WHERE userID = @userID 
+        AND badgeID = 18";
 
+        MySqlCommand checkBadgeCmd = new MySqlCommand(checkBadgeQuery, con);
+        checkBadgeCmd.Parameters.AddWithValue("@userID", userID);
+
+        int existingBadgeCount = Convert.ToInt32(checkBadgeCmd.ExecuteScalar());
+
+        if (existingBadgeCount == 0)
+        {
+            
+            string insertBadgeQuery = @"
+            INSERT INTO UserBadge (userID, badgeID, badgeType) 
+            VALUES (@userID, 18, 'gold')";
+
+            MySqlCommand insertCmd = new MySqlCommand(insertBadgeQuery, con);
+            insertCmd.Parameters.AddWithValue("@userID", userID);
+
+            int rowsInserted = insertCmd.ExecuteNonQuery();
+
+            if (rowsInserted > 0)
+            {
+                System.Diagnostics.Debug.WriteLine(string.Format("Awarded gold profile icon change badge to user {0}", userID));
+            }
+        }
+    }
     protected void SelectIcon_Click(object sender, ImageClickEventArgs e)
     {
         ImageButton clickedButton = sender as ImageButton;
@@ -112,14 +144,13 @@ public partial class Default2 : System.Web.UI.Page
 
     private void RefreshSelectedIcon()
     {
-        // Reset all button styles
         btnCat.CssClass = "iconItem circle-cat";
         btnDog.CssClass = "iconItem circle-dog";
         btnBunny.CssClass = "iconItem circle-bunny";
         btnCow.CssClass = "iconItem circle-cow";
         btnUnicorn.CssClass = "iconItem circle-unicorn";
 
-        string selected; // Declare the variable first
+        string selected; 
 
         if (ViewState["SelectedIcon"] != null)
         {
@@ -127,7 +158,7 @@ public partial class Default2 : System.Web.UI.Page
         }
         else
         {
-            selected = null; // ViewState entry is null
+            selected = null; 
         }
 
         switch (selected)

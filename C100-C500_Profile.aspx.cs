@@ -168,6 +168,7 @@ public partial class Default2 : System.Web.UI.Page
                 reader.Close();
             }
 
+           
             if (userID != -1 && !string.IsNullOrEmpty(userEmail))
             {
                 string checkBadgeQuery = "SELECT COUNT(*) FROM UserBadge WHERE userID = @userID AND badgeID = @badgeID";
@@ -175,7 +176,7 @@ public partial class Default2 : System.Web.UI.Page
                 using (MySqlCommand checkBadgeCmd = new MySqlCommand(checkBadgeQuery, con))
                 {
                     checkBadgeCmd.Parameters.AddWithValue("@userID", userID);
-                    checkBadgeCmd.Parameters.AddWithValue("@badgeID", 15);
+                    checkBadgeCmd.Parameters.AddWithValue("@badgeID", 17); 
                     badgeCount = Convert.ToInt32(checkBadgeCmd.ExecuteScalar());
                 }
 
@@ -185,9 +186,11 @@ public partial class Default2 : System.Web.UI.Page
                     using (MySqlCommand insertBadgeCmd = new MySqlCommand(insertBadgeQuery, con))
                     {
                         insertBadgeCmd.Parameters.AddWithValue("@userID", userID);
-                        insertBadgeCmd.Parameters.AddWithValue("@badgeID", 15);
+                        insertBadgeCmd.Parameters.AddWithValue("@badgeID", 17); 
                         insertBadgeCmd.Parameters.AddWithValue("@badgeType", "Gold");
                         insertBadgeCmd.ExecuteNonQuery();
+
+                        System.Diagnostics.Debug.WriteLine(string.Format("Awarded gold email badge to user {0}", userID));
                     }
                 }
             }

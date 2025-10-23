@@ -371,19 +371,46 @@ public partial class Default2 : System.Web.UI.Page
 
             using (MySqlConnection con = new MySqlConnection(cs))
             {
-                string query = "UPDATE FriendsList SET requestStatus = 'Accepted' WHERE friendshipID = @friendshipID";
-                MySqlCommand cmd = new MySqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@friendshipID", friendshipID);
+                con.Open();
 
-                try
+                // First get the userIDto (the person who is accepting the request)
+                string getUsersQuery = "SELECT userIDfrom, userIDto FROM FriendsList WHERE friendshipID = @friendshipID";
+                MySqlCommand getUsersCmd = new MySqlCommand(getUsersQuery, con);
+                getUsersCmd.Parameters.AddWithValue("@friendshipID", friendshipID);
+
+                string userIDfrom = "";
+                string userIDto = "";
+
+                using (MySqlDataReader reader = getUsersCmd.ExecuteReader())
                 {
-                    con.Open();
-                    int rowsAffected = cmd.ExecuteNonQuery();
-                    System.Diagnostics.Debug.WriteLine("Friend request accepted. Rows affected: " + rowsAffected);
+                    if (reader.Read())
+                    {
+                        userIDfrom = reader["userIDfrom"].ToString();
+                        userIDto = reader["userIDto"].ToString();
+                    }
                 }
-                catch (Exception ex)
+
+                if (!string.IsNullOrEmpty(userIDto))
                 {
-                    System.Diagnostics.Debug.WriteLine("Error accepting friend request: " + ex.Message);
+                    // Update friend request status
+                    string updateQuery = "UPDATE FriendsList SET requestStatus = 'Accepted' WHERE friendshipID = @friendshipID";
+                    MySqlCommand cmd = new MySqlCommand(updateQuery, con);
+                    cmd.Parameters.AddWithValue("@friendshipID", friendshipID);
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Friend request accepted. Rows affected: " + rowsAffected);
+
+                        // Update received friend requests count for the user who received it (userIDto)
+                        UpdateReceivedFriendRequestsAndCheckBadge(userIDto);
+
+                        // Your existing code for numFriends and other badges...
+                        UpdateNumFriends(con, userIDfrom);
+                        UpdateNumFriends(con, userIDto);
+                        CheckAndAwardFriendBadge(con, userIDfrom);
+                        CheckAndAwardFriendBadge(con, userIDto);
+                    }
                 }
             }
 
@@ -392,7 +419,105 @@ public partial class Default2 : System.Web.UI.Page
         }
         updFriendRequests.Update();
     }
+    private void UpdateNumFriends(MySqlConnection con, string userID)
+    {
+        // Count the number of accepted friends for this user
+        string countQuery = @"
+        SELECT COUNT(*) 
+        FROM FriendsList 
+        WHERE (userIDfrom = @userID OR userIDto = @userID) 
+        AND requestStatus = 'Accepted'";
 
+        MySqlCommand countCmd = new MySqlCommand(countQuery, con);
+        countCmd.Parameters.AddWithValue("@userID", userID);
+
+        int numFriends = Convert.ToInt32(countCmd.ExecuteScalar());
+
+        // Update the numFriends in Users table
+        string updateQuery = "UPDATE Users SET numFriends = @numFriends WHERE userID = @userID";
+        MySqlCommand updateCmd = new MySqlCommand(updateQuery, con);
+        updateCmd.Parameters.AddWithValue("@numFriends", numFriends);
+        updateCmd.Parameters.AddWithValue("@userID", userID);
+
+        updateCmd.ExecuteNonQuery();
+
+        System.Diagnostics.Debug.WriteLine(string.Format("Updated numFriends to {0} for user {1}", numFriends, userID));
+    }
+
+    private void CheckAndAwardFriendBadge(MySqlConnection con, string userID)
+    {
+        // Get current numFriends
+        string getNumFriendsQuery = "SELECT numFriends FROM Users WHERE userID = @userID";
+        MySqlCommand getNumFriendsCmd = new MySqlCommand(getNumFriendsQuery, con);
+        getNumFriendsCmd.Parameters.AddWithValue("@userID", userID);
+
+        int numFriends = Convert.ToInt32(getNumFriendsCmd.ExecuteScalar());
+
+        // Determine badge type based on numFriends
+        string badgeType = "";
+
+        if (numFriends >= 15)
+        {
+            badgeType = "gold";
+        }
+        else if (numFriends >= 10)
+        {
+            badgeType = "silver";
+        }
+        else if (numFriends >= 5)
+        {
+            badgeType = "bronze";
+        }
+        else
+        {
+            // Not enough friends for any badge
+            return;
+        }
+
+        // Check if user already has this badge type for badgeID 13
+        string checkBadgeQuery = @"
+        SELECT COUNT(*) 
+        FROM UserBadge 
+        WHERE userID = @userID 
+        AND badgeID = 13 
+        AND badgeType = @badgeType";
+
+        MySqlCommand checkBadgeCmd = new MySqlCommand(checkBadgeQuery, con);
+        checkBadgeCmd.Parameters.AddWithValue("@userID", userID);
+        checkBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+
+        int existingBadgeCount = Convert.ToInt32(checkBadgeCmd.ExecuteScalar());
+
+        if (existingBadgeCount == 0)
+        {
+            // Remove any existing friend badges of lower tiers
+            string deleteLowerBadgesQuery = @"
+            DELETE FROM UserBadge 
+            WHERE userID = @userID 
+            AND badgeID = 13 
+            AND badgeType IN ('bronze', 'silver')";
+
+            MySqlCommand deleteCmd = new MySqlCommand(deleteLowerBadgesQuery, con);
+            deleteCmd.Parameters.AddWithValue("@userID", userID);
+            deleteCmd.ExecuteNonQuery();
+
+            // Insert new badge
+            string insertBadgeQuery = @"
+            INSERT INTO UserBadge (userID, badgeID, badgeType) 
+            VALUES (@userID, 13, @badgeType)";
+
+            MySqlCommand insertCmd = new MySqlCommand(insertBadgeQuery, con);
+            insertCmd.Parameters.AddWithValue("@userID", userID);
+            insertCmd.Parameters.AddWithValue("@badgeType", badgeType);
+
+            int rowsInserted = insertCmd.ExecuteNonQuery();
+
+            if (rowsInserted > 0)
+            {
+                System.Diagnostics.Debug.WriteLine(string.Format("Awarded {0} friend badge to user {1} for having {2} friends", badgeType, userID, numFriends));
+            }
+        }
+    }
     protected void btnDeclineFriendRequest_Click(object sender, EventArgs e)
     {
         string friendshipID = hiddenFriendRequestID.Value;
@@ -961,7 +1086,107 @@ public partial class Default2 : System.Web.UI.Page
 
         Session["PendingInvites"] = pendingInvites;
     }
+    private void UpdateReceivedFriendRequestsAndCheckBadge(string userID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            con.Open();
+
+            // Count the number of friend requests received by this user (both pending and accepted)
+            string countQuery = @"
+            SELECT COUNT(*) 
+            FROM FriendsList 
+            WHERE userIDto = @userID 
+            AND requestStatus IN ('Pending', 'Accepted')";
+
+            MySqlCommand countCmd = new MySqlCommand(countQuery, con);
+            countCmd.Parameters.AddWithValue("@userID", userID);
+
+            int receivedRequestsCount = Convert.ToInt32(countCmd.ExecuteScalar());
+
+            // Update the receivedFriendRequests field in Users table
+            string updateQuery = "UPDATE Users SET receivedFriendRequests = @receivedRequestsCount WHERE userID = @userID";
+            MySqlCommand updateCmd = new MySqlCommand(updateQuery, con);
+            updateCmd.Parameters.AddWithValue("@receivedRequestsCount", receivedRequestsCount);
+            updateCmd.Parameters.AddWithValue("@userID", userID);
+            updateCmd.ExecuteNonQuery();
+
+            System.Diagnostics.Debug.WriteLine(string.Format("Updated receivedFriendRequests to {0} for user {1}", receivedRequestsCount, userID));
+
+            // Check and award badge based on received requests count
+            CheckAndAwardReceivedRequestsBadge(con, userID, receivedRequestsCount);
+        }
+    }
+
+    private void CheckAndAwardReceivedRequestsBadge(MySqlConnection con, string userID, int receivedRequestsCount)
+    {
+        // Determine badge type based on received requests count
+        string badgeType = "";
+
+        if (receivedRequestsCount >= 15)
+        {
+            badgeType = "gold";
+        }
+        else if (receivedRequestsCount >= 10)
+        {
+            badgeType = "silver";
+        }
+        else if (receivedRequestsCount >= 5)
+        {
+            badgeType = "bronze";
+        }
+        else
+        {
+            // Not enough received requests for any badge
+            return;
+        }
+
+        // Check if user already has this badge type for badgeID 15
+        string checkBadgeQuery = @"
+        SELECT COUNT(*) 
+        FROM UserBadge 
+        WHERE userID = @userID 
+        AND badgeID = 15 
+        AND badgeType = @badgeType";
+
+        MySqlCommand checkBadgeCmd = new MySqlCommand(checkBadgeQuery, con);
+        checkBadgeCmd.Parameters.AddWithValue("@userID", userID);
+        checkBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+
+        int existingBadgeCount = Convert.ToInt32(checkBadgeCmd.ExecuteScalar());
+
+        if (existingBadgeCount == 0)
+        {
+            // Remove any existing received request badges of lower tiers
+            string deleteLowerBadgesQuery = @"
+            DELETE FROM UserBadge 
+            WHERE userID = @userID 
+            AND badgeID = 15 
+            AND badgeType IN ('bronze', 'silver')";
+
+            MySqlCommand deleteCmd = new MySqlCommand(deleteLowerBadgesQuery, con);
+            deleteCmd.Parameters.AddWithValue("@userID", userID);
+            deleteCmd.ExecuteNonQuery();
+
+            // Insert new badge
+            string insertBadgeQuery = @"
+            INSERT INTO UserBadge (userID, badgeID, badgeType) 
+            VALUES (@userID, 15, @badgeType)";
+
+            MySqlCommand insertCmd = new MySqlCommand(insertBadgeQuery, con);
+            insertCmd.Parameters.AddWithValue("@userID", userID);
+            insertCmd.Parameters.AddWithValue("@badgeType", badgeType);
+
+            int rowsInserted = insertCmd.ExecuteNonQuery();
+
+            if (rowsInserted > 0)
+            {
+                System.Diagnostics.Debug.WriteLine(string.Format("Awarded {0} received requests badge to user {1} for receiving {2} friend requests", badgeType, userID, receivedRequestsCount));
+            }
+        }
+    }
     private void ShowNextInvite(bool userInitiated = false)
     {
         List<SessionInvite> invites = Session["PendingInvites"] as List<SessionInvite>;

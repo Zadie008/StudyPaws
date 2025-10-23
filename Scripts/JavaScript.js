@@ -99,7 +99,6 @@ function updateTimeAndDate() {
     const timeLabel = document.getElementById("headerContentPlaceHolder_lblTime");
     const dayLabel = document.getElementById("headerContentPlaceHolder_lblDay");
     const dateLabel = document.getElementById("headerContentPlaceHolder_lblDate");
-
     const now = new Date();
 
     // format time as hh:mm
@@ -120,12 +119,59 @@ function updateTimeAndDate() {
     if (timeLabel) timeLabel.textContent = timeString;
     if (dayLabel) dayLabel.textContent = dayString;
     if (dateLabel) dateLabel.textContent = dateString;
+    checkNovember30Badge(now);
+    checkChristmasBadge(now);
+}
+
+function checkNovember30Badge(currentDate) {
+    // Check if it's November 30th
+    if (currentDate.getMonth() === 10 && currentDate.getDate() === 30) {
+        awardNovember30Badge();
+    }
+}
+
+function checkChristmasBadge(currentDate) {
+    // Check if it's December 25th
+    if (currentDate.getMonth() === 11 && currentDate.getDate() === 25) {
+        awardChristmasBadge();
+    }
+}
+
+function awardNovember30Badge() {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", window.location.href, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log("November 30 badge check completed");
+        }
+    };
+
+    xhr.send("__EVENTTARGET=checkNovember30Badge");
+}
+
+function awardChristmasBadge() {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", window.location.href, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log("Christmas badge check completed");
+        }
+    };
+
+    xhr.send("__EVENTTARGET=checkChristmasBadge");
 }
 
 window.addEventListener("DOMContentLoaded", updateTimeAndDate);
-
-// update time every second
 setInterval(updateTimeAndDate, 1000);
+document.addEventListener('DOMContentLoaded', function () {
+    const now = new Date();
+    checkNovember30Badge(now);
+    checkChristmasBadge(now);
+});
 
 // pop-ups
 function showPopup() {
