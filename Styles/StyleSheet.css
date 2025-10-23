@@ -2005,6 +2005,21 @@ body.page-exit .welcomeBackTextDiv {
     box-sizing: border-box;
     display: block;
 }
+
+/*-------------------------------------- EDIT AND DELETE TAGS B700 AND B800 ------------------------------*/
+#editDeleteTag #popupDeleteTag {
+    bottom: 0;
+    right: 0;
+}
+
+#editDeleteTag .simple-popup .popup-blue-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+}
+
 /*--------------------------------------------- TO DO LIST PAGE B900 -------------------------------------------*/
 .toDoListPage {
     background-color: #ADA7C9;

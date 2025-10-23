@@ -118,6 +118,7 @@
                 <td class="tableValidation" colspan="5"><asp:CustomValidator ID="validatorTagColourEdit" runat="server" ErrorMessage="Please select a Tag Colour" ClientValidationFunction="validateTagColour" ValidationGroup="tagPopup" Display="Static" CssClass="validationError" OnServerValidate="validatorTagColour_ServerValidate"/></td>
             </tr>
         </table>
+
         <div class="buttonSection">
             <asp:Button ID="btnBackEditTag" class="button" runat="server" Text="Back" CausesValidation="False" OnClick="btnBack_Click" />
             <asp:Button ID="btnDeleteTag" class="button" runat="server" Text="Delete" CausesValidation="false" OnClick="btnDelete_Click" OnClientClick="showDeletePopup(); return false;" />
@@ -137,7 +138,6 @@
             </div>
         </div>
     </div>
-
 
     <script type="text/javascript">
         window.addEventListener('DOMContentLoaded', function () {
