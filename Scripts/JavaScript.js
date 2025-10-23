@@ -326,8 +326,36 @@ function updateCountdown() {
         clearInterval(countdownInterval);
         const alarm = document.getElementById("timerEndSound");
         if (alarm) alarm.play();
-        showTimeUpPopup();
+
+        // Check which page we're on
+        if (isStudySessionPage()) {
+            showStudySessionTimeUpPopup();
+        } else {
+            showTimeUpPopup();
+        }
     }
+}
+
+function isStudySessionPage() {
+    // Method 1: Check URL
+    if (window.location.href.includes('study-session') ||
+        window.location.href.includes('StudySession')) {
+        return true;
+    }
+
+    // Method 2: Check for page-specific elements
+    if (document.getElementById('studySessionElement') ||
+        document.querySelector('.study-session-content')) {
+        return true;
+    }
+
+    // Method 3: Check page title or specific text
+    if (document.title.includes('Study Session') ||
+        document.body.innerHTML.includes('Study Session')) {
+        return true;
+    }
+
+    return false;
 }
 
 let extraVisible = false;

@@ -88,7 +88,7 @@
     <div class="viewTimerMainContent">
         <div class="timeSection">
             <div class="leftSection">
-                <div class="inSessionDiv">
+                <div class="inSessionDiv" style="display: block; padding: 0.5em 0em; width: 25vw; border-radius: 2em; background-color: #64A6BD; border: 2px solid red; min-height: 50px;">
                     <h2 class="inSessionHeading">In session</h2>
                     <div class="scrollableTableContainer">
                         <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" 
