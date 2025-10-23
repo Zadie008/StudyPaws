@@ -121,19 +121,23 @@ public partial class A200_View_timer : System.Web.UI.Page
                 DateTime currentTime = DateTime.Now;
                 int currentHour = currentTime.Hour;
 
-                CheckTimerCompletionBadges(con, Convert.ToInt32(userID));
+                int userIDInt = Convert.ToInt32(userID);
+
+                CheckTimerCompletionBadges(con, userIDInt);
 
                 // 04:00-08:00
                 if (currentHour >= 4 && currentHour < 8)
                 {
-                    CheckEarlyMorningTimerBadges(con, Convert.ToInt32(userID));
+                    CheckEarlyMorningTimerBadges(con, userIDInt);
                 }
 
                 // 22:00-02:00
                 if (currentHour >= 22 || currentHour < 2)
                 {
-                    CheckLateNightTimerBadges(con, Convert.ToInt32(userID));
+                    CheckLateNightTimerBadges(con, userIDInt);
                 }
+
+                CheckCombinedCompletionBadges(con, userIDInt);
             }
 
             return "Success: " + xpEarned + " XP and " + coinsEarned + " coins added";
@@ -141,6 +145,42 @@ public partial class A200_View_timer : System.Web.UI.Page
         catch (Exception ex)
         {
             return "Error: " + ex.Message;
+        }
+    }
+
+    // FOR GETTING COMBINED COMPLETION BADGE (completedTasks, completedTimers, completedStudySessions)
+    private static void CheckCombinedCompletionBadges(MySqlConnection con, int userID)
+    {
+        string getCountsQuery = "SELECT completedTasks, completedTimers, completedStudySessions FROM Users WHERE userID = @userID";
+        int completedTasks = 0;
+        int completedTimers = 0;
+        int completedStudySessions = 0;
+
+        using (MySqlCommand getCountsCmd = new MySqlCommand(getCountsQuery, con))
+        {
+            getCountsCmd.Parameters.AddWithValue("@userID", userID);
+            using (MySqlDataReader reader = getCountsCmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    completedTasks = reader["completedTasks"] != DBNull.Value ? Convert.ToInt32(reader["completedTasks"]) : 0;
+                    completedTimers = reader["completedTimers"] != DBNull.Value ? Convert.ToInt32(reader["completedTimers"]) : 0;
+                    completedStudySessions = reader["completedStudySessions"] != DBNull.Value ? Convert.ToInt32(reader["completedStudySessions"]) : 0;
+                }
+            }
+        }
+
+        if (completedTasks >= 50 && completedTimers >= 50 && completedStudySessions >= 50)
+        {
+            AwardBadgeStatic(con, userID, 10, "Gold");
+        }
+        else if (completedTasks >= 25 && completedTimers >= 25 && completedStudySessions >= 25)
+        {
+            AwardBadgeStatic(con, userID, 10, "Silver");
+        }
+        else if (completedTasks >= 10 && completedTimers >= 10 && completedStudySessions >= 10)
+        {
+            AwardBadgeStatic(con, userID, 10, "Bronze");
         }
     }
 

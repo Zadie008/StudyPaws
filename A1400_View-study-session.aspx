@@ -197,7 +197,6 @@
     <audio id="timerEndSound" src="Audio/timerEndSound.mp3" preload="auto"></audio>
 
     <script type="text/javascript">
-        // Set circle colors on page load
         document.addEventListener('DOMContentLoaded', function () {
             setCircleColors();
         });
@@ -216,9 +215,7 @@
                 else if (src.includes('cow')) colorClass = 'circle-cow';
                 else if (src.includes('unicorn')) colorClass = 'circle-unicorn';
 
-                // Remove existing color classes
                 circle.className = 'friendProfileCircle';
-                // Add the correct color class
                 circle.classList.add(colorClass);
             });
         }
@@ -239,7 +236,6 @@
                 gridView.appendChild(tbody);
             }
 
-            // Build rows for each user - simple and clean
             let html = '';
             users.forEach(u => {
                 const imgSrc = getProfileImagePath(u.iconNum);
@@ -261,7 +257,6 @@
 
             tbody.innerHTML = html;
 
-            // Re-apply circle colors after updating
             setTimeout(setCircleColors, 100);
         }
 
@@ -287,10 +282,8 @@
             }
         }
 
-        // Start refreshing after page is fully loaded
-        setTimeout(loadInSessionUsers, 1000);
-        // Refresh every 10 seconds
-        setInterval(loadInSessionUsers, 3000);
+        setTimeout(loadInSessionUsers, 1000); // start refreshing after page is fully loaded
+        setInterval(loadInSessionUsers, 3000); // refresh every 3 seconds
     </script>
 </asp:Content>
 

@@ -312,6 +312,17 @@ public partial class View_Pets_farm : System.Web.UI.Page
                 cmd.ExecuteNonQuery();
             }
 
+            // 4. INCREMENT soldPets counter
+            string updateSoldPets = "UPDATE Users SET soldPets = soldPets + 1 WHERE userID = @userID";
+            using (MySqlCommand cmd = new MySqlCommand(updateSoldPets, con))
+            {
+                cmd.Parameters.AddWithValue("@userID", userID);
+                cmd.ExecuteNonQuery();
+            }
+
+            // 5. CHECK FOR SOLD PETS BADGES
+            CheckSoldPetsBadges(con, Convert.ToInt32(userID));
+
             if (wasEquipped)
             {
                 // GET petID of Cat 1
@@ -366,6 +377,73 @@ public partial class View_Pets_farm : System.Web.UI.Page
 
         ScriptManager.RegisterStartupScript(this, GetType(), "hideSellPopup", "hideSellPopup();", true);
         Response.Redirect(Request.RawUrl);
+    }
+
+    // FOR GETTING SOLD PETS BADGE
+    private void CheckSoldPetsBadges(MySqlConnection con, int userID)
+    {
+        string getCountQuery = "SELECT soldPets FROM Users WHERE userID = @userID";
+        int soldCount = 0;
+        using (MySqlCommand getCountCmd = new MySqlCommand(getCountQuery, con))
+        {
+            getCountCmd.Parameters.AddWithValue("@userID", userID);
+            object result = getCountCmd.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                soldCount = Convert.ToInt32(result);
+            }
+        }
+
+        if (soldCount >= 3)
+        {
+            AwardBadge(con, userID, 12, "Gold");
+        }
+        else if (soldCount >= 2)
+        {
+            AwardBadge(con, userID, 12, "Silver");
+        }
+        else if (soldCount >= 1)
+        {
+            AwardBadge(con, userID, 12, "Bronze");
+        }
+    }
+
+    private void AwardBadge(MySqlConnection con, int userID, int badgeID, string badgeType)
+    {
+        // Check if user already has any type of this badge
+        string checkBadgeQuery = "SELECT COUNT(*) FROM UserBadge WHERE userID = @userID AND badgeID = @badgeID";
+        int badgeCount = 0;
+        using (MySqlCommand checkBadgeCmd = new MySqlCommand(checkBadgeQuery, con))
+        {
+            checkBadgeCmd.Parameters.AddWithValue("@userID", userID);
+            checkBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+            badgeCount = Convert.ToInt32(checkBadgeCmd.ExecuteScalar());
+        }
+
+        if (badgeCount == 0)
+        {
+            // No entry exists - INSERT new record
+            string insertBadgeQuery = "INSERT INTO UserBadge (userID, badgeID, badgeType) VALUES (@userID, @badgeID, @badgeType)";
+            using (MySqlCommand insertBadgeCmd = new MySqlCommand(insertBadgeQuery, con))
+            {
+                insertBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                insertBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+                insertBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+                insertBadgeCmd.ExecuteNonQuery();
+            }
+        }
+        else
+        {
+            // Entry exists - UPDATE with new badgeType
+            string updateBadgeQuery = "UPDATE UserBadge SET badgeType = @badgeType WHERE userID = @userID AND badgeID = @badgeID";
+            using (MySqlCommand updateBadgeCmd = new MySqlCommand(updateBadgeQuery, con))
+            {
+                updateBadgeCmd.Parameters.AddWithValue("@userID", userID);
+                updateBadgeCmd.Parameters.AddWithValue("@badgeID", badgeID);
+                updateBadgeCmd.Parameters.AddWithValue("@badgeType", badgeType);
+                updateBadgeCmd.ExecuteNonQuery();
+            }
+        }
     }
 
     protected void btnCats_Click(object sender, EventArgs e)
