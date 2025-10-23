@@ -126,7 +126,7 @@
                     Placeholder="Search" OnTextChanged="txtSearchFriends_TextChanged" AutoPostBack="true" ></asp:TextBox>
                 <asp:ImageButton ID="btnSearchFriends" CssClass="imageButton" runat="server" 
                     ImageUrl="Icons/icons8-search-white-96.png" OnClick="btnSearchFriends_Click" 
-                    Width="75" Height="75" CausesValidation="false" />
+                    Width="65" Height="65" CausesValidation="false" />
             </div>
        
             <div class="scrollableTableContainer">

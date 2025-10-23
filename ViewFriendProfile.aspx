@@ -114,34 +114,35 @@
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" runat="Server">
     <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
-
-    <div class="friend-profile-page-container">
-        <div class="friend-profile-content-container">
-            <div class="friend-profile-details-card">
-                <div class="friend-profile-avatar-container">
-                    <div class="friend-profile-large-avatar">
-                        <asp:Image ID="imgFriend" runat="server" CssClass="friendProfileImage" />
+    <div id="viewFriendProfile">
+        <div class="friend-profile-page-container">
+            <div class="friend-profile-content-container">
+                <div class="friend-profile-details-card">
+                    <div class="friend-profile-avatar-container">
+                        <div class="friend-profile-large-avatar">
+                            <asp:Image ID="imgFriend" runat="server" CssClass="friendProfileImage" />
+                        </div>
+                    </div>
+            
+                    <h2 class="friend-profile-display-name">
+                        <asp:Label ID="lblFriendName" runat="server" Text="Ica" />
+                    </h2>
+            
+                    <div class="friend-profile-level-badge">
+                        <asp:Label ID="lblFriendLevel" runat="server" Text="Level 12" />
+                    </div>
+                    <div class="buttonSection">
+                        <asp:Button ID="btnViewFriendBadges" CssClass="buttonViewFriendBadges" runat="server" Text="View Badges" OnClick="btnViewFriendBadges_Click" />
                     </div>
                 </div>
-                
-                <h2 class="friend-profile-display-name">
-                    <asp:Label ID="lblFriendName" runat="server" Text="Ica" />
-                </h2>
-                
-                <div class="friend-profile-level-badge">
-                    <asp:Label ID="lblFriendLevel" runat="server" Text="Level 12" />
-                </div>
-                <div class="buttonSection">
-                    <asp:Button ID="btnViewFriendBadges" CssClass="buttonViewFriendBadges" runat="server" Text="View Badges" OnClick="btnViewFriendBadges_Click" />
-                </div>
+                <div class="rightSection"></div>
             </div>
-            <div class="rightSection"></div>
         </div>
-    </div>
 
-     <!-- Back Button -->
-    <div class="buttonSection">
-        <asp:Button ID="btnBack" CssClass="button" runat="server" Text="Back" OnClick="btnBack_Click" />
+         <!-- Back Button -->
+        <div class="buttonSection">
+            <asp:Button ID="btnBack" CssClass="button" runat="server" Text="Back" OnClick="btnBack_Click" />
+        </div>
     </div>
 
     <script>

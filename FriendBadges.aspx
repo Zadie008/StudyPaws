@@ -140,6 +140,11 @@
                 </div>
             </div>
         </div>
+
+         <!-- Back Button -->
+        <div class="buttonSection">
+            <asp:Button ID="btnBack" CssClass="button" runat="server" Text="Back" OnClick="btnBack_Click" />
+        </div>
     
         <!--does not have notification-->
         <div id="popupNoNotifications" class="simple-popup" style="display: none;">

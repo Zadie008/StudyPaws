@@ -68,6 +68,11 @@ public partial class Default2 : System.Web.UI.Page
         }
     }
 
+    protected void btnBack_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("C600_View-friend-list.aspx");
+    }
+
     private string GetUsernameFromID(string userID)
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;

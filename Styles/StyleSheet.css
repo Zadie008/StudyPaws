@@ -99,6 +99,10 @@ p {
     z-index: 9999;
 }
 
+.simple-popup p {
+    font-size: 2em;
+}
+
 .popup-pink-box {
     background-color: #D7B9D5; /*pink*/
     padding: 1.5em;
@@ -3279,7 +3283,7 @@ body.page-exit .welcomeBackTextDiv {
     max-width: 700px;
 }
 
-::placeholder {
+#inviteFriendsToSession .textbox::placeholder {
     color: #64A6BD;
 }
 
@@ -3998,12 +4002,12 @@ body.page-exit .welcomeBackTextDiv {
 
 /* -------------------------------------------- SEARCH FRIENDS PAGE -------------------------------------------- */
 #SearchFriendsMainContent {
-    margin: 0em auto;
+    margin: 1em 4em 4em 4em;
 }
 
 #SearchFriendsMainContent h2 {
     font-size: 2.5rem;
-    margin-bottom: 0em;
+    margin-bottom: 0.1em;
     margin-top: 0;
     text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
@@ -4038,29 +4042,17 @@ body.page-exit .welcomeBackTextDiv {
     max-width: 700px;
 }
 
-#SearchFriendsMainContent .textbox ::placeholder {
-    color: #ADA7C9; /* doesn't work yet */
+#SearchFriendsMainContent .textbox::placeholder {
+    color: #ADA7C9; /*dark purple*/
 }
-
-/*#SearchFriendsMainContent .friendsScrollableTableContainer {
-    height: auto;
-    max-height: 45vh;
-    min-width: 97%;
-    max-width: 100%;
-    width: 50%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding-right: 7em;
-    box-sizing: content-box;
-}*/
 
 #SearchFriendsMainContent .scrollableTableContainer {
     margin: auto 0.5em;
-    padding: 0;
+    padding-left: 1em;
     max-height: 43vh;
-    min-width: 97%;
-    max-width: 97%;
-    padding-right: 10em;
+    min-width: 95%;
+    max-width: 95%;
+    padding-right: 7em;
 }
 
 #SearchFriendsMainContent .scrollableTableContainer::-webkit-scrollbar {
@@ -4078,8 +4070,8 @@ body.page-exit .welcomeBackTextDiv {
     box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
 }
 
-#SearchFriendsMainContent {
-    width: 90%;
+#SearchFriendsMainContent .friendUsername {
+    min-width: 8.5em;
 }
 
 #SearchFriendsMainContent .buttonSection {
@@ -4108,9 +4100,9 @@ body.page-exit .welcomeBackTextDiv {
     font-family: 'Lilita One', sans-serif;
     letter-spacing: 0.5px;
 }
-/* -------------------------------------------- Friends Badges Page Styles -------------------------------------------- */
+/* -------------------------------------------- FRIENDS BADGES PAGE -------------------------------------------- */
 #friendsBadgesPage {
-    margin: 1em 4em -4em 4em;
+    margin: 1em 4em 0 4em;
     height: 67vh;
     overflow: hidden;
     position: relative;
@@ -4136,6 +4128,12 @@ body.page-exit .welcomeBackTextDiv {
     padding: 0.5em;
     display: flex;
     flex-direction: column;
+}
+
+#friendsBadgesPage .buttonSection {
+    margin-top: 0vh;
+    margin-left: 45.5em;
+    position: fixed;
 }
 
 #friendsBadgesPage .scrollableTableContainer {
@@ -4279,7 +4277,6 @@ body.page-exit .welcomeBackTextDiv {
 #friendsBadgesPage .friends-badges-popup-box p {
     font-size: 2.2rem;
 }
-
 
 /* -------------------------------------------- BADGES PAGE -------------------------------------------- */
 #badgesMainContent {
@@ -5176,13 +5173,13 @@ table {
 
 @media (max-width: 1900px) {
     /* ---------------------- POP-UPS ---------------------- */
+    .simple-popup p {
+        font-size: 1.5rem;
+    }
+
     /* PINK */
     .popup-pink-box {
         width: 40%;
-    }
-
-    .popup-pink-box p {
-        font-size: 1.5rem;
     }
 
     .popup-pink-box img {
@@ -5198,10 +5195,6 @@ table {
     /* BLUE */
     .popup-blue-box {
         width: 40%;
-    }
-
-    .popup-blue-box p {
-        font-size: 1.5rem;
     }
 
     .popup-blue-box img {
@@ -5573,21 +5566,64 @@ table {
     }
 
     /* ---------------------- FRIENDS PAGES ---------------------- */
+    /* VIEW FRIENDS LIST PAGE */
     #viewFriendListMainContent {
         margin: 0em auto;
     }
 
+    /* VIEW FRIENDS PROFILE PAGE */
     .friend-profile-page-container {
         margin: 0em auto;
     }
 
+    #viewFriendProfile .buttonSection {
+        margin-top: 10px;
+        margin-bottom: -10px;
+    }
+
     .friend-profile-content-container {
-        margin: 1em auto;
-        padding: 1.5em;
+        margin: 0em auto;
+        padding: 1em;
     }
 
     .friend-profile-details-card {
-        padding: 1.5em;
+        padding: 1em;
+    }
+
+    /* SEARCH FRIENDS PAGE */
+    #SearchFriendsMainContent {
+        margin: 0em auto;
+    }
+
+    #SearchFriendsMainContent .scrollableTableContainer {
+        margin: auto 0.5em;
+        padding-left: 0.5em;
+        padding-right: -0.5em;
+        max-height: 43vh;
+        min-width: 95%;
+        max-width: 95%;
+    }
+
+    #SearchFriendsMainContent .friendUsername {
+        min-width: 9em;
+    }
+
+    /* VIEW FRIENDS BADGES PAGE */
+    #friendsBadgesPage {
+        margin: 0 4em 4em 4em;
+        height: 67.5vh;
+    }
+
+    #friendsBadgesPage .scrollableTableContainer {
+        max-height: 57vh;
+        min-width: 97%;
+        max-width: 97%;
+    }
+
+    #friendsBadgesPage .buttonSection {
+        margin-top: 1px;
+        margin-bottom: -1px;
+        margin-left: 35em;
     }
 
     /* ---------------------- BADGES PAGE ---------------------- */
