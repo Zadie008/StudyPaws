@@ -60,6 +60,12 @@ public partial class Default2 : System.Web.UI.Page
             ShowNextInvite();
         }
     }
+
+    protected void btnEditFriends_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("C600_View-friend-list.aspx");
+    }
+
     protected void txtSearchFriends_TextChanged(object sender, EventArgs e)
     {
         SearchFriends(txtSearchFriends.Text.Trim());

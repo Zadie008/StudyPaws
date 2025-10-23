@@ -116,8 +116,6 @@
     <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
 
     <div class="friend-profile-page-container">
-        
-
         <div class="friend-profile-content-container">
             <div class="friend-profile-details-card">
                 <div class="friend-profile-avatar-container">
@@ -134,33 +132,25 @@
                     <asp:Label ID="lblFriendLevel" runat="server" Text="Level 12" />
                 </div>
                 <div class="buttonSection">
-     <asp:Button ID="btnViewFriendBadges" CssClass="buttonViewFriendBadges" runat="server"
-         Text="View Badges" OnClick="btnViewFriendBadges_Click" />
- </div>
+                    <asp:Button ID="btnViewFriendBadges" CssClass="buttonViewFriendBadges" runat="server" Text="View Badges" OnClick="btnViewFriendBadges_Click" />
+                </div>
             </div>
             <div class="rightSection"></div>
         </div>
-        </div>
-   
+    </div>
 
-   
-    
+     <!-- Back Button -->
+    <div class="buttonSection">
+        <asp:Button ID="btnBack" CssClass="button" runat="server" Text="Back" OnClick="btnBack_Click" />
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // If you really want client-side interactivity:
             const profile = document.querySelector('.friendProfileDetails');
             if (profile) {
                 profile.addEventListener('click', function () {
                     const name = document.getElementById('<%= lblFriendName.ClientID %>').innerText;
                     alert(`Showing profile for ${name}`);
-                });
-            }
-
-            const backButton = document.querySelector('.button');
-            if (backButton) {
-                backButton.addEventListener('click', function () {
-                    alert('Going back to previous screen');
                 });
             }
         });

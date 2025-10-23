@@ -115,8 +115,8 @@
     <div id="friendsBadgesPage">
    
          <h2><asp:Label ID="lblPageTitle" runat="server" Text="Badges"></asp:Label></h2>
-        <div class="friends-badges-container">
-            <div class="friends-badges-scroll-container">
+        <div class="backgroundColorContainer">
+            <div class="scrollableTableContainer">
                 <div class="friends-badges-grid">
                     <asp:Repeater ID="rpPets" runat="server">
                         <ItemTemplate>

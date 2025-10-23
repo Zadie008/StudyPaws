@@ -129,7 +129,7 @@
                     Width="75" Height="75" CausesValidation="false" />
             </div>
        
-            <div class="friendsScrollableTableContainer">
+            <div class="scrollableTableContainer">
                 <asp:GridView ID="GridView1" runat="server" GridLines="None" CssClass="searchFriendsTable" AutoGenerateColumns="False" OnRowCommand="GridView1_RowCommand">
                     <Columns>
                         <asp:TemplateField>
@@ -156,6 +156,11 @@
         </div>
         <div class="rightSection"></div>
         
+    </div>
+
+     <!-- Edit Friends Button -->
+    <div class="buttonSection">
+        <asp:Button ID="btnEdit" CssClass="button" runat="server" Text="Edit friends" OnClick="btnEditFriends_Click" />
     </div>
 
     <div id="popupHasNotifications" class="simple-popup" style="display: none;">

@@ -395,6 +395,7 @@ h2 {
     height: 100%;
     z-index: -1;
 }
+
 #profileCircle.circle-cat {
     background-color: #64A6BD;
 }
@@ -3635,7 +3636,7 @@ body.page-exit .welcomeBackTextDiv {
 
 /* -------------------------------------------- VIEW FRIEND LIST PAGE -------------------------------------------- */
 #viewFriendListMainContent {
-    margin: 0em auto;
+    margin: 1em 4em 4em 4em;
 }
 
 #viewFriendListMainContent h2 {
@@ -3721,7 +3722,7 @@ body.page-exit .welcomeBackTextDiv {
     display: block;
 }
 
-.buttonSection {
+#viewFriendListMainContent .buttonSection {
     text-align: center;
     margin-top: 20px;
 }
@@ -3946,9 +3947,9 @@ body.page-exit .welcomeBackTextDiv {
 
 .mailIcon {
     display: inline-block;
-    vertical-align: middle; 
-    width: 55px;
-    height: 55px;
+    vertical-align: middle;
+    width: 45px;
+    height: 45px;
     padding: 5px;
     margin-left: 5px;
     border: none;
@@ -3987,6 +3988,10 @@ body.page-exit .welcomeBackTextDiv {
     padding: -5em;
 }
 
+#SearchFriendsMainContent #searchFriendsSection {
+    margin-bottom: 0.2em;
+}
+
 #SearchFriendsMainContent .textbox {
     border-radius: 2rem;
     border: 2px solid white;
@@ -3997,7 +4002,7 @@ body.page-exit .welcomeBackTextDiv {
     font-family: 'Gilda Display', serif;
     font-weight: 200;
     outline: none;
-    margin: 1vh auto;
+    margin: 1.5vh auto 1vh auto;
     text-align: left;
     max-width: 700px;
 }
@@ -4006,13 +4011,40 @@ body.page-exit .welcomeBackTextDiv {
     color: #ADA7C9; /* doesn't work yet */
 }
 
-#SearchFriendsMainContent .scrollableTableContainer {
-    height: 37vh;
-    width: 100%;
+/*#SearchFriendsMainContent .friendsScrollableTableContainer {
+    height: auto;
+    max-height: 45vh;
+    min-width: 97%;
+    max-width: 100%;
+    width: 50%;
     overflow-y: auto;
     overflow-x: hidden;
     padding-right: 7em;
     box-sizing: content-box;
+}*/
+
+#SearchFriendsMainContent .scrollableTableContainer {
+    margin: auto 0.5em;
+    padding: 0;
+    max-height: 43vh;
+    min-width: 97%;
+    max-width: 97%;
+    padding-right: 10em;
+}
+
+#SearchFriendsMainContent .scrollableTableContainer::-webkit-scrollbar {
+    width: 0.7em;
+}
+
+#SearchFriendsMainContent .scrollableTableContainer::-webkit-scrollbar-track {
+    background: white;
+    border-radius: 100px;
+}
+
+#SearchFriendsMainContent .scrollableTableContainer::-webkit-scrollbar-thumb {
+    background-color: #446791;
+    border-radius: 100px;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
 }
 
 #SearchFriendsMainContent {
@@ -4020,10 +4052,8 @@ body.page-exit .welcomeBackTextDiv {
 }
 
 #SearchFriendsMainContent .buttonSection {
-    position: fixed;
-    padding: 0;
-    padding-top: 0.5%;
-    z-index: 0;
+    text-align: center;
+    margin-top: 20px;
 }
 
 #searchFriendsSection {
@@ -4049,179 +4079,174 @@ body.page-exit .welcomeBackTextDiv {
 }
 /* -------------------------------------------- Friends Badges Page Styles -------------------------------------------- */
 #friendsBadgesPage {
-margin: 1em 4em 4em 4em;
-height: 67vh;
-overflow: hidden;
-position: relative;
-z-index: 20;
+    margin: 1em 4em -4em 4em;
+    height: 67vh;
+    overflow: hidden;
+    position: relative;
+    z-index: 20;
 }
 
-.friends-badges-container {
-    background-color: #ADA7C9;
+#friendsBadgesPage h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.1em;
+    margin-top: 0;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
+}
+
+#friendsBadgesPage .backgroundColorContainer {
+    align-items: center;
+    margin: auto;
+    padding-left: 0.2em;
+    background-color: #ADA7C9; /*dark purple*/
+    min-width: 85%;
+    max-width: 85%;
+    height: auto;
     border-radius: 3em;
-    padding: 1em;
-    height: 80vh;
+    padding: 0.5em;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* This prevents child elements from breaking rounded corners */
 }
-.friends-badges-scroll-container {
-    height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 0;
+
+#friendsBadgesPage .scrollableTableContainer {
+    height: auto;
+    max-height: 58vh;
+    min-width: 97%;
+    max-width: 100%;
+}
+
+#friendsBadgesPage .scrollableTableContainer::-webkit-scrollbar {
+    padding-right: 0.2em;
+}
+
+#friendsBadgesPage .scrollableTableContainer::-webkit-scrollbar {
+    width: 0.7em;
+}
+
+#friendsBadgesPage .scrollableTableContainer::-webkit-scrollbar-track {
+    background: white;
+    border-radius: 100px;
+}
+
+#friendsBadgesPage .scrollableTableContainer::-webkit-scrollbar-thumb {
+    background-color: #446791;
+    border-radius: 100px;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+#friendsBadgesPage .friends-badges-background {
+    align-items: center;
+    margin: auto;
+    padding: 0.5em;
+    background-color: #ADA7C9; /*light purple*/
+    min-width: 85%;
+    max-width: 85%;
+    height: 80vh;
+    border-radius: 3em;
+    display: flex;
+    flex-direction: column;
+}
+
+.friends-badges-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    padding: 0 1rem 1rem 1rem;
+    padding-top: 0;
     width: 100%;
-    border-radius: 0 0 3em 3em; /* Rounded bottom corners */
-    margin-top: -1em; /* Counteract parent padding */
+}
+
+#friendsBadgesPage .friend-badge-card {
+    background-color: #ADA7C9; /*dark purple*/
+    border-radius: 1rem;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding-bottom: 1em;
+}
+
+#friendsBadgesPage .friend-badge-image {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 4px solid white;
+    background-color: #90A8C3; /*dull blue*/
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto -1.5em auto;
     position: relative;
     z-index: 1;
 }
 
-.friends-badges-scroll-container::-webkit-scrollbar {
-    width: 12px;
-}
-
-.friends-badges-scroll-container::-webkit-scrollbar-track {
-    background-color: transparent;
-    border-radius: 10px;
-}
-
-.friends-badges-scroll-container::-webkit-scrollbar-thumb {
-    background-color: #7B6BA0;
-    border-radius: 10px;
-    border: 2px solid #ADA7C9;
-}
-
-.friends-badges-scroll-container::-webkit-scrollbar-thumb:hover {
-    background-color: #5F4B8B;
-}
-
-#friendsBadgesPage .friends-badges-background {
-align-items: center;
-margin: auto;
-padding: 0.5em;
-background-color: #ADA7C9;
-min-width: 85%;
-max-width: 85%;
-height: 80vh;
-border-radius: 3em;
-display: flex;
-flex-direction: column;
-}
-
-#friendsBadgesPage .friends-badges-scroll-container {
-height: 100%;
-overflow-y: auto;
-padding-right: 1em;
-min-width: unset;
-max-width: unset;
-}
-
-#friendsBadgesPage .friends-badges-scroll-container::-webkit-scrollbar {
-padding-right: 0.2em;
-}
-
-.friends-badges-grid {
-display: grid;
-grid-template-columns: repeat(4, 1fr);
-gap: 2rem;
-padding: 0 1rem 1rem 1rem;
-padding-top: 0;
-width: 100%;
-}
-
-.friend-badge-card {
-background-color: #ADA7C9;
-border-radius: 1rem;
-width: 100%;
-text-align: center;
-display: flex;
-flex-direction: column;
-align-items: center;
-position: relative;
-padding-bottom: 1em;
-}
-
-.friend-badge-image {
-width: 180px;
-height: 180px;
-border-radius: 50%;
-border: 4px solid white;
-background-color: #D7B9D5;
-overflow: hidden;
-display: flex;
-align-items: center;
-justify-content: center;
-margin: 0 auto -1.5em auto;
-position: relative;
-z-index: 1;
-}
-
 .friend-badge-image img {
-width: 90%;
-height: 90%;
-object-fit: contain;
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
 }
 
 .friend-badge-card .badge-stars {
-display: flex;
-justify-content: center;
-gap: 8px;
-margin-top: 0.5em;
-margin-bottom: 0em;
-width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 0.5em;
+    margin-bottom: 0em;
+    width: 100%;
 }
 
 .friend-badge-card .badge-stars img {
-width: 35px;
-height: auto;
-vertical-align: middle;
-margin: 0;
-padding: 0;
-border: none;
-transform-origin: center center;
-transition: transform 0.1s ease-out;
-z-index: 2;
+    width: 35px;
+    height: auto;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    border: none;
+    transform-origin: center center;
+    transition: transform 0.1s ease-out;
+    z-index: 2;
 }
 
 .friend-badge-card .badge-stars img:nth-child(1) {
-transform: rotate(15deg) translateY(-5px);
+    transform: rotate(15deg) translateY(-5px);
 }
 
 .friend-badge-card .badge-stars img:nth-child(2) {
-transform: translateY(2px);
+    transform: translateY(2px);
 }
 
 .friend-badge-card .badge-stars img:nth-child(3) {
-transform: rotate(-15deg) translateY(-5px);
+    transform: rotate(-15deg) translateY(-5px);
 }
 
-.friend-badge-name {
-display: inline-block;
-font-weight: bold;
-font-size: 1.1rem;
-margin-top: 0.6rem;
-padding: 0.3rem 0.7rem;
-border: 2px solid white;
-border-radius: 1.5rem;
-background-color: #90a8c3;
+#friendsBadgesPage .friend-badge-name {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-top: 0.6rem;
+    padding: 0.3rem 0.7rem;
+    border: 2px solid white;
+    border-radius: 1.5rem;
+    background-color: #ADA7C9; /*dark purple*/
 }
 
 .friend-badge-description {
-display: block;
-font-size: 0.95rem;
-color: white;
-margin-top: 0.3rem;
+    display: block;
+    font-size: 0.95rem;
+    color: white;
+    margin-top: 0.3rem;
 }
 
 /* Badges holder */
 #friendsBadgesPage .friends-badges-popup-box table tr td p {
-text-align: left;
-padding: 0 0.2em 0 0.2em;
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
 }
 
 #friendsBadgesPage .friends-badges-popup-box p {
-font-size: 2.2rem;
+    font-size: 2.2rem;
 }
 
 
@@ -4235,9 +4260,10 @@ font-size: 2.2rem;
 }
 
 #badgesMainContent h2 {
-    margin-bottom: 0.1em;
     font-size: 2.5rem;
-    text-shadow: 0px 0px 5px dimgrey; 
+    margin-bottom: 0.1em;
+    margin-top: 0;
+    text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
 
 #badgesMainContent .backgroundColorContainer {
@@ -4375,7 +4401,7 @@ font-size: 2.2rem;
 
 #aboutMainContent h2 {
     font-size: 2.5rem;
-    margin-bottom: 0.1em;
+    margin-bottom: 0em;
     margin-top: 0;
     text-shadow: 0px 0px 5px dimgrey; /* text shadow */
 }
@@ -5515,6 +5541,24 @@ table {
         margin: -5.5em 0 0 0;
     }
 
+    /* ---------------------- FRIENDS PAGES ---------------------- */
+    #viewFriendListMainContent {
+        margin: 0em auto;
+    }
+
+    .friend-profile-page-container {
+        margin: 0em auto;
+    }
+
+    .friend-profile-content-container {
+        margin: 1em auto;
+        padding: 1.5em;
+    }
+
+    .friend-profile-details-card {
+        padding: 1.5em;
+    }
+
     /* ---------------------- BADGES PAGE ---------------------- */
     #badgesMainContent {
         margin: 0 4em 4em 4em;
@@ -5533,9 +5577,9 @@ table {
         height: 67vh;
     }
 
-    #aboutMainContent h2 {
+    /*#aboutMainContent h2 {
         font-size: 1.6rem;
-    }
+    }*/
 
     #aboutMainContent p {
         font-size: 1.2rem;
