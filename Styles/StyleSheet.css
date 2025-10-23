@@ -3020,7 +3020,7 @@ body.page-exit .welcomeBackTextDiv {
 
 .extraTimeRow {
     position: absolute;
-    top: 75%;
+    top: 73%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;

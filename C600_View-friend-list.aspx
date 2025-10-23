@@ -124,11 +124,7 @@
                 <!-- Header -->
                 <div class="header-container">
                     <h2>Your friends</h2>
-                    <asp:ImageButton ID="btnMail" runat="server"
-                        ImageUrl="Icons/icons8-mail-white-96.png"
-                        CssClass="mailIcon"
-                        OnClick="btnMail_Click"
-                        CausesValidation="false" />
+                    <asp:ImageButton ID="btnMail" runat="server" ImageUrl="Icons/icons8-mail-white-96.png" CssClass="mailIcon" OnClick="btnMail_Click" CausesValidation="false" />
                 </div>
 
 
@@ -137,9 +133,9 @@
                     <div class="popup-pink-box">
                         <asp:HiddenField ID="hiddenFriendRequestID" runat="server" />
                         <asp:HiddenField ID="hiddenRequesterID" runat="server" />
-                        <asp:Label ID="lblFriendRequestMessage" runat="server" Text=""></asp:Label>
-                        <img src="Images/Notification%20Happy.png" alt="Friend Request" />
+                        <asp:Label ID="lblFriendRequestMessage" CssClass="label" runat="server" Text=""></asp:Label>
                         <br />
+                        <img src="Images/Notification%20Happy.png" alt="Friend Request" />
                         <div class="buttonSection">
                             <asp:Button ID="btnAcceptFriendRequest" CssClass="popup-button-best-pink" runat="server"
                                 Text="Accept!" OnClick="btnAcceptFriendRequest_Click" />
@@ -153,9 +149,9 @@
                 <asp:Panel ID="pnlGiftNotifications" runat="server" Visible="false" CssClass="simple-popup" Style="display: none;">
                     <div class="popup-pink-box">
                         <asp:HiddenField ID="hiddenGiftFriendID" runat="server" />
-                        <asp:Label ID="lblGiftMessage" runat="server" Text=""></asp:Label>
-                        <img src="Images/Notification%20Happy.png" alt="Gift Notification" />
+                        <asp:Label ID="lblGiftMessage" CssClass="label" runat="server" Text=""></asp:Label>
                         <br />
+                        <img src="Images/Notification%20Happy.png" alt="Gift Notification" />
                         <div class="buttonSection">
                             <asp:Button ID="btnCollectGift" CssClass="popup-button-best-pink" runat="server"
                                 Text="Collect!" OnClick="btnCollectGift_Click" />
@@ -164,12 +160,12 @@
                         </div>
                     </div>
                 </asp:Panel>
+
                 <!-- No Notifications Panel -->
                 <div id="popupNoNotifications" class="simple-popup" style="display: none;">
                     <div class="popup-blue-box">
                         <p>You do not have any notifications at the moment!</p>
                         <img src="Images/Notification%20Sad%20Hamster.png" alt="No notifications" />
-                        <br />
                         <div class="buttonSection">
                             <asp:Button ID="Button1" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideAllPopups(); return false;" />
                         </div>
@@ -180,27 +176,23 @@
                 <div id="popupGiftSent" class="simple-popup" style="display: none;">
                     <div class="popup-pink-box">
                         <p>Gift sent successfully!</p>
-                        <img src="Images/Notification%20Happy.png" alt="Gift sent" />
                         <br />
+                        <img src="Images/Notification%20Happy.png" alt="Gift sent" />
                         <div class="buttonSection">
                             <asp:Button ID="btnGiftSentOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideAllPopups(); return false;" />
                         </div>
                     </div>
                 </div>
+
                 <!-- Delete Confirmation Panel -->
                 <asp:Panel ID="pnlDeleteFriend" runat="server" Visible="false">
                     <div id="popup-blue-box" class="simple-popup">
                         <div class="popup-blue-box">
-                            <p>Are you sure you want to delete your friend? You will no longer be able to view them</p>
+                            <p>Are you sure you want to delete your friend? You will no longer be able to view them or schedule study sessions with them!</p>
                             <img src="Images/Notification%20Sad%20Hamster.png" />
-                            <br />
                             <div class="buttonSection">
-                                <asp:Button ID="btnConfirmDeleteFriend" CssClass="popup-button"
-                                    runat="server" Text="Yes, I am sure"
-                                    OnClick="btnConfirmDeleteFriend_Click" />
-                                <asp:Button ID="btnCancelDeleteFriend" CssClass="popup-button-best-blue"
-                                    runat="server" Text="No, not sure!"
-                                    OnClick="btnCancelDeleteFriend_Click" />
+                                <asp:Button ID="btnConfirmDeleteFriend" CssClass="popup-button" runat="server" Text="Yes, I am sure" OnClick="btnConfirmDeleteFriend_Click" />
+                                <asp:Button ID="btnCancelDeleteFriend" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnCancelDeleteFriend_Click" />
                             </div>
                         </div>
                     </div>
@@ -243,7 +235,7 @@
 
                 <!-- Search Friends Button -->
                 <div class="buttonSection">
-                    <asp:Button ID="btnSearch" CssClass="button" runat="server" Text="Search friends" OnClick="btnSearchFriends_Click" />
+                    <asp:Button ID="btnSearch" CssClass="button" runat="server" Text="Find new friends" OnClick="btnSearchFriends_Click" />
                 </div>
             </ContentTemplate>
 
@@ -260,8 +252,6 @@
             </Triggers>
         </asp:UpdatePanel>
     </div>
-
-  
 
     <div id="popupHasNotifications" class="simple-popup" style="display: none;">
         <div class="popup-pink-box">
@@ -406,5 +396,6 @@
         });
     </script>
 </asp:Content>
+
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" runat="Server">
 </asp:Content>

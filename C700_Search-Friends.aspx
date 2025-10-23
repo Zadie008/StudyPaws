@@ -160,7 +160,7 @@
 
      <!-- Edit Friends Button -->
     <div class="buttonSection">
-        <asp:Button ID="btnEdit" CssClass="button" runat="server" Text="Edit friends" OnClick="btnEditFriends_Click" />
+        <asp:Button ID="btnEdit" CssClass="button" runat="server" Text="View friends" OnClick="btnEditFriends_Click" />
     </div>
 
     <div id="popupHasNotifications" class="simple-popup" style="display: none;">

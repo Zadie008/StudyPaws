@@ -343,7 +343,7 @@ public partial class Default2 : System.Web.UI.Page
             hiddenRequesterID.Value = row["userIDfrom"].ToString();
 
             string username = row["username"].ToString();
-            lblFriendRequestMessage.Text = "You have a friend request from <span style='font-weight:bold;'>" + username + "</span>";
+            lblFriendRequestMessage.Text = "You have a friend request from <span style='font-weight:bold;'>" + username + "</span>" + "!";
 
             pnlFriendRequests.Visible = true;
             ViewState["CurrentRequestIndex"] = index;
@@ -359,7 +359,7 @@ public partial class Default2 : System.Web.UI.Page
         {
             System.Diagnostics.Debug.WriteLine("No friend request found at index: " + index);
         }
-      
+
     }
     protected void btnAcceptFriendRequest_Click(object sender, EventArgs e)
     {
@@ -712,7 +712,7 @@ public partial class Default2 : System.Web.UI.Page
         }
         pnlDeleteFriend.Visible = false;
     }
-   
+
     // end: friends code
 
     // start: header profile code

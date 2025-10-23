@@ -384,8 +384,8 @@ function confirmStop() {
 function showTimeUpPopup() {
 
     const minutesStudied = Math.floor(initialTime / 60);
-    const xpEarned = minutesStudied * 2;
-    const coinsEarned = minutesStudied * 5;
+    const xpEarned = minutesStudied * 1;
+    const coinsEarned = minutesStudied * 1;
     document.getElementById("xpEarned").textContent = '+' + xpEarned;
     document.getElementById("coinsEarned").textContent = '+' + coinsEarned;
     document.getElementById("popupTimeUp").style.display = "flex";
@@ -412,8 +412,8 @@ function hideTimeUpPopup() {
 }
 function showStudySessionTimeUpPopup() {
     const minutesStudied = Math.floor(initialTime / 60);
-    const xpEarned = minutesStudied * 5;
-    const coinsEarned = minutesStudied * 10;
+    const xpEarned = minutesStudied * 2;
+    const coinsEarned = minutesStudied * 2;
 
     document.getElementById("xpEarned").textContent = '+' + xpEarned;
     document.getElementById("coinsEarned").textContent = '+' + coinsEarned;
