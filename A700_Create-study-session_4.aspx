@@ -120,7 +120,7 @@
                         <asp:RangeValidator ID="errorStartMinute" CssClass="validationErrorCustom" runat="server" ControlToValidate="txtStartTimeMinutes" ErrorMessage="Minutes have to be between 00 and 59" MinimumValue="0" MaximumValue="59" Type="Integer" Display="Dynamic" EnableClientScript="true" ValidationGroup="timerValidation" ValidateEmptyText="true" SetFocusOnError="true" />
                     </div>
                     <div id="validationErrorEndSection" class="validationErrorSection">
-                        <asp:RangeValidator ID="errorEndHour" CssClass="validationErrorCustom" runat="server" ControlToValidate="txtEndTimeHours" ErrorMessage="Hours have to be between 00 and 24" MinimumValue="0" MaximumValue="24" Type="Integer" Display="Dynamic" EnableClientScript="true" ValidationGroup="timerValidation" ValidateEmptyText="true" SetFocusOnError="true" />
+                        <asp:RangeValidator ID="errorEndHour" CssClass="validationErrorCustom" runat="server" ControlToValidate="txtEndTimeHours" ErrorMessage="Hours have to be between 00 and 23" MinimumValue="0" MaximumValue="23" Type="Integer" Display="Dynamic" EnableClientScript="true" ValidationGroup="timerValidation" ValidateEmptyText="true" SetFocusOnError="true" />
 
                         <asp:RangeValidator ID="errorEndMinute" CssClass="validationErrorCustom" runat="server" ControlToValidate="txtEndTimeMinutes" ErrorMessage="Minutes have to be between 00 and 59" MinimumValue="0" MaximumValue="59" Type="Integer" Display="Dynamic" EnableClientScript="true" ValidationGroup="timerValidation" ValidateEmptyText="true" SetFocusOnError="true" />
 
@@ -232,13 +232,12 @@
     </div>
 
     <script type="text/javascript">
-        // Add global variables for control IDs like in timer page
         window.studySessionControlIds = {
             dateId: '<%= txtFilterDate.ClientID %>',
-        startHoursId: '<%= txtStartTimeHours.ClientID %>',
-        startMinutesId: '<%= txtStartTimeMinutes.ClientID %>',
-        endHoursId: '<%= txtEndTimeHours.ClientID %>',
-        endMinutesId: '<%= txtEndTimeMinutes.ClientID %>'
+            startHoursId: '<%= txtStartTimeHours.ClientID %>',
+            startMinutesId: '<%= txtStartTimeMinutes.ClientID %>',
+            endHoursId: '<%= txtEndTimeHours.ClientID %>',
+            endMinutesId: '<%= txtEndTimeMinutes.ClientID %>'
         };
 
         // Store current time for default values
@@ -262,7 +261,6 @@
             window.location.href = 'Default.aspx';
         }
 
-        // Simple date validation function
         function validateDateNotInPast() {
             const dateInput = document.getElementById('<%= txtFilterDate.ClientID %>');
             const dateValidationError = document.getElementById('dateValidationError');
@@ -273,42 +271,37 @@
                 return false;
             }
 
-            // The date you want to check
             const inputDate = new Date(dateInput.value);
 
             // Get the current date
             const currentDate = new Date();
 
-            // Reset time parts to compare only dates (set both to midnight)
             inputDate.setHours(0, 0, 0, 0);
             currentDate.setHours(0, 0, 0, 0);
 
-            // Compare the input date with the current date
             if (inputDate < currentDate) {
                 dateValidationError.textContent = 'Cannot schedule study session for a past date';
                 dateValidationError.style.display = 'inline';
                 return false;
             } else {
                 dateValidationError.style.display = 'none';
-                return validateTimeNotInPast(); // Also validate time if date is today
+                return validateTimeNotInPast();
             }
         }
 
-        // New function to validate time for today's date
+        // function to validate time for today's date
         function validateTimeNotInPast() {
             const dateInput = document.getElementById('<%= txtFilterDate.ClientID %>');
-        const startHoursInput = document.getElementById('<%= txtStartTimeHours.ClientID %>');
-        const startMinutesInput = document.getElementById('<%= txtStartTimeMinutes.ClientID %>');
+            const startHoursInput = document.getElementById('<%= txtStartTimeHours.ClientID %>');
+            const startMinutesInput = document.getElementById('<%= txtStartTimeMinutes.ClientID %>');
             const dateValidationError = document.getElementById('dateValidationError');
 
             const inputDate = new Date(dateInput.value);
             const currentDate = new Date();
 
-            // Reset time parts to compare only dates
             inputDate.setHours(0, 0, 0, 0);
             currentDate.setHours(0, 0, 0, 0);
 
-            // If selected date is today, validate the times
             if (inputDate.getTime() === currentDate.getTime()) {
                 const currentTime = new Date();
                 const selectedStartTime = new Date();
@@ -325,103 +318,121 @@
             return true;
         }
 
-        // Initialize validation on page load
         document.addEventListener('DOMContentLoaded', function () {
             // Set default times to current time and 1 hour from now
             document.getElementById('<%= txtStartTimeHours.ClientID %>').value = currentHours;
-        document.getElementById('<%= txtStartTimeMinutes.ClientID %>').value = currentMinutes;
-        document.getElementById('<%= txtEndTimeHours.ClientID %>').value = defaultEndHours;
-        document.getElementById('<%= txtEndTimeMinutes.ClientID %>').value = defaultEndMinutes;
+            document.getElementById('<%= txtStartTimeMinutes.ClientID %>').value = currentMinutes;
+            document.getElementById('<%= txtEndTimeHours.ClientID %>').value = defaultEndHours;
+            document.getElementById('<%= txtEndTimeMinutes.ClientID %>').value = defaultEndMinutes;
 
-        // Set today's date as default
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('<%= txtFilterDate.ClientID %>').value = today;
+            // Set today's date as default (using local time)
+            const today = new Date();
+            const localDate = today.toLocaleDateString('en-CA'); // YYYY-MM-DD format
+            document.getElementById('<%= txtFilterDate.ClientID %>').value = localDate;
 
-        validateAllFields();
-
-        // Add event listeners for real-time validation like timer page
-        document.getElementById('<%= txtFilterDate.ClientID %>').addEventListener('change', function () {
-            validateDateNotInPast();
             validateAllFields();
-        });
 
-        document.getElementById('<%= txtStartTimeHours.ClientID %>').addEventListener('input', function () {
-            validateTimeNotInPast();
-            validateAllFields();
-        });
+            document.getElementById('<%= txtFilterDate.ClientID %>').addEventListener('change', function () {
+                validateDateNotInPast();
+                validateAllFields();
+            });
 
-        document.getElementById('<%= txtStartTimeMinutes.ClientID %>').addEventListener('input', function() {
-            validateTimeNotInPast();
-            validateAllFields();
-        });
+            document.getElementById('<%= txtStartTimeHours.ClientID %>').addEventListener('input', function () {
+                validateTimeNotInPast();
+                validateAllFields();
+            });
+
+            document.getElementById('<%= txtStartTimeMinutes.ClientID %>').addEventListener('input', function() {
+                validateTimeNotInPast();
+                validateAllFields();
+            });
         
-        document.getElementById('<%= txtEndTimeHours.ClientID %>').addEventListener('input', validateAllFields);
-        document.getElementById('<%= txtEndTimeMinutes.ClientID %>').addEventListener('input', validateAllFields);
-    });
+            document.getElementById('<%= txtEndTimeHours.ClientID %>').addEventListener('input', validateAllFields);
+            document.getElementById('<%= txtEndTimeMinutes.ClientID %>').addEventListener('input', validateAllFields);
+        });
 
-    function validateAllFields() {
-        if (typeof Page_ClientValidate === 'function') {
-            Page_ClientValidate('timerValidation');
+        function validateAllFields() {
+            if (typeof Page_ClientValidate === 'function') {
+                Page_ClientValidate('timerValidation');
+            }
+
+            validateMinTime(null, null);
+            resetInvalidTimeInputs();
+            showValidationErrors();
         }
 
-        validateMinTime(null, null);
-        resetInvalidTimeInputs();
-        showValidationErrors();
-    }
-
-    function showValidationErrors() {
-        const validators = [
-            '<%= errorStartHour.ClientID %>',
-            '<%= errorStartMinute.ClientID %>',
-            '<%= errorEndHour.ClientID %>',
-            '<%= errorEndMinute.ClientID %>',
-            '<%= minTotalTimeValidator.ClientID %>'
-        ];
+        function showValidationErrors() {
+            const validators = [
+                '<%= errorStartHour.ClientID %>',
+                '<%= errorStartMinute.ClientID %>',
+                '<%= errorEndHour.ClientID %>',
+                '<%= errorEndMinute.ClientID %>',
+                '<%= minTotalTimeValidator.ClientID %>'
+            ];
     
-        validators.forEach(id => {
-            const validator = document.getElementById(id);
-            if (validator) {
-                validator.style.display = validator.isvalid ? 'none' : 'inline';
-            }
-        });
-    }
-
-    // Reset time inputs to "00" if they contain invalid data (like timer page)
-    function resetInvalidTimeInputs() {
-        const timeInputs = [
-            '<%= txtStartTimeHours.ClientID %>',
-            '<%= txtStartTimeMinutes.ClientID %>',
-            '<%= txtEndTimeHours.ClientID %>',
-            '<%= txtEndTimeMinutes.ClientID %>'
-        ];
-
-        timeInputs.forEach(inputId => {
-            const input = document.getElementById(inputId);
-            if (input) {
-                const value = input.value.trim();
-                // If empty or contains non-digits or value is invalid, reset to "00"
-                if (value === '' || !/^\d+$/.test(value) || isNaN(parseInt(value))) {
-                    input.value = '00';
+            validators.forEach(id => {
+                const validator = document.getElementById(id);
+                if (validator) {
+                    validator.style.display = validator.isvalid ? 'none' : 'inline';
                 }
-            }
+            });
+        }
+
+        // Reset time inputs to "00" if they contain invalid data
+        function resetInvalidTimeInputs() {
+            const timeInputs = [
+                '<%= txtStartTimeHours.ClientID %>',
+                '<%= txtStartTimeMinutes.ClientID %>',
+                '<%= txtEndTimeHours.ClientID %>',
+                '<%= txtEndTimeMinutes.ClientID %>'
+            ];
+
+            timeInputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                if (input) {
+                    const value = input.value.trim();
+                    // If empty or contains non-digits or value is invalid, reset to "00"
+                    if (value === '' || !/^\d+$/.test(value) || isNaN(parseInt(value))) {
+                        input.value = '00';
+                    }
+                }
+            });
+        }
+
+        document.getElementById('<%= txtStartTimeHours.ClientID %>').addEventListener('blur', function () {
+            if (this.value === '') this.value = '00';
         });
-    }
+        document.getElementById('<%= txtStartTimeMinutes.ClientID %>').addEventListener('blur', function() {
+            if (this.value === '') this.value = '00';
+        });
+        document.getElementById('<%= txtEndTimeHours.ClientID %>').addEventListener('blur', function() {
+            if (this.value === '') this.value = '00';
+        });
+        document.getElementById('<%= txtEndTimeMinutes.ClientID %>').addEventListener('blur', function () {
+            if (this.value === '') this.value = '00';
+        });
 
-    function validateMinTime(source, args) {
-        // Always get values, even if they're "00"
-        var startHours = parseInt(document.getElementById('<%= txtStartTimeHours.ClientID %>').value) || 0;
-        var startMinutes = parseInt(document.getElementById('<%= txtStartTimeMinutes.ClientID %>').value) || 0;
-        var endHours = parseInt(document.getElementById('<%= txtEndTimeHours.ClientID %>').value) || 0;
-        var endMinutes = parseInt(document.getElementById('<%= txtEndTimeMinutes.ClientID %>').value) || 0;
+        function validateMinTime(source, args) {
+            // Always get values, even if they're "00"
+            var startHours = parseInt(document.getElementById('<%= txtStartTimeHours.ClientID %>').value) || 0;
+            var startMinutes = parseInt(document.getElementById('<%= txtStartTimeMinutes.ClientID %>').value) || 0;
+            var endHours = parseInt(document.getElementById('<%= txtEndTimeHours.ClientID %>').value) || 0;
+            var endMinutes = parseInt(document.getElementById('<%= txtEndTimeMinutes.ClientID %>').value) || 0;
 
-        var startTotal = (startHours * 3600) + (startMinutes * 60);
-        var endTotal = (endHours * 3600) + (endMinutes * 60);
-        var duration = endTotal - startTotal;
-        
-        var isValid = duration >= 60;
+            var startTotal = (startHours * 3600) + (startMinutes * 60);
+            var endTotal = (endHours * 3600) + (endMinutes * 60);
     
-        // Always update the validator display
-        var validator = document.getElementById('<%= minTotalTimeValidator.ClientID %>');
+            // Handle sessions that span across midnight
+            var duration;
+            if (endTotal < startTotal) {
+                duration = (endTotal + (24 * 3600)) - startTotal;
+            } else {
+                duration = endTotal - startTotal;
+            }
+    
+            var isValid = duration >= 60;
+
+            var validator = document.getElementById('<%= minTotalTimeValidator.ClientID %>');
             if (validator) {
                 validator.style.display = isValid ? 'none' : 'inline';
                 validator.innerHTML = "Study Session must be at least 1 minute";

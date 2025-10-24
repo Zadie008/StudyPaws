@@ -255,14 +255,15 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-function validateMinTime(source, args) {
+// commented out so study session does not use the wrong one
+/*function validateMinTime(source, args) {
     var hours = parseInt(document.getElementById('<%= txtTimeHours.ClientID %>').value) || 0;
     var minutes = parseInt(document.getElementById('<%= txtTimeMinutes.ClientID %>').value) || 0;
     var seconds = parseInt(document.getElementById('<%= txtTimeSeconds.ClientID %>').value) || 0;
 
     var totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
     args.IsValid = totalSeconds >= 60;
-}
+}*/
 
 document.addEventListener('DOMContentLoaded', function () {
     const timerInputs = document.querySelectorAll('.timerInput');

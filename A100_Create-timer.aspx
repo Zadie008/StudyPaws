@@ -194,25 +194,49 @@
                 </div>
             </div>
         </div>
-
-        <!-- study session has started (popup stays for 1 minute) -->
-        <div id="popup" class="simple-popup" style="display: none;">
-            <div class="popup-pink-box">
-                <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
-                <p>Study Session has started!</p>
-                <br />
-                <br />
-                <img src="Images/Notification%20Happy.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
-                </div>
+    </div>
+    <!-- study session has started (popup stays for 1 minute) -->
+    <div id="popup" class="simple-popup" style="display: none;">
+        <div class="popup-pink-box">
+            <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
+            <p style="font-size: 2.3em;">Study Session has started!</p>
+            <img style="margin-bottom: -2em;" src="Images/Notification%20Happy.png" />
+            <div class="buttonSection">
+                <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
             </div>
         </div>
     </div>
+
+    <script>
+    // JOIN STUDY SESSION POPUP
+    function showJoinPopup() {
+        document.getElementById("popup").style.display = "flex";
+
+        // Auto-refresh after 1 minute only if popup is still visible
+        setTimeout(function () {
+            var popup = document.getElementById("popup");
+            if (popup && popup.style.display === "flex") {
+                location.reload();
+            }
+        }, 60000); // 1 minute
+    }
+
+    function hideJoinPopup() {
+        document.getElementById("popup").style.display = "none";
+    }
+
+    // Auto-show join popup when page loads if there's a session to join
+    window.addEventListener('load', function () {
+        var joinSessionID = document.getElementById("mainContentPlaceHolder_hiddenJoinSessionID");
+        if (joinSessionID && joinSessionID.value) {
+            setTimeout(function () {
+                showJoinPopup();
+            }, 1000);
+        }
+    });
+    </script>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
 
 </asp:Content>
-

@@ -111,16 +111,17 @@ public partial class Default2 : System.Web.UI.Page
             int endMinutes = int.Parse(txtEndTimeMinutes.Text);
 
             DateTime sessionStart = sessionDate.AddHours(startHours).AddMinutes(startMinutes);
-            DateTime sessionEnd = sessionDate.AddHours(endHours).AddMinutes(endMinutes);
+            DateTime sessionEnd;
 
-            // Check if end time is before start time
-            if (sessionEnd <= sessionStart)
+            if (endHours < startHours || (endHours == startHours && endMinutes < startMinutes))
             {
-                minTotalTimeValidator.ErrorMessage = "End time must be after start time";
-                minTotalTimeValidator.IsValid = false;
-                ScriptManager.RegisterStartupScript(this, GetType(), "showValidation",
-                    "validateAllFields();", true);
-                return;
+                // Session spans across midnight - end time is next day
+                sessionEnd = sessionDate.AddDays(1).AddHours(endHours).AddMinutes(endMinutes);
+            }
+            else
+            {
+                // Normal session within the same day
+                sessionEnd = sessionDate.AddHours(endHours).AddMinutes(endMinutes);
             }
 
             TimeSpan duration = sessionEnd - sessionStart;
@@ -358,7 +359,19 @@ public partial class Default2 : System.Web.UI.Page
 
             int startTotal = (startHours * 3600) + (startMinutes * 60);
             int endTotal = (endHours * 3600) + (endMinutes * 60);
-            int duration = endTotal - startTotal;
+
+            // Handle sessions that span across midnight (same fix as client-side)
+            int duration;
+            if (endTotal < startTotal)
+            {
+                // Session spans across midnight - add 24 hours to end time
+                duration = (endTotal + (24 * 3600)) - startTotal;
+            }
+            else
+            {
+                // Normal session within the same day
+                duration = endTotal - startTotal;
+            }
 
             args.IsValid = duration >= 60;
             minTotalTimeValidator.ErrorMessage = args.IsValid ? "" : "Study Session must be at least 1 minute";
