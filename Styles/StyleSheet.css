@@ -1740,6 +1740,35 @@ body.page-exit .welcomeBackTextDiv {
     font-size: 1.5em;
 }
 
+.eventTitleTagSection .rightSection {
+    position: relative;
+    min-height: 120px; /* Reserve space for all possible validations */
+}
+
+.eventTitleTagSection .rightSection table {
+    position: absolute;
+    bottom: 0em;
+    left: 0;
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+.eventTitleTagSection .rightSection table tr {
+    height: auto;
+    margin: 0;
+    padding: 0;
+}
+
+.eventTitleTagSection .rightSection table td {
+    line-height: 0.3;
+}
+
+.validationError {
+    display: block;
+    white-space: nowrap;
+}
+
 .eventTitleTagSection table {
     width: auto;
     align-items:center; 
@@ -1798,46 +1827,16 @@ body.page-exit .welcomeBackTextDiv {
     height:auto; /*CHANGED*/
     margin-left:0.5rem; /*ADDED*/
 }
-.createEventMainContent .eventTitleTagSection .rightSection .addTagBtn {
-    width: 20px;
-    height: 20px;
-    max-width: 20px;
-    max-height: 20px; /*ADDED*/
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    margin: 0 0 0 0; /*CHANGED*/
-    vertical-align: middle;
-    display: inline-block; /*CHANGED*/
-}
-.createEventMainContent .eventTitleTagSection .rightSection .editTagBtn {
-    width: 20px;
-    height: 20px;
-    max-width: 20px;
-    max-height: 20px; /*ADDED*/
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    margin: 0 0 0 0; /*CHANGED*/
-    vertical-align: middle;
-    display: none; /*CHANGED*/
-    /*visibility: hidden;*/
-}
-.createEventMainContent .eventTitleTagSection .rightSection .addTagBtn img {
-    max-width: 20px; /*CHANGED*/
-    max-height: 20px; /*ADDED*/
-    width: 20px; /*CHANGED*/
-    height: 20px; /*ADDED*/
-    display: block; /*ADDED*/
-    /*max-width: 3vh;*/
-    object-fit:contain;
+
+.tagControls .addTagBtn { /*FOR TAMMY TO EDIT LATER*/
+    width: 35px;
 }
     
-    /* NOTIFICATION POPUP */
-    .createEventMainContent .popup-pink-box table tr td p {
-        text-align: left;
-        padding: 0 0.2em 0 0.2em;
-    }
+/* NOTIFICATION POPUP */
+.createEventMainContent .popup-pink-box table tr td p {
+    text-align: left;
+    padding: 0 0.2em 0 0.2em;
+}
 
 .createEventMainContent .popup-pink-box p {
     font-size: 2.2rem;

@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="B300-B400_Edit_Delete_Event.aspx.cs" Inherits="B300_B400_Edit_Delete_Event" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
-    Edit and Delete Calendar Events
+    Edit and Delete Calendar Event
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
