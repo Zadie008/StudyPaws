@@ -197,7 +197,7 @@ public partial class Default2 : System.Web.UI.Page
         using (MySqlConnection conn = new MySqlConnection(connString))
         {
             conn.Open();
-            string loadEvents = "SELECT eventID, eventDesc, tagID FROM CalendarEvent " +  "WHERE userID=@userID AND eventDate=@eventDate";
+            string loadEvents = "SELECT eventID, eventDesc, tagID FROM CalendarEvent " + "WHERE userID=@userID AND DATE(eventDate)=@eventDate";
             
             MySqlCommand cmd = new MySqlCommand(loadEvents, conn);
             cmd.Parameters.AddWithValue("@userID", userID);
@@ -933,6 +933,31 @@ public partial class Default2 : System.Web.UI.Page
             case 4: return "circle-cow";
             case 5: return "circle-unicorn";
             default: return "circle-cat";
+        }
+    }
+    protected void btnJoin_Click(object sender, EventArgs e)
+    {
+        if (Session["sessionID"] != null && Session["userID"] != null)
+        {
+            int sessionID = Convert.ToInt32(Session["sessionID"]);
+            int userID = Convert.ToInt32(Session["userID"]);
+
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            string updateQuery = "UPDATE StudySessionParticipants SET joined = true WHERE sessionID = @sessionID AND userID = @userID";
+
+            using (MySqlConnection conn = new MySqlConnection(cs))
+            using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn))
+            {
+                cmd.Parameters.AddWithValue("@sessionID", sessionID);
+                cmd.Parameters.AddWithValue("@userID", userID);
+                conn.Open();
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                if (rowsAffected > 0)
+                {
+                    Response.Redirect("A1400_View-study-session.aspx");
+                }
+            }
         }
     }
     // end: header profile code

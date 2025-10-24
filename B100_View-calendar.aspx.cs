@@ -173,7 +173,7 @@ public partial class Default2 : System.Web.UI.Page
         using (MySqlConnection conn = new MySqlConnection(connString))
         {
             conn.Open();
-            string loadEvents = "SELECT eventID, eventDesc, tagID FROM CalendarEvent " + "WHERE userID=@userID AND eventDate=@eventDate";
+            string loadEvents = "SELECT eventID, eventDesc, tagID FROM CalendarEvent " + "WHERE userID=@userID AND DATE(eventDate)=@eventDate";
             MySqlCommand cmd = new MySqlCommand(loadEvents, conn);
             cmd.Parameters.AddWithValue("@userID", userID);
             cmd.Parameters.AddWithValue("@eventDate", day.Date);

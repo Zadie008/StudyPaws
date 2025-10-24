@@ -1654,7 +1654,10 @@ body.page-exit .welcomeBackTextDiv {
     }
 /*--------------------------------------------- DELETE STUDY SESSION PAGE ---------------------------------------------*/
 #deleteStudySession .eventTitleTagSection { /* LEA ADDED THIS, YOU CAN CHANGE AMOUNTS */
-    padding: 6% 0 2% 0;
+    padding: 6% 0 1% 0;
+}
+#deleteStudySession .createEventMainContent .buttonSection{
+    margin:0;
 }
 
 .textboxDisabled {
