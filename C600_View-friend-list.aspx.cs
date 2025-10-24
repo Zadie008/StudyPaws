@@ -421,8 +421,7 @@ public partial class Default2 : System.Web.UI.Page
     }
     private void UpdateNumFriends(MySqlConnection con, string userID)
     {
-        // Count the number of accepted friends for this user
-        string countQuery = @"
+       string countQuery = @"
         SELECT COUNT(*) 
         FROM FriendsList 
         WHERE (userIDfrom = @userID OR userIDto = @userID) 
@@ -432,8 +431,6 @@ public partial class Default2 : System.Web.UI.Page
         countCmd.Parameters.AddWithValue("@userID", userID);
 
         int numFriends = Convert.ToInt32(countCmd.ExecuteScalar());
-
-        // Update the numFriends in Users table
         string updateQuery = "UPDATE Users SET numFriends = @numFriends WHERE userID = @userID";
         MySqlCommand updateCmd = new MySqlCommand(updateQuery, con);
         updateCmd.Parameters.AddWithValue("@numFriends", numFriends);
@@ -446,14 +443,11 @@ public partial class Default2 : System.Web.UI.Page
 
     private void CheckAndAwardFriendBadge(MySqlConnection con, string userID)
     {
-        // Get current numFriends
         string getNumFriendsQuery = "SELECT numFriends FROM Users WHERE userID = @userID";
         MySqlCommand getNumFriendsCmd = new MySqlCommand(getNumFriendsQuery, con);
         getNumFriendsCmd.Parameters.AddWithValue("@userID", userID);
 
         int numFriends = Convert.ToInt32(getNumFriendsCmd.ExecuteScalar());
-
-        // Determine badge type based on numFriends
         string badgeType = "";
 
         if (numFriends >= 15)
@@ -470,11 +464,9 @@ public partial class Default2 : System.Web.UI.Page
         }
         else
         {
-            // Not enough friends for any badge
             return;
         }
 
-        // Check if user already has this badge type for badgeID 13
         string checkBadgeQuery = @"
         SELECT COUNT(*) 
         FROM UserBadge 
@@ -490,7 +482,6 @@ public partial class Default2 : System.Web.UI.Page
 
         if (existingBadgeCount == 0)
         {
-            // Remove any existing friend badges of lower tiers
             string deleteLowerBadgesQuery = @"
             DELETE FROM UserBadge 
             WHERE userID = @userID 
@@ -501,7 +492,6 @@ public partial class Default2 : System.Web.UI.Page
             deleteCmd.Parameters.AddWithValue("@userID", userID);
             deleteCmd.ExecuteNonQuery();
 
-            // Insert new badge
             string insertBadgeQuery = @"
             INSERT INTO UserBadge (userID, badgeID, badgeType) 
             VALUES (@userID, 13, @badgeType)";
