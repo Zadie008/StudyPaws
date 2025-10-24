@@ -31,6 +31,7 @@ public partial class Default2 : System.Web.UI.Page
             userIDHidden.Value = Convert.ToString(Session["userID"]);
             string username = Session["Username"].ToString();
             string userID = GetUserID(username, connString);
+
             if (!IsPostBack)
             {
                 ViewState["SelectedFilter"] = "All";
@@ -46,9 +47,9 @@ public partial class Default2 : System.Web.UI.Page
 
                 GetUserStats(connString, userID);
                 GetUserProfileIcon(connString, userID);
-                LoadPendingInvitesFromDB();
-                LoadUpcomingSessions();
 
+                // Check for level up on page load
+                CheckForLevelUp(userID);
             }
             else
             {
@@ -59,9 +60,8 @@ public partial class Default2 : System.Web.UI.Page
         {
             Response.Redirect("Login.aspx");
         }
-
-        ShowNextInvite();
     }
+
     private bool IsToDoFilterVisible
     {
         get
@@ -73,6 +73,7 @@ public partial class Default2 : System.Web.UI.Page
             ViewState["FilterVisible"] = value;
         }
     }
+
     private void LoadTasks()
     {
         string filter = ddlFilter.SelectedValue ?? "All";
@@ -99,10 +100,12 @@ public partial class Default2 : System.Web.UI.Page
         rptTasks.DataSource = dt;
         rptTasks.DataBind();
     }
+
     protected void txtNewTask_TextChanged(object sender, EventArgs e)
     {
         btnAdd_Click(sender, e);
     }
+
     protected void btnAdd_Click(object sender, EventArgs e)
     {
         string taskDesc = txtNewTask.Text.Trim();
@@ -179,11 +182,13 @@ public partial class Default2 : System.Web.UI.Page
         ViewState["SelectedFilter"] = selectedFilter;
         LoadTasks();
     }
+
     protected void toDoFilterBtn_Click(object sender, EventArgs e)
     {
         IsToDoFilterVisible = !IsToDoFilterVisible;
         ddlFilter.Visible = IsToDoFilterVisible;
     }
+
     protected void rptTasks_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
         if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
@@ -196,7 +201,6 @@ public partial class Default2 : System.Web.UI.Page
             if (txtDesc != null && editBtn != null && saveBtn != null && taskIDHidden != null)
             {
                 string editingTaskID = Convert.ToString(ViewState["EditingTaskID"]);
-
 
                 if (editingTaskID == taskIDHidden.Value)
                 {
@@ -240,6 +244,7 @@ public partial class Default2 : System.Web.UI.Page
         ViewState["PendingTaskID"] = null;
         LoadTasks();
     }
+
     private bool GetTaskStatus(int taskID)
     {
         using (MySqlConnection conn = new MySqlConnection(connString))
@@ -252,6 +257,7 @@ public partial class Default2 : System.Web.UI.Page
             return result != DBNull.Value && Convert.ToBoolean(result);
         }
     }
+
     private void ToggleTaskStatus(int taskID)
     {
         string userID = Session["userID"].ToString();
@@ -288,11 +294,12 @@ public partial class Default2 : System.Web.UI.Page
                     Console.WriteLine("Transaction error: " + ex.Message);
                 }
             }
-                
+
         }
         ViewState["PendingAction"] = null;
         ViewState["PendingTaskID"] = null;
     }
+
     // CHECKING COMPLETED TASKS BADGE
     private static void CheckCompletedTasksBadge(MySqlConnection con, int userID)
     {
@@ -321,6 +328,7 @@ public partial class Default2 : System.Web.UI.Page
             AwardBadgeStatic(con, userID, 1, "Bronze");
         }
     }
+
     // FOR GETTING COMBINED COMPLETION BADGE (completedTasks, completedTimers, completedStudySessions)
     private static void CheckCombinedCompletionBadges(MySqlConnection con, int userID)
     {
@@ -356,6 +364,7 @@ public partial class Default2 : System.Web.UI.Page
             AwardBadgeStatic(con, userID, 10, "Bronze");
         }
     }
+
     private static void AwardBadgeStatic(MySqlConnection con, int userID, int badgeID, string badgeType)
     {
         string checkBadgeQuery = "SELECT COUNT(*) FROM UserBadge WHERE userID = @userID AND badgeID = @badgeID";
@@ -392,10 +401,6 @@ public partial class Default2 : System.Web.UI.Page
             }
         }
     }
-    protected void btnYayLevelUp_Click(object sender, EventArgs e)
-    {
-        ScriptManager.RegisterStartupScript(this, GetType(), "hideLevelUp", "hideLevelUp();", false);
-    }
 
     protected void btnThankYou_Click(object sender, EventArgs e)
     {
@@ -403,76 +408,81 @@ public partial class Default2 : System.Web.UI.Page
         {
             int taskID = Convert.ToInt32(ViewState["PendingTaskID"]);
             ToggleTaskStatus(taskID);
-        }
-        string userID = userIDHidden.Value;
 
-        if (string.IsNullOrEmpty(userID))
-        {
-            Response.Write("<script>alert('Error: User not found.');</script>");
-            return;
-        }
+            string userID = userIDHidden.Value;
 
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-
-        using (MySqlConnection con = new MySqlConnection(cs))
-        {
-            try
+            if (string.IsNullOrEmpty(userID))
             {
-                con.Open();
+                Response.Write("<script>alert('Error: User not found.');</script>");
+                return;
+            }
 
-                // Get current XP
-                string selectXPQuery = "SELECT userXP FROM Users WHERE userID = @userID";
-                MySqlCommand selectXPCmd = new MySqlCommand(selectXPQuery, con);
-                selectXPCmd.Parameters.AddWithValue("@userID", userID);
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
-                object xpObj = selectXPCmd.ExecuteScalar();
-                int currentXP = (xpObj != null && xpObj != DBNull.Value) ? Convert.ToInt32(xpObj) : 0;
-                int newXP = currentXP + 1;
-
-                // Update XP
-                string updateXPQuery = "UPDATE Users SET userXP = @newXP WHERE userID = @userID";
-                MySqlCommand updateXPCmd = new MySqlCommand(updateXPQuery, con);
-                updateXPCmd.Parameters.AddWithValue("@newXP", newXP);
-                updateXPCmd.Parameters.AddWithValue("@userID", userID);
-                updateXPCmd.ExecuteNonQuery();
-
-                // Check new level
-                string getNewLevelQuery = "SELECT MAX(levelNum) FROM Level WHERE xpAmount <= @newXP";
-                MySqlCommand getNewLevelCmd = new MySqlCommand(getNewLevelQuery, con);
-                getNewLevelCmd.Parameters.AddWithValue("@newXP", newXP);
-
-                object newLevelObj = getNewLevelCmd.ExecuteScalar();
-                int newLevelNum = (newLevelObj != null && newLevelObj != DBNull.Value) ? Convert.ToInt32(newLevelObj) : 1;
-
-                // Get current level
-                string getCurrentLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
-                MySqlCommand getCurrentLevelCmd = new MySqlCommand(getCurrentLevelQuery, con);
-                getCurrentLevelCmd.Parameters.AddWithValue("@userID", userID);
-
-                object currentLevelObj = getCurrentLevelCmd.ExecuteScalar();
-                int currentLevel = (currentLevelObj != null && currentLevelObj != DBNull.Value) ? Convert.ToInt32(currentLevelObj) : 1;
-
-                if (newLevelNum > currentLevel)
+            using (MySqlConnection con = new MySqlConnection(cs))
+            {
+                try
                 {
-                    // Update level
-                    string updateLevelQuery = "UPDATE CurrentLevel SET levelID = @newLevelNum WHERE userID = @userID";
-                    MySqlCommand updateLevelCmd = new MySqlCommand(updateLevelQuery, con);
-                    updateLevelCmd.Parameters.AddWithValue("@newLevelNum", newLevelNum);
-                    updateLevelCmd.Parameters.AddWithValue("@userID", userID);
-                    updateLevelCmd.ExecuteNonQuery();
+                    con.Open();
 
-                    // Show Level Up popup
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowLevelUp", "showLevelUp();", true);
+                    // Get current XP
+                    string selectXPQuery = "SELECT userXP FROM Users WHERE userID = @userID";
+                    MySqlCommand selectXPCmd = new MySqlCommand(selectXPQuery, con);
+                    selectXPCmd.Parameters.AddWithValue("@userID", userID);
+
+                    object xpObj = selectXPCmd.ExecuteScalar();
+                    int currentXP = (xpObj != null && xpObj != DBNull.Value) ? Convert.ToInt32(xpObj) : 0;
+                    int newXP = currentXP + 1;
+
+                    // Update XP
+                    string updateXPQuery = "UPDATE Users SET userXP = @newXP WHERE userID = @userID";
+                    MySqlCommand updateXPCmd = new MySqlCommand(updateXPQuery, con);
+                    updateXPCmd.Parameters.AddWithValue("@newXP", newXP);
+                    updateXPCmd.Parameters.AddWithValue("@userID", userID);
+                    updateXPCmd.ExecuteNonQuery();
+
+                    // Check new level
+                    string getNewLevelQuery = "SELECT MAX(levelNum) FROM Level WHERE xpAmount <= @newXP";
+                    MySqlCommand getNewLevelCmd = new MySqlCommand(getNewLevelQuery, con);
+                    getNewLevelCmd.Parameters.AddWithValue("@newXP", newXP);
+
+                    object newLevelObj = getNewLevelCmd.ExecuteScalar();
+                    int newLevelNum = (newLevelObj != null && newLevelObj != DBNull.Value) ? Convert.ToInt32(newLevelObj) : 1;
+
+                    // Get current level
+                    string getCurrentLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
+                    MySqlCommand getCurrentLevelCmd = new MySqlCommand(getCurrentLevelQuery, con);
+                    getCurrentLevelCmd.Parameters.AddWithValue("@userID", userID);
+
+                    object currentLevelObj = getCurrentLevelCmd.ExecuteScalar();
+                    int currentLevel = (currentLevelObj != null && currentLevelObj != DBNull.Value) ? Convert.ToInt32(currentLevelObj) : 1;
+
+                    if (newLevelNum > currentLevel)
+                    {
+                        // Update level
+                        string updateLevelQuery = "UPDATE CurrentLevel SET levelID = @newLevelNum WHERE userID = @userID";
+                        MySqlCommand updateLevelCmd = new MySqlCommand(updateLevelQuery, con);
+                        updateLevelCmd.Parameters.AddWithValue("@newLevelNum", newLevelNum);
+                        updateLevelCmd.Parameters.AddWithValue("@userID", userID);
+                        updateLevelCmd.ExecuteNonQuery();
+
+                        // Store level up info in session
+                        Session["ShowLevelUpPopup"] = true;
+                        Session["CurrentLevel"] = newLevelNum;
+
+                        // Show Level Up popup
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowLevelUp", "showLevelUpPopup(" + newLevelNum + ");", true);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Response.Write("<script>alert('An error occurred: " + ex.Message + "');</script>");
                 }
             }
-            catch (Exception ex)
-            {
-                Response.Write("<script>alert('An error occurred: " + ex.Message + "');</script>");
-            }
-        }
 
-        UpdateXPDisplay(userID);
-        LoadTasks();
+            UpdateXPDisplay(userID);
+            LoadTasks();
+        }
     }
 
     private void UpdateXPDisplay(string userID)
@@ -484,6 +494,31 @@ public partial class Default2 : System.Web.UI.Page
         int nextLevelXpAmount = levelInfo.Item3;
         lblLevelNumber.Text = currentLevel.ToString();
         CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
+    }
+
+    // Level Up Detection
+    private void CheckForLevelUp(string userID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+        int userXP = GetUserXP(cs, userID);
+        Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
+        int currentLevel = levelInfo.Item1;
+
+        // Check if user leveled up since last visit
+        if (Session["LastKnownLevel"] != null)
+        {
+            int lastLevel = Convert.ToInt32(Session["LastKnownLevel"]);
+            if (currentLevel > lastLevel)
+            {
+                // Level up detected!
+                Session["ShowLevelUpPopup"] = true;
+                Session["CurrentLevel"] = currentLevel;
+            }
+        }
+
+        // Update last known level
+        Session["LastKnownLevel"] = currentLevel;
     }
 
     // start: header profile code
@@ -693,242 +728,4 @@ public partial class Default2 : System.Web.UI.Page
         }
     }
     // end: header profile code
-
-    // start: notification bell code
-    private void LoadPendingInvitesFromDB()
-    {
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        List<SessionInvite> pendingInvites = new List<SessionInvite>();
-        string query = "SELECT StudySession.sessionID, StudySession.sessionTitle, StudySession.sessionTag, StudySession.sessionStart, StudySession.sessionEnd, Users.username FROM (StudySessionParticipants INNER JOIN StudySession ON StudySessionParticipants.sessionID = StudySession.sessionID) INNER JOIN Users ON StudySession.leaderID = Users.userID WHERE StudySessionParticipants.userID = @userID AND StudySessionParticipants.accepted = false ORDER BY StudySession.sessionID ASC";
-
-        using (MySqlConnection conn = new MySqlConnection(cs))
-        using (MySqlCommand cmd = new MySqlCommand(query, conn))
-        {
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
-            conn.Open();
-            using (MySqlDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    pendingInvites.Add(new SessionInvite
-                    {
-                        sessionID = Convert.ToInt32(reader["sessionID"]),
-                        leaderUsername = reader["username"].ToString(),
-                        title = reader["sessionTitle"].ToString(),
-                        tag = reader["sessionTag"].ToString(),
-                        startTime = Convert.ToDateTime(reader["sessionStart"]),
-                        endTime = Convert.ToDateTime(reader["sessionEnd"])
-                    });
-                }
-            }
-        }
-
-        Session["PendingInvites"] = pendingInvites;
-    }
-
-    private void ShowNextInvite()
-    {
-        List<SessionInvite> invites = Session["PendingInvites"] as List<SessionInvite>;
-        if (invites != null && invites.Count > 0)
-        {
-            var invite = invites[0];
-
-            litNotificationText.Text = "<p><span style='text-decoration:underline;'>Study session invitation</span></p><table><tr><td><p>From:</p></td><td><p><span style='font-weight:bold;'>" + invite.leaderUsername + "</span></p></td></tr>" + "<tr><td><p>Title:</p></td><td><p><span style='font-weight:bold;'>" + invite.title + "</span></p></td></tr>" + "<tr><td><p>Tag:</p></td><td><p><span style='font-weight:bold;'>" + invite.tag + "</span></p></td></tr>" + "<tr><td><p>Starts:</p></td><td><p><span style='font-weight:bold;'>" + invite.startTime.ToString("dddd, dd MMMM yyyy @ HH:mm") + "</span></p></td></tr><tr><td><p>Ends:</p></td><td><p><span style='font-weight:bold;'>" + invite.endTime.ToString("dddd, dd MMMM yyyy @ HH:mm") + "</span></p></td></tr></table>";
-
-            hiddenSessionID.Value = invite.sessionID.ToString();
-
-            imgNotificationRinging.Visible = true;
-            imgNotificationNormal.Visible = false;
-            notificationBadge.Visible = true;
-
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "showNotificationPopup();", true);
-        }
-        else
-        {
-            imgNotificationRinging.Visible = false;
-            imgNotificationNormal.Visible = true;
-            notificationBadge.Visible = false;
-
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopupNone", "showNotificationPopup(false);", true);
-        }
-    }
-
-    protected void btnYes_Click(object sender, EventArgs e)
-    {
-        int sessionID = int.Parse(hiddenSessionID.Value);
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string updateQuery = "UPDATE StudySessionParticipants SET accepted = true WHERE sessionID = @sessionID AND userID = @userID";
-        using (MySqlConnection conn = new MySqlConnection(cs))
-        using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn))
-        {
-            cmd.Parameters.AddWithValue("@sessionID", sessionID);
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
-            conn.Open();
-            cmd.ExecuteNonQuery();
-        }
-
-        List<SessionInvite> invites = Session["PendingInvites"] as List<SessionInvite>;
-        SessionInvite invite = null;
-
-        if (invites != null)
-        {
-            foreach (SessionInvite i in invites)
-            {
-                if (i.sessionID == sessionID)
-                {
-                    invite = i;
-                    break;
-                }
-            }
-        }
-
-        if (invite != null)
-        {
-            string insertQuery = "INSERT INTO CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (@eventDesc, @eventDate, @tagID, @userID)";
-            using (MySqlConnection conn = new MySqlConnection(cs))
-            using (MySqlCommand cmd2 = new MySqlCommand(insertQuery, conn))
-            {
-                string eventDesc = invite.title + " (From: " + invite.leaderUsername + ")";
-                DateTime eventDate = invite.startTime;
-                int tagID = 1;
-                int userID = Convert.ToInt32(Session["userID"]);
-
-                cmd2.Parameters.AddWithValue("@eventDesc", eventDesc);
-                cmd2.Parameters.AddWithValue("@eventDate", eventDate);
-                cmd2.Parameters.AddWithValue("@tagID", tagID);
-                cmd2.Parameters.AddWithValue("@userID", userID);
-
-                conn.Open();
-                cmd2.ExecuteNonQuery();
-            }
-        }
-
-        hiddenShowCalendar.Value = "true";
-
-        RemoveInviteAndShowNext(sessionID);
-    }
-
-    protected void btnNo_Click(object sender, EventArgs e)
-    {
-        hiddenShowConfirmation.Value = "true";
-    }
-
-    private void RemoveInviteAndShowNext(int sessionID)
-    {
-        List<SessionInvite> invites = Session["PendingInvites"] as List<SessionInvite>;
-        if (invites != null)
-        {
-            var currentInvite = invites.Find(i => i.sessionID == sessionID);
-            if (currentInvite != null)
-            {
-                invites.Remove(currentInvite);
-            }
-            Session["PendingInvites"] = invites;
-            ShowNextInvite();
-        }
-    }
-
-    private void LoadUpcomingSessions()
-    {
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string query = "SELECT StudySession.sessionID, StudySession.sessionStart FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = @userID AND StudySessionParticipants.accepted = true";
-
-        List<string> jsSessionTimes = new List<string>();
-
-        using (MySqlConnection conn = new MySqlConnection(cs))
-        using (MySqlCommand cmd = new MySqlCommand(query, conn))
-        {
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
-            conn.Open();
-            using (MySqlDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    int foundSessionID = Convert.ToInt32(reader["sessionID"]);
-                    DateTime sessionStart = Convert.ToDateTime(reader["sessionStart"]);
-
-                    string jsObject = "{ sessionID: " + foundSessionID + ", time: '" + sessionStart.ToString("yyyy-MM-ddTHH:mm:ss") + "' }";
-                    jsSessionTimes.Add(jsObject);
-
-                    TimeSpan timeUntilStart = sessionStart - DateTime.Now;
-                    if (timeUntilStart.TotalMinutes >= 0 && timeUntilStart.TotalMinutes <= 10)
-                    {
-                        Session["sessionID"] = foundSessionID;
-                    }
-                }
-            }
-        }
-
-        if (jsSessionTimes.Count > 0)
-        {
-            string jsArray = "[" + string.Join(",", jsSessionTimes.ToArray()) + "]";
-            ClientScript.RegisterStartupScript(this.GetType(), "registerSessions", "var upcomingSessions = " + jsArray + ";", true);
-        }
-    }
-
-    protected void btnCalendar_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("B100_View-calendar.aspx");
-    }
-
-    protected void btnOk_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("Default.aspx");
-    }
-
-    protected void btnSure_Click(object sender, EventArgs e)
-    {
-        int sessionID = int.Parse(hiddenSessionID.Value);
-        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string deleteQuery = "DELETE FROM StudySessionParticipants WHERE sessionID = @sessionID AND userID = @userID AND accepted = false";
-        using (MySqlConnection conn = new MySqlConnection(cs))
-        using (MySqlCommand cmd = new MySqlCommand(deleteQuery, conn))
-        {
-            cmd.Parameters.AddWithValue("@sessionID", sessionID);
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
-            conn.Open();
-            cmd.ExecuteNonQuery();
-        }
-
-        hiddenShowDeclineConfirmed.Value = "true";
-
-        RemoveInviteAndShowNext(sessionID);
-    }
-
-    protected void btnNotSure_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("Default.aspx");
-    }
-
-    protected void btnOkayDeclined_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("Default.aspx");
-    }
-
-    protected void btnJoin_Click(object sender, EventArgs e)
-    {
-        if (Session["sessionID"] != null && Session["userID"] != null)
-        {
-            int sessionID = Convert.ToInt32(Session["sessionID"]);
-            int userID = Convert.ToInt32(Session["userID"]);
-
-            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            string updateQuery = "UPDATE StudySessionParticipants SET joined = true WHERE sessionID = @sessionID AND userID = @userID";
-
-            using (MySqlConnection conn = new MySqlConnection(cs))
-            using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn))
-            {
-                cmd.Parameters.AddWithValue("@sessionID", sessionID);
-                cmd.Parameters.AddWithValue("@userID", userID);
-                conn.Open();
-                int rowsAffected = cmd.ExecuteNonQuery();
-
-                if (rowsAffected > 0)
-                {
-                    Response.Redirect("A1400_View-study-session.aspx");
-                }
-            }
-        }
-    }
-    // end: notification bell code
 }

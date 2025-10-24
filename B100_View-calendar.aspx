@@ -213,6 +213,72 @@
             </div>
         </div>
     </div>
+           <div id="popup" class="simple-popup" style="display: none;">
+            <div class="popup-blue-box">
+                <p>Are you sure you want to stop the study session?<br />
+                    All XP and coins earned will be lost!<br />
+                    (Your friends will stay in the study session even if you decide to leave!)</p>
+                <img src="Images/Notification%20Sad%20Hamster.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="Button1" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnYes_Click" OnClientClick="return confirmStop();" />
+                    <asp:Button ID="Button2" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClientClick="hidePopup(); return false;" />
+                </div>
+            </div>
+        </div>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script type="text/javascript">
+    function showLevelUpPopup(newLevel) {
+        document.getElementById('newLevelSpan').innerText = newLevel;
+        document.getElementById('popupLevelUp').style.display = 'block';
+        
+        // Trigger confetti explosion
+        triggerConfetti();
+    }
+
+    function hideLevelUpPopup() {
+        document.getElementById('popupLevelUp').style.display = 'none';
+        // Stop any ongoing confetti
+        confetti.reset();
+    }
+
+    function triggerConfetti() {
+        // Major explosion
+        confetti({
+            particleCount: 300,
+            spread: 100,
+            origin: { y: 0.6 },
+            colors: ['#FFD700', '#FFA500', '#FF8C00', '#FF6347', '#00FF7F', '#1E90FF']
+        });
+
+        // Continuous falling confetti for 5 seconds
+        const duration = 5000;
+        const end = Date.now() + duration;
+
+        (function frame() {
+            confetti({
+                particleCount: 5,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: ['#FFD700', '#FFA500', '#FF8C00']
+            });
+            confetti({
+                particleCount: 5,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: ['#1E90FF', '#00FF7F', '#FF6347']
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
+    }
+
+   </script>
+
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

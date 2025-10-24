@@ -34,9 +34,6 @@ public partial class Default2 : System.Web.UI.Page
         if (Session["userID"] != null)
         {
             string username = Session["Username"].ToString();
-
-            ddlFilter.Visible = IsToDoFilterVisible;
-            
             userIDHidden.Value = Convert.ToString(Session["userID"]);
 
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -65,6 +62,9 @@ public partial class Default2 : System.Web.UI.Page
                 CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
                 GetUserStats(cs, userID);
                 GetUserProfileIcon(cs, userID);
+
+                // Add level up check
+                CheckForLevelUp(userID);
             }
             else
             {
@@ -699,6 +699,8 @@ public partial class Default2 : System.Web.UI.Page
                     updateLevelCmd.ExecuteNonQuery();
 
                     // Show Level Up popup
+                    Session["ShowLevelUpPopup"] = true;
+                    Session["CurrentLevel"] = newLevelNum;
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowLevelUp", "showLevelUp();", true);
                 }
             }
@@ -724,7 +726,7 @@ public partial class Default2 : System.Web.UI.Page
     }
     protected void btnYayLevelUp_Click(object sender, EventArgs e)
     {
-        ScriptManager.RegisterStartupScript(this, GetType(), "hideLevelUp", "hideLevelUp();", false);
+        // This will be handled by the OnClientClick now
     }
 
     // start: header profile code
@@ -1172,4 +1174,27 @@ public partial class Default2 : System.Web.UI.Page
     //    }
     //}
     // end: notification bell code
+    private void CheckForLevelUp(string userID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+        int userXP = GetUserXP(cs, userID);
+        Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
+        int currentLevel = levelInfo.Item1;
+
+        // Check if user leveled up since last visit
+        if (Session["LastKnownLevel"] != null)
+        {
+            int lastLevel = Convert.ToInt32(Session["LastKnownLevel"]);
+            if (currentLevel > lastLevel)
+            {
+                // Level up detected!
+                Session["ShowLevelUpPopup"] = true;
+                Session["CurrentLevel"] = currentLevel;
+            }
+        }
+
+        // Update last known level
+        Session["LastKnownLevel"] = currentLevel;
+    }
 }

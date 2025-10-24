@@ -84,23 +84,22 @@ public partial class View_study_session : System.Web.UI.Page
             if (Session["Username"] != null)
             {
                 string username = Session["Username"].ToString();
-
                 string userID = GetUserID(username, cs);
 
-                if (!IsPostBack)
-                {
-                    int userXP = GetUserXP(cs, userID);
-                    Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
-                    int currentLevel = levelInfo.Item1;
-                    int currentLevelXpAmount = levelInfo.Item2;
-                    int nextLevelXpAmount = levelInfo.Item3;
+                int userXP = GetUserXP(cs, userID);
+                Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
+                int currentLevel = levelInfo.Item1;
+                int currentLevelXpAmount = levelInfo.Item2;
+                int nextLevelXpAmount = levelInfo.Item3;
 
-                    lblLevelNumber.Text = currentLevel.ToString();
+                lblLevelNumber.Text = currentLevel.ToString();
 
-                    CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
-                    GetUserStats(cs, userID);
-                    GetUserProfileIcon(cs, userID);
-                }
+                CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
+                GetUserStats(cs, userID);
+                GetUserProfileIcon(cs, userID);
+
+                // Add level up check
+                CheckForLevelUp(userID);
             }
             else
             {
@@ -131,6 +130,21 @@ public partial class View_study_session : System.Web.UI.Page
             {
                 con.Open();
 
+                // Get current XP first
+                string getCurrentXPQuery = "SELECT userXP FROM Users WHERE userID = @userID";
+                MySqlCommand getCurrentXPCmd = new MySqlCommand(getCurrentXPQuery, con);
+                getCurrentXPCmd.Parameters.AddWithValue("@userID", userID);
+                object currentXPObj = getCurrentXPCmd.ExecuteScalar();
+                int currentXP = (currentXPObj != null && currentXPObj != DBNull.Value) ? Convert.ToInt32(currentXPObj) : 0;
+                int newXP = currentXP + xpEarned;
+
+                // Get current level
+                string getCurrentLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
+                MySqlCommand getCurrentLevelCmd = new MySqlCommand(getCurrentLevelQuery, con);
+                getCurrentLevelCmd.Parameters.AddWithValue("@userID", userID);
+                object currentLevelObj = getCurrentLevelCmd.ExecuteScalar();
+                int currentLevel = (currentLevelObj != null && currentLevelObj != DBNull.Value) ? Convert.ToInt32(currentLevelObj) : 1;
+
                 // Update user XP
                 string updateXPQuery = "UPDATE Users SET userXP = userXP + @xpEarned WHERE userID = @userID";
                 MySqlCommand cmd = new MySqlCommand(updateXPQuery, con);
@@ -144,13 +158,82 @@ public partial class View_study_session : System.Web.UI.Page
                 cmdCoins.Parameters.AddWithValue("@coinsEarned", coinsEarned);
                 cmdCoins.Parameters.AddWithValue("@userID", userID);
                 cmdCoins.ExecuteNonQuery();
-            }
 
-            return "Success: " + xpEarned + " XP and " + coinsEarned + " coins added";
+                // Check for level up
+                string getNewLevelQuery = "SELECT MAX(levelNum) FROM Level WHERE xpAmount <= @newXP";
+                MySqlCommand getNewLevelCmd = new MySqlCommand(getNewLevelQuery, con);
+                getNewLevelCmd.Parameters.AddWithValue("@newXP", newXP);
+                object newLevelObj = getNewLevelCmd.ExecuteScalar();
+                int newLevelNum = (newLevelObj != null && newLevelObj != DBNull.Value) ? Convert.ToInt32(newLevelObj) : 1;
+
+                bool leveledUp = false;
+                int achievedLevel = currentLevel;
+
+                if (newLevelNum > currentLevel)
+                {
+                    // Update level
+                    string updateLevelQuery = "UPDATE CurrentLevel SET levelID = @newLevelNum WHERE userID = @userID";
+                    MySqlCommand updateLevelCmd = new MySqlCommand(updateLevelQuery, con);
+                    updateLevelCmd.Parameters.AddWithValue("@newLevelNum", newLevelNum);
+                    updateLevelCmd.Parameters.AddWithValue("@userID", userID);
+                    updateLevelCmd.ExecuteNonQuery();
+
+                    leveledUp = true;
+                    achievedLevel = newLevelNum;
+                }
+
+                // Return level up information in the response
+                return string.Format("Success:{0}:{1}:{2}:{3}", xpEarned, coinsEarned, leveledUp ? "1" : "0", achievedLevel);
+            }
         }
         catch (Exception ex)
         {
             return "Error: " + ex.Message;
+        }
+    }
+    private static bool CheckLevelUpAfterStudySession(MySqlConnection con, string userID, int newXP)
+    {
+        // Get new level based on new XP
+        string getNewLevelQuery = "SELECT MAX(levelNum) FROM Level WHERE xpAmount <= @newXP";
+        using (MySqlCommand getNewLevelCmd = new MySqlCommand(getNewLevelQuery, con))
+        {
+            getNewLevelCmd.Parameters.AddWithValue("@newXP", newXP);
+            object newLevelObj = getNewLevelCmd.ExecuteScalar();
+            int newLevelNum = (newLevelObj != null && newLevelObj != DBNull.Value) ? Convert.ToInt32(newLevelObj) : 1;
+
+            // Get current level
+            string getCurrentLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
+            using (MySqlCommand getCurrentLevelCmd = new MySqlCommand(getCurrentLevelQuery, con))
+            {
+                getCurrentLevelCmd.Parameters.AddWithValue("@userID", userID);
+                object currentLevelObj = getCurrentLevelCmd.ExecuteScalar();
+                int currentLevel = (currentLevelObj != null && currentLevelObj != DBNull.Value) ? Convert.ToInt32(currentLevelObj) : 1;
+
+                if (newLevelNum > currentLevel)
+                {
+                    // Update level
+                    string updateLevelQuery = "UPDATE CurrentLevel SET levelID = @newLevelNum WHERE userID = @userID";
+                    using (MySqlCommand updateLevelCmd = new MySqlCommand(updateLevelQuery, con))
+                    {
+                        updateLevelCmd.Parameters.AddWithValue("@newLevelNum", newLevelNum);
+                        updateLevelCmd.Parameters.AddWithValue("@userID", userID);
+                        updateLevelCmd.ExecuteNonQuery();
+                    }
+                    return true; // Leveled up
+                }
+            }
+        }
+        return false; // No level up
+    }
+
+    private static int GetCurrentLevel(MySqlConnection con, string userID)
+    {
+        string getCurrentLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
+        using (MySqlCommand getCurrentLevelCmd = new MySqlCommand(getCurrentLevelQuery, con))
+        {
+            getCurrentLevelCmd.Parameters.AddWithValue("@userID", userID);
+            object currentLevelObj = getCurrentLevelCmd.ExecuteScalar();
+            return (currentLevelObj != null && currentLevelObj != DBNull.Value) ? Convert.ToInt32(currentLevelObj) : 1;
         }
     }
 
@@ -834,4 +917,48 @@ public partial class View_study_session : System.Web.UI.Page
         }
     }
     // end: header profile code
+
+    private void CheckForLevelUp(string userID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+        int userXP = GetUserXP(cs, userID);
+        Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
+        int currentLevel = levelInfo.Item1;
+        int currentLevelXpAmount = levelInfo.Item2;
+        int nextLevelXpAmount = levelInfo.Item3;
+
+        // Check if user is at max level (when current and next level XP are equal)
+        bool isMaxLevel = (nextLevelXpAmount <= currentLevelXpAmount);
+
+        // Only check for level up if not at max level
+        if (!isMaxLevel)
+        {
+            // Check if user leveled up since last visit
+            if (Session["LastKnownLevel"] != null)
+            {
+                int lastLevel = Convert.ToInt32(Session["LastKnownLevel"]);
+                if (currentLevel > lastLevel)
+                {
+                    // Level up detected!
+                    Session["ShowLevelUpPopup"] = true;
+                    Session["CurrentLevel"] = currentLevel;
+                }
+            }
+
+            // Update last known level
+            Session["LastKnownLevel"] = currentLevel;
+        }
+        else
+        {
+            // User is at max level, clear any level up flags
+            Session["ShowLevelUpPopup"] = false;
+            Session["LastKnownLevel"] = currentLevel;
+        }
+    }
+
+    protected void btnYayLevelUp_Click(object sender, EventArgs e)
+    {
+        // This will be handled by the OnClientClick now
+    }
 }

@@ -51,12 +51,6 @@
 
     <div class="rightInfoDiv">
         <div class="timeNotificationWrapper">
-            <!--<div class="notificationDetails">
-                <asp:ImageButton ID="imgNotificationRinging" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-ringing-white-96.png" OnClientClick="showNotificationPopup(true); return false;" />
-                <asp:ImageButton ID="imgNotificationNormal" CssClass="notificationIcon" runat="server" ImageUrl="~/Icons/icons8-notification-bell-white-96.png" OnClientClick="showNotificationPopup(false); return false;" />
-                <div id="notificationBadge" runat="server" class="notificationBadge"></div>
-            </div>-->
-
             <div class="timeDateDiv">
                 <asp:Label ID="lblTime" CssClass="accountInfoLabel currentTime" runat="server" Text="09:52"></asp:Label>
                 <div class="dateContainer">
@@ -114,6 +108,7 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
+     <div class="wave-background"></div>
     <div class="toDoListPage">
         <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
         
@@ -187,95 +182,24 @@
             </div>
         </div>
 
-        <!--<div id="popupNoNotifications" class="simple-popup" style="display: none;">
-            <div class="popup-blue-box">
-                <p>You do not have any notifications at the moment!</p>
-                <img src="Images/Notification%20Sad%20Hamster.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideNotificationPopup(); return false;" />
-                </div>
-            </div>
-        </div>
-
-        <div id="popupHasNotifications" class="simple-popup" style="display: none;">
+        <!-- Level Up Popup with Confetti -->
+<div id="popupLevelUp" class="simple-popup" style="display: none;">
             <div class="popup-pink-box">
-                <asp:HiddenField ID="hiddenSessionID" runat="server" />
-                <asp:Literal ID="litNotificationText" runat="server" />
+                <h2>🎉 Level Up! 🎉</h2>
+                <p>Congratulations! You've reached Level <span id="newLevelSpan"></span>!</p>
                 <img src="Images/Notification%20Happy.png" />
                 <br />
                 <div class="buttonSection">
-                    <asp:Button ID="btnYes" CssClass="popup-button-best-pink" runat="server" Text="Accept!" OnClick="btnYes_Click" />
-                    <asp:Button ID="Button1" CssClass="popup-button" runat="server" Text="Decline!" OnClick="btnNo_Click" />
+                    <asp:Button ID="btnYayLevelUp" CssClass="popup-button" runat="server" Text="Awesome!" OnClientClick="hideLevelUpPopup(); return false;" />
                 </div>
             </div>
         </div>
 
-        <div id="popupCalendar" class="simple-popup" style="display: none;">
-            <div class="popup-pink-box">
-                <asp:HiddenField ID="hiddenShowCalendar" runat="server" />
-                <p>Study Session has been added to your calendar!</p>
-                <br />
-                <br />
-                <img src="Images/Notification%20Happy.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnCalendar" CssClass="popup-button-best-pink" runat="server" Text="Calendar, GO!" OnClick="btnCalendar_Click" />
-                    <asp:Button ID="btnOk" CssClass="popup-button" runat="server" Text="Okay, thanks!" OnClick="btnOk_Click" />
-                </div>
-            </div>
-        </div>
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+        
+        
 
-        <div id="popupConfirmDecline" class="simple-popup" style="display: none;">
-            <div class="popup-blue-box">
-                <asp:HiddenField ID="hiddenShowConfirmation" runat="server" />
-                <p>Are you sure you want to decline the Study Session invitation?</p>
-                <img src="Images/Notification%20Sad%20Hamster.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnSure" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnSure_Click" />
-                    <asp:Button ID="btnNotSure" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnNotSure_Click" />
-                </div>
-            </div>
-        </div>
-
-        <div id="popupIsDeclined" class="simple-popup" style="display: none;">
-            <div class="popup-blue-box">
-                <asp:HiddenField ID="hiddenShowDeclineConfirmed" runat="server" />
-                <p>Study Session has been declined!</p>
-                <img src="Images/Notification%20Sad%20Hamster.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnOkayDeclined" CssClass="popup-button" runat="server" Text="Okay!" OnClick="btnOkayDeclined_Click" />
-                </div>
-            </div>
-        </div>
-
-        <div id="popup" class="simple-popup" style="display: none;">
-            <div class="popup-pink-box">
-                <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
-                <p>Study Session has started!</p>
-                <img src="Images/Notification%20Happy.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
-                </div>
-            </div>
-        </div>-->
-
-            <%-- this is the code for the level up panel--%>
-            <div id="popupLevelUp" class="simple-popup" style="display: none;">
-                <div class="popup-pink-box">
-                    <p>Congrats! You have leveled up!</p> 
-                    <img src="Images/Notification%20Happy.png" />
-                    <br />
-                    <div class="buttonSection">
-                        <asp:Button ID="btnYayLevelUp" CssClass="popup-button" runat="server" Text="Thank you!" OnClick="btnYayLevelUp_Click" />
-                    </div>
-                </div>
-            </div>
-
-            <script type="text/javascript">
+        <script type="text/javascript">
             // To-Do List Popups
             function showTaskCompletePopup() {
                 var popup = document.getElementById('popupTaskComplete');
@@ -302,20 +226,68 @@
                 showPopupDelete();
             }
 
-            // Level Up Popup
-            function showLevelUp() {
-                var popup = document.getElementById('popupLevelUp');
-                if (popup) popup.style.display = 'flex';
+            // Level Up Popup Functions
+            function showLevelUpPopup(newLevel) {
+                console.log('Showing level up popup for level:', newLevel);
+                document.getElementById('newLevelSpan').innerText = newLevel;
+                document.getElementById('popupLevelUp').style.display = 'flex';
+                triggerConfetti();
             }
 
-            function hideLevelUp() {
-                var popup = document.getElementById('popupLevelUp');
-                if (popup) popup.style.display = 'none';
+            function hideLevelUpPopup() {
+                console.log('Hiding level up popup');
+                document.getElementById('popupLevelUp').style.display = 'none';
+                confetti.reset();
             }
+
+            // Confetti Functions
+            function triggerConfetti() {
+                console.log('Triggering confetti');
+                // Major explosion
+                confetti({
+                    particleCount: 300,
+                    spread: 100,
+                    origin: { y: 0.6 },
+                    colors: ['#FFD700', '#FFA500', '#FF8C00', '#FF6347', '#00FF7F', '#1E90FF']
+                });
+
+                // Continuous falling confetti for 5 seconds
+                const duration = 5000;
+                const end = Date.now() + duration;
+
+                (function frame() {
+                    confetti({
+                        particleCount: 5,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0 },
+                        colors: ['#FFD700', '#FFA500', '#FF8C00']
+                    });
+                    confetti({
+                        particleCount: 5,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 1 },
+                        colors: ['#1E90FF', '#00FF7F', '#FF6347']
+                    });
+
+                    if (Date.now() < end) {
+                        requestAnimationFrame(frame);
+                    }
+                }());
+            }
+
+            // Check for level up on page load
+            window.onload = function() {
+                // Check if we need to show level up popup from session
+                <% if (Session["ShowLevelUpPopup"] != null && (bool)Session["ShowLevelUpPopup"]) { %>
+                    showLevelUpPopup(<%= Session["CurrentLevel"] %>);
+                    <% Session["ShowLevelUpPopup"] = false; %>
+                <% } %>
+            };
         </script>
     </div>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
-
 </asp:Content>

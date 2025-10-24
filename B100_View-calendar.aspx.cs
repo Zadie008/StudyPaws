@@ -47,7 +47,7 @@ public partial class Default2 : System.Web.UI.Page
                 int nextLevelXpAmount = levelInfo.Item3;
 
                 lblLevelNumber.Text = currentLevel.ToString();
-
+                CheckForLevelUp();
                 CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
                 GetUserStats(cs, userID);
                 GetUserProfileIcon(cs, userID);
@@ -716,6 +716,33 @@ public partial class Default2 : System.Web.UI.Page
                     Response.Redirect("A1400_View-study-session.aspx");
                 }
             }
+        }
+    }
+    private void CheckForLevelUp()
+    {
+        if (Session["userID"] != null)
+        {
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            string userID = GetUserID(Session["Username"].ToString(), cs);
+
+            int userXP = GetUserXP(cs, userID);
+            Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
+            int currentLevel = levelInfo.Item1;
+
+            // Check if user leveled up since last visit
+            if (Session["LastKnownLevel"] != null)
+            {
+                int lastLevel = Convert.ToInt32(Session["LastKnownLevel"]);
+                if (currentLevel > lastLevel)
+                {
+                    // Level up detected!
+                    Session["ShowLevelUpPopup"] = true;
+                    Session["NewLevel"] = currentLevel;
+                }
+            }
+
+            // Update last known level
+            Session["LastKnownLevel"] = currentLevel;
         }
     }
     // end: notification bell code
