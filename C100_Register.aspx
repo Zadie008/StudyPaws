@@ -124,52 +124,61 @@
     </script>
 
     <div id="registerPageDiv">
-        <asp:Panel ID="registerPanel" runat="server" DefaultButton="btnRegister">
-            <table>
-                <tr>
-                    <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>
-                    <td>
-                        <asp:TextBox ID="txtUsername" class="textbox" runat="server"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="rfvUsername" runat="server" ControlToValidate="txtUsername" 
-                            ErrorMessage="Username is required" ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
-                    </td>
-                </tr>
-                <tr>
-                    <td><asp:Label ID="lblPassword" class="label" runat="server" Text="Password"></asp:Label></td>
-                    <td>
-                        <div style="position: relative; display: inline-block;">
-                            <asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password" style="padding-right: 40px; width: 100%;"></asp:TextBox>
-                            <img id="passwordToggle" src="Icons/icons8-eye-white-96.png" 
-                                 style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; width: 24px; height: 24px; opacity: 0.6;" 
-                                 onclick="togglePassword()" 
-                                 title="Show Password" />
-                        </div>
-                        <asp:RequiredFieldValidator ID="rfvPassword" runat="server" ControlToValidate="txtPassword" 
-                            ErrorMessage="Password is required" ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
-                    </td>
-                </tr>
-                <tr>
-                    <td><asp:Label ID="lblConfirmPassword" class="label" runat="server" Text="Confirm Password"></asp:Label></td>
-                    <td>
-                        <div style="position: relative; display: inline-block;">
-                            <asp:TextBox ID="txtConfirmPassword" class="textbox" runat="server" TextMode="Password" style="padding-right: 40px; width: 100%;"></asp:TextBox>
-                            <img id="confirmPasswordToggle" src="Icons/icons8-eye-white-96.png" 
-                                 style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; width: 24px; height: 24px; opacity: 0.6;" 
-                                 onclick="toggleConfirmPassword()" 
-                                 title="Show Password" />
-                        </div>
-                        <asp:Label ID="lblPasswordMismatch" runat="server" Text="Password does not match" CssClass="errorLabel" style="display: none; color: red;" />
-                        <asp:RequiredFieldValidator ID="rfvConfirmPassword" runat="server" ControlToValidate="txtConfirmPassword" 
-                            ErrorMessage="Confirm Password is required" ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
-                    </td>
-                </tr>
-            </table>
-            <br />
-            <div class="buttonSection">
-                <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="false" />
-                <asp:Button ID="btnRegister" class="button" runat="server" Text="Register" OnClick="btnRegister_Click1" />
+        <div class="leftSection">
+            <p class="backgroundColorText">invisible p</p>
+        </div>
+        <div class="middleSection">
+            <asp:Panel ID="registerPanel" runat="server" DefaultButton="btnRegister">
+                <table>
+                    <tr>
+                        <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>
+                        <td>
+                            <asp:TextBox ID="txtUsername" class="textbox" runat="server"></asp:TextBox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><asp:Label ID="lblPassword" class="label" runat="server" Text="Password"></asp:Label></td>
+                        <td>
+                            <div style="position: relative; display: inline-block;">
+                                <asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password" style="padding-right: 40px; width: 100%;"></asp:TextBox>
+                                <img id="passwordToggle" src="Icons/icons8-eye-white-96.png" 
+                                     style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; width: 24px; height: 24px; opacity: 0.6;" 
+                                     onclick="togglePassword()" 
+                                     title="Show Password" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><asp:Label ID="lblConfirmPassword" class="label" runat="server" Text="Confirm Password"></asp:Label></td>
+                        <td>
+                            <div style="position: relative; display: inline-block;">
+                                <asp:TextBox ID="txtConfirmPassword" class="textbox" runat="server" TextMode="Password" style="padding-right: 40px; width: 100%;"></asp:TextBox>
+                                <img id="confirmPasswordToggle" src="Icons/icons8-eye-white-96.png" 
+                                     style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; width: 24px; height: 24px; opacity: 0.6;" 
+                                     onclick="toggleConfirmPassword()" 
+                                     title="Show Password" />
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="false" />
+                    <asp:Button ID="btnRegister" class="button" runat="server" Text="Register" OnClick="btnRegister_Click1" />
+                </div>
+            </asp:Panel>
+        </div>
+
+        <div class="rightSection">
+            <div class="validationSection">
+                <asp:RequiredFieldValidator ID="rfvUsername" runat="server" ControlToValidate="txtUsername" ErrorMessage="Username is required" CssClass="validationErrorCustom" ForeColor="white" Display="Dynamic"></asp:RequiredFieldValidator>
+                <asp:RequiredFieldValidator ID="rfvPassword" runat="server" ControlToValidate="txtPassword" ErrorMessage="Password is required" CssClass="validationErrorCustom" ForeColor="white" Display="Dynamic"></asp:RequiredFieldValidator>
+                <asp:Label ID="lblPasswordMismatch" runat="server" Text="Password does not match" CssClass="validationErrorCustom" style="display: none; color: white;" />
+                <asp:RequiredFieldValidator ID="rfvConfirmPassword" runat="server" ControlToValidate="txtConfirmPassword" 
+                    ErrorMessage="Confirm Password is required" CssClass="validationErrorCustom" ForeColor="white" Display="Dynamic"></asp:RequiredFieldValidator>
             </div>
-        </asp:Panel>
+        </div>
+        
 
         <%-- Panel for successful registration confirmation --%>
         <asp:Panel ID="pnlConfirm" runat="server" CssClass="simple-popup" style="display: none;">
@@ -202,10 +211,9 @@
             <div class="popup-blue-box">
                 <p>Sorry! This user already exists</p>
                 <img src="Images/Notification%20Sad%20Hamster.png" alt="Error" />
-                <br />
                 <div class="buttonSection">
                    <%-- Use OnClientClick instead of OnClick for client-side handling --%>
-                   <asp:Button ID="btnUnderstandExists" CssClass="popup-button" runat="server" Text="I understand :(" OnClientClick="return onUnderstandExistsClick();" />
+                   <asp:Button ID="btnUnderstandExists" CssClass="popup-button" runat="server" Text="Okay" OnClientClick="return onUnderstandExistsClick();" />
                 </div>
             </div>
         </asp:Panel>

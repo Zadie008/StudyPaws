@@ -4665,6 +4665,23 @@ footer p {
 #registerPageDiv {
     margin-top: 17%;
     text-align: left;
+    display: flex;
+}
+
+#registerPageDiv .leftSection {
+    flex: 1;
+}
+
+#registerPageDiv .middleSection {
+    flex: 2;
+}
+
+#registerPageDiv .rightSection {
+    flex: 1;
+}
+
+.backgroundColorText {
+    color: #446791;
 }
 
 #registerPageDiv table {
@@ -4691,11 +4708,20 @@ footer p {
 #registerPageDiv table td:last-child {
     text-align: right;
 }
-.errorLabel {
-    margin-left: 10px;
-    font-size: 0.9rem;
-    font-weight: 600;
+
+#registerPageDiv .validationSection {
+    margin-top: 5em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
 }
+
+#registerPageDiv .validationErrorCustom {
+    display: block;
+    white-space: nowrap;
+    text-align: left;
+}
+
 /* -------------------------------------------- LOGIN PAGE -------------------------------------------- */
 #loginPageDiv {
     margin-top: 17%;
@@ -5444,6 +5470,13 @@ table {
     /* ---------------------- REGISTER PAGE ---------------------- */
     #registerPageDiv {
         margin-top: 15%;
+    }
+
+    #registerPageDiv .validationSection {
+        margin-top: 0.5em;
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
     }
 
     /* ---------------------- LOGIN PAGE ---------------------- */
