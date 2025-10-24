@@ -1831,6 +1831,11 @@ body.page-exit .welcomeBackTextDiv {
 .tagControls .addTagBtn { /*FOR TAMMY TO EDIT LATER*/
     width: 35px;
 }
+
+/*this is actually on B200_B500 add-event select tag page*/
+.tagControls .editTagBtn { /*FOR TAMMY TO EDIT LATER*/
+    width: 35px;
+}
     
 /* NOTIFICATION POPUP */
 .createEventMainContent .popup-pink-box table tr td p {
