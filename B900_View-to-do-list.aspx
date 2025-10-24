@@ -248,8 +248,9 @@
                     particleCount: 300,
                     spread: 100,
                     origin: { y: 0.6 },
-                    colors: ['#FFD700', '#FFA500', '#FF8C00', '#FF6347', '#00FF7F', '#1E90FF']
+                    colors: ['#F4CAE0', '#D7B9D5', '#ADA7C9', '#90A8C3', '#64A6BD', '#FFFFFF']
                 });
+                // old colors: ['#FFD700', '#FFA500', '#FF8C00', '#FF6347', '#00FF7F', '#1E90FF']
 
                 // Continuous falling confetti for 5 seconds
                 const duration = 5000;
@@ -261,15 +262,17 @@
                         angle: 60,
                         spread: 55,
                         origin: { x: 0 },
-                        colors: ['#FFD700', '#FFA500', '#FF8C00']
+                        colors: ['#F4CAE0', '#D7B9D5', '#ADA7C9']
                     });
+                    // old colors: ['#FFD700', '#FFA500', '#FF8C00']
                     confetti({
                         particleCount: 5,
                         angle: 120,
                         spread: 55,
                         origin: { x: 1 },
-                        colors: ['#1E90FF', '#00FF7F', '#FF6347']
+                        colors: ['#90A8C3', '#64A6BD', '#FFFFFF']
                     });
+                    // old colors: ['#1E90FF', '#00FF7F', '#FF6347']
 
                     if (Date.now() < end) {
                         requestAnimationFrame(frame);

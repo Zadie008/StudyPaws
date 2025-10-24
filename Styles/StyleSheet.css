@@ -5734,6 +5734,10 @@ table {
         margin: 0em auto;
     }
 
+    .darkPurpleText {
+        display: none;
+    }
+
     #SearchFriendsMainContent .scrollableTableContainer {
         margin: auto 0.5em;
         padding-left: 0.5em;
