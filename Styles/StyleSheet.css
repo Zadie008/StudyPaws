@@ -1686,10 +1686,10 @@ body.page-exit .welcomeBackTextDiv {
     margin: 4em 4em 0em 4em;
 }
 
-    .createEventMainContent .eventTitleTagSection {
-        padding: 6% 0 2% 0;
-        display: flex;
-    }
+.createEventMainContent .eventTitleTagSection {
+    padding: 6% 0 2% 0;
+    display: flex;
+}
 .createEventMainContent .eventTitleTagSection .leftSection {
     flex: 1;
 }

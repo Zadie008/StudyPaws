@@ -29,47 +29,48 @@
     <br />
     <br />
     <asp:Panel ID="loginPanel" runat="server" DefaultButton="btnLogin">
-    <div id="loginPageDiv">
-        <table>
-            <tr>
-                <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>
-                <td><asp:TextBox ID="txtUsername" class="textbox" runat="server"></asp:TextBox></td>
-            </tr>
-          <tr>
-    <td><asp:Label ID="lblPassword" class="label" runat="server" Text="Password"></asp:Label></td>
-    <td>
-        <div style="position: relative; display: inline-block;">
-            <asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password" style="padding-right: 40px;"></asp:TextBox>
-            <img id="passwordToggle" src="Icons/icons8-eye-white-96.png" 
-                 style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; width: 24px; height: 24px; opacity: 0.6;" 
-                 onclick="togglePasswordVisibility()" 
-                  />
+        <div id="loginPageDiv">
+            <table>
+                <tr>
+                    <td><asp:Label ID="lblUsername" class="label" runat="server" Text="Username"></asp:Label></td>
+                    <td><asp:TextBox ID="txtUsername" class="textbox" runat="server"></asp:TextBox></td>
+                </tr>
+                <tr>
+                    <td><asp:Label ID="lblPassword" class="label" runat="server" Text="Password"></asp:Label></td>
+                    <td>
+                        <div style="position: relative; display: inline-block;">
+                            <asp:TextBox ID="txtPassword" class="textbox" runat="server" TextMode="Password" style="padding-right: 40px;"></asp:TextBox>
+                            <img id="passwordToggle" src="Icons/icons8-eye-white-96.png" 
+                                 style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; width: 24px; height: 24px; opacity: 0.6;" 
+                                 onclick="togglePasswordVisibility()" 
+                                  />
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <div class="buttonSection">
+                <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" />
+                <asp:Button ID="btnLogin" class="button" runat="server" Text="Login" OnClick="btnLogin_Click" />
+            </div>
+
+            <div id="popup" class="simple-popup" style="display: none;">
+                <div class="popup-blue-box">
+                    <p>Sorry! Your username or password is incorrect</p>
+                    <img src="Images/Notification%20Sad%20Hamster.png" alt="Sad hamster" />
+                    <div class="buttonSection">
+                        <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay" OnClientClick="hidePopup(); return false;" />
+                    </div>
+                </div>
+            </div>
         </div>
-    </td>
-</tr>
-        </table>
-        <br />
-        <div class="buttonSection">
-            <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" />
-            <asp:Button ID="btnLogin" class="button" runat="server" Text="Login" OnClick="btnLogin_Click" />
-        </div>
-    </div>
     </asp:Panel>
 
-<div id="popup" class="simple-popup" style="display: none;">
-    <div class="popup-blue-box">
-        <p>Sorry! Your username or password is incorrect</p>
-        <img src="Images/Notification%20Sad%20Hamster.png" alt="Sad hamster" />
-        <br />
-        <div class="buttonSection">
-            <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay :(" OnClientClick="hidePopup(); return false;" />
-        </div>
-    </div>
     
-</div>
+
     <script type="text/javascript">
     function showPopup() {
-        document.getElementById('popup').style.display = 'block';
+        document.getElementById('popup').style.display = 'flex';
     }
     
     function hidePopup() {
