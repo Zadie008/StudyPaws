@@ -47,6 +47,7 @@ public partial class Default2 : System.Web.UI.Page
 
                 GetUserStats(connString, userID);
                 GetUserProfileIcon(connString, userID);
+                LoadUpcomingSessions();
 
                 // Check for level up on page load
                 CheckForLevelUp(userID);
@@ -730,6 +731,44 @@ public partial class Default2 : System.Web.UI.Page
     // end: header profile code
 
     // start: join study session code
+    private void LoadUpcomingSessions()
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        string query = "SELECT StudySession.sessionID, StudySession.sessionStart FROM StudySession INNER JOIN StudySessionParticipants ON StudySession.sessionID = StudySessionParticipants.sessionID WHERE StudySessionParticipants.userID = @userID AND StudySessionParticipants.accepted = true";
+
+        List<string> jsSessionTimes = new List<string>();
+
+        using (MySqlConnection conn = new MySqlConnection(cs))
+        using (MySqlCommand cmd = new MySqlCommand(query, conn))
+        {
+            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
+            conn.Open();
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    int foundSessionID = Convert.ToInt32(reader["sessionID"]);
+                    DateTime sessionStart = Convert.ToDateTime(reader["sessionStart"]);
+
+                    string jsObject = "{ sessionID: " + foundSessionID + ", time: '" + sessionStart.ToString("yyyy-MM-ddTHH:mm:ss") + "' }";
+                    jsSessionTimes.Add(jsObject);
+
+                    TimeSpan timeUntilStart = sessionStart - DateTime.Now;
+                    if (timeUntilStart.TotalMinutes >= 0 && timeUntilStart.TotalMinutes <= 10)
+                    {
+                        Session["sessionID"] = foundSessionID;
+                    }
+                }
+            }
+        }
+
+        if (jsSessionTimes.Count > 0)
+        {
+            string jsArray = "[" + string.Join(",", jsSessionTimes.ToArray()) + "]";
+            ClientScript.RegisterStartupScript(this.GetType(), "registerSessions", "var upcomingSessions = " + jsArray + ";", true);
+        }
+    }
+
     protected void btnJoin_Click(object sender, EventArgs e)
     {
         if (Session["sessionID"] != null && Session["userID"] != null)

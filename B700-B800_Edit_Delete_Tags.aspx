@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="B700-B800_Edit_Delete_Tags.aspx.cs" Inherits="B700_B800_Edit_Delete_Tags" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
-    Edit and Delete Tags
+    Edit or Delete Tag
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
@@ -193,6 +193,33 @@
         function hideDeletePopup() {
             document.getElementById('popupDeleteTag').style.display = 'none';
         }
+
+        // JOIN STUDY SESSION POPUP
+        function showJoinPopup() {
+            document.getElementById("popup").style.display = "flex";
+
+            // Auto-refresh after 1 minute only if popup is still visible
+            setTimeout(function () {
+                var popup = document.getElementById("popup");
+                if (popup && popup.style.display === "flex") {
+                    location.reload();
+                }
+            }, 60000); // 1 minute
+        }
+
+        function hideJoinPopup() {
+            document.getElementById("popup").style.display = "none";
+        }
+
+        // Auto-show join popup when page loads if there's a session to join
+        window.addEventListener('load', function () {
+            var joinSessionID = document.getElementById("mainContentPlaceHolder_hiddenJoinSessionID");
+            if (joinSessionID && joinSessionID.value) {
+                setTimeout(function () {
+                    showJoinPopup();
+                }, 1000);
+            }
+        });
     </script>
 </div>
 </asp:Content>

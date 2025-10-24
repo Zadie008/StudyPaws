@@ -185,7 +185,6 @@
             <div class="popup-pink-box">
                 <p>You have been registered!</p>
                 <img src="Images/Notification%20Happy.png" alt="Success" />
-                <br />
                 <div class="buttonSection">
                     <%-- Use OnClientClick instead of OnClick for client-side handling --%>
                     <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="return onOkayClick();" />
@@ -198,7 +197,6 @@
             <div class="popup-pink-box">
                 <p>Would you like to learn how to use the home page?</p>
                 <img src="Images/Notification%20Happy.png" alt="Tutorial" />
-                <br />
                 <div class="buttonSection">
                     <asp:Button ID="btnWatchtut" CssClass="popup-button-best-pink" runat="server" Text="Yes, please!" OnClick="btnWatchtut_Click" OnClientClick="return onWatchTutClick();" />
                     <asp:Button ID="BtnNotut" CssClass="popup-button" runat="server" Text="No, thank you!" OnClick="BtnNotut_Click" OnClientClick="return onNoTutClick();" />

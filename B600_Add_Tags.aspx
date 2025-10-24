@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="B600_Add_Tags.aspx.cs" Inherits="B500_B800_Tags" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
-    Add Tags
+    Add Tag
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
@@ -92,7 +92,6 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-    <!--<div id="popup1" runat="server" ClientIDMode="static" class="simple-popup" >-->
     <div class="popup-pink-boxTagEdit">
         <table class="popupTagEditing">
             <tr>
@@ -140,27 +139,53 @@
     </div>
 
     <script type="text/javascript">
-    window.addEventListener('DOMContentLoaded', function () {
-        const tagButtons = document.querySelectorAll('.tagOne, .tagTwo, .tagThree, .tagFour, .tagFive');
-        const hiddenField = document.getElementById('<%= hiddenSelectedTagColour.ClientID %>');
-        tagButtons.forEach(btn => {
-            btn.addEventListener('click', function () {
-                tagButtons.forEach(b => b.classList.remove('selectedTag'));
-                this.classList.add('selectedTag');
-                hiddenField.value = this.id;
+        window.addEventListener('DOMContentLoaded', function () {
+            const tagButtons = document.querySelectorAll('.tagOne, .tagTwo, .tagThree, .tagFour, .tagFive');
+            const hiddenField = document.getElementById('<%= hiddenSelectedTagColour.ClientID %>');
+            tagButtons.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    tagButtons.forEach(b => b.classList.remove('selectedTag'));
+                    this.classList.add('selectedTag');
+                    hiddenField.value = this.id;
+                });
             });
         });
-    });
 
-    function validateTagColour(sender, args) {
-        var selected = document.getElementById('<%=hiddenSelectedTagColour.ClientID%>').value;
-        args.IsValid = selected !== "";
-    }
-    function selectTagColour(colourNum) {
-        document.getElementById('<%= hfTagColourNum.ClientID%>').value = colourNum;
-    }
+        function validateTagColour(sender, args) {
+            var selected = document.getElementById('<%=hiddenSelectedTagColour.ClientID%>').value;
+            args.IsValid = selected !== "";
+        }
+        function selectTagColour(colourNum) {
+            document.getElementById('<%= hfTagColourNum.ClientID%>').value = colourNum;
+            }
+
+        // JOIN STUDY SESSION POPUP
+        function showJoinPopup() {
+            document.getElementById("popup").style.display = "flex";
+
+            // Auto-refresh after 1 minute only if popup is still visible
+            setTimeout(function () {
+                var popup = document.getElementById("popup");
+                if (popup && popup.style.display === "flex") {
+                    location.reload();
+                }
+            }, 60000); // 1 minute
+        }
+
+        function hideJoinPopup() {
+            document.getElementById("popup").style.display = "none";
+        }
+
+        // Auto-show join popup when page loads if there's a session to join
+        window.addEventListener('load', function () {
+            var joinSessionID = document.getElementById("mainContentPlaceHolder_hiddenJoinSessionID");
+            if (joinSessionID && joinSessionID.value) {
+                setTimeout(function () {
+                    showJoinPopup();
+                }, 1000);
+            }
+        });
     </script>
-</div>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

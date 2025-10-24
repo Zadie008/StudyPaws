@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="B300-B400_Edit_Delete_Event.aspx.cs" Inherits="B300_B400_Edit_Delete_Event" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
-    Edit and Delete Calendar Event
+    Edit or Delete Calendar Event
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
@@ -162,72 +162,6 @@
         </div>
     </div>
 
-    <!--does not have notification-->
-    <div id="popupNoNotifications" class="simple-popup" style="display: none;">
-        <div class="popup-blue-box">
-            <p>You do not have any notifications at the moment!</p>
-            <img src="Images/Notification%20Sad%20Hamster.png" />
-            <br />
-            <div class="buttonSection">
-                <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideNotificationPopup(); return false;" />
-            </div>
-        </div>
-    </div>
-
-    <!--has notifications-->
-    <div id="popupHasNotifications" class="simple-popup" style="display: none;">
-        <div class="popup-pink-box">
-            <asp:HiddenField ID="hiddenSessionID" runat="server" />
-            <asp:Literal ID="litNotificationText" runat="server" />
-            <img src="Images/Notification%20Happy.png" />
-            <br />
-            <div class="buttonSection">
-                <asp:Button ID="btnYes" CssClass="popup-button-best-pink" runat="server" Text="Accept!" OnClick="btnYes_Click" />
-                <asp:Button ID="Button1" CssClass="popup-button" runat="server" Text="Decline!" OnClick="btnNo_Click" />
-            </div>
-        </div>
-    </div>
-
-    <div id="popupCalendar" class="simple-popup" style="display: none;">
-        <div class="popup-pink-box">
-            <asp:HiddenField ID="hiddenShowCalendar" runat="server" />
-            <p>Study Session has been added to your calendar!</p>
-            <br />
-            <br />
-            <img src="Images/Notification%20Happy.png" />
-            <br />
-            <div class="buttonSection">
-                <asp:Button ID="btnCalendar" CssClass="popup-button-best-pink" runat="server" Text="Calendar, GO!" OnClick="btnCalendar_Click" />
-                <asp:Button ID="btnOk" CssClass="popup-button" runat="server" Text="Okay, thanks!" OnClick="btnOk_Click" />
-            </div>
-        </div>
-    </div>
-
-    <div id="popupConfirmDecline" class="simple-popup" style="display: none;">
-        <div class="popup-blue-box">
-            <asp:HiddenField ID="hiddenShowConfirmation" runat="server" />
-            <p>Are you sure you want to decline the Study Session invitation?</p>
-            <img src="Images/Notification%20Sad%20Hamster.png" />
-            <br />
-            <div class="buttonSection">
-                <asp:Button ID="btnSure" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnSure_Click" />
-                <asp:Button ID="btnNotSure" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnNotSure_Click" />
-            </div>
-        </div>
-    </div>
-
-    <div id="popupIsDeclined" class="simple-popup" style="display: none;">
-        <div class="popup-blue-box">
-            <asp:HiddenField ID="hiddenShowDeclineConfirmed" runat="server" />
-            <p>Study Session has been declined!</p>
-            <img src="Images/Notification%20Sad%20Hamster.png" />
-            <br />
-            <div class="buttonSection">
-                <asp:Button ID="btnOkayDeclined" CssClass="popup-button" runat="server" Text="Okay!" OnClick="btnOkayDeclined_Click" />
-            </div>
-        </div>
-    </div>
-
     <!-- study session has started (popup stays for 1 minute) -->
     <div id="popup" class="simple-popup" style="display: none;">
         <div class="popup-pink-box">
@@ -280,6 +214,33 @@
         function hideDeletePopup() {
             document.getElementById('popupDeleteEvent').style.display = 'none';
         }
+
+        // JOIN STUDY SESSION POPUP
+        function showJoinPopup() {
+            document.getElementById("popup").style.display = "flex";
+
+            // Auto-refresh after 1 minute only if popup is still visible
+            setTimeout(function () {
+                var popup = document.getElementById("popup");
+                if (popup && popup.style.display === "flex") {
+                    location.reload();
+                }
+            }, 60000); // 1 minute
+        }
+
+        function hideJoinPopup() {
+            document.getElementById("popup").style.display = "none";
+        }
+
+        // Auto-show join popup when page loads if there's a session to join
+        window.addEventListener('load', function () {
+            var joinSessionID = document.getElementById("mainContentPlaceHolder_hiddenJoinSessionID");
+            if (joinSessionID && joinSessionID.value) {
+                setTimeout(function () {
+                    showJoinPopup();
+                }, 1000);
+            }
+        });
     </script>
 </div>
 </asp:Content>
