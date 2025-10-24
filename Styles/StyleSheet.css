@@ -1732,7 +1732,7 @@ body.page-exit .welcomeBackTextDiv {
 
 .eventTitleTagSection table td {
     vertical-align: middle;
-    padding: 0.1em 1em;
+    padding: 0.1em 0.5em; /*CHANGED*/
 }
 
 .eventTitleTagSection table td:first-child {
@@ -1771,36 +1771,47 @@ body.page-exit .welcomeBackTextDiv {
     flex: 1;
 }
 .tagControls {
-    /*text-align: right;
-    display: none;*/
-    /*flex-direction: row;*/ /*changed*/
-    /*gap: 3px;*/ /*changed*/
-   /* z-index: 100;*/
-    /*flex: 0 0 auto;*/ /* changed*/
-    /*order: 0;*/
-    /*position: absolute;
-    right: 5px;
-    top: 50%;*/
-    transform: translateY(-50%);
+    /*transform: translateY(-50%);*/
     align-items:center;
-    display: flex; /*ADDED*/
-    justify-content: flex-start; /*ADDED*/
-    height:0px; /*ADDED*/
+    vertical-align:middle; /*ADDED*/
+    display: inline-flex; /*CHANGED*/
+    /*justify-content: flex-start;*/ /*ADDED*/
+    height:auto; /*CHANGED*/
+    margin-left:0.5rem; /*ADDED*/
 }
 .createEventMainContent .eventTitleTagSection .rightSection .addTagBtn {
-    width: 35px;
-    height: 35px;
-    max-width: 35px;
+    width: 20px;
+    height: 20px;
+    max-width: 20px;
+    max-height: 20px; /*ADDED*/
     border: none;
     background: transparent;
     cursor: pointer;
-    margin: 0 1rem 0 0;
-    vertical-align:middle;
-    display:none; /*ADDED*/
+    margin: 0 0 0 0; /*CHANGED*/
+    vertical-align: middle;
+    display: inline-block; /*CHANGED*/
+}
+.createEventMainContent .eventTitleTagSection .rightSection .editTagBtn {
+    width: 20px;
+    height: 20px;
+    max-width: 20px;
+    max-height: 20px; /*ADDED*/
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    margin: 0 0 0 0; /*CHANGED*/
+    vertical-align: middle;
+    display: none; /*CHANGED*/
+    /*visibility: hidden;*/
 }
 .createEventMainContent .eventTitleTagSection .rightSection .addTagBtn img {
-    width: 2.2vh; /*check this with pencil (edit tag btn)*/
-    max-width: 3vh;
+    max-width: 20px; /*CHANGED*/
+    max-height: 20px; /*ADDED*/
+    width: 20px; /*CHANGED*/
+    height: 20px; /*ADDED*/
+    display: block; /*ADDED*/
+    /*max-width: 3vh;*/
+    object-fit:contain;
 }
     
     /* NOTIFICATION POPUP */
@@ -1820,14 +1831,15 @@ body.page-exit .welcomeBackTextDiv {
     border: 5px solid white;
     width: 55%;
     max-width: 1300px;
-    max-height: 400vh;
-    min-height: 150px;
+    max-height: 70vh;
+    min-height: 70vh;
+    height:70vh;
     /*text-align: center;*/
-    margin: 4em 22%; /* LEA ADDED THIS TO CENTER POPUP, YOU CAN CHANGE AMOUNTS */
+    margin: 1em 22%; /* LEA ADDED THIS TO CENTER POPUP, YOU CAN CHANGE AMOUNTS */
 }
 .popup-pink-boxTagEdit .buttonSection {
     text-align: center;
-    margin-top: 1.5vh;
+    /*margin-top: 1vh;*/
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1837,7 +1849,7 @@ body.page-exit .welcomeBackTextDiv {
 }
 .popupTagEditing{
     width:90%;
-    padding: 0.5em 0.8em;
+    padding: 0.5em 0.2em;
     border-spacing: 0.5em;
 }
 .popupTagEditing table{
@@ -1952,11 +1964,11 @@ body.page-exit .welcomeBackTextDiv {
 /*-------------------------------------- EDIT AND DELETE EVENT PAGE B300 AND B400 ------------------------------*/
 
 #editDeleteEvent .eventTitleTagSection { /* LEA ADDED THIS, YOU CAN CHANGE AMOUNTS */
-    padding: 6% 0 2% 0;
+    padding: 6% 0 2.5% 0;
 }
 
 .createEventMainContent .buttonSection {
-    margin-top: 5%;
+    margin-top: 2.5%;
 }
 
 .eventDateBox {
