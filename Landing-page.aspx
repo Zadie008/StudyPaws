@@ -32,8 +32,8 @@
         <img src="Images/Notification%20Happy.png" />
         <br />
         <div class="buttonSection">
-            <asp:Button ID="btnRegister" class="button" runat="server" Text="Register" OnClick="btnRegister_Click" />
-            <asp:Button ID="btnLogin" class="button" runat="server" Text="Login" OnClick="btnLogin_Click" />
+            <asp:Button ID="btnRegister" class="loginButton" runat="server" Text="Register" OnClick="btnRegister_Click" />
+            <asp:Button ID="btnLogin" class="loginButton" runat="server" Text="Login" OnClick="btnLogin_Click" />
         </div>
     </div>
 </asp:Content>

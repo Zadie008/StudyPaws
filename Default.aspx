@@ -202,6 +202,14 @@
         // JOIN STUDY SESSION POPUP
         function showJoinPopup() {
             document.getElementById("popup").style.display = "flex";
+
+            // Auto-refresh after 1 minute only if popup is still visible
+            setTimeout(function () {
+                var popup = document.getElementById("popup");
+                if (popup && popup.style.display === "flex") {
+                    location.reload();
+                }
+            }, 60000); // 1 minute
         }
 
         function hideJoinPopup() {

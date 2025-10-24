@@ -5109,7 +5109,7 @@ input:checked + .slider:before {
 }
 
 .button {
-    background-color: #5f7fa3;
+    background-color: #446791; /*wave colour*/
     border: none;
     border-radius: 1rem;
     color: white;
@@ -5124,12 +5124,31 @@ input:checked + .slider:before {
 }
 
 .button:hover {
-    background-color: #446791;
+    background-color: #5f7fa3; /*background colour*/
 }
 
 .button a {
     color: white;
     text-decoration: none;
+}
+
+.loginButton {
+    background-color: #5f7fa3; /*background colour*/
+    border: none;
+    border-radius: 1rem;
+    color: white;
+    padding: 1vh 2vw;
+    font-size: clamp(1.2rem, 2.5vw, 2.7rem);
+    font-family: 'Lilita One', sans-serif;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 1vh;
+    transition: background-color 0.3s ease;
+}
+
+.loginButton:hover {
+    background-color: #446791; /*wave colour*/
 }
 
 
