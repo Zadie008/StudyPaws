@@ -169,9 +169,10 @@
                 <asp:HiddenField ID="userIDHidden" runat="server" />
             </div>
         </div>
+    </div>
 
         <div id="popupTaskComplete" class="simple-popup" style="display: none;">
-            <div class="popup-pink-boxSmaller">
+            <div class="popup-pink-box">
                 <p>Congrats! You earned:</p>
                 <p>XP   +1</p>
                 <img src="Images/Notification%20Happy.png" />
@@ -276,12 +277,12 @@
                 <h2>🎉 Level Up! 🎉</h2>
                 <p>Congratulations! You've reached Level <span id="newLevelSpan"></span>!</p>
                 <img src="Images/Notification%20Happy.png" />
-                <br />
                 <div class="buttonSection">
                     <asp:Button ID="btnYayLevelUp" CssClass="popup-button" runat="server" Text="Awesome!" OnClientClick="hideLevelUpPopup(); return false;" />
                 </div>
             </div>
         </div>
+
         <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
         <script type="text/javascript">
             function showPopup() {
@@ -416,7 +417,7 @@
                 <% } %>
             };
         </script>
-    </div>
+    
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" runat="Server">
