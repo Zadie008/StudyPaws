@@ -40,60 +40,72 @@
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div id="changeProfilePhotoPage">
-            <div class="changeIconContainer">
-       <asp:Button ID="btnChangeIcon" class="profilebutton" runat="server" Text="Change icon" OnClick="btnChangeIcon_Click" />
-        <asp:HiddenField ID="selectedIcon" runat="server" ClientIDMode="Static" />
-   </div>
-
-<div class="iconLayoutWrapper">
-    <div class="iconRow topIconRow">
-        <asp:ImageButton ID="btnCat" runat="server" CssClass="iconItem circle-cat"
-            ImageUrl="Images/ProfilePictures/CatPfp.png"
-            AlternateText="Cat"
-            CommandArgument="1"
-            OnClick="SelectIcon_Click" />
-        
-        <asp:ImageButton ID="btnDog" runat="server" CssClass="iconItem circle-dog"
-            ImageUrl="Images/ProfilePictures/DogPfp.png"
-            AlternateText="Dog"
-            CommandArgument="2"
-            OnClick="SelectIcon_Click" />
-        
-        <asp:ImageButton ID="btnBunny" runat="server" CssClass="iconItem circle-bunny"
-            ImageUrl="Images/ProfilePictures/BunnyPfp.png"
-            AlternateText="Bunny"
-            CommandArgument="3"
-            OnClick="SelectIcon_Click" />
-    </div>
-
-    <!-- Bottom row -->
-    <div class="iconRow bottomIconRow">
-        <asp:ImageButton ID="btnCow" runat="server" CssClass="iconItem circle-cow"
-            ImageUrl="Images/ProfilePictures/CowPfp.png"
-            AlternateText="Cow"
-            CommandArgument="4"
-            OnClick="SelectIcon_Click" />
-
-        <asp:ImageButton ID="btnUnicorn" runat="server" CssClass="iconItem circle-unicorn"
-            ImageUrl="Images/ProfilePictures/UnicornPfp.png"
-            AlternateText="Unicorn"
-            CommandArgument="5"
-            OnClick="SelectIcon_Click" />
-    </div>
-
-    <asp:Panel ID="pnlConfirmPfpf" runat="server" Visible="false">
-     <div id="popup" class="simple-popup">
-    <div class="popup-pink-box">
-        <p>Your profile photo has been updated!</p>
-        <img src="Images/Notification%20Happy.png" />
-        <br />
-        <div class="buttonSection">
-            <asp:Button ID="btnConfirmChange" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hidePopup(); return false;" />
+        <div class="changeIconContainer">
+            <asp:Button ID="btnChangeIcon" class="profilebutton" runat="server" Text="Change icon" OnClick="btnChangeIcon_Click" />
+            <asp:HiddenField ID="selectedIcon" runat="server" ClientIDMode="Static" />
         </div>
-    </div>
-</div>
-</asp:Panel>
-    </div>
+
+        <div class="iconLayoutWrapper">
+            <div class="iconRow topIconRow">
+                <asp:ImageButton ID="btnCat" runat="server" CssClass="iconItem circle-cat"
+                    ImageUrl="Images/ProfilePictures/CatPfp.png"
+                    AlternateText="Cat"
+                    CommandArgument="1"
+                    OnClick="SelectIcon_Click" />
+        
+                <asp:ImageButton ID="btnDog" runat="server" CssClass="iconItem circle-dog"
+                    ImageUrl="Images/ProfilePictures/DogPfp.png"
+                    AlternateText="Dog"
+                    CommandArgument="2"
+                    OnClick="SelectIcon_Click" />
+        
+                <asp:ImageButton ID="btnBunny" runat="server" CssClass="iconItem circle-bunny"
+                    ImageUrl="Images/ProfilePictures/BunnyPfp.png"
+                    AlternateText="Bunny"
+                    CommandArgument="3"
+                    OnClick="SelectIcon_Click" />
+            </div>
+
+            <!-- Bottom row -->
+            <div class="iconRow bottomIconRow">
+                <asp:ImageButton ID="btnCow" runat="server" CssClass="iconItem circle-cow"
+                    ImageUrl="Images/ProfilePictures/CowPfp.png"
+                    AlternateText="Cow"
+                    CommandArgument="4"
+                    OnClick="SelectIcon_Click" />
+
+                <asp:ImageButton ID="btnUnicorn" runat="server" CssClass="iconItem circle-unicorn"
+                    ImageUrl="Images/ProfilePictures/UnicornPfp.png"
+                    AlternateText="Unicorn"
+                    CommandArgument="5"
+                    OnClick="SelectIcon_Click" />
+            </div>
+
+            <asp:Panel ID="pnlConfirmPfpf" runat="server" Visible="false">
+                <div id="popup" class="simple-popup">
+                    <div class="popup-pink-box">
+                        <p>Your profile photo has been updated!</p>
+                        <img src="Images/Notification%20Happy.png" />
+                        <br />
+                        <div class="buttonSection">
+                            <asp:Button ID="btnConfirmChange" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hidePopup(); return false;" />
+                        </div>
+                    </div>
+                </div>
+            </asp:Panel>
+
+            <!-- study session has started (popup stays for 1 minute) -->
+            <div id="popup" class="simple-popup" style="display: none;">
+                <div class="popup-pink-box">
+                    <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
+                    <p style="font-size: 2.3em;">Study Session has started!</p>
+                    <img style="margin-bottom: -2em;" src="Images/Notification%20Happy.png" />
+                    <div class="buttonSection">
+                        <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </asp:Content> 
 

@@ -127,6 +127,17 @@
     </div>
     <asp:HiddenField ID="hiddenSelectedTagColour" runat="server" />     
 
+    <!-- study session has started (popup stays for 1 minute) -->
+    <div id="popup" class="simple-popup" style="display: none;">
+        <div class="popup-pink-box">
+            <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
+            <p style="font-size: 2.3em;">Study Session has started!</p>
+            <img style="margin-bottom: -2em;" src="Images/Notification%20Happy.png" />
+            <div class="buttonSection">
+                <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
+            </div>
+        </div>
+    </div>
 
     <script type="text/javascript">
     window.addEventListener('DOMContentLoaded', function () {

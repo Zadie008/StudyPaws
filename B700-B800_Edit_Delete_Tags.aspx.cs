@@ -64,7 +64,6 @@ public partial class B700_B800_Edit_Delete_Tags : System.Web.UI.Page
                 CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
                 GetUserStats(cs, userID);
                 GetUserProfileIcon(cs, userID);
-                LoadPendingInvitesFromDB();
                 //LoadUpcomingSessions();
             }
         }
@@ -395,8 +394,36 @@ public partial class B700_B800_Edit_Delete_Tags : System.Web.UI.Page
     }
     // end: header profile code
 
+    // start: join study session code
+    protected void btnJoin_Click(object sender, EventArgs e)
+    {
+        if (Session["sessionID"] != null && Session["userID"] != null)
+        {
+            int sessionID = Convert.ToInt32(Session["sessionID"]);
+            int userID = Convert.ToInt32(Session["userID"]);
+
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            string updateQuery = "UPDATE StudySessionParticipants SET joined = true WHERE sessionID = @sessionID AND userID = @userID";
+
+            using (MySqlConnection conn = new MySqlConnection(cs))
+            using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn))
+            {
+                cmd.Parameters.AddWithValue("@sessionID", sessionID);
+                cmd.Parameters.AddWithValue("@userID", userID);
+                conn.Open();
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                if (rowsAffected > 0)
+                {
+                    Response.Redirect("A1400_View-study-session.aspx");
+                }
+            }
+        }
+    }
+    // end: join study session code
+
     // start: notification bell code
-    private void LoadPendingInvitesFromDB()
+    /*private void LoadPendingInvitesFromDB()
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         List<SessionInvite> pendingInvites = new List<SessionInvite>();
@@ -425,7 +452,7 @@ public partial class B700_B800_Edit_Delete_Tags : System.Web.UI.Page
         }
 
         Session["PendingInvites"] = pendingInvites;
-    }
+    }*/
 
     //private void ShowNextInvite()
     //{

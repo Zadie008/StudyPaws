@@ -201,31 +201,19 @@
             </div>
         </div>
 
+        <!-- study session has started (popup stays for 1 minute) -->
         <div id="popup" class="simple-popup" style="display: none;">
             <div class="popup-pink-box">
                 <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
-                <p>Study Session has started!</p>
-                <img src="Images/Notification%20Happy.png" />
-                <br />
+                <p style="font-size: 2.3em;">Study Session has started!</p>
+                <img style="margin-bottom: -2em;" src="Images/Notification%20Happy.png" />
                 <div class="buttonSection">
                     <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
                 </div>
             </div>
         </div>
     </div>
-           <div id="popup" class="simple-popup" style="display: none;">
-            <div class="popup-blue-box">
-                <p>Are you sure you want to stop the study session?<br />
-                    All XP and coins earned will be lost!<br />
-                    (Your friends will stay in the study session even if you decide to leave!)</p>
-                <img src="Images/Notification%20Sad%20Hamster.png" />
-                <br />
-                <div class="buttonSection">
-                    <asp:Button ID="Button1" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnYes_Click" OnClientClick="return confirmStop();" />
-                    <asp:Button ID="Button2" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClientClick="hidePopup(); return false;" />
-                </div>
-            </div>
-        </div>
+
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script type="text/javascript">
     function showLevelUpPopup(newLevel) {
