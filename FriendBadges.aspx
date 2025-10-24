@@ -112,6 +112,7 @@
     </div>
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
+
     <div id="friendsBadgesPage">
    
          <h2><asp:Label ID="lblPageTitle" runat="server" Text="Badges"></asp:Label></h2>
@@ -224,6 +225,7 @@
             </div>
         </div>
     </div>
+
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
 </asp:Content>

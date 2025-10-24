@@ -10,6 +10,7 @@
     <div class="tutorial-container">
         <img src="Images/Tutorial/TipsAndTricks.png" class="fullscreen-img" alt="Tutorial Screen" />
         <div class="button-container">
+             <a href="Tutorial.aspx" class="tutorial-button">Back</a>
             <a href="Default.aspx" class="tutorial-button">Thank you</a>
         </div>
     </div>
