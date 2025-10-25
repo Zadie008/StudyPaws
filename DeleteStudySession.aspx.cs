@@ -127,8 +127,44 @@ public partial class DeleteStudySession : System.Web.UI.Page
     {
         int eventID = (int)ViewState["EditEventID"];
 
+        string userID = null;
+        if (Session["UserID"] != null)
+        {
+            userID = Session["UserID"].ToString();
+        }
+
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        using (MySqlConnection conn = new MySqlConnection(cs)) // remove from calendar event
+
+        // First, get the sessionID using the event description or other matching criteria
+        int? sessionID = null;
+        using (MySqlConnection conn = new MySqlConnection(cs))
+        {
+            conn.Open();
+
+            // Get the event description to match with study session title
+            string eventDesc = "";
+            string getEventSql = "SELECT eventDesc FROM CalendarEvent WHERE eventID = @eventID";
+            MySqlCommand getEventCmd = new MySqlCommand(getEventSql, conn);
+            getEventCmd.Parameters.AddWithValue("@eventID", eventID);
+            object eventDescResult = getEventCmd.ExecuteScalar();
+            if (eventDescResult != null)
+            {
+                eventDesc = eventDescResult.ToString();
+
+                // Now find the study session with matching title
+                string findSessionSql = "SELECT sessionID FROM StudySession WHERE sessionTitle = @sessionTitle";
+                MySqlCommand findSessionCmd = new MySqlCommand(findSessionSql, conn);
+                findSessionCmd.Parameters.AddWithValue("@sessionTitle", eventDesc);
+                object sessionResult = findSessionCmd.ExecuteScalar();
+                if (sessionResult != null)
+                {
+                    sessionID = Convert.ToInt32(sessionResult);
+                }
+            }
+        }
+
+        // Delete from calendar event
+        using (MySqlConnection conn = new MySqlConnection(cs))
         {
             conn.Open();
             string sql = "DELETE FROM CalendarEvent WHERE eventID=@eventID";
@@ -136,22 +172,21 @@ public partial class DeleteStudySession : System.Web.UI.Page
             cmd.Parameters.AddWithValue("@eventID", eventID);
             cmd.ExecuteNonQuery();
         }
-        using (MySqlConnection conn2 = new MySqlConnection(cs)) // remove from study session
+
+        // Delete from study session participants for THIS USER
+        if (sessionID.HasValue && !string.IsNullOrEmpty(userID))
         {
-            conn2.Open();
-            string sql2 = "DELETE FROM StudySession WHERE sessionID=@eventID";
-            MySqlCommand cmd2 = new MySqlCommand(sql2, conn2);
-            cmd2.Parameters.AddWithValue("@eventID", eventID);
-            cmd2.ExecuteNonQuery();
+            using (MySqlConnection conn = new MySqlConnection(cs))
+            {
+                conn.Open();
+                string sql = "DELETE FROM StudySessionParticipants WHERE sessionID=@sessionID AND userID=@userID";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@sessionID", sessionID.Value);
+                cmd.Parameters.AddWithValue("@userID", userID);
+                cmd.ExecuteNonQuery();
+            }
         }
-        using (MySqlConnection conn3 = new MySqlConnection(cs)) // remove from study session participants
-        {
-            conn3.Open();
-            string sql3 = "DELETE FROM StudySessionParticipants WHERE sessionID=@eventID";
-            MySqlCommand cmd3 = new MySqlCommand(sql3, conn3);
-            cmd3.Parameters.AddWithValue("@eventID", eventID);
-            cmd3.ExecuteNonQuery();
-        }
+
         string from = Request.QueryString["from"];
         if (from == "calendar")
         {
@@ -166,6 +201,7 @@ public partial class DeleteStudySession : System.Web.UI.Page
             Response.Redirect("Default.aspx");
         }
     }
+
     protected void btnNoDelete_Click(object sender, EventArgs e)
     {
         ScriptManager.RegisterStartupScript(this, GetType(), "showDeletePopup", "showPopupDelete();", true);
