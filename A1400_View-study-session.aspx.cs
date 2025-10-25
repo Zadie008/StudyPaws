@@ -282,25 +282,8 @@ public partial class View_study_session : System.Web.UI.Page
             // Check for badges after incrementing
             CheckStoppedStudySessionBadges(thisUserID);
 
-            // Delete study session participant
-            using (MySqlConnection con2 = new MySqlConnection(cs))
-            {
-                string deleteCommand = "DELETE FROM StudySessionParticipants WHERE sessionID = @sessionID AND userID = @userID";
-                using (MySqlCommand cmd = new MySqlCommand(deleteCommand, con2))
-                {
-                    cmd.Parameters.AddWithValue("@sessionID", thisSessionID);
-                    cmd.Parameters.AddWithValue("@userID", thisUserID);
-
-                    con2.Open();
-                    int code = cmd.ExecuteNonQuery();
-                    con2.Close();
-
-                    if (code == 1)
-                    {
-                        Response.Redirect("Default.aspx");
-                    }
-                }
-            }
+            // just leave study session
+            Response.Redirect("Default.aspx");
         }
     }
 

@@ -149,7 +149,7 @@
         <div id="popup" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
                 <p>Are you sure you want to stop the study session?<br />
-                    All XP and coins earned will be lost!<br />
+                    All XP and pawprints earned will be lost!<br />
                     (Your friends will stay in the study session even if you decide to leave!)</p>
                 <img src="Images/Notification%20Sad%20Hamster.png" />
                 <br />
