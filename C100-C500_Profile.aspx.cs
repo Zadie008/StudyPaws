@@ -132,6 +132,17 @@ public partial class Default2 : System.Web.UI.Page
             con.Close();
         }
 
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            string query = "UPDATE Users SET addedEmailAddress = 1 WHERE username = @username";
+            MySqlCommand cmd = new MySqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@username", username);
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+
         txtEmail.ReadOnly = true;
         btnEditEmail.Visible = true;
         btnSaveEmail.Visible = false;

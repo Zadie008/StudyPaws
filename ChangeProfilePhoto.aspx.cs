@@ -118,7 +118,7 @@ public partial class Default2 : System.Web.UI.Page
             
             string insertBadgeQuery = @"
             INSERT INTO UserBadge (userID, badgeID, badgeType) 
-            VALUES (@userID, 18, 'gold')";
+            VALUES (@userID, 18, 'Gold')";
 
             MySqlCommand insertCmd = new MySqlCommand(insertBadgeQuery, con);
             insertCmd.Parameters.AddWithValue("@userID", userID);
