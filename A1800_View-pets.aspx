@@ -124,7 +124,7 @@
                 <asp:Button ID="btnFuzzy" runat="server" CssClass="button" Text="Fuzzy" OnClick="btnFuzzy_Click" />
                 <asp:Button ID="btnFarm" runat="server" CssClass="button" Text="Farm" OnClick="btnFarm_Click" />
                 <asp:Button ID="btnSpecial" runat="server" CssClass="button" Text="Special" OnClick="btnSpecial_Click" />
-                 <asp:Button ID="btnSecret" runat="server" CssClass="button" Text="Secret" OnClick="btnSecret_Click" />
+                <asp:Button ID="btnSecret" runat="server" CssClass="button" Text="Secret" OnClick="btnSecret_Click" />
             </div>
             <div class="rightPetsSection">
                 <table>
