@@ -654,19 +654,39 @@ public partial class Default2 : System.Web.UI.Page
             int userID = Convert.ToInt32(Session["userID"]);
 
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+            string checkTimeQuery = @"SELECT sessionStart FROM StudySession WHERE sessionID = @sessionID AND DATE_ADD(sessionStart, INTERVAL 1 MINUTE) < NOW()";
+
             string updateQuery = "UPDATE StudySessionParticipants SET joined = true WHERE sessionID = @sessionID AND userID = @userID";
 
             using (MySqlConnection conn = new MySqlConnection(cs))
-            using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn))
             {
-                cmd.Parameters.AddWithValue("@sessionID", sessionID);
-                cmd.Parameters.AddWithValue("@userID", userID);
                 conn.Open();
-                int rowsAffected = cmd.ExecuteNonQuery();
 
-                if (rowsAffected > 0)
+                using (MySqlCommand checkCmd = new MySqlCommand(checkTimeQuery, conn))
                 {
-                    Response.Redirect("A1400_View-study-session.aspx");
+                    checkCmd.Parameters.AddWithValue("@sessionID", sessionID);
+                    var result = checkCmd.ExecuteScalar();
+
+                    // session started more than 1 minute ago
+                    if (result != null)
+                    {
+                        Response.Redirect("Default.aspx");
+                        return;
+                    }
+                }
+
+                // session started less than 1 minute ago, so can join study session
+                using (MySqlCommand updateCmd = new MySqlCommand(updateQuery, conn))
+                {
+                    updateCmd.Parameters.AddWithValue("@sessionID", sessionID);
+                    updateCmd.Parameters.AddWithValue("@userID", userID);
+                    int rowsAffected = updateCmd.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                    {
+                        Response.Redirect("A1400_View-study-session.aspx");
+                    }
                 }
             }
         }
