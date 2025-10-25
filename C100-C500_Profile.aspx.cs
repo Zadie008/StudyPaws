@@ -649,7 +649,6 @@ public partial class Default2 : System.Web.UI.Page
         System.Diagnostics.Debug.WriteLine("=== btnDeleteLabelHiddenTrigger_Click COMPLETED ===");
     }
 
-    // Method to insert the delete label secret pet into userPets table
     private bool InsertDeleteLabelSecretPet(int userID)
     {
         System.Diagnostics.Debug.WriteLine("InsertDeleteLabelSecretPet called for user " + userID);
@@ -659,9 +658,6 @@ public partial class Default2 : System.Web.UI.Page
         using (MySqlConnection con = new MySqlConnection(cs))
         {
             con.Open();
-
-            // First check if the user already has this pet to avoid duplicates
-            // Using petID 29 for the fourth secret pet
             string checkQuery = "SELECT COUNT(*) FROM UserPets WHERE userID = @userID AND petID = 29";
             using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, con))
             {
@@ -676,7 +672,6 @@ public partial class Default2 : System.Web.UI.Page
                 }
             }
 
-            // Insert new pet (userPetsID will auto-increment, equippedStatus = 0)
             string insertQuery = "INSERT INTO UserPets (userID, petID, equippedStatus) VALUES (@userID, 29, 0)";
             using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, con))
             {
@@ -698,10 +693,8 @@ public partial class Default2 : System.Web.UI.Page
         }
     }
 
-    // Redirect to SecretPets page
     protected void btnViewSecretPet4_Click(object sender, EventArgs e)
     {
-        // Use JavaScript redirect to avoid ThreadAbortException
         string script = "window.location.href = 'SecretPets.aspx';";
         ScriptManager.RegisterStartupScript(this, GetType(), "redirectToSecretPets4", script, true);
     }

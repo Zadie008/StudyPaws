@@ -129,31 +129,32 @@
             <div class="rightPetsSection">
                 <table>
                     <tr>
-                        <td><div class="petIcon">
+                        <td><div class="petIcon"> <%--26 about--%>
                                 <div id="circle1" class="petCircle" runat="server"></div>
                                 <asp:Image ID="imgPet1" runat="server" CssClass="petImage" ImageUrl="Images/Secret%201.png" Width="130" />
                             </div>
                         </td>
                         <td>
-                         <div class="petIcon">
+                         <div class="petIcon"> <%--27 badges--%>
                                 <div id="circle2" class="petCircle" runat="server"></div>
                                 <asp:Image ID="imgPet2" runat="server" CssClass="petImage" ImageUrl="Images/Secret%202.png" Width="130" />
                             </div>
                         </td>
+                        
                         <td>
-                            <div class="petIcon">
+                            <div class="petIcon"><%--28 Money--%>
                                 <div id="circle3" class="petCircle" runat="server"></div>
                                 <asp:Image ID="imgPet3" runat="server" CssClass="petImage" ImageUrl="Images/Secret%203.png" Width="130" />
                             </div>
                         </td>
                         <td>
-                            <div class="petIcon">
+                            <div class="petIcon"><%--29 profile--%>
                                 <div id="circle4" class="petCircle" runat="server"></div>
                                 <asp:Image ID="imgPet4" runat="server" CssClass="petImage" ImageUrl="Images/Secret%204.png"  Width="130" />
                             </div>
                         </td>
                         <td>
-                            <div class="petIcon">
+                            <div class="petIcon"><%--30 pet shop--%>
                                 <div id="circle5" class="petCircle" runat="server"></div>
                                 <asp:Image ID="imgPet5" runat="server" CssClass="petImage" ImageUrl ="Images/Secret%205.png" Width="130" />
                             </div>

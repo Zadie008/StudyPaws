@@ -1072,7 +1072,6 @@ public partial class Default2 : System.Web.UI.Page
             {
                 System.Diagnostics.Debug.WriteLine("Paw pet added successfully, showing popup");
 
-                // Use a different approach - register the script and don't do anything else
                 string script = @"
                 console.log('Script executed from C# - showing paw popup');
                 setTimeout(function() {
@@ -1096,8 +1095,6 @@ public partial class Default2 : System.Web.UI.Page
         {
             con.Open();
 
-            // First check if the user already has this pet to avoid duplicates
-            // Using petID 28 for the third secret pet (assuming 26=coffee, 27=study spirit)
             string checkQuery = "SELECT COUNT(*) FROM UserPets WHERE userID = @userID AND petID = 28";
             using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, con))
             {
@@ -1112,7 +1109,6 @@ public partial class Default2 : System.Web.UI.Page
                 }
             }
 
-            // Insert new pet (userPetsID will auto-increment, equippedStatus = 0)
             string insertQuery = "INSERT INTO UserPets (userID, petID, equippedStatus) VALUES (@userID, 28, 0)";
             using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, con))
             {
@@ -1134,10 +1130,8 @@ public partial class Default2 : System.Web.UI.Page
         }
     }
 
-    // Redirect to SecretPets page
     protected void btnViewSecretPet3_Click(object sender, EventArgs e)
     {
-        // Use this instead of Response.Redirect to avoid ThreadAbortException
         string script = "window.location.href = 'SecretPets.aspx';";
         ScriptManager.RegisterStartupScript(this, GetType(), "redirectToSecretPets", script, true);
     }
