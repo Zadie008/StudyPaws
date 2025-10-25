@@ -156,7 +156,7 @@
         <div id="popupStudySpiritSecret" class="simple-popup" style="display: none;">
             <div class="popup-pink-box">
                 <p>You found a secret pet!</p>
-                <img style="margin-bottom: -2em;" src="Images/Notification%20Happy.png" />
+                <img style="margin-bottom: 1vh;" src="Images/Notification%20Happy.png" />
                 <div class="buttonSection">
                     <asp:Button ID="btnViewSecretPet2" CssClass="popup-button" runat="server" Text="Check it out!" OnClick="btnViewSecretPet2_Click" />
                 </div>

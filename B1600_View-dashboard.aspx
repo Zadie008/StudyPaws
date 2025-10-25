@@ -48,16 +48,16 @@
             </table>
         </div>
     </div>
-                   <!-- Paw Secret Popup -->
-<div id="popupPawSecret" class="simple-popup" style="display: none;">
-    <div class="popup-pink-box">
-          <p>You found a secret pet!</p>
-        <img style="margin-bottom: -2em;" src="Images/Notification%20Happy.png" />
-        <div class="buttonSection">
-            <asp:Button ID="btnViewSecretPet3" CssClass="popup-button" runat="server" Text="Check it out!" OnClick="btnViewSecretPet3_Click" />
-        </div>
-    </div>
-</div>
+                <!-- Paw Secret Popup -->
+                <div id="popupPawSecret" class="simple-popup" style="display: none;">
+                    <div class="popup-pink-box">
+                          <p style="font-size: 1em;">You found a secret pet!</p>
+                        <img src="Images/Notification%20Happy.png" />
+                        <div class="buttonSection">
+                            <asp:Button ID="btnViewSecretPet3" CssClass="popup-button" runat="server" Text="Check it out!" OnClick="btnViewSecretPet3_Click" />
+                        </div>
+                    </div>
+                </div>
        <asp:HiddenField ID="hfPawClicked" runat="server" Value="false" />
 <asp:Button ID="btnPawHiddenTrigger" runat="server" style="display: none;" OnClick="btnPawHiddenTrigger_Click" />
     <div class="rightInfoDiv">

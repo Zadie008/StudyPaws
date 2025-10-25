@@ -120,12 +120,7 @@
                 <tr>
                     <td><img src="Icons/icons8-coffee-to-go-white-96.png" /></td>
                     <td>
-                        <p>
-                            Buy us a 
-                            <asp:LinkButton ID="lnkCoffee" runat="server" OnClick="lnkCoffee_Click" CssClass="hidden-coffee-link">
-                                coffee
-                            </asp:LinkButton> 
-                            to keep us purrfectly productive
+                        <p>Buy us a <asp:LinkButton ID="lnkCoffee" runat="server" OnClick="lnkCoffee_Click" CssClass="hidden-coffee-link">coffee</asp:LinkButton> to keep us purrfectly productive
                         </p>
                     </td>
                 </tr>
@@ -177,7 +172,7 @@
         <div id="popupCoffeeSecret" class="simple-popup" style="display: none;">
             <div class="popup-pink-box">
                   <p>You found a secret pet!</p>
-                <img style="margin-bottom: -2em;" src="Images/Notification%20Happy.png" />
+                <img style="margin-bottom: 1vh;" src="Images/Notification%20Happy.png" />
                 <div class="buttonSection">
                     <asp:Button ID="btnViewSecretPet" CssClass="popup-button" runat="server" Text="Check it out!" OnClick="btnViewSecretPet_Click" />
                 </div>
