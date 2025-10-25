@@ -3623,7 +3623,7 @@ body.page-exit .welcomeBackTextDiv {
 #viewInventoryMainContent .rightPetsSection {
     flex: 4;
     z-index: 12;
-    padding: 0 2em;
+    padding: 0 1em;
     display: flex;
 }
 
@@ -5915,21 +5915,26 @@ table {
     #viewShopMainContent .buttonSection {
         margin: -5.5em 0 0 0;
     }
-    .clickable-shop-header {
-    cursor: default;
-    color: inherit;
-    text-decoration: none;
-    font-size: 2.5rem;
-    margin-bottom: 0.1em;
-    margin-top: 0;
-    text-shadow: 0px 0px 5px dimgrey;
-}
 
-.clickable-shop-header:hover {
-    color: inherit;
-    text-decoration: none;
-    background-color: transparent;
-}
+    #viewShopMainContent .leftCategorySection .button {
+        padding: 0.15em;
+    }
+
+    .clickable-shop-header {
+        cursor: default;
+        color: inherit;
+        text-decoration: none;
+        font-size: 2.5rem;
+        margin-bottom: 0.1em;
+        margin-top: 0;
+        text-shadow: 0px 0px 5px dimgrey;
+    }
+
+    .clickable-shop-header:hover {
+        color: inherit;
+        text-decoration: none;
+        background-color: transparent;
+    }
     /* ---------------------- INVENTORY PAGE ---------------------- */
     #viewInventoryMainContent {
         margin: -0.1em 4em 4em 4em;
@@ -5937,6 +5942,10 @@ table {
 
     #viewInventoryMainContent .buttonSection {
         margin: -5.5em 0 0 0;
+    }
+
+    #viewInventoryMainContent .leftCategorySection .button {
+        padding: 0.15em;
     }
 
     /* ---------------------- FRIENDS PAGES ---------------------- */
@@ -6115,6 +6124,3 @@ table {
     }
 
 }
-
-
-
