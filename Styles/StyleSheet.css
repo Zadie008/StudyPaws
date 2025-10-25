@@ -121,11 +121,15 @@ p {
     border-radius: 3em;
     border: 5px solid white;
     width: 40%;
-    max-width: 1500px;
+    max-width: 1600px;
     min-height: 250px;
     text-align: center;
     max-height: 90vh;
     overflow-y: auto;
+}
+
+#popupCalendar .popup-pink-box {
+    width: 43%;
 }
 
 .popup-pink-box img {
@@ -135,7 +139,7 @@ p {
 
 .popup-pink-box .buttonSection{
     text-align: center;
-    margin-top: 3vh;
+    margin-top: 1vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -150,7 +154,7 @@ p {
     border-radius: 3em;
     border: 5px solid white;
     width: 40%;
-    max-width: 1500px;
+    max-width: 1600px;
     min-height: 250px;
     text-align: center;
 }
@@ -162,7 +166,7 @@ p {
 
 .popup-blue-box .buttonSection {
     text-align: center;
-    margin-top: 3vh;
+    margin-top: 1vh;
     display: flex;
     justify-content: center;
     align-items: center;
