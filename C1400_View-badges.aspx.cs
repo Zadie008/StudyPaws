@@ -150,11 +150,11 @@ public partial class Default2 : System.Web.UI.Page
         {
             case "none":
                 return bronzeDesc; //show bronze if no desc
-            case "bronze":
+            case "Bronze":
                 return silverDesc; //show silver if gold is achieved
-            case "silver":
+            case "Silver":
                 return goldDesc;   //gold if silver achieved
-            case "gold":
+            case "Gold":
                 return goldDesc;   //keep showing gold
             default:
                 return bronzeDesc;
@@ -163,9 +163,9 @@ public partial class Default2 : System.Web.UI.Page
     protected string GetStarHtml(string badgeType)
     {
         int stars = 0;
-        if (badgeType == "bronze") stars = 1;
-        else if (badgeType == "silver") stars = 2;
-        else if (badgeType == "gold") stars = 3;
+        if (badgeType == "Bronze") stars = 1;
+        else if (badgeType == "Silver") stars = 2;
+        else if (badgeType == "Gold") stars = 3;
 
         string filledStar = "<img src='Icons/icons8-star-filled-white-96.png' class='star-icon' />";
         string emptyStar = "<img src='Icons/icons8-star-white-96.png' class='star-icon' />";

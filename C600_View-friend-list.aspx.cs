@@ -459,15 +459,15 @@ public partial class Default2 : System.Web.UI.Page
 
         if (numFriends >= 15)
         {
-            badgeType = "gold";
+            badgeType = "Gold";
         }
         else if (numFriends >= 10)
         {
-            badgeType = "silver";
+            badgeType = "Silver";
         }
         else if (numFriends >= 5)
         {
-            badgeType = "bronze";
+            badgeType = "Bronze";
         }
         else
         {
@@ -493,7 +493,7 @@ public partial class Default2 : System.Web.UI.Page
             DELETE FROM UserBadge 
             WHERE userID = @userID 
             AND badgeID = 13 
-            AND badgeType IN ('bronze', 'silver')";
+            AND badgeType IN ('Bronze', 'Silver')";
 
             MySqlCommand deleteCmd = new MySqlCommand(deleteLowerBadgesQuery, con);
             deleteCmd.Parameters.AddWithValue("@userID", userID);
@@ -1125,15 +1125,15 @@ public partial class Default2 : System.Web.UI.Page
 
         if (receivedRequestsCount >= 15)
         {
-            badgeType = "gold";
+            badgeType = "Gold";
         }
         else if (receivedRequestsCount >= 10)
         {
-            badgeType = "silver";
+            badgeType = "Silver";
         }
         else if (receivedRequestsCount >= 5)
         {
-            badgeType = "bronze";
+            badgeType = "Bronze";
         }
         else
         {
@@ -1162,7 +1162,7 @@ public partial class Default2 : System.Web.UI.Page
             DELETE FROM UserBadge 
             WHERE userID = @userID 
             AND badgeID = 15 
-            AND badgeType IN ('bronze', 'silver')";
+            AND badgeType IN ('Bronze', 'Silver')";
 
             MySqlCommand deleteCmd = new MySqlCommand(deleteLowerBadgesQuery, con);
             deleteCmd.Parameters.AddWithValue("@userID", userID);
