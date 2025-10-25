@@ -12,10 +12,10 @@
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
     <div class="tutorial-container">
-        <img src="Images/Tutorial/TipsAndTricks.png" class="fullscreen-img" alt="Tutorial Screen" />
+        <img src="Images/Tutorial/Tutorial_page_2.png" class="fullscreen-img" alt="Tutorial Screen" />
         <div class="button-container">
-             <a href="Tutorial.aspx" class="tutorial-button">Back</a>
-            <a href="Default.aspx" class="tutorial-button">Thank you</a>
+             <a href="Tutorial.aspx" class="button">Back</a>
+            <a href="Default.aspx" class="button">Thank you!</a>
         </div>
     </div>
 </asp:Content>
