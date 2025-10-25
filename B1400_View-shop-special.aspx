@@ -117,7 +117,19 @@
         <asp:HiddenField ID="hfCurrentCategory" runat="server" Value="SPECIAL" />
 <asp:HiddenField ID="hfSelectedPetID" runat="server"/>
 <asp:HiddenField ID="hfSelectedPetPrice" runat="server" />
-        <h2>Welcome to the Pet Shop!</h2>
+         <h2 class="clickable-shop-header" data-isclickable="true">Welcome to the Pet Shop!</h2>
+<asp:HiddenField ID="hfShopHeaderClicked" runat="server" Value="false" />
+        <asp:Button ID="btnShopHeaderHiddenTrigger" runat="server" style="display: none;" OnClick="btnShopHeaderHiddenTrigger_Click" />
+ <!-- Shop Header Secret Popup -->
+        <div id="popupShopHeaderSecret" class="simple-popup" style="display: none;">
+            <div class="popup-pink-box">
+                <p>You found a secret pet!</p>
+                <img style="margin-bottom: -2em;" src="Images/Notification%20Happy.png" />
+                <div class="buttonSection">
+                    <asp:Button ID="btnViewSecretPet5" CssClass="popup-button" runat="server" Text="Check it out!" OnClick="btnViewSecretPet5_Click" />
+                </div>
+            </div>
+        </div>
         <div class="backgroundColorContainer">
                 <div class="leftCategorySection">
         <asp:Button ID="btnCats" runat="server" CssClass="button" Text="Cats" OnClick="btnCats_Click" />
@@ -349,40 +361,91 @@
             </div>
         </div>
 
-    <script>
-    function showAlreadyOwnedPopup() {
-        var popup = document.getElementById('alreadyOwnedPopup');
-        if (popup) popup.style.display = 'flex';
-    }
-    function hideAlreadyOwnedPopup() {
-        var popup = document.getElementById('alreadyOwnedPopup');
-        if (popup) popup.style.display = 'none';
-    }
-    function showConfirmBuyPopup() {
-        var popup = document.getElementById('confirmBuyPopup');
-        if (popup) popup.style.display = 'flex';
-    }
-    function hideConfirmBuyPopup() {
-        var popup = document.getElementById('confirmBuyPopup');
-        if (popup) popup.style.display = 'none';
-    }
-    function showInsufficientCoinsPopup() {
-        var popup = document.getElementById('insufficientCoinsPopup');
-        if (popup) popup.style.display = 'flex';
-    }
-    function hideInsufficientCoinsPopup() {
-        var popup = document.getElementById('insufficientCoinsPopup');
-        if (popup) popup.style.display = 'none';
-    }
-    function showPurchaseSuccessPopup() {
-        var popup = document.getElementById('purchaseSuccessPopup');
-        if (popup) popup.style.display = 'flex';
-    }
-    function hidePurchaseSuccessPopup() {
-        var popup = document.getElementById('purchaseSuccessPopup');
-        if (popup) popup.style.display = 'none';
-    }
-    </script>
+        <script type="text/javascript">
+            function initShopHeaderClick() {
+                var shopHeader = document.querySelector('.clickable-shop-header');
+                console.log('Shop header found:', !!shopHeader);
+
+                if (shopHeader) {
+                    shopHeader.style.cursor = 'pointer';
+                    shopHeader.onclick = function (event) {
+                        console.log('Shop header clicked!');
+                        event.preventDefault();
+                        event.stopPropagation();
+                        var hiddenField = document.getElementById('<%= hfShopHeaderClicked.ClientID %>');
+                        if (hiddenField) {
+                            hiddenField.value = 'true';
+                            console.log('Shop header hidden field set to true');
+                        }
+                        
+                        var hiddenButton = document.getElementById('<%= btnShopHeaderHiddenTrigger.ClientID %>');
+                        if (hiddenButton) {
+                            console.log('Clicking shop header hidden button');
+                            hiddenButton.click();
+                        }
+                        return false;
+                    };
+                }
+            }
+
+            function showShopHeaderSecretPopup() {
+                console.log('=== showShopHeaderSecretPopup CALLED ===');
+                var popup = document.getElementById('popupShopHeaderSecret');
+                console.log('Shop header secret popup element found:', !!popup);
+
+                if (popup) {
+                    console.log('Showing shop header secret popup');
+                    popup.style.display = 'flex';
+                }
+            }
+
+            function hideShopHeaderSecretPopup() {
+                var popup = document.getElementById('popupShopHeaderSecret');
+                if (popup) {
+                    popup.style.display = 'none';
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                console.log('DOM loaded - initializing shop header click');
+                initShopHeaderClick();
+            });
+
+            setTimeout(initShopHeaderClick, 1000);
+
+            function showAlreadyOwnedPopup() {
+                var popup = document.getElementById('alreadyOwnedPopup');
+                if (popup) popup.style.display = 'flex';
+            }
+            function hideAlreadyOwnedPopup() {
+                var popup = document.getElementById('alreadyOwnedPopup');
+                if (popup) popup.style.display = 'none';
+            }
+            function showConfirmBuyPopup() {
+                var popup = document.getElementById('confirmBuyPopup');
+                if (popup) popup.style.display = 'flex';
+            }
+            function hideConfirmBuyPopup() {
+                var popup = document.getElementById('confirmBuyPopup');
+                if (popup) popup.style.display = 'none';
+            }
+            function showInsufficientCoinsPopup() {
+                var popup = document.getElementById('insufficientCoinsPopup');
+                if (popup) popup.style.display = 'flex';
+            }
+            function hideInsufficientCoinsPopup() {
+                var popup = document.getElementById('insufficientCoinsPopup');
+                if (popup) popup.style.display = 'none';
+            }
+            function showPurchaseSuccessPopup() {
+                var popup = document.getElementById('purchaseSuccessPopup');
+                if (popup) popup.style.display = 'flex';
+            }
+            function hidePurchaseSuccessPopup() {
+                var popup = document.getElementById('purchaseSuccessPopup');
+                if (popup) popup.style.display = 'none';
+            }
+        </script>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

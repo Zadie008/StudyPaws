@@ -1040,4 +1040,105 @@ public partial class Default2 : System.Web.UI.Page
         // Update last known level
         Session["LastKnownLevel"] = currentLevel;
     }
+    // Handle paw hidden button click
+    protected void btnPawHiddenTrigger_Click(object sender, EventArgs e)
+    {
+        if (hfPawClicked.Value == "true")
+        {
+            System.Diagnostics.Debug.WriteLine("Paw hidden trigger clicked - awarding pet");
+            hfPawClicked.Value = "false"; // Reset
+            AwardPawSecretPet();
+        }
+    }
+
+    private void AwardPawSecretPet()
+    {
+        System.Diagnostics.Debug.WriteLine("AwardPawSecretPet called");
+
+        string userID = Session["UserID"] as string;
+
+        if (string.IsNullOrEmpty(userID) && Session["Username"] != null)
+        {
+            string username = Session["Username"].ToString();
+            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            userID = GetUserID(username, cs);
+        }
+
+        if (!string.IsNullOrEmpty(userID))
+        {
+            bool petAdded = InsertPawSecretPet(Convert.ToInt32(userID));
+
+            if (petAdded)
+            {
+                System.Diagnostics.Debug.WriteLine("Paw pet added successfully, showing popup");
+
+                // Use a different approach - register the script and don't do anything else
+                string script = @"
+                console.log('Script executed from C# - showing paw popup');
+                setTimeout(function() {
+                    showPawSecretPopup();
+                }, 100);";
+
+                ScriptManager.RegisterStartupScript(this, GetType(), "showPawPopup", script, true);
+                System.Diagnostics.Debug.WriteLine("Popup script registered");
+            }
+        }
+    }
+
+    // Method to insert the paw secret pet into userPets table
+    private bool InsertPawSecretPet(int userID)
+    {
+        System.Diagnostics.Debug.WriteLine("InsertPawSecretPet called for user " + userID);
+
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            con.Open();
+
+            // First check if the user already has this pet to avoid duplicates
+            // Using petID 28 for the third secret pet (assuming 26=coffee, 27=study spirit)
+            string checkQuery = "SELECT COUNT(*) FROM UserPets WHERE userID = @userID AND petID = 28";
+            using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, con))
+            {
+                checkCmd.Parameters.AddWithValue("@userID", userID);
+                int existingCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+                System.Diagnostics.Debug.WriteLine("Existing paw pets count: " + existingCount);
+
+                if (existingCount > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("User already has paw secret pet");
+                    return false;
+                }
+            }
+
+            // Insert new pet (userPetsID will auto-increment, equippedStatus = 0)
+            string insertQuery = "INSERT INTO UserPets (userID, petID, equippedStatus) VALUES (@userID, 28, 0)";
+            using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, con))
+            {
+                insertCmd.Parameters.AddWithValue("@userID", userID);
+                int rowsAffected = insertCmd.ExecuteNonQuery();
+                System.Diagnostics.Debug.WriteLine("Rows affected by paw insert: " + rowsAffected);
+
+                if (rowsAffected > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("Successfully added pet 28 for user " + userID);
+                    return true;
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("No rows affected by paw insert");
+                    return false;
+                }
+            }
+        }
+    }
+
+    // Redirect to SecretPets page
+    protected void btnViewSecretPet3_Click(object sender, EventArgs e)
+    {
+        // Use this instead of Response.Redirect to avoid ThreadAbortException
+        string script = "window.location.href = 'SecretPets.aspx';";
+        ScriptManager.RegisterStartupScript(this, GetType(), "redirectToSecretPets", script, true);
+    }
 }

@@ -792,4 +792,6 @@ public partial class _Default : System.Web.UI.Page
         return string.Format("~/Images/{0} {1}.png", petType, colourNum);  // png or gif
     }
     // end: home page code
+
+  
 }

@@ -603,4 +603,126 @@ public partial class Default2 : System.Web.UI.Page
         }
     }
     // end: join study session code
+    // Handle delete label hidden button click
+    protected void btnDeleteLabelHiddenTrigger_Click(object sender, EventArgs e)
+    {
+        System.Diagnostics.Debug.WriteLine("=== btnDeleteLabelHiddenTrigger_Click STARTED ===");
+
+        if (hfDeleteLabelClicked.Value == "true")
+        {
+            System.Diagnostics.Debug.WriteLine("Delete label hidden trigger clicked - awarding pet");
+            hfDeleteLabelClicked.Value = "false"; // Reset
+
+            string userID = Session["UserID"] as string;
+
+            if (string.IsNullOrEmpty(userID) && Session["Username"] != null)
+            {
+                string username = Session["Username"].ToString();
+                string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+                userID = GetUserID(username, cs);
+            }
+
+            if (!string.IsNullOrEmpty(userID))
+            {
+                bool petAdded = InsertDeleteLabelSecretPet(Convert.ToInt32(userID));
+
+                if (petAdded)
+                {
+                    System.Diagnostics.Debug.WriteLine("Delete label pet added successfully, showing popup");
+
+                    string script = @"
+                    console.log('Delete label secret script executed');
+                    if (typeof showDeleteSecretPopup === 'function') {
+                        setTimeout(function() {
+                            showDeleteSecretPopup();
+                        }, 500);
+                    } else {
+                        console.error('showDeleteSecretPopup function not found');
+                    }";
+
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showDeleteLabelPopup", script, true);
+                    System.Diagnostics.Debug.WriteLine("Delete label popup script registered");
+                }
+            }
+        }
+
+        System.Diagnostics.Debug.WriteLine("=== btnDeleteLabelHiddenTrigger_Click COMPLETED ===");
+    }
+
+    // Method to insert the delete label secret pet into userPets table
+    private bool InsertDeleteLabelSecretPet(int userID)
+    {
+        System.Diagnostics.Debug.WriteLine("InsertDeleteLabelSecretPet called for user " + userID);
+
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            con.Open();
+
+            // First check if the user already has this pet to avoid duplicates
+            // Using petID 29 for the fourth secret pet
+            string checkQuery = "SELECT COUNT(*) FROM UserPets WHERE userID = @userID AND petID = 29";
+            using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, con))
+            {
+                checkCmd.Parameters.AddWithValue("@userID", userID);
+                int existingCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+                System.Diagnostics.Debug.WriteLine("Existing delete label pets count: " + existingCount);
+
+                if (existingCount > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("User already has delete label secret pet");
+                    return false;
+                }
+            }
+
+            // Insert new pet (userPetsID will auto-increment, equippedStatus = 0)
+            string insertQuery = "INSERT INTO UserPets (userID, petID, equippedStatus) VALUES (@userID, 29, 0)";
+            using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, con))
+            {
+                insertCmd.Parameters.AddWithValue("@userID", userID);
+                int rowsAffected = insertCmd.ExecuteNonQuery();
+                System.Diagnostics.Debug.WriteLine("Rows affected by delete label insert: " + rowsAffected);
+
+                if (rowsAffected > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("Successfully added pet 29 for user " + userID);
+                    return true;
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("No rows affected by delete label insert");
+                    return false;
+                }
+            }
+        }
+    }
+
+    // Redirect to SecretPets page
+    protected void btnViewSecretPet4_Click(object sender, EventArgs e)
+    {
+        // Use JavaScript redirect to avoid ThreadAbortException
+        string script = "window.location.href = 'SecretPets.aspx';";
+        ScriptManager.RegisterStartupScript(this, GetType(), "redirectToSecretPets4", script, true);
+    }
+    private string GetUserID(string username, string connectionString)
+    {
+        string query = "SELECT userID FROM Users WHERE username = @username";
+        using (MySqlConnection con = new MySqlConnection(connectionString))
+        using (MySqlCommand cmd = new MySqlCommand(query, con))
+        {
+            cmd.Parameters.AddWithValue("@username", username);
+            try
+            {
+                con.Open();
+                object result = cmd.ExecuteScalar();
+                return result != null ? result.ToString() : null;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error getting user ID: " + ex.Message);
+                return null;
+            }
+        }
+    }
 }

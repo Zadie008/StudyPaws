@@ -74,7 +74,10 @@
                 </td>
             </tr>
              <tr>
-                <td><asp:Label ID="lblDelete" CssClass="label" runat="server" Text="Delete Profile"></asp:Label></td>
+                <td>
+                    <asp:Label ID="lblDelete" CssClass="label clickable-delete-label" runat="server" Text="Delete Profile" 
+                        data-isclickable="true" />
+                </td>
                 <td>
                     <div class="deleteIconContainer">
                         <asp:ImageButton ID="deleteImageButton" runat="server" ImageUrl="~/Icons/icons8-delete-white-96.png" CssClass="deleteIcon" AlternateText="Delete Profile" OnClientClick="showDeletePopup(); return false;"/>
@@ -89,6 +92,21 @@
                 </td>
             </tr>
         </table>
+
+        <!-- Delete Profile Secret Popup -->
+        <div id="popupDeleteSecret" class="simple-popup" style="display: none;">
+            <div class="popup-pink-box">
+                 <p>You found a secret pet!</p>
+                <img style="margin-bottom: -2em;" src="Images/Notification%20Happy.png" />
+                <div class="buttonSection">
+                    <asp:Button ID="btnViewSecretPet4" CssClass="popup-button" runat="server" Text="Check it out!" OnClick="btnViewSecretPet4_Click" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden fields for delete profile secret -->
+        <asp:HiddenField ID="hfDeleteLabelClicked" runat="server" Value="false" />
+        <asp:Button ID="btnDeleteLabelHiddenTrigger" runat="server" style="display: none;" OnClick="btnDeleteLabelHiddenTrigger_Click" />
 
         <div id="popupDelete" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
@@ -138,14 +156,14 @@
                 var panel = document.getElementById('<%= pnlLogout.ClientID %>');
                 if (panel) {
                     panel.style.display = 'block';
-            
+
                     var popup = panel.querySelector('.simple-popup');
                     if (popup) {
                         popup.style.display = 'flex';
                     }
                 }
             }
-    
+
             function hidePopup() {
                 var logoutPanel = document.getElementById('<%= pnlLogout.ClientID %>');
 
@@ -154,6 +172,53 @@
                     // Also hide the inner popup
                     var logoutPopup = logoutPanel.querySelector('.simple-popup');
                     if (logoutPopup) logoutPopup.style.display = 'none';
+                }
+            }
+
+            // Delete Profile Label Secret
+            function initDeleteLabelClick() {
+                var deleteLabel = document.querySelector('.clickable-delete-label');
+                console.log('Delete label found:', !!deleteLabel);
+                
+                if (deleteLabel) {
+                    deleteLabel.style.cursor = 'pointer';
+                    deleteLabel.onclick = function(event) {
+                        console.log('Delete Profile label clicked!');
+                        event.preventDefault();
+                        event.stopPropagation();
+                        
+                        // Set hidden field and trigger postback
+                        var hiddenField = document.getElementById('<%= hfDeleteLabelClicked.ClientID %>');
+                        if (hiddenField) {
+                            hiddenField.value = 'true';
+                            console.log('Delete label hidden field set to true');
+                        }
+                        
+                        var hiddenButton = document.getElementById('<%= btnDeleteLabelHiddenTrigger.ClientID %>');
+                        if (hiddenButton) {
+                            console.log('Clicking delete label hidden button');
+                            hiddenButton.click();
+                        }
+                        return false;
+                    };
+                }
+            }
+
+            function showDeleteSecretPopup() {
+                console.log('=== showDeleteSecretPopup CALLED ===');
+                var popup = document.getElementById('popupDeleteSecret');
+                console.log('Delete secret popup element found:', !!popup);
+
+                if (popup) {
+                    console.log('Showing delete secret popup');
+                    popup.style.display = 'flex';
+                }
+            }
+
+            function hideDeleteSecretPopup() {
+                var popup = document.getElementById('popupDeleteSecret');
+                if (popup) {
+                    popup.style.display = 'none';
                 }
             }
 
@@ -182,7 +247,13 @@
                         showJoinPopup();
                     }, 1000);
                 }
+
+                // Initialize delete label click
+                initDeleteLabelClick();
             });
+
+            // Also initialize after delay
+            setTimeout(initDeleteLabelClick, 1000);
         </script>
     </div>
 </asp:Content>

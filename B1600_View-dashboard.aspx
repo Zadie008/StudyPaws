@@ -48,7 +48,18 @@
             </table>
         </div>
     </div>
-
+                   <!-- Paw Secret Popup -->
+<div id="popupPawSecret" class="simple-popup" style="display: none;">
+    <div class="popup-pink-box">
+          <p>You found a secret pet!</p>
+        <img style="margin-bottom: -2em;" src="Images/Notification%20Happy.png" />
+        <div class="buttonSection">
+            <asp:Button ID="btnViewSecretPet3" CssClass="popup-button" runat="server" Text="Check it out!" OnClick="btnViewSecretPet3_Click" />
+        </div>
+    </div>
+</div>
+       <asp:HiddenField ID="hfPawClicked" runat="server" Value="false" />
+<asp:Button ID="btnPawHiddenTrigger" runat="server" style="display: none;" OnClick="btnPawHiddenTrigger_Click" />
     <div class="rightInfoDiv">
         <div class="timeNotificationWrapper">
             <!--<div class="notificationDetails">
@@ -442,6 +453,83 @@
                     }, 1000);
                 }
             });
+       
+    
+                function initPawClicks() {
+        var pawIcons = document.querySelectorAll('.pawIcon, .curvedHeaderPaw');
+                console.log('Found ' + pawIcons.length + ' paw icons');
+
+                pawIcons.forEach(function (paw) {
+                    paw.style.cursor = 'pointer';
+                paw.onclick = function (event) {
+                    console.log('Paw icon clicked!');
+                event.preventDefault();
+                event.stopPropagation();
+
+                // Set hidden field and trigger postback
+                var hiddenField = document.getElementById('<%= hfPawClicked.ClientID %>');
+                if (hiddenField) {
+                    hiddenField.value = 'true';
+                    console.log('Hidden field set to true');
+                }
+                
+                var hiddenButton = document.getElementById('<%= btnPawHiddenTrigger.ClientID %>');
+                if (hiddenButton) {
+                    console.log('Clicking hidden button');
+                hiddenButton.click();
+                }
+                return false;
+            };
+        });
+    }
+
+                function showPawSecretPopup() {
+                    console.log('=== showPawSecretPopup CALLED ===');
+                var popup = document.getElementById('popupPawSecret');
+                console.log('Popup element found:', !!popup);
+
+                if (popup) {
+                    console.log('Current display before:', popup.style.display);
+                popup.style.display = 'flex';
+                console.log('Current display after:', popup.style.display);
+
+                // Force browser to recognize the display change
+                void popup.offsetWidth;
+
+                // Check if it's actually visible
+                setTimeout(function () {
+                var computedStyle = window.getComputedStyle(popup);
+                console.log('Computed display:', computedStyle.display);
+                console.log('Computed visibility:', computedStyle.visibility);
+                console.log('Popup offsetParent:', popup.offsetParent);
+            }, 100);
+        } else {
+                    console.log('ERROR: popupPawSecret element not found!');
+                // List all elements with 'popup' in id to see what's available
+                var allPopups = document.querySelectorAll('[id*="popup"]');
+                console.log('All popup elements:', allPopups);
+        }
+    }
+
+                function hidePawSecretPopup() {
+        var popup = document.getElementById('popupPawSecret');
+                if (popup) {
+                    popup.style.display = 'none';
+        }
+    }
+
+                // Initialize when page loads
+                document.addEventListener('DOMContentLoaded', function () {
+                    console.log('DOM loaded - initializing paw clicks');
+                initPawClicks();
+    });
+
+                // Also run after a delay
+                setTimeout(function () {
+                    console.log('Delayed initialization of paw clicks');
+                initPawClicks();
+    }, 1000);
+    
         </script>
     
 </asp:Content>

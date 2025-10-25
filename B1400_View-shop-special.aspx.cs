@@ -1045,4 +1045,100 @@ public partial class B1400_View_shop_special : System.Web.UI.Page
         }
     }
     // end: notification bell code
+    // Handle shop header hidden button click
+    protected void btnShopHeaderHiddenTrigger_Click(object sender, EventArgs e)
+    {
+        System.Diagnostics.Debug.WriteLine("=== btnShopHeaderHiddenTrigger_Click STARTED ===");
+
+        if (hfShopHeaderClicked.Value == "true")
+        {
+            System.Diagnostics.Debug.WriteLine("Shop header hidden trigger clicked - awarding pet");
+            hfShopHeaderClicked.Value = "false";
+
+            string userID = Session["UserID"] as string;
+
+            if (string.IsNullOrEmpty(userID) && Session["Username"] != null)
+            {
+                string username = Session["Username"].ToString();
+                string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+                userID = GetUserID(username, cs);
+            }
+
+            if (!string.IsNullOrEmpty(userID))
+            {
+                bool petAdded = InsertShopHeaderSecretPet(Convert.ToInt32(userID));
+
+                if (petAdded)
+                {
+                    System.Diagnostics.Debug.WriteLine("Shop header pet added successfully, showing popup");
+
+                    string script = @"
+                    console.log('Shop header secret script executed');
+                    if (typeof showShopHeaderSecretPopup === 'function') {
+                        setTimeout(function() {
+                            showShopHeaderSecretPopup();
+                        }, 500);
+                    } else {
+                        console.error('showShopHeaderSecretPopup function not found');
+                    }";
+
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showShopHeaderPopup", script, true);
+                    System.Diagnostics.Debug.WriteLine("Shop header popup script registered");
+                }
+            }
+        }
+
+        System.Diagnostics.Debug.WriteLine("=== btnShopHeaderHiddenTrigger_Click COMPLETED ===");
+    }
+
+    private bool InsertShopHeaderSecretPet(int userID)
+    {
+        System.Diagnostics.Debug.WriteLine("InsertShopHeaderSecretPet called for user " + userID);
+
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            con.Open();
+
+            string checkQuery = "SELECT COUNT(*) FROM UserPets WHERE userID = @userID AND petID = 30";
+            using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, con))
+            {
+                checkCmd.Parameters.AddWithValue("@userID", userID);
+                int existingCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+                System.Diagnostics.Debug.WriteLine("Existing shop header pets count: " + existingCount);
+
+                if (existingCount > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("User already has shop header secret pet");
+                    return false;
+                }
+            }
+
+            string insertQuery = "INSERT INTO UserPets (userID, petID, equippedStatus) VALUES (@userID, 30, 0)";
+            using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, con))
+            {
+                insertCmd.Parameters.AddWithValue("@userID", userID);
+                int rowsAffected = insertCmd.ExecuteNonQuery();
+                System.Diagnostics.Debug.WriteLine("Rows affected by shop header insert: " + rowsAffected);
+
+                if (rowsAffected > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("Successfully added pet 30 for user " + userID);
+                    return true;
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("No rows affected by shop header insert");
+                    return false;
+                }
+            }
+        }
+    }
+
+    protected void btnViewSecretPet5_Click(object sender, EventArgs e)
+    {
+        string script = "window.location.href = 'SecretPets.aspx';";
+        ScriptManager.RegisterStartupScript(this, GetType(), "redirectToSecretPets5", script, true);
+    }
 }

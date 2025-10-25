@@ -176,7 +176,7 @@
          <!-- Coffee Secret Popup -->
         <div id="popupCoffeeSecret" class="simple-popup" style="display: none;">
             <div class="popup-pink-box">
-                <p style="font-size: 2.3em;">A secret has been revealed!</p>
+                  <p>You found a secret pet!</p>
                 <img style="margin-bottom: -2em;" src="Images/Notification%20Happy.png" />
                 <div class="buttonSection">
                     <asp:Button ID="btnViewSecretPet" CssClass="popup-button" runat="server" Text="Check it out!" OnClick="btnViewSecretPet_Click" />
