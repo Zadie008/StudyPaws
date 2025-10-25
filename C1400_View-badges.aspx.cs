@@ -624,4 +624,119 @@ public partial class Default2 : System.Web.UI.Page
         }
     }
     // end: notification bell code
+    protected override void RaisePostBackEvent(IPostBackEventHandler source, string eventArgument)
+    {
+        System.Diagnostics.Debug.WriteLine("RaisePostBackEvent called with: " + eventArgument);
+
+        if (eventArgument == "StudySpiritClick")
+        {
+            System.Diagnostics.Debug.WriteLine("StudySpiritClick detected in RaisePostBackEvent");
+            AwardStudySpiritPet();
+        }
+        else
+        {
+            System.Diagnostics.Debug.WriteLine("Calling base with: " + eventArgument);
+            base.RaisePostBackEvent(source, eventArgument);
+        }
+    }
+
+    private void AwardStudySpiritPet()
+    {
+        System.Diagnostics.Debug.WriteLine("AwardStudySpiritPet called");
+
+        string userID = Session["UserID"] as string;
+        System.Diagnostics.Debug.WriteLine("Session UserID: " + userID);
+
+        if (string.IsNullOrEmpty(userID))
+        {
+            System.Diagnostics.Debug.WriteLine("UserID is null, trying to get from Username");
+            if (Session["Username"] != null)
+            {
+                string username = Session["Username"].ToString();
+                string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+                userID = GetUserID(username, cs);
+                System.Diagnostics.Debug.WriteLine("Retrieved UserID from database: " + userID);
+            }
+        }
+
+        if (!string.IsNullOrEmpty(userID))
+        {
+            System.Diagnostics.Debug.WriteLine("Proceeding with UserID: " + userID);
+            bool petAdded = InsertStudySpiritPet(Convert.ToInt32(userID));
+
+            if (petAdded)
+            {
+                System.Diagnostics.Debug.WriteLine("Pet added successfully, showing popup");
+                System.Diagnostics.Debug.WriteLine("About to register popup script");
+
+                string script = "console.log('Script registered - calling showStudySpiritSecretPopup'); showStudySpiritSecretPopup();";
+                ScriptManager.RegisterStartupScript(this, GetType(), "showStudySpiritPopup", script, true);
+
+                System.Diagnostics.Debug.WriteLine("Popup script registered");
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Pet was NOT added (may already exist)");
+            }
+        }
+        else
+        {
+            System.Diagnostics.Debug.WriteLine("UserID is still null after all attempts");
+        }
+    }
+
+    private bool InsertStudySpiritPet(int userID)
+    {
+        System.Diagnostics.Debug.WriteLine("InsertStudySpiritPet called for user " + userID);
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            con.Open();
+            System.Diagnostics.Debug.WriteLine("Database connection opened");
+            string checkQuery = "SELECT COUNT(*) FROM UserPets WHERE userID = @userID AND petID = 27";
+            using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, con))
+            {
+                checkCmd.Parameters.AddWithValue("@userID", userID);
+                int existingCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+                System.Diagnostics.Debug.WriteLine("Existing pets count: " + existingCount);
+
+                if (existingCount > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("User already has Study Spirit pet");
+                    return false;
+                }
+            }
+            string insertQuery = "INSERT INTO UserPets (userID, petID, equippedStatus) VALUES (@userID, 27, 0)";
+            using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, con))
+            {
+                insertCmd.Parameters.AddWithValue("@userID", userID);
+                int rowsAffected = insertCmd.ExecuteNonQuery();
+                System.Diagnostics.Debug.WriteLine("Rows affected by insert: " + rowsAffected);
+
+                if (rowsAffected > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("Successfully added pet 27 for user " + userID);
+                    return true;
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("No rows affected by insert");
+                    return false;
+                }
+            }
+        }
+    }
+    protected void btnHiddenTrigger_Click(object sender, EventArgs e)
+    {
+        if (hfStudySpiritClicked.Value == "true")
+        {
+            System.Diagnostics.Debug.WriteLine("Hidden trigger clicked - awarding pet");
+            hfStudySpiritClicked.Value = "false"; 
+            AwardStudySpiritPet();
+        }
+    }
+    protected void btnViewSecretPet2_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("SecretPets.aspx");
+    }
 }

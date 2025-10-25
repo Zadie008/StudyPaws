@@ -4585,6 +4585,16 @@ body.page-exit .welcomeBackTextDiv {
     color: white;
     margin-top: 0.3rem;
 }
+.badge-name {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-top: 0.6rem;
+    padding: 0.3rem 0.7rem;
+    border: 2px solid white;
+    border-radius: 1.5rem;
+    background-color: #90a8c3;
+}
 
 /* Badges holder */
 #badgesMainContent .popup-pink-box table tr td p {
@@ -6035,10 +6045,10 @@ table {
         width: 120px;
     }
     .hidden-coffee-link {
-        color: inherit; /* Same as surrounding text */
-        text-decoration: none; /* No underline */
-        cursor: pointer; /* Still clickable */
-        font-weight: normal; /* Not bold */
+        color: inherit; 
+        text-decoration: none; 
+        cursor: pointer; 
+        font-weight: normal; 
     }
 
         .hidden-coffee-link:hover {
