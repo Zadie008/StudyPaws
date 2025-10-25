@@ -9,7 +9,7 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
-public partial class View_Pets_special : System.Web.UI.Page
+public partial class Default2 : System.Web.UI.Page
 {
     private string userID;
     protected void Page_Load(object sender, EventArgs e)
@@ -61,6 +61,8 @@ public partial class View_Pets_special : System.Web.UI.Page
     }
 
     // start: view pets code
+
+    // DISPLAYING THE OWNED PETS OF THE USER
     private void LoadOwnedPets(string userID)
     {
         ContentPlaceHolder content = (ContentPlaceHolder)Master.FindControl("mainContentPlaceHolder");
@@ -75,7 +77,7 @@ public partial class View_Pets_special : System.Web.UI.Page
         using (MySqlCommand cmd = new MySqlCommand(command, con))
         {
             cmd.Parameters.AddWithValue("@userID", userID);
-            cmd.Parameters.AddWithValue("@petType", "Special"); // PET TYPE~~~~
+            cmd.Parameters.AddWithValue("@petType", "Secret"); // PET TYPE~~~~
 
             try
             {
@@ -119,7 +121,7 @@ public partial class View_Pets_special : System.Web.UI.Page
 
             if (petImg != null && selectBtn != null && circleDiv != null)
             {
-                petImg.ImageUrl = string.Format("Images/Special {0}.png", pet.ColourNum); // PET TYPE~~~~
+                petImg.ImageUrl = string.Format("Images/Secret {0}.png", pet.ColourNum); // PET TYPE~~~~
                 petImg.Visible = true;
 
                 selectBtn.Visible = true;
@@ -152,6 +154,7 @@ public partial class View_Pets_special : System.Web.UI.Page
         }
     }
 
+    // EQUIPPING THE HOME PAGE PET (UPDATING THE EQUIPPEDSTATUS)
     protected void Page_Init(object sender, EventArgs e)
     {
         btnEquip.Click += new EventHandler(btnEquip_Click);
@@ -182,7 +185,7 @@ public partial class View_Pets_special : System.Web.UI.Page
 
             // 2. get petID
             int petID = -1;
-            string getPetIDQuery = "SELECT petID FROM Pet WHERE petType = 'Special' AND colourNum = @colourNum"; // PET TYPE~~~~
+            string getPetIDQuery = "SELECT petID FROM Pet WHERE petType = 'Secret' AND colourNum = @colourNum"; // PET TYPE~~~~
 
             using (MySqlCommand getPetIDCmd = new MySqlCommand(getPetIDQuery, con))
             {
@@ -209,7 +212,7 @@ public partial class View_Pets_special : System.Web.UI.Page
         }
 
         // update session variable
-        Session["EquippedPetImagePath"] = string.Format("Images/Special {0}.png", selectedColourNum); // PET TYPE~~~~
+        Session["EquippedPetImagePath"] = string.Format("Images/Secret {0}.png", selectedColourNum); // PET TYPE~~~~
 
         // reload pets to reflect new equipped status
         LoadOwnedPets(userID);
@@ -227,12 +230,13 @@ public partial class View_Pets_special : System.Web.UI.Page
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         int petID = -1;
         int sellPrice = 0;
+        string petType = "";
 
         using (MySqlConnection con = new MySqlConnection(cs))
         {
             con.Open();
 
-            using (MySqlCommand cmd = new MySqlCommand("SELECT Pet.petID, Pet.sellPrice FROM Pet INNER JOIN UserPets ON Pet.petID = UserPets.petID WHERE UserPets.userID = @userID AND Pet.petType = 'Special' AND Pet.colourNum = @colourNum", con)) // PET TYPE~~~~
+            using (MySqlCommand cmd = new MySqlCommand("SELECT Pet.petID, Pet.sellPrice FROM Pet INNER JOIN UserPets ON Pet.petID = UserPets.petID WHERE UserPets.userID = @userID AND Pet.petType = 'Cat' AND Pet.colourNum = @colourNum", con)) // PET TYPE~~~~
             {
                 cmd.Parameters.AddWithValue("@userID", userID);
                 cmd.Parameters.AddWithValue("@colourNum", selectedColourNum);
@@ -248,11 +252,17 @@ public partial class View_Pets_special : System.Web.UI.Page
             }
         }
 
+        if (selectedColourNum == "1" && petType == "Cat")
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "cannotSell", "showCannotSellPopup();", true);
+            return;
+        }
+
         Session["petID"] = petID;
         Session["sellPrice"] = sellPrice;
         Session["colourNum"] = selectedColourNum;
 
-        lblSellPrice.Text = sellPrice.ToString(); // UPDATE COIN LABEL
+    
         ScriptManager.RegisterStartupScript(this, GetType(), "showSellPopup", "showSellPopup();", true);
     }
 
@@ -469,6 +479,10 @@ public partial class View_Pets_special : System.Web.UI.Page
     protected void btnSpecial_Click(object sender, EventArgs e)
     {
         Response.Redirect("A1800_View-pets-special.aspx");
+    }
+    protected void btnSecret_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("SecretPets.aspx");
     }
     // end: view pets code
 
@@ -813,10 +827,7 @@ public partial class View_Pets_special : System.Web.UI.Page
             ShowNextInvite();
         }
     }
-    protected void btnSecret_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("SecretPets.aspx");
-    }
+
     private void LoadUpcomingSessions()
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -862,7 +873,7 @@ public partial class View_Pets_special : System.Web.UI.Page
 
     protected void btnOk_Click(object sender, EventArgs e)
     {
-        Response.Redirect("A1800_View-pets-special.aspx");
+        Response.Redirect("A1800_View-pets.aspx");
     }
 
     protected void btnSure_Click(object sender, EventArgs e)
@@ -886,12 +897,12 @@ public partial class View_Pets_special : System.Web.UI.Page
 
     protected void btnNotSure_Click(object sender, EventArgs e)
     {
-        Response.Redirect("A1800_View-pets-special.aspx");
+        Response.Redirect("A1800_View-pets.aspx");
     }
 
     protected void btnOkayDeclined_Click(object sender, EventArgs e)
     {
-        Response.Redirect("A1800_View-pets-special.aspx");
+        Response.Redirect("A1800_View-pets.aspx");
     }
 
     protected void btnJoin_Click(object sender, EventArgs e)

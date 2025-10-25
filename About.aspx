@@ -116,10 +116,18 @@
     <div id="aboutMainContent">
         <h2>About Us</h2>
         <div class="backgroundColorContainer">
-            <table id="coffeeTable">
+                               <table id="coffeeTable">
                 <tr>
                     <td><img src="Icons/icons8-coffee-to-go-white-96.png" /></td>
-                    <td><p>Buy us a coffee to keep us purrfectly productive</p></td>
+                    <td>
+                        <p>
+                            Buy us a 
+                            <asp:LinkButton ID="lnkCoffee" runat="server" OnClick="lnkCoffee_Click" CssClass="hidden-coffee-link">
+                                coffee
+                            </asp:LinkButton> 
+                            to keep us purrfectly productive
+                        </p>
+                    </td>
                 </tr>
             </table>
             <table id="madeByTable">
@@ -165,7 +173,16 @@
                 </tr>
             </table>
         </div>
-
+         <!-- Coffee Secret Popup -->
+        <div id="popupCoffeeSecret" class="simple-popup" style="display: none;">
+            <div class="popup-pink-box">
+                <p style="font-size: 2.3em;">A secret has been revealed!</p>
+                <img style="margin-bottom: -2em;" src="Images/Notification%20Happy.png" />
+                <div class="buttonSection">
+                    <asp:Button ID="btnViewSecretPet" CssClass="popup-button" runat="server" Text="Check it out!" OnClick="btnViewSecretPet_Click" />
+                </div>
+            </div>
+        </div>
         <!--does not have notification-->
         <div id="popupNoNotifications" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
@@ -246,6 +263,17 @@
             </div>
         </div>
     </div>
+
+           <script type="text/javascript">
+               function showCoffeeSecretPopup() {
+                   document.getElementById('popupCoffeeSecret').style.display = 'flex';
+               }
+
+               function hideCoffeeSecretPopup() {
+                   document.getElementById('popupCoffeeSecret').style.display = 'none';
+               }
+
+           </script>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">

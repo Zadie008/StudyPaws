@@ -465,7 +465,10 @@ public partial class View_Pets_dogs : System.Web.UI.Page
     {
         Response.Redirect("A1800_View-pets-farm.aspx");
     }
-
+    protected void btnSecret_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("SecretPets.aspx");
+    }
     protected void btnSpecial_Click(object sender, EventArgs e)
     {
         Response.Redirect("A1800_View-pets-special.aspx");

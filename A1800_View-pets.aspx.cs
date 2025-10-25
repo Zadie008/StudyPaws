@@ -480,6 +480,10 @@ public partial class View_pets : System.Web.UI.Page
     {
         Response.Redirect("A1800_View-pets-special.aspx");
     }
+    protected void btnSecret_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("SecretPets.aspx");
+    }
     // end: view pets code
 
     // start: header profile code

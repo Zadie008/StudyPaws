@@ -1,15 +1,15 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="A1800_View-pets-fuzzy.aspx.cs" Inherits="View_Pets_fuzzy" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="tab" Runat="Server">
+<asp:Content ID="Content1" ContentPlaceHolderID="tab" runat="Server">
     Inventory
 </asp:Content>
 
-<asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" Runat="Server">
+<asp:Content ID="Content2" ContentPlaceHolderID="headerContentPlaceHolder" runat="Server">
     <div class="accountInfoDiv">
         <div class="profileDiv">
             <a href="C100-C500_Profile.aspx" class="profileIconLink">
                 <div class="profileIcon">
-                    <div id="profileCircle" runat="server" ClientIDMode="Static"></div>
+                    <div id="profileCircle" runat="server" clientidmode="Static"></div>
                     <asp:Image ID="profilePet" runat="server" />
                 </div>
             </a>
@@ -77,17 +77,19 @@
             <text>
                 <textPath href="#curve" startOffset="50%" text-anchor="middle">
                     <a href="Default.aspx" class="curvedHeaderLink">
-                        StudyP<tspan dx="0.7em">w</tspan>s
+                        StudyP
+<tspan dx="0.7em">w</tspan>s
                     </a>
                 </textPath>
             </text>
         </svg>
-        <a href="Default.aspx"><img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" /></a>
+        <a href="Default.aspx">
+            <img class="curvedHeaderPaw" src="Icons/icons8-cat-footprint-filled-white-96.png" alt="paw" /></a>
         <h2><a href="Default.aspx">purrfectly productive</a></h2>
     </div>
 </asp:Content>
 
-<asp:Content ID="Content3" ContentPlaceHolderID="navContent" Runat="Server">
+<asp:Content ID="Content3" ContentPlaceHolderID="navContent" runat="Server">
     <!--navigation to copy and paste-->
     <div class="collapsedNav">
         <div class="navbar">
@@ -113,7 +115,7 @@
     </div>
 </asp:Content>
 
-<asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
+<asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" runat="Server">
     <div id="viewInventoryMainContent">
         <asp:HiddenField ID="hfCurrentCategory" runat="server" Value="FUZZY" />
         <h2>Your inventory</h2>
@@ -124,11 +126,13 @@
                 <asp:Button ID="btnFuzzy" runat="server" CssClass="button buttonSelected" Text="Fuzzy" OnClick="btnFuzzy_Click" />
                 <asp:Button ID="btnFarm" runat="server" CssClass="button" Text="Farm" OnClick="btnFarm_Click" />
                 <asp:Button ID="btnSpecial" runat="server" CssClass="button" Text="Special" OnClick="btnSpecial_Click" />
+                <asp:Button ID="btnSecret" runat="server" CssClass="button" Text="Secret" OnClick="btnSecret_Click" />
             </div>
             <div class="rightPetsSection">
                 <table>
                     <tr>
-                        <td><div class="petIcon">
+                        <td>
+                            <div class="petIcon">
                                 <div id="circle1" class="petCircle" runat="server"></div>
                                 <asp:Image ID="imgPet1" runat="server" CssClass="petImage" ImageUrl="Images/Fuzzy 1.png" Width="130" />
                             </div>
@@ -159,11 +163,16 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><asp:Button ID="btnSelect1" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
-                        <td><asp:Button ID="btnSelect2" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
-                        <td><asp:Button ID="btnSelect3" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
-                        <td><asp:Button ID="btnSelect4" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
-                        <td><asp:Button ID="btnSelect5" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
+                        <td>
+                            <asp:Button ID="btnSelect1" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
+                        <td>
+                            <asp:Button ID="btnSelect2" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
+                        <td>
+                            <asp:Button ID="btnSelect3" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
+                        <td>
+                            <asp:Button ID="btnSelect4" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
+                        <td>
+                            <asp:Button ID="btnSelect5" runat="server" CssClass="button" Text="Select" UseSubmitBehavior="false" OnClientClick="return false;" /></td>
                     </tr>
                 </table>
             </div>
@@ -192,7 +201,8 @@
                                 <img class="paw" src="Icons/icons8-cat-footprint-filled-white-96.png" width="30" />
                             </div>
                         </td>
-                        <td><asp:Label ID="lblSellPrice" runat="server" Text="0"></asp:Label></td>
+                        <td>
+                            <asp:Label ID="lblSellPrice" runat="server" Text="0"></asp:Label></td>
                         <td>?</td>
                     </tr>
                 </table>
@@ -289,7 +299,6 @@
     <audio id="equipSound" src="Audio/soundEffectPop_1.mp3" preload="auto"></audio>
 </asp:Content>
 
-<asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
-
+<asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" runat="Server">
 </asp:Content>
 

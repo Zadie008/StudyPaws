@@ -600,7 +600,10 @@ public partial class View_Pets_fuzzy : System.Web.UI.Page
             lblXPPercentage.Text = "100%";
         }
     }
-
+    protected void btnSecret_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("SecretPets.aspx");
+    }
     private void GetUserStats(string connectionString, string userID)
     {
         string query = "SELECT userCoinCount FROM Users WHERE userID = @userID";

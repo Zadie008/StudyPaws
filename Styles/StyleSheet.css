@@ -6034,6 +6034,18 @@ table {
     #creditsTable img {
         width: 120px;
     }
+    .hidden-coffee-link {
+        color: inherit; /* Same as surrounding text */
+        text-decoration: none; /* No underline */
+        cursor: pointer; /* Still clickable */
+        font-weight: normal; /* Not bold */
+    }
+
+        .hidden-coffee-link:hover {
+            color: inherit;  Same color on hover 
+            text-decoration: none;  No underline on hover 
+            background-color: transparent;  No background 
+        }
 
     /* ---------------------- LANDING PAGE ---------------------- */
     #landingPageDiv img {
@@ -6068,5 +6080,6 @@ table {
     }
 
 }
+
 
 

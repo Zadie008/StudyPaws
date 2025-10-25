@@ -624,7 +624,10 @@ public partial class View_Pets_farm : System.Web.UI.Page
             }
         }
     }
-
+    protected void btnSecret_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("SecretPets.aspx");
+    }
     private void GetUserProfileIcon(string connectionString, string userID)
     {
         string query = "SELECT iconNum FROM Users WHERE userID = @userID";

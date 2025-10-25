@@ -504,4 +504,74 @@ public partial class Default2 : System.Web.UI.Page
         }
     }
     // end: notification bell code
+    protected void lnkCoffee_Click(object sender, EventArgs e)
+    {
+        string userID = Session["UserID"] as string;
+
+        if (string.IsNullOrEmpty(userID))
+        {
+            if (Session["Username"] != null)
+            {
+                string username = Session["Username"].ToString();
+                string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+                userID = GetUserID(username, cs);
+            }
+        }
+
+        if (!string.IsNullOrEmpty(userID))
+        {
+            bool petAdded = InsertCoffeePet(Convert.ToInt32(userID));
+
+            if (petAdded)
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "showCoffeePopup",
+                    "showCoffeeSecretPopup();", true);
+            }
+        }
+        else
+        {
+            System.Diagnostics.Debug.WriteLine("User not logged in for coffee click");
+        }
+    }
+
+    private bool InsertCoffeePet(int userID)
+    {
+        string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+        using (MySqlConnection con = new MySqlConnection(cs))
+        {
+            con.Open();
+            string checkQuery = "SELECT COUNT(*) FROM UserPets WHERE userID = @userID AND petID = 26";
+            using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, con))
+            {
+                checkCmd.Parameters.AddWithValue("@userID", userID);
+                int existingCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                if (existingCount > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("User already has coffee pet");
+                    return false;
+                }
+            }
+
+            string insertQuery = "INSERT INTO UserPets (userID, petID, equippedStatus) VALUES (@userID, 26, 0)";
+            using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, con))
+            {
+                insertCmd.Parameters.AddWithValue("@userID", userID);
+                int rowsAffected = insertCmd.ExecuteNonQuery();
+
+                if (rowsAffected > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("Successfully added pet 26 for user " + userID);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+    protected void btnViewSecretPet_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("SecretPets.aspx");
+    }
 }
