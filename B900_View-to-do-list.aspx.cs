@@ -426,23 +426,32 @@ public partial class Default2 : System.Web.UI.Page
                 {
                     con.Open();
 
-                    // Get current XP
-                    string selectXPQuery = "SELECT userXP FROM Users WHERE userID = @userID";
-                    MySqlCommand selectXPCmd = new MySqlCommand(selectXPQuery, con);
-                    selectXPCmd.Parameters.AddWithValue("@userID", userID);
+                    // Get current XP and level
+                    string selectQuery = @"
+                    SELECT u.userXP, cl.levelID 
+                    FROM Users u 
+                    INNER JOIN CurrentLevel cl ON u.userID = cl.userID 
+                    WHERE u.userID = @userID";
+                    MySqlCommand selectCmd = new MySqlCommand(selectQuery, con);
+                    selectCmd.Parameters.AddWithValue("@userID", userID);
 
-                    object xpObj = selectXPCmd.ExecuteScalar();
-                    int currentXP = (xpObj != null && xpObj != DBNull.Value) ? Convert.ToInt32(xpObj) : 0;
+                    int currentXP = 0;
+                    int currentLevel = 1;
+
+                    using (MySqlDataReader reader = selectCmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            currentXP = reader["userXP"] != DBNull.Value ? Convert.ToInt32(reader["userXP"]) : 0;
+                            currentLevel = reader["levelID"] != DBNull.Value ? Convert.ToInt32(reader["levelID"]) : 1;
+                        }
+                        reader.Close();
+                    }
+
+                    // Add XP for completing task
                     int newXP = currentXP + 1;
 
-                    // Update XP
-                    string updateXPQuery = "UPDATE Users SET userXP = @newXP WHERE userID = @userID";
-                    MySqlCommand updateXPCmd = new MySqlCommand(updateXPQuery, con);
-                    updateXPCmd.Parameters.AddWithValue("@newXP", newXP);
-                    updateXPCmd.Parameters.AddWithValue("@userID", userID);
-                    updateXPCmd.ExecuteNonQuery();
-
-                    // Check new level
+                    // Check if user leveled up
                     string getNewLevelQuery = "SELECT MAX(levelNum) FROM Level WHERE xpAmount <= @newXP";
                     MySqlCommand getNewLevelCmd = new MySqlCommand(getNewLevelQuery, con);
                     getNewLevelCmd.Parameters.AddWithValue("@newXP", newXP);
@@ -450,16 +459,30 @@ public partial class Default2 : System.Web.UI.Page
                     object newLevelObj = getNewLevelCmd.ExecuteScalar();
                     int newLevelNum = (newLevelObj != null && newLevelObj != DBNull.Value) ? Convert.ToInt32(newLevelObj) : 1;
 
-                    // Get current level
-                    string getCurrentLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
-                    MySqlCommand getCurrentLevelCmd = new MySqlCommand(getCurrentLevelQuery, con);
-                    getCurrentLevelCmd.Parameters.AddWithValue("@userID", userID);
-
-                    object currentLevelObj = getCurrentLevelCmd.ExecuteScalar();
-                    int currentLevel = (currentLevelObj != null && currentLevelObj != DBNull.Value) ? Convert.ToInt32(currentLevelObj) : 1;
-
+                    // RESET XP TO 0 WHEN LEVELING UP
+                    int finalXP = newXP;
                     if (newLevelNum > currentLevel)
                     {
+                        // When leveling up, reset XP to 0 + any overflow
+                        // Get the XP required for the new level
+                        string getLevelXPQuery = "SELECT xpAmount FROM Level WHERE levelNum = @levelNum";
+                        MySqlCommand getLevelXPCmd = new MySqlCommand(getLevelXPQuery, con);
+                        getLevelXPCmd.Parameters.AddWithValue("@levelNum", newLevelNum);
+                        object levelXPObj = getLevelXPCmd.ExecuteScalar();
+
+                        if (levelXPObj != null && levelXPObj != DBNull.Value)
+                        {
+                            int levelXPRequirement = Convert.ToInt32(levelXPObj);
+                            // Calculate overflow XP (XP earned beyond the level requirement)
+                            finalXP = newXP - levelXPRequirement;
+                            // Ensure XP doesn't go negative
+                            if (finalXP < 0) finalXP = 0;
+                        }
+                        else
+                        {
+                            finalXP = 0; // Reset to 0 if we can't calculate overflow
+                        }
+
                         // Update level
                         string updateLevelQuery = "UPDATE CurrentLevel SET levelID = @newLevelNum WHERE userID = @userID";
                         MySqlCommand updateLevelCmd = new MySqlCommand(updateLevelQuery, con);
@@ -467,6 +490,7 @@ public partial class Default2 : System.Web.UI.Page
                         updateLevelCmd.Parameters.AddWithValue("@userID", userID);
                         updateLevelCmd.ExecuteNonQuery();
 
+                        // Award level badges
                         if (newLevelNum >= 25)
                         {
                             AwardBadgeStatic(con, Convert.ToInt32(userID), 16, "Gold");
@@ -480,13 +504,20 @@ public partial class Default2 : System.Web.UI.Page
                             AwardBadgeStatic(con, Convert.ToInt32(userID), 16, "Bronze");
                         }
 
-                        // Store level up info in session
+                       // Store level up info
                         Session["ShowLevelUpPopup"] = true;
                         Session["CurrentLevel"] = newLevelNum;
 
-                        // Show Level Up popup
+                       
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowLevelUp", "showLevelUpPopup(" + newLevelNum + ");", true);
                     }
+
+                    // Update XP (either incremented or reset after level up)
+                    string updateXPQuery = "UPDATE Users SET userXP = @finalXP WHERE userID = @userID";
+                    MySqlCommand updateXPCmd = new MySqlCommand(updateXPQuery, con);
+                    updateXPCmd.Parameters.AddWithValue("@finalXP", finalXP);
+                    updateXPCmd.Parameters.AddWithValue("@userID", userID);
+                    updateXPCmd.ExecuteNonQuery();
                 }
                 catch (Exception ex)
                 {
