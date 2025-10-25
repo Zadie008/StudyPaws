@@ -473,31 +473,28 @@ function showTimeUpPopup() {
     });
 }
 
-function hideTimeUpPopup() {
+function hideTimeUpPopup() { /* TAMMY CHANGED*/
     const minutesStudied = Math.floor(initialTime / 60);
     PageMethods.UpdateUserXP(minutesStudied, function (response) {
         console.log("Rewards updated:", response);
-        // Check if user leveled up
+        // TAMMY ADDED - START
         if (response.startsWith("LevelUp:")) {
             const parts = response.split(":");
             const newLevel = parts[1];
             const xpEarned = parts[2];
             const coinsEarned = parts[3];
 
-            console.log('LEVEL UP DETECTED! New level: ' + newLevel);
-
-            // Hide the time up popup and show level up popup with confetti
             document.getElementById("popupTimeUp").style.display = "none";
             showLevelUpPopup(newLevel);
         } else if (response.startsWith("Success:")) {
-            // No level up, just go to default page
-            document.getElementById("popupTimeUp").style.display = "none";
-            window.location.href = "Default.aspx";
-        } else {
-            console.error("Error updating rewards:", response);
             document.getElementById("popupTimeUp").style.display = "none";
             window.location.href = "Default.aspx";
         }
+        else {
+            console.error("Error updating rewards:", error);
+            document.getElementById("popupTimeUp").style.display = "none";
+            window.location.href = "Default.aspx";
+        } // TAMMY ADDED - END
     }, function (error) {
         console.error("Error updating rewards:", error);
         document.getElementById("popupTimeUp").style.display = "none";
@@ -834,5 +831,4 @@ if (window.location.pathname.toLowerCase().includes("c100_register.aspx")) {
             }
         }
     });
-
 }

@@ -85,7 +85,6 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" runat="Server">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <div class="viewTimerMainContent">
         <div class="timeSection">
             <div class="leftSection">
@@ -184,116 +183,12 @@
     </div>
 </div>
 
-
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    </div>
 
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" />
     <audio id="timerStartSound" src="Audio/timerStartSound.mp3" preload="auto"></audio>
     <audio id="timerEndSound" src="Audio/timerEndSound.mp3" preload="auto"></audio>
-<script type="text/javascript">
-    // Confetti Functions - ORIGINAL VERSION
-    function triggerConfetti() {
-        console.log('Triggering confetti');
-        // Major explosion
-        confetti({
-            particleCount: 300,
-            spread: 100,
-            origin: { y: 0.6 },
-            colors: ['#F4CAE0', '#D7B9D5', '#ADA7C9', '#90A8C3', '#64A6BD', '#FFFFFF']
-        });
-
-        // Continuous falling confetti for 5 seconds
-        const duration = 5000;
-        const end = Date.now() + duration;
-
-        (function frame() {
-            confetti({
-                particleCount: 5,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0 },
-                colors: ['#F4CAE0', '#D7B9D5', '#ADA7C9']
-            });
-            confetti({
-                particleCount: 5,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1 },
-                colors: ['#90A8C3', '#64A6BD', '#FFFFFF']
-            });
-
-            if (Date.now() < end) {
-                requestAnimationFrame(frame);
-            }
-        }());
-    }
-
-    function showLevelUpPopup(newLevel) {
-        console.log('Showing level up popup for level:', newLevel);
-
-        // Set the level text
-        document.getElementById('newLevelSpan').innerText = newLevel;
-
-        // Show the popup
-        document.getElementById('popupLevelUp').style.display = 'flex';
-
-        console.log('Popup visible, triggering confetti behind it');
-
-        // Trigger confetti immediately - it will appear behind the popup
-        triggerConfetti();
-    }
-
-    function hideLevelUpPopup() {
-        console.log('Hiding level up popup');
-        document.getElementById('popupLevelUp').style.display = 'none';
-        window.location.href = "Default.aspx";
-        return false;
-    }
-
-    // Check for level up on page load
-    window.onload = function () {
-        console.log('Page loaded, checking for level up...');
-
-    // Check if we need to show level up popup from session
-    <% if (Session["ShowLevelUpPopup"] != null && (bool)Session["ShowLevelUpPopup"]) { %>
-       console.log('Session level up detected: <%= Session["CurrentLevel"] %>');
-       showLevelUpPopup(<%= Session["CurrentLevel"] %>);
-        <% Session["ShowLevelUpPopup"] = false; %>
-    <% } else { %>
-        console.log('No level up detected in session');
-    <% } %>
-
-       // Add proper event listeners to test buttons
-       const testConfettiBtn = document.getElementById('testConfettiBtn');
-       const testLevelUpBtn = document.getElementById('testLevelUpBtn');
-
-       if (testConfettiBtn) {
-           testConfettiBtn.addEventListener('click', function (e) {
-               e.preventDefault();
-               e.stopPropagation();
-               console.log('Testing confetti...');
-               triggerConfetti();
-               return false;
-           });
-       }
-
-       if (testLevelUpBtn) {
-           testLevelUpBtn.addEventListener('click', function (e) {
-               e.preventDefault();
-               e.stopPropagation();
-               console.log('Testing level up popup...');
-               showLevelUpPopup(5);
-               return false;
-           });
-       }
-
-       console.log('Test buttons initialized');
-    };
-
-</script>
-
-<!-- Test buttons - COMPLETELY SEPARATE from form -->
-<button id="testConfettiBtn" type="button" style="position: fixed; top: 10px; right: 10px; z-index: 10001; background: #F4CAE0; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer;">Test Confetti</button>
-<button id="testLevelUpBtn" type="button" style="position: fixed; top: 50px; right: 10px; z-index: 10001; background: #64A6BD; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer;">Test Level Up</button>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" runat="Server">
