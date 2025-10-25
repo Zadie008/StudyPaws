@@ -124,9 +124,10 @@
                 <!-- Header -->
                 <div class="header-container">
                     <h2>Your friends</h2>
-                    <asp:ImageButton ID="btnMail" runat="server" ImageUrl="Icons/icons8-mail-white-96.png" CssClass="mailIcon" OnClick="btnMail_Click" CausesValidation="false" />
+                    <div class="mailIconWrapper">
+                        <asp:ImageButton ID="btnMail" runat="server" ImageUrl="Icons/icons8-mail-white-96.png" CssClass="mailIcon" OnClick="btnMail_Click" CausesValidation="false" />
+                    </div>
                 </div>
-
 
                 <!-- Friend Request Notification Panel -->
                 <asp:Panel ID="pnlFriendRequests" runat="server" Visible="false" CssClass="simple-popup" Style="display: none;">
@@ -252,7 +253,6 @@
                 <asp:AsyncPostBackTrigger ControlID="btnLaterGift" EventName="Click" />
                 <asp:AsyncPostBackTrigger ControlID="btnConfirmDeleteFriend" EventName="Click" />
                 <asp:AsyncPostBackTrigger ControlID="btnCancelDeleteFriend" EventName="Click" />
-                <%--<asp:AsyncPostBackTrigger ControlID="btnSendGift" EventName="Click" />--%>
                 <asp:AsyncPostBackTrigger ControlID="btnSearch" EventName="Click" />
             </Triggers>
         </asp:UpdatePanel>

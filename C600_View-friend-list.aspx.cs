@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Security;
 using System.Web.Services;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 public partial class Default2 : System.Web.UI.Page
@@ -38,7 +39,7 @@ public partial class Default2 : System.Web.UI.Page
 
                 if (!string.IsNullOrEmpty(userID))
                 {
-                    Session["userID"] = userID; // Ensure userID is in session
+                    Session["userID"] = userID;
                     int userXP = GetUserXP(cs, userID);
                     LoadFriends();
                     Tuple<int, int, int> levelInfo = GetLevelInformation(cs, userID);
@@ -48,13 +49,14 @@ public partial class Default2 : System.Web.UI.Page
                     LoadUpcomingSessions();
 
                     int currentLevel = levelInfo.Item1;
-                    int currentLevelXpAmount = levelInfo.Item2; // XP needed to reach current level
-                    int nextLevelXpAmount = levelInfo.Item3; // XP needed to reach next level
+                    int currentLevelXpAmount = levelInfo.Item2;
+                    int nextLevelXpAmount = levelInfo.Item3;
 
                     lblLevelNumber.Text = currentLevel.ToString();
-
-                    // Calculate progress for the progress bar
                     CalculateXPProgressBar(userXP, currentLevelXpAmount, nextLevelXpAmount);
+
+                 
+                    CheckAndShowMailNotification();
                 }
             }
             else
@@ -63,6 +65,9 @@ public partial class Default2 : System.Web.UI.Page
             }
             ShowNextInvite(false);
         }
+
+        // Also check on postbacks to keep the badge updated
+        CheckAndShowMailNotification();
         ScriptManager1.RegisterAsyncPostBackControl(GridView1);
     }
 
@@ -290,6 +295,7 @@ public partial class Default2 : System.Web.UI.Page
             ShowNextGiftOrClose();
             Response.Redirect("C600_View-friend-list.aspx");
         }
+        CheckAndShowMailNotification();
     }
     protected void btnLaterGift_Click(object sender, EventArgs e)
     {
@@ -418,6 +424,7 @@ public partial class Default2 : System.Web.UI.Page
             ShowNextRequestOrClose();
         }
         updFriendRequests.Update();
+        CheckAndShowMailNotification();
     }
     private void UpdateNumFriends(MySqlConnection con, string userID)
     {
@@ -538,6 +545,7 @@ public partial class Default2 : System.Web.UI.Page
             ShowNextRequestOrClose();
         }
         updFriendRequests.Update();
+        CheckAndShowMailNotification();
     }
 
     private void ShowNextRequestOrClose()
@@ -1390,6 +1398,23 @@ public partial class Default2 : System.Web.UI.Page
         }
     }
     // end: notification bell code
+    private void CheckAndShowMailNotification()
+    {
+        DataTable pendingRequests = LoadPendingFriendRequests();
+        DataTable pendingGifts = LoadPendingGifts();
+        bool hasNotifications = pendingRequests.Rows.Count > 0 || pendingGifts.Rows.Count > 0;
+
+        // Direct reference to the button (make sure it's inside UpdatePanel)
+        if (btnMail != null)
+        {
+            btnMail.ImageUrl = hasNotifications ? "Icons/icons8-love-mail-white-96.png" : "Icons/icons8-mail-white-96.png";
+            System.Diagnostics.Debug.WriteLine("Mail icon updated to: " + btnMail.ImageUrl);
+        }
+        else
+        {
+            System.Diagnostics.Debug.WriteLine("btnMail is null - control not found");
+        }
+    }
 }
 
 public class FriendRequest

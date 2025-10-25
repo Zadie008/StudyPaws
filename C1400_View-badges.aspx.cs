@@ -59,6 +59,7 @@ public partial class Default2 : System.Web.UI.Page
     public class BadgeIcon
     {
         public string badgeName { get; set; }
+        public string badgeDescription { get; set; } 
         public string badgeDescBronze { get; set; }
         public string badgeDescSilver { get; set; }
         public string badgeDescGold { get; set; }
@@ -70,10 +71,10 @@ public partial class Default2 : System.Web.UI.Page
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         string query = @"
-            SELECT b.badgeName, b.badgeDescBronze, b.badgeDescSilver, b.badgeDescGold, 
-                   b.badgeIconNum, ub.badgeType
-            FROM Badges b
-            LEFT JOIN UserBadge ub ON b.badgeID = ub.badgeID AND ub.userID = @userID";
+        SELECT b.badgeName, b.badgeDescBronze, b.badgeDescSilver, b.badgeDescGold, 
+               b.badgeIconNum, ub.badgeType
+        FROM Badges b
+        LEFT JOIN UserBadge ub ON b.badgeID = ub.badgeID AND ub.userID = @userID";
 
         List<BadgeIcon> badgeList = new List<BadgeIcon>();
 
@@ -87,14 +88,25 @@ public partial class Default2 : System.Web.UI.Page
             {
                 while (reader.Read())
                 {
+                    string badgeType = reader["badgeType"] == DBNull.Value ? "none" : reader["badgeType"].ToString().ToLower();
+
+                    // Determine which description to show based on current achievement level
+                    string currentDescription = GetCurrentBadgeDescription(
+                        badgeType,
+                        reader["badgeDescBronze"].ToString(),
+                        reader["badgeDescSilver"].ToString(),
+                        reader["badgeDescGold"].ToString()
+                    );
+
                     BadgeIcon badge = new BadgeIcon
                     {
                         badgeName = reader["badgeName"].ToString(),
+                        badgeDescription = currentDescription,
                         badgeDescBronze = reader["badgeDescBronze"].ToString(),
                         badgeDescSilver = reader["badgeDescSilver"].ToString(),
                         badgeDescGold = reader["badgeDescGold"].ToString(),
                         badgeIconNum = GetBadgeImagePath(Convert.ToInt32(reader["badgeIconNum"])),
-                        badgeType = reader["badgeType"] == DBNull.Value ? "none" : reader["badgeType"].ToString().ToLower()
+                        badgeType = badgeType
                     };
                     badgeList.Add(badge);
                 }
@@ -132,7 +144,22 @@ public partial class Default2 : System.Web.UI.Page
             default: return "~/Images/Badges/1_Busy-Bee.png";
         }
     }
-
+    private string GetCurrentBadgeDescription(string badgeType, string bronzeDesc, string silverDesc, string goldDesc)
+    {
+        switch (badgeType)
+        {
+            case "none":
+                return bronzeDesc; //show bronze if no desc
+            case "bronze":
+                return silverDesc; //show silver if gold is achieved
+            case "silver":
+                return goldDesc;   //gold if silver achieved
+            case "gold":
+                return goldDesc;   //keep showing gold
+            default:
+                return bronzeDesc;
+        }
+    }
     protected string GetStarHtml(string badgeType)
     {
         int stars = 0;

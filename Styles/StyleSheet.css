@@ -4255,7 +4255,22 @@ body.page-exit .welcomeBackTextDiv {
     position: relative;
     z-index: 20;
 }
+.mailIconWrapper {
+    position: relative;
+    display: inline-block;
+}
 
+.mailNotificationBadge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 12px;
+    height: 12px;
+    background-color: #ff4444;
+    border: 2px solid white;
+    border-radius: 50%;
+    display: none;
+}
 #friendsBadgesPage h2 {
     font-size: 2.5rem;
     margin-bottom: 0.1em;

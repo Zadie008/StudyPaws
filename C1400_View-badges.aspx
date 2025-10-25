@@ -118,28 +118,28 @@
         <h2>Badges</h2>
         <div class="backgroundColorContainer">
             <div class="scrollableTableContainer">
-                <div class="badges-container">
-                    <asp:Repeater ID="rpPets" runat="server">
-                        <ItemTemplate>
-                            <div class="badge-card">
-                                <div class="badge-image">
-                                    <asp:Image ID="imgBadge" runat="server" ImageUrl='<%# Eval("badgeIconNum") %>' />
-                                </div>
+    <div class="badges-container">
+        <asp:Repeater ID="rpPets" runat="server">
+            <ItemTemplate>
+                <div class="badge-card">
+                    <div class="badge-image">
+                        <asp:Image ID="imgBadge" runat="server" ImageUrl='<%# Eval("badgeIconNum") %>' />
+                    </div>
 
-                                <!-- Star rating -->
-                                <div class="stars">
-                                    <asp:Literal ID="litStars" runat="server" Text='<%# GetStarHtml(Eval("badgeType").ToString()) %>' />
-                                </div>
+                    <!-- Star rating -->
+                    <div class="stars">
+                        <asp:Literal ID="litStars" runat="server" Text='<%# GetStarHtml(Eval("badgeType").ToString()) %>' />
+                    </div>
 
-                                <asp:Label ID="lblBadgeName" runat="server" Text='<%# Eval("badgeName") %>' CssClass="badge-name"></asp:Label>
-                                <asp:Label ID="lblBadgeDescription" runat="server" 
-                                    Text='<%# Eval("badgeType").ToString() == "gold" ? Eval("badgeDescGold") : Eval("badgeType").ToString() == "silver" ? Eval("badgeDescSilver") : Eval("badgeDescBronze") %>' 
-                                    CssClass="badge-description"></asp:Label>
-                            </div>
-                        </ItemTemplate>
-                    </asp:Repeater>
+                    <asp:Label ID="lblBadgeName" runat="server" Text='<%# Eval("badgeName") %>' CssClass="badge-name"></asp:Label>
+                    <asp:Label ID="lblBadgeDescription" runat="server" 
+                        Text='<%# Eval("badgeDescription") %>' 
+                        CssClass="badge-description"></asp:Label>
                 </div>
-            </div>
+            </ItemTemplate>
+        </asp:Repeater>
+    </div>
+</div>
         </div>
 
         <!--does not have notification-->
