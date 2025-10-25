@@ -191,7 +191,7 @@ public partial class B300_B400_Edit_Delete_Event : System.Web.UI.Page
     }
     protected void btnNoDelete_Click(object sender, EventArgs e)
     {
-        ScriptManager.RegisterStartupScript(this, GetType(), "showDeletePopup", "showPopupDelete();", true);
+        ScriptManager.RegisterStartupScript(this, GetType(), "hideDeletePopup", "hidePopupDelete();", true);
     }
     protected void btnDelete_Click(object sender, EventArgs e) 
     {

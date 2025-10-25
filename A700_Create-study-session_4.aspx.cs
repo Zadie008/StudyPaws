@@ -64,212 +64,215 @@ public partial class Default2 : System.Web.UI.Page
 
     protected void btnSchedule_Click(object sender, EventArgs e)
     {
-        Page.Validate("timerValidation");
-
-        if (!Page.IsValid)
+        if (Session["Username"] != null)
         {
-            ScriptManager.RegisterStartupScript(this, GetType(), "showValidation",
-                "validateAllFields();", true);
-            return;
-        }
+            Page.Validate("timerValidation");
 
-        // Client-side date validation will prevent the postback if date is invalid
-        DateTime sessionDate;
-        if (!DateTime.TryParse(txtFilterDate.Text, out sessionDate))
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "showDateError",
-                "document.getElementById('dateValidationError').textContent = 'Please enter a valid date'; document.getElementById('dateValidationError').style.display = 'inline';", true);
-            return;
-        }
-
-        if (sessionDate.Date < DateTime.Today)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "showDateError",
-                "document.getElementById('dateValidationError').textContent = 'Cannot schedule study session for a past date'; document.getElementById('dateValidationError').style.display = 'inline';", true);
-            return;
-        }
-
-        if (Session["userID"] == null)
-        {
-            Response.Redirect("Login.aspx");
-            return;
-        }
-
-        // get invited friends from session
-        List<string> invitedFriends = Session["selectedFriends"] as List<string>;
-        if (invitedFriends == null)
-        {
-            invitedFriends = new List<string>();
-        }
-
-        try
-        {
-            // parse date and time values
-            int startHours = int.Parse(txtStartTimeHours.Text);
-            int startMinutes = int.Parse(txtStartTimeMinutes.Text);
-            int endHours = int.Parse(txtEndTimeHours.Text);
-            int endMinutes = int.Parse(txtEndTimeMinutes.Text);
-
-            DateTime sessionStart = sessionDate.AddHours(startHours).AddMinutes(startMinutes);
-            DateTime sessionEnd;
-
-            if (endHours < startHours || (endHours == startHours && endMinutes < startMinutes))
+            if (!Page.IsValid)
             {
-                // Session spans across midnight - end time is next day
-                sessionEnd = sessionDate.AddDays(1).AddHours(endHours).AddMinutes(endMinutes);
-            }
-            else
-            {
-                // Normal session within the same day
-                sessionEnd = sessionDate.AddHours(endHours).AddMinutes(endMinutes);
-            }
-
-            TimeSpan duration = sessionEnd - sessionStart;
-            int totalSeconds = (int)duration.TotalSeconds;
-
-            if (totalSeconds < 60)
-            {
-                minTotalTimeValidator.ErrorMessage = "Study Session must be at least 1 minute";
-                minTotalTimeValidator.IsValid = false;
                 ScriptManager.RegisterStartupScript(this, GetType(), "showValidation",
                     "validateAllFields();", true);
                 return;
             }
 
-            string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            using (MySqlConnection con = new MySqlConnection(cs))
+            // Client-side date validation will prevent the postback if date is invalid
+            DateTime sessionDate;
+            if (!DateTime.TryParse(txtFilterDate.Text, out sessionDate))
             {
-                con.Open();
+                ScriptManager.RegisterStartupScript(this, GetType(), "showDateError",
+                    "document.getElementById('dateValidationError').textContent = 'Please enter a valid date'; document.getElementById('dateValidationError').style.display = 'inline';", true);
+                return;
+            }
 
-                using (MySqlTransaction transaction = con.BeginTransaction())
+            if (sessionDate.Date < DateTime.Today)
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "showDateError",
+                    "document.getElementById('dateValidationError').textContent = 'Cannot schedule study session for a past date'; document.getElementById('dateValidationError').style.display = 'inline';", true);
+                return;
+            }
+
+            if (Session["userID"] == null)
+            {
+                Response.Redirect("Login.aspx");
+                return;
+            }
+
+            // get invited friends from session
+            List<string> invitedFriends = Session["selectedFriends"] as List<string>;
+            if (invitedFriends == null)
+            {
+                invitedFriends = new List<string>();
+            }
+
+            try
+            {
+                // parse date and time values
+                int startHours = int.Parse(txtStartTimeHours.Text);
+                int startMinutes = int.Parse(txtStartTimeMinutes.Text);
+                int endHours = int.Parse(txtEndTimeHours.Text);
+                int endMinutes = int.Parse(txtEndTimeMinutes.Text);
+
+                DateTime sessionStart = sessionDate.AddHours(startHours).AddMinutes(startMinutes);
+                DateTime sessionEnd;
+
+                if (endHours < startHours || (endHours == startHours && endMinutes < startMinutes))
                 {
-                    try
+                    // Session spans across midnight - end time is next day
+                    sessionEnd = sessionDate.AddDays(1).AddHours(endHours).AddMinutes(endMinutes);
+                }
+                else
+                {
+                    // Normal session within the same day
+                    sessionEnd = sessionDate.AddHours(endHours).AddMinutes(endMinutes);
+                }
+
+                TimeSpan duration = sessionEnd - sessionStart;
+                int totalSeconds = (int)duration.TotalSeconds;
+
+                if (totalSeconds < 60)
+                {
+                    minTotalTimeValidator.ErrorMessage = "Study Session must be at least 1 minute";
+                    minTotalTimeValidator.IsValid = false;
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showValidation",
+                        "validateAllFields();", true);
+                    return;
+                }
+
+                string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+                using (MySqlConnection con = new MySqlConnection(cs))
+                {
+                    con.Open();
+
+                    using (MySqlTransaction transaction = con.BeginTransaction())
                     {
-                        // 1. insert the study session
-                        string sessionCommand = "INSERT INTO StudySession (sessionTitle, sessionTag, sessionStart, sessionEnd, sessionDuration, leaderID) VALUES (@title, @tag, @start, @end, @duration, @leaderId)";
-
-                        using (MySqlCommand cmd = new MySqlCommand(sessionCommand, con, transaction))
+                        try
                         {
-                            cmd.Parameters.AddWithValue("@title", Session["sessionTitle"]);
-                            cmd.Parameters.AddWithValue("@tag", Session["sessionTag"]);
-                            cmd.Parameters.AddWithValue("@start", sessionStart);
-                            cmd.Parameters.AddWithValue("@end", sessionEnd);
-                            cmd.Parameters.AddWithValue("@duration", totalSeconds);
-                            cmd.Parameters.AddWithValue("@leaderId", Convert.ToInt32(Session["userID"]));
+                            // 1. insert the study session
+                            string sessionCommand = "INSERT INTO StudySession (sessionTitle, sessionTag, sessionStart, sessionEnd, sessionDuration, leaderID) VALUES (@title, @tag, @start, @end, @duration, @leaderId)";
 
-                            cmd.ExecuteNonQuery();
-                        }
-
-                        // 2. get the new session ID
-                        int newSessionID;
-                        using (MySqlCommand cmdID = new MySqlCommand("SELECT LAST_INSERT_ID()", con, transaction))
-                        {
-                            newSessionID = Convert.ToInt32(cmdID.ExecuteScalar());
-                            Session["sessionID"] = newSessionID;
-                            Session["sessionDuration"] = totalSeconds;
-                        }
-
-                        // 3. insert the session creator as participant
-                        string creatorCommand = "INSERT INTO StudySessionParticipants (sessionID, userID, accepted) VALUES (@sessionId, @userId, @accepted)";
-
-                        using (MySqlCommand cmdCreator = new MySqlCommand(creatorCommand, con, transaction))
-                        {
-                            cmdCreator.Parameters.AddWithValue("@sessionId", newSessionID);
-                            cmdCreator.Parameters.AddWithValue("@userId", Convert.ToInt32(Session["userID"]));
-                            cmdCreator.Parameters.AddWithValue("@accepted", true); // accepted by default
-                            cmdCreator.ExecuteNonQuery();
-                        }
-
-                        // 4. insert all invited friends as participants
-                        if (invitedFriends.Count > 0)
-                        {
-                            // get userIDs for all invited usernames
-                            Dictionary<string, int> usernameToIdMap = new Dictionary<string, int>();
-                            string getUserIdsCommand = "SELECT userID, username FROM Users WHERE username IN (" + string.Join(",", invitedFriends.Select(f => "@username" + invitedFriends.IndexOf(f))) + ")";
-
-                            using (MySqlCommand cmdGetIds = new MySqlCommand(getUserIdsCommand, con, transaction))
+                            using (MySqlCommand cmd = new MySqlCommand(sessionCommand, con, transaction))
                             {
-                                for (int i = 0; i < invitedFriends.Count; i++)
-                                {
-                                    cmdGetIds.Parameters.AddWithValue("@username" + i, invitedFriends[i]);
-                                }
+                                cmd.Parameters.AddWithValue("@title", Session["sessionTitle"]);
+                                cmd.Parameters.AddWithValue("@tag", Session["sessionTag"]);
+                                cmd.Parameters.AddWithValue("@start", sessionStart);
+                                cmd.Parameters.AddWithValue("@end", sessionEnd);
+                                cmd.Parameters.AddWithValue("@duration", totalSeconds);
+                                cmd.Parameters.AddWithValue("@leaderId", Convert.ToInt32(Session["userID"]));
 
-                                using (MySqlDataReader reader = cmdGetIds.ExecuteReader())
-                                {
-                                    while (reader.Read())
-                                    {
-                                        usernameToIdMap.Add(reader["username"].ToString(), Convert.ToInt32(reader["userID"]));
-                                    }
-                                }
-                            }
-
-                            // insert all participants
-                            string friendCommand = "INSERT INTO StudySessionParticipants (sessionID, userID, accepted) VALUES (@sessionId, @userId, @accepted)";
-
-                            foreach (string friendUsername in invitedFriends)
-                            {
-                                int friendId;
-                                if (usernameToIdMap.TryGetValue(friendUsername, out friendId))
-                                {
-                                    using (MySqlCommand cmdFriend = new MySqlCommand(friendCommand, con, transaction))
-                                    {
-                                        cmdFriend.Parameters.AddWithValue("@sessionId", newSessionID);
-                                        cmdFriend.Parameters.AddWithValue("@userId", friendId);
-                                        cmdFriend.Parameters.AddWithValue("@accepted", false); // not replied yet
-                                        cmdFriend.ExecuteNonQuery();
-                                    }
-                                }
-                            }
-                        }
-
-                        //5. insert into calendar event table
-                        string eventCommand = "INSERT into CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (@desc, @eventDate, @tagID, @userID)";
-                        using (MySqlCommand cmdEvent = new MySqlCommand(eventCommand, con, transaction))
-                        {
-                            cmdEvent.Parameters.AddWithValue("@desc", Session["sessionTitle"]);
-                            cmdEvent.Parameters.AddWithValue("@eventDate", sessionDate);
-                            cmdEvent.Parameters.AddWithValue("@tagID", 1);
-                            cmdEvent.Parameters.AddWithValue("@userID", Convert.ToInt32(Session["userID"]));
-
-                            cmdEvent.ExecuteNonQuery();
-                        }
-
-                        transaction.Commit();
-
-                        // Increment scheduledStudySessions counter and check for badges
-                        int thisUserID = Convert.ToInt32(Session["userID"]);
-                        using (MySqlConnection con2 = new MySqlConnection(cs))
-                        {
-                            string updateCommand = "UPDATE Users SET scheduledStudySessions = scheduledStudySessions + 1 WHERE userID = @userID";
-                            using (MySqlCommand cmd = new MySqlCommand(updateCommand, con2))
-                            {
-                                cmd.Parameters.AddWithValue("@userID", thisUserID);
-                                con2.Open();
                                 cmd.ExecuteNonQuery();
-                                con2.Close();
                             }
+
+                            // 2. get the new session ID
+                            int newSessionID;
+                            using (MySqlCommand cmdID = new MySqlCommand("SELECT LAST_INSERT_ID()", con, transaction))
+                            {
+                                newSessionID = Convert.ToInt32(cmdID.ExecuteScalar());
+                                Session["sessionID"] = newSessionID;
+                                Session["sessionDuration"] = totalSeconds;
+                            }
+
+                            // 3. insert the session creator as participant
+                            string creatorCommand = "INSERT INTO StudySessionParticipants (sessionID, userID, accepted) VALUES (@sessionId, @userId, @accepted)";
+
+                            using (MySqlCommand cmdCreator = new MySqlCommand(creatorCommand, con, transaction))
+                            {
+                                cmdCreator.Parameters.AddWithValue("@sessionId", newSessionID);
+                                cmdCreator.Parameters.AddWithValue("@userId", Convert.ToInt32(Session["userID"]));
+                                cmdCreator.Parameters.AddWithValue("@accepted", true); // accepted by default
+                                cmdCreator.ExecuteNonQuery();
+                            }
+
+                            // 4. insert all invited friends as participants
+                            if (invitedFriends.Count > 0)
+                            {
+                                // get userIDs for all invited usernames
+                                Dictionary<string, int> usernameToIdMap = new Dictionary<string, int>();
+                                string getUserIdsCommand = "SELECT userID, username FROM Users WHERE username IN (" + string.Join(",", invitedFriends.Select(f => "@username" + invitedFriends.IndexOf(f))) + ")";
+
+                                using (MySqlCommand cmdGetIds = new MySqlCommand(getUserIdsCommand, con, transaction))
+                                {
+                                    for (int i = 0; i < invitedFriends.Count; i++)
+                                    {
+                                        cmdGetIds.Parameters.AddWithValue("@username" + i, invitedFriends[i]);
+                                    }
+
+                                    using (MySqlDataReader reader = cmdGetIds.ExecuteReader())
+                                    {
+                                        while (reader.Read())
+                                        {
+                                            usernameToIdMap.Add(reader["username"].ToString(), Convert.ToInt32(reader["userID"]));
+                                        }
+                                    }
+                                }
+
+                                // insert all participants
+                                string friendCommand = "INSERT INTO StudySessionParticipants (sessionID, userID, accepted) VALUES (@sessionId, @userId, @accepted)";
+
+                                foreach (string friendUsername in invitedFriends)
+                                {
+                                    int friendId;
+                                    if (usernameToIdMap.TryGetValue(friendUsername, out friendId))
+                                    {
+                                        using (MySqlCommand cmdFriend = new MySqlCommand(friendCommand, con, transaction))
+                                        {
+                                            cmdFriend.Parameters.AddWithValue("@sessionId", newSessionID);
+                                            cmdFriend.Parameters.AddWithValue("@userId", friendId);
+                                            cmdFriend.Parameters.AddWithValue("@accepted", false); // not replied yet
+                                            cmdFriend.ExecuteNonQuery();
+                                        }
+                                    }
+                                }
+                            }
+
+                            //5. insert into calendar event table
+                            string eventCommand = "INSERT into CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (@desc, @eventDate, @tagID, @userID)";
+                            using (MySqlCommand cmdEvent = new MySqlCommand(eventCommand, con, transaction))
+                            {
+                                cmdEvent.Parameters.AddWithValue("@desc", Session["sessionTitle"]);
+                                cmdEvent.Parameters.AddWithValue("@eventDate", sessionDate);
+                                cmdEvent.Parameters.AddWithValue("@tagID", 1);
+                                cmdEvent.Parameters.AddWithValue("@userID", Convert.ToInt32(Session["userID"]));
+
+                                cmdEvent.ExecuteNonQuery();
+                            }
+
+                            transaction.Commit();
+
+                            // Increment scheduledStudySessions counter and check for badges
+                            int thisUserID = Convert.ToInt32(Session["userID"]);
+                            using (MySqlConnection con2 = new MySqlConnection(cs))
+                            {
+                                string updateCommand = "UPDATE Users SET scheduledStudySessions = scheduledStudySessions + 1 WHERE userID = @userID";
+                                using (MySqlCommand cmd = new MySqlCommand(updateCommand, con2))
+                                {
+                                    cmd.Parameters.AddWithValue("@userID", thisUserID);
+                                    con2.Open();
+                                    cmd.ExecuteNonQuery();
+                                    con2.Close();
+                                }
+                            }
+
+                            // Check for scheduled study session badges
+                            CheckScheduledStudySessionBadges(thisUserID);
+
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "showSuccessPopup();", true);
                         }
-
-                        // Check for scheduled study session badges
-                        CheckScheduledStudySessionBadges(thisUserID);
-
-                        ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "showSuccessPopup();", true);
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        minTotalTimeValidator.ErrorMessage = "Error creating study session: " + ex.Message;
-                        minTotalTimeValidator.IsValid = false;
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            minTotalTimeValidator.ErrorMessage = "Error creating study session: " + ex.Message;
+                            minTotalTimeValidator.IsValid = false;
+                        }
                     }
                 }
             }
-        }
-        catch (Exception ex)
-        {
-            minTotalTimeValidator.ErrorMessage = "An error occurred: " + ex.Message;
-            minTotalTimeValidator.IsValid = false;
-            ScriptManager.RegisterStartupScript(this, GetType(), "showValidation",
-                "validateAllFields();", true);
+            catch (Exception ex)
+            {
+                minTotalTimeValidator.ErrorMessage = "An error occurred: " + ex.Message;
+                minTotalTimeValidator.IsValid = false;
+                ScriptManager.RegisterStartupScript(this, GetType(), "showValidation",
+                    "validateAllFields();", true);
+            }
         }
     }
 

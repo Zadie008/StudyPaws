@@ -141,23 +141,71 @@
     <script type="text/javascript">
         window.addEventListener('DOMContentLoaded', function () {
             const tagButtons = document.querySelectorAll('.tagOne, .tagTwo, .tagThree, .tagFour, .tagFive');
-            const hiddenField = document.getElementById('<%= hiddenSelectedTagColour.ClientID %>');
+            const hiddenField = document.getElementById('<%= hfTagColourNum.ClientID %>'); // Use the correct hidden field
+
             tagButtons.forEach(btn => {
                 btn.addEventListener('click', function () {
+                    // Remove selected class from all buttons
                     tagButtons.forEach(b => b.classList.remove('selectedTag'));
+                    // Add selected class to clicked button
                     this.classList.add('selectedTag');
-                    hiddenField.value = this.id;
+
+                    // Get colour number from button ID or data attribute
+                    const colourNum = this.id.replace('tagColour', '').charAt(0); // Extract number from ID
+                    hiddenField.value = colourNum;
+
+                    // Trigger validation immediately
+                    validateAndHideColourError();
                 });
             });
         });
 
-        function validateTagColour(sender, args) {
-            var selected = document.getElementById('<%=hiddenSelectedTagColour.ClientID%>').value;
-            args.IsValid = selected !== "";
-        }
-        function selectTagColour(colourNum) {
-            document.getElementById('<%= hfTagColourNum.ClientID%>').value = colourNum;
+        function validateAndHideColourError() {
+            var selected = document.getElementById('<%= hfTagColourNum.ClientID %>').value;
+            var validator = document.getElementById('<%= validatorTagColour.ClientID %>');
+    
+            if (selected !== "" && validator) {
+                // Hide the validation error
+                validator.style.display = 'none';
+                validator.innerHTML = '';
+        
+                // Also trigger ASP.NET validation
+                if (typeof ValidatorValidate === 'function') {
+                    ValidatorValidate(validator);
+                }
             }
+        }
+
+        function validateTagColour(sender, args) {
+            var selected = document.getElementById('<%= hfTagColourNum.ClientID %>').value;
+            args.IsValid = selected !== "";
+    
+            // Hide the validator if valid
+            if (args.IsValid && sender) {
+                sender.style.display = 'none';
+                sender.innerHTML = '';
+            }
+        }
+
+        function selectTagColour(colourNum) {
+            document.getElementById('<%= hfTagColourNum.ClientID %>').value = colourNum;
+
+            // Update UI
+            const tagButtons = document.querySelectorAll('.tagOne, .tagTwo, .tagThree, .tagFour, .tagFive');
+            tagButtons.forEach(b => b.classList.remove('selectedTag'));
+
+            // Add selected class to the correct button
+            const selectedButton = document.getElementById('tagColour' + (colourNum === '1' ? 'One' :
+                colourNum === '2' ? 'Two' :
+                    colourNum === '3' ? 'Three' :
+                        colourNum === '4' ? 'Four' : 'Five'));
+            if (selectedButton) {
+                selectedButton.classList.add('selectedTag');
+            }
+
+            // Trigger validation
+            validateAndHideColourError();
+        }
 
         // JOIN STUDY SESSION POPUP
         function showJoinPopup() {

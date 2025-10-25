@@ -211,7 +211,7 @@
                 <img src="Images/Notification%20Sad%20Hamster.png" alt="Error" />
                 <div class="buttonSection">
                    <%-- Use OnClientClick instead of OnClick for client-side handling --%>
-                   <asp:Button ID="btnUnderstandExists" CssClass="popup-button" runat="server" Text="Okay" OnClientClick="return onUnderstandExistsClick();" />
+                   <asp:Button ID="btnUnderstandExists" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="return onUnderstandExistsClick();" />
                 </div>
             </div>
         </asp:Panel>

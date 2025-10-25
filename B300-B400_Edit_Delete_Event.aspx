@@ -154,7 +154,6 @@
         <div class="popup-blue-box">
             <p>Are you sure you want to delete this event?</p>
             <img src="Images/Notification%20Sad%20Hamster.png" />
-            <br />
             <div class="buttonSection">
                 <asp:Button ID="btnYesDelete" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnYesDelete_Click" />
                 <asp:Button ID="btnNo" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnNoDelete_Click"  />

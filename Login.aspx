@@ -59,7 +59,7 @@
                     <p>Sorry! Your username or password is incorrect</p>
                     <img src="Images/Notification%20Sad%20Hamster.png" alt="Sad hamster" />
                     <div class="buttonSection">
-                        <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay" OnClientClick="hidePopup(); return false;" />
+                        <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hidePopup(); return false;" />
                     </div>
                 </div>
             </div>

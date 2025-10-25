@@ -90,26 +90,22 @@
             </tr>
         </table>
 
-        <asp:Panel ID="pnlDeleteProfile" runat="server" style="display: none;">
-            <div id="popupDelete" class="simple-popup">
-                <div class="popup-blue-box">
-                    <p>Are you sure you want to delete your profile? All progress will be lost!</p>
-                    <img src="Images/Notification%20Sad%20Hamster.png" />
-                    <br />
-                    <div class="buttonSection">
-                       <asp:Button ID="btnConfirmDeleteProfile" CssClass="popup-button" runat="server" Text="Yes, I am sure!" OnClick="btnConfirmDeleteProfile_Click" />
-                        <asp:Button ID="btnCancelDelete" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClientClick="hidePopup(); return false;" />
-                    </div>
+        <div id="popupDelete" class="simple-popup" style="display: none;">
+            <div class="popup-blue-box">
+                <p>Are you sure you want to delete your profile?<br />All progress will be lost!</p>
+                <img src="Images/Notification%20Sad%20Hamster.png" />
+                <div class="buttonSection">
+                    <asp:Button ID="btnConfirmDeleteProfile" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnConfirmDeleteProfile_Click" CausesValidation="false" />
+                    <asp:Button ID="btnCancelDelete" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClientClick="hideDeletePopup(); return false;" />
                 </div>
             </div>
-        </asp:Panel>
+        </div>
             
         <asp:Panel ID="pnlLogout" runat="server" style="display: none;">
             <div id="popupLogout" class="simple-popup">
                 <div class="popup-pink-box">
-                    <p>Hope you have a purrfect day!</p>
+                    <p style="font-size: 2em;">Hope you have a purrfect day!</p>
                     <img src="Images/Notification%20Happy.png" />
-                    <br />
                     <div class="buttonSection">
                        <asp:Button ID="btnGoodbye" CssClass="popup-button" runat="server" Text="Goodbye!" OnClick="btnGoodbye_Click" />
                     </div>
@@ -131,16 +127,11 @@
 
         <script type="text/javascript">
             function showDeletePopup() {
-                var panel = document.getElementById('<%= pnlDeleteProfile.ClientID %>');
-                if (panel) {
-                    panel.style.display = 'block';
+                document.getElementById('popupDelete').style.display = 'flex';
+            }
 
-                    // Also show the inner popup if it has display:none
-                    var popup = panel.querySelector('.simple-popup');
-                    if (popup) {
-                        popup.style.display = 'flex'; // or 'block' depending on your CSS
-                    }
-                }
+            function hideDeletePopup() {
+                document.getElementById('popupDelete').style.display = 'none';
             }
 
             function showLogoutPopup() {
@@ -156,11 +147,14 @@
             }
     
             function hidePopup() {
-                var deletePanel = document.getElementById('<%= pnlDeleteProfile.ClientID %>');
                 var logoutPanel = document.getElementById('<%= pnlLogout.ClientID %>');
 
-                if (deletePanel) deletePanel.style.display = 'none';
-                if (logoutPanel) logoutPanel.style.display = 'none';
+                if (logoutPanel) {
+                    logoutPanel.style.display = 'none';
+                    // Also hide the inner popup
+                    var logoutPopup = logoutPanel.querySelector('.simple-popup');
+                    if (logoutPopup) logoutPopup.style.display = 'none';
+                }
             }
 
             // JOIN STUDY SESSION POPUP

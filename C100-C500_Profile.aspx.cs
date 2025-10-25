@@ -315,21 +315,24 @@ public partial class Default2 : System.Web.UI.Page
         Response.Redirect("Landing-page.aspx");
     }
 
-    protected void deleteImageButton_Click(object sender, ImageClickEventArgs e)
+    /*protected void deleteImageButton_Click(object sender, ImageClickEventArgs e)
     {
         pnlDeleteProfile.Visible = true;
-    }
+    }*/
 
     protected void btnConfirmDeleteProfile_Click(object sender, EventArgs e)
     {
+        System.Diagnostics.Debug.WriteLine("DELETE PROFILE BUTTON CLICKED - START");
+
         string username = "";
         if (Session["Username"] != null)
         {
             username = Session["Username"].ToString();
+            System.Diagnostics.Debug.WriteLine("Username from session: " + username);
         }
-
-        if (string.IsNullOrEmpty(username))
+        else
         {
+            System.Diagnostics.Debug.WriteLine("NO USERNAME IN SESSION");
             Response.Write("<script>alert('Error: User session expired or not found.');</script>");
             return;
         }
@@ -343,6 +346,7 @@ public partial class Default2 : System.Web.UI.Page
             try
             {
                 transaction = con.BeginTransaction();
+                System.Diagnostics.Debug.WriteLine("Transaction started");
 
                 int userID = -1;
                 string getUserIDQuery = "SELECT userID FROM Users WHERE username = @username";
@@ -351,40 +355,54 @@ public partial class Default2 : System.Web.UI.Page
                     cmdGetID.Parameters.AddWithValue("@username", username);
 
                     object result = cmdGetID.ExecuteScalar();
+                    System.Diagnostics.Debug.WriteLine("User ID query executed");
+
                     if (result != null && result != DBNull.Value)
                     {
                         userID = Convert.ToInt32(result);
+                        System.Diagnostics.Debug.WriteLine("User ID found: " + userID);
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("NO USER ID FOUND FOR USERNAME: " + username);
+                        Response.Write("<script>alert('Error: User not found in database.');</script>");
+                        transaction.Rollback();
+                        return;
                     }
                 }
 
-                if (userID == -1)
-                {
-                    Response.Write("<script>alert('Error: User not found in database for deletion. Nothing to delete.');</script>");
-                    transaction.Rollback();
-                    return;
-                }
+                System.Diagnostics.Debug.WriteLine("Deleting related records for user ID: " + userID);
 
-                // Delete related records in all tables
+                // Delete related records in all tables (REMOVED FriendRequest since table doesn't exist)
                 string[] deleteQueries = new string[]
                 {
-                    "DELETE FROM FriendsList WHERE userIDfrom = @userID",
-                    "DELETE FROM FriendsList WHERE userIDto = @userID",
-                    "DELETE FROM FriendRequest WHERE userID = @userID",
-                    "DELETE FROM UserBadge WHERE userID = @userID",
-                    "DELETE FROM UserPets WHERE userID = @userID",
-                    "DELETE FROM CurrentLevel WHERE userID = @userID",
-                    "DELETE FROM CalendarEvent WHERE userID = @userID",
-                    "DELETE FROM StudySessionParticipants WHERE userID = @userID",
-                    "DELETE FROM Timer WHERE userID = @userID",
-                    "DELETE FROM ToDoListTask WHERE userID = @userID"
+                "DELETE FROM FriendsList WHERE userIDfrom = @userID",
+                "DELETE FROM FriendsList WHERE userIDto = @userID",
+                // "DELETE FROM FriendRequest WHERE userID = @userID", // REMOVE THIS LINE
+                "DELETE FROM UserBadge WHERE userID = @userID",
+                "DELETE FROM UserPets WHERE userID = @userID",
+                "DELETE FROM CurrentLevel WHERE userID = @userID",
+                "DELETE FROM CalendarEvent WHERE userID = @userID",
+                "DELETE FROM StudySessionParticipants WHERE userID = @userID",
+                "DELETE FROM Timer WHERE userID = @userID",
+                "DELETE FROM ToDoListTask WHERE userID = @userID"
                 };
 
                 foreach (string query in deleteQueries)
                 {
-                    using (MySqlCommand cmd = new MySqlCommand(query, con, transaction))
+                    try
                     {
-                        cmd.Parameters.AddWithValue("@userID", userID);
-                        cmd.ExecuteNonQuery();
+                        using (MySqlCommand cmd = new MySqlCommand(query, con, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@userID", userID);
+                            int rows = cmd.ExecuteNonQuery();
+                            System.Diagnostics.Debug.WriteLine("Executed: " + query + " - Rows affected: " + rows);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("ERROR executing query: " + query + " - " + ex.Message);
+                        // Continue with other queries even if one fails
                     }
                 }
 
@@ -395,27 +413,33 @@ public partial class Default2 : System.Web.UI.Page
                     cmdDeleteUser.Parameters.AddWithValue("@userID", userID);
 
                     int rowsAffected = cmdDeleteUser.ExecuteNonQuery();
+                    System.Diagnostics.Debug.WriteLine("User deletion query executed - Rows affected: " + rowsAffected);
+
                     if (rowsAffected > 0)
                     {
+                        System.Diagnostics.Debug.WriteLine("USER DELETED SUCCESSFULLY - COMMITTING TRANSACTION");
                         transaction.Commit();
                         Session.Clear();
                         Session.Abandon();
                         FormsAuthentication.SignOut();
+                        System.Diagnostics.Debug.WriteLine("Redirecting to landing page");
                         Response.Redirect("Landing-page.aspx");
+                        return;
                     }
                     else
                     {
-                        Response.Write("<script>alert('Error: User record not found in Users table for deletion. Transaction rolled back.');</script>");
+                        System.Diagnostics.Debug.WriteLine("NO ROWS AFFECTED IN USER DELETION - ROLLING BACK");
+                        Response.Write("<script>alert('Error: User record not found in Users table for deletion.');</script>");
                         transaction.Rollback();
                     }
                 }
             }
             catch (Exception ex)
             {
-                Response.Write("<script>alert('An error occurred during profile deletion: " + ex.Message.Replace("'", "\\'") + "');</script>");
-                if (transaction != null)
+                if (ex is System.Threading.ThreadAbortException)
                 {
-                    transaction.Rollback();
+                    System.Diagnostics.Debug.WriteLine("ThreadAbortException - Redirect in progress");
+                    return;
                 }
             }
             finally
@@ -426,14 +450,12 @@ public partial class Default2 : System.Web.UI.Page
                 }
             }
         }
-
-        Response.Redirect("Landing-page.aspx");
     }
 
-    protected void btnCancelDelete_Click(object sender, EventArgs e)
+    /*protected void btnCancelDelete_Click(object sender, EventArgs e)
     {
         pnlDeleteProfile.Visible = false;
-    }
+    }*/
 
     protected void btnGoodbye_Click(object sender, EventArgs e)
     {

@@ -435,7 +435,7 @@
             var validator = document.getElementById('<%= minTotalTimeValidator.ClientID %>');
             if (validator) {
                 validator.style.display = isValid ? 'none' : 'inline';
-                validator.innerHTML = "Study Session must be at least 1 minute";
+                validator.innerHTML = "Study Session must be at least <br />1 minute in duration";
             }
 
             if (args) {

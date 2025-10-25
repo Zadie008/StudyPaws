@@ -1657,7 +1657,7 @@ body.page-exit .welcomeBackTextDiv {
     padding: 6% 0 1% 0;
 }
 #deleteStudySession .createEventMainContent .buttonSection{
-    margin:0;
+    margin: 0;
 }
 
 .textboxDisabled {
@@ -1852,7 +1852,7 @@ body.page-exit .welcomeBackTextDiv {
 .popup-pink-boxTagEdit {
     background: #D7B9D5;
     background-color: #D7B9D5; /*pink*/
-    padding: 1em;
+    padding: 2em 1em 1em 1em;
     border-radius: 3em;
     border: 5px solid white;
     width: 55%;
@@ -1864,25 +1864,16 @@ body.page-exit .welcomeBackTextDiv {
     margin: 1em 22%; /* LEA ADDED THIS TO CENTER POPUP, YOU CAN CHANGE AMOUNTS */
 }
 .popup-pink-boxTagEdit .buttonSection {
-    text-align: center;
-    /*margin-top: 1vh;*/
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5em;
-    flex-wrap: nowrap;
-    flex-direction: row;
+    width: 100%;
 }
 .popupTagEditing{
-    width:90%;
-    padding: 0.5em 0.2em;
+    width:100%;
     border-spacing: 0.5em;
 }
 .popupTagEditing table{
     width: 100%;
     border-collapse: separate;
     border-spacing: 0.5em;
-    
 }
 .tableLabel{
     width: 50%;
@@ -1890,19 +1881,18 @@ body.page-exit .welcomeBackTextDiv {
 .tableInput{
     width:8%;
 }
-.tableValidation{
+.tableValidation {
     width: 50%;
-    text-align:right;
-    /*height:0.5em;*/
-    /*display:block;*/
-    padding:0;
-    /*display:flex;
-    justify-content:flex-end;*/
+    text-align: right;
+    min-height: 5em;
+    height: 5em; /* Add fixed height */
+    padding: 0;
+    vertical-align: top; /* Align content to top */
 }
 .popupTagEditing td{
-    padding: 0.3em 0.3em;
+    padding: 0em 0em;
     vertical-align:middle;
-    line-height:1.6;
+    line-height: 2;
 }
 .tagOne {
     width: 35px;
@@ -5637,7 +5627,7 @@ table {
         font-size: 14px;
         overflow-x: hidden; /*ADDED*/
     }
-    /* ---------------------- CALENDAR PAGE ---------------------- */
+    /* ---------------------- CALENDAR PAGES ---------------------- */
     .calendarBox th {
         width: 10%;
         height: 48px;
@@ -5653,12 +5643,20 @@ table {
         margin: 3em 3em 3em 3em;
     }
 
+    #editDeleteEvent .eventTitleTagSection {
+        padding: 4% 0 8% 0;
+    }
+
+    #deleteStudySession .eventTitleTagSection {
+        padding: 5% 0 7% 0;
+    }
+
     .createEventMainContent .eventTitleTagSection {
-        padding: 4% 0 9.25% 0;
+        padding: 6.5% 0 10.7% 0;
     }
 
     .createEventMainContent .eventTitleTagSection .rightSection table td {
-        padding: 2.8vh 0;
+        padding: 2vh 0 3vh 0;
     }
 
     /* ---------------------- TO-DO LIST PAGE ---------------------- */
@@ -5845,9 +5843,18 @@ table {
         margin-bottom: -1.2em;
     }
 
+    #createSession4MainContent .validationErrorSection {
+        align-items: flex-start;
+        height: 2.5em;
+    }
+
+    #createSession4MainContent .validationErrorCustom {
+        padding-left: 1em;
+        text-align: left;
+    }
+
     #dateValidationError {
         color: white !important;
-        text-align: left !important;
         display: none;
     }
 
