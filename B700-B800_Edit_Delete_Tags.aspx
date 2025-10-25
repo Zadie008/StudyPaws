@@ -187,6 +187,7 @@
             document.getElementById('<%= hiddenSelectedTagColourEdit.ClientID%>').value = selectedBtn ? selectedBtn.id : '';
         }
 
+
         function showDeletePopup() {
             document.getElementById('popupDeleteTag').style.display = 'block';
         }

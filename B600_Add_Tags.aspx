@@ -103,7 +103,7 @@
                 <td class="tableValidation" colspan="5"><asp:RequiredFieldValidator ID="errorTagTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title" ValidationGroup="tagPopup" Display="Static" EnableClientScript="true" ControlToValidate="txtTagTitle"></asp:RequiredFieldValidator></td>
             </tr>
             <tr>
-                <asp:HiddenField ID="hfTagColourNum" runat="server" />
+                <%--<asp:HiddenField ID="hfTagColourNum" runat="server" />--%>
                 <td class="tableLabel"><asp:Label ID="lblTagColour" class="label" runat="server" Text="Tag Colour" UseSubmitBehaviour="false" OnClientClick="return false;"></asp:Label></td>
                 <td class="tableInput"><asp:Button ID="tagColourOne" class="tagOne" runat="server" Text="" UseSubmitBehaviour="false" OnClientClick="selectTagColour(1); return false;"/></td>
                 <td class="tableInput"><asp:Button ID="tagColourTwo" class="tagTwo" runat="server" Text="" UseSubmitBehaviour="false" OnClientClick="selectTagColour(2); return false;"/></td>
@@ -141,8 +141,11 @@
     <script type="text/javascript">
         window.addEventListener('DOMContentLoaded', function () {
             const tagButtons = document.querySelectorAll('.tagOne, .tagTwo, .tagThree, .tagFour, .tagFive');
-            const hiddenField = document.getElementById('<%= hfTagColourNum.ClientID %>'); // Use the correct hidden field
+            const hiddenField = document.getElementById('<%= hiddenSelectedTagColour.ClientID %>'); // Use the correct hidden field
 
+            tagButtons.forEach((btn, index) => {
+                btn.setAttribute('data-colour', (index + 1).toString());
+            });
             tagButtons.forEach(btn => {
                 btn.addEventListener('click', function () {
                     // Remove selected class from all buttons
@@ -151,17 +154,23 @@
                     this.classList.add('selectedTag');
 
                     // Get colour number from button ID or data attribute
-                    const colourNum = this.id.replace('tagColour', '').charAt(0); // Extract number from ID
+                    const colourNum = this.getAttribute('data-colour'); // Extract number from ID
                     hiddenField.value = colourNum;
 
                     // Trigger validation immediately
                     validateAndHideColourError();
                 });
             });
+            if (hiddenField.value) {
+                const selectedButton = document.querySelector('[data-colour="' + hiddenField.value + '"]');
+                if (selectedButton) {
+                    selectedButton.classList.add('selectedTag');
+                }
+            }
         });
 
         function validateAndHideColourError() {
-            var selected = document.getElementById('<%= hfTagColourNum.ClientID %>').value;
+            var selected = document.getElementById('<%= hiddenSelectedTagColour.ClientID %>').value;
             var validator = document.getElementById('<%= validatorTagColour.ClientID %>');
     
             if (selected !== "" && validator) {
@@ -177,7 +186,7 @@
         }
 
         function validateTagColour(sender, args) {
-            var selected = document.getElementById('<%= hfTagColourNum.ClientID %>').value;
+            var selected = document.getElementById('<%= hiddenSelectedTagColour.ClientID %>').value;
             args.IsValid = selected !== "";
     
             // Hide the validator if valid
@@ -188,23 +197,21 @@
         }
 
         function selectTagColour(colourNum) {
-            document.getElementById('<%= hfTagColourNum.ClientID %>').value = colourNum;
+            document.getElementById('<%= hiddenSelectedTagColour.ClientID %>').value = colourNum;
 
             // Update UI
             const tagButtons = document.querySelectorAll('.tagOne, .tagTwo, .tagThree, .tagFour, .tagFive');
             tagButtons.forEach(b => b.classList.remove('selectedTag'));
 
             // Add selected class to the correct button
-            const selectedButton = document.getElementById('tagColour' + (colourNum === '1' ? 'One' :
-                colourNum === '2' ? 'Two' :
-                    colourNum === '3' ? 'Three' :
-                        colourNum === '4' ? 'Four' : 'Five'));
+            const selectedButton = document.querySelector('[data-colour"' + colourNum + '"]');
             if (selectedButton) {
                 selectedButton.classList.add('selectedTag');
             }
 
             // Trigger validation
             validateAndHideColourError();
+            return false;
         }
 
         // JOIN STUDY SESSION POPUP

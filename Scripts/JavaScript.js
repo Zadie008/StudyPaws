@@ -473,49 +473,120 @@ function showTimeUpPopup() {
     });
 }
 
-function hideTimeUpPopup() {
+function hideTimeUpPopup() { /* TAMMY CHANGED*/
     const minutesStudied = Math.floor(initialTime / 60);
     PageMethods.UpdateUserXP(minutesStudied, function (response) {
         console.log("Rewards updated:", response);
-        document.getElementById("popupTimeUp").style.display = "none";
-        window.location.href = "Default.aspx";
+        // TAMMY ADDED - START
+        if (response.startsWith("LevelUp:")) {
+            const parts = response.split(":");
+            const newLevel = parts[1];
+            const xpEarned = parts[2];
+            const coinsEarned = parts[3];
+
+            document.getElementById("popupTimeUp").style.display = "none";
+            showLevelUpPopup(newLevel);
+        } else if (response.startsWith("Success:")) {
+            document.getElementById("popupTimeUp").style.display = "none";
+            window.location.href = "Default.aspx";
+        }
+        else {
+            console.error("Error updating rewards:", error);
+            document.getElementById("popupTimeUp").style.display = "none";
+            window.location.href = "Default.aspx";
+        } // TAMMY ADDED - END
     }, function (error) {
         console.error("Error updating rewards:", error);
         document.getElementById("popupTimeUp").style.display = "none";
         window.location.href = "Default.aspx";
     });
 }
-function showStudySessionTimeUpPopup() {
-    const minutesStudied = Math.floor(initialTime / 60);
-    const xpEarned = minutesStudied * 2;
-    const coinsEarned = minutesStudied * 2;
-
-    document.getElementById("xpEarned").textContent = '+' + xpEarned;
-    document.getElementById("coinsEarned").textContent = '+' + coinsEarned;
-
-    // Show the popup
-    document.getElementById("popupTimeUp").style.display = "flex";
-
-    // Mark session as completed
-    PageMethods.MarkSessionAsCompleted(function (response) {
-        console.log("Session marked as completed:", response);
-    }, function (error) {
-        console.error("Error marking session as completed:", error);
-    });
+// TAMMY ADDED
+function showLevelUpPopup(newLevel) {
+    console.log('Showing level up popup for level:', newLevel);
+    document.getElementById('newLevelSpan').innerText = newLevel;
+    document.getElementById('popupLevelUp').style.display = 'flex';
+    triggerConfettiTimer();
 }
 
-function hideStudySessionTimeUpPopup() {
-    const minutesStudied = Math.floor(initialTime / 60);
-    PageMethods.UpdateStudySessionRewards(minutesStudied, function (response) {
-        console.log("Study session rewards updated:", response);
-        document.getElementById("popupTimeUp").style.display = "none";
-        window.location.href = "Default.aspx";
-    }, function (error) {
-        console.error("Error updating study session rewards:", error);
-        document.getElementById("popupTimeUp").style.display = "none";
-        window.location.href = "Default.aspx";
-    });
+//TAMMY ADDED
+function hideLevelUpPopup() {
+    console.log('Hiding level up popup');
+    document.getElementById('popupLevelUp').style.display = 'none';
+    confetti.reset();
+    window.location.href = "Default.aspx";
 }
+
+// Confetti Functions
+function triggerConfetti() {
+    console.log('Triggering confetti');
+    // Major explosion
+    confetti({
+        particleCount: 300,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ['#F4CAE0', '#D7B9D5', '#ADA7C9', '#90A8C3', '#64A6BD', '#FFFFFF']
+    });
+    // old colors: ['#FFD700', '#FFA500', '#FF8C00', '#FF6347', '#00FF7F', '#1E90FF']
+
+    // Continuous falling confetti for 5 seconds
+    const duration = 5000;
+    const end = Date.now() + duration;
+
+    (function frame() {
+        confetti({
+            particleCount: 5,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: ['#F4CAE0', '#D7B9D5', '#ADA7C9']
+        });
+        // old colors: ['#FFD700', '#FFA500', '#FF8C00']
+        confetti({
+            particleCount: 5,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: ['#90A8C3', '#64A6BD', '#FFFFFF']
+        });
+        // old colors: ['#1E90FF', '#00FF7F', '#FF6347']
+
+        if (Date.now() < end) {
+            requestAnimationFrame(frame);
+        }
+    }());
+}
+//function showStudySessionTimeUpPopup() {
+//    const minutesStudied = Math.floor(initialTime / 60);
+//    const xpEarned = minutesStudied * 2;
+//    const coinsEarned = minutesStudied * 2;
+
+//    document.getElementById("xpEarned").textContent = '+' + xpEarned;
+//    document.getElementById("coinsEarned").textContent = '+' + coinsEarned;
+
+//    // Show the popup
+//    document.getElementById("popupTimeUp").style.display = "flex";
+
+//    // Mark session as completed
+//    PageMethods.MarkSessionAsCompleted(function (response) {
+//        console.log("Session marked as completed:", response);
+//    }, function (error) {
+//        console.error("Error marking session as completed:", error);
+//    });
+//}
+
+//function hideStudySessionTimeUpPopup() {
+//    const minutesStudied = Math.floor(initialTime / 60);
+//    PageMethods.UpdateStudySessionRewards(minutesStudied, function (response) {
+//        console.log("Study session rewards updated:", response);
+//        document.getElementById("popupTimeUp").style.display = "none";
+//        window.location.href = "Default.aspx";
+//    }, function (error) {
+//        console.error("Error updating study session rewards:", error);
+//        document.getElementById("popupTimeUp").style.display = "none";
+//        window.location.href = "Default.aspx";
+//    });
+//}
 // ---- VIEW PAST TIMER PAGE ---- //
 document.addEventListener("DOMContentLoaded", function () {
     var icon = document.getElementById("filterIcon");

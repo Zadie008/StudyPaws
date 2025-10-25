@@ -188,14 +188,13 @@
 
         <!-- Level Up Popup with Confetti -->
            <div id="popupLevelUp" class="simple-popup" style="display: none;">
-    <div class="popup-gold-box">
+    <div class="popup-pink-box">
         <h2>🎉 Level Up! 🎉</h2>
         <p>Congratulations! You've reached Level <span id="newLevelSpan"></span>!</p>
-        <br />
-        <img src="Images/LevelUpHappy.png" alt="Level Up Celebration" />
+        <img src="Images/Notification%20Happy.png" />
         <br />
         <div class="buttonSection">
-            <asp:Button ID="btnCelebrate" CssClass="popup-button-best-gold" runat="server" Text="Awesome!" OnClientClick="hideLevelUpPopup(); return false;" />
+            <asp:Button ID="btnYayLevelUp" CssClass="popup-button" runat="server" Text="Awesome!" OnClientClick="hideLevelUpPopup(); return false;" />
         </div>
     </div>
 </div>
@@ -295,109 +294,67 @@
                 default: return "circle-cat";
             }
         }
+        //TAMMY ADDED - START
+        function showStudySessionTimeUpPopup() {
+            const minutesStudied = Math.floor(initialTime / 60);
+            const xpEarned = minutesStudied * 2;
+            const coinsEarned = minutesStudied * 2;
 
-        // ===== STUDY SESSION TIMER COMPLETION FUNCTIONS =====
+            document.getElementById("xpEarned").textContent = '+' + xpEarned;
+            document.getElementById("coinsEarned").textContent = '+' + coinsEarned;
 
-        // This function should be called when the study session timer completes
-        function onStudySessionComplete(minutesStudied) {
-            console.log('Study session completed. Minutes studied:', minutesStudied);
+            // Show the popup
+            document.getElementById("popupTimeUp").style.display = "flex";
 
-            // Call the WebMethod to update rewards and check for level up
-            PageMethods.UpdateStudySessionRewards(minutesStudied, function (response) {
-                console.log('UpdateStudySessionRewards response:', response);
-
-                if (response.startsWith("Success")) {
-                    // Parse the response
-                    // Format: "Success:XP_EARNED:COINS_EARNED:LEVELED_UP_FLAG:NEW_LEVEL"
-                    var parts = response.split(':');
-                    var xpEarned = parts[1];
-                    var coinsEarned = parts[2];
-                    var leveledUpFlag = parts[3] === "1";
-                    var achievedLevel = parts[4];
-
-                    console.log('Parsed response - XP:', xpEarned, 'Coins:', coinsEarned, 'Leveled up:', leveledUpFlag, 'New level:', achievedLevel);
-
-                    // Update the time-up popup with earned amounts
-                    document.getElementById('xpEarned').textContent = '+' + xpEarned;
-                    document.getElementById('coinsEarned').textContent = '+' + coinsEarned;
-
-                    // Store level up information for when user clicks "Thank you"
-                    leveledUp = leveledUpFlag;
-                    newLevel = achievedLevel;
-
-                    // Show the time-up popup
-                    document.getElementById('popupTimeUp').style.display = 'flex';
-
-                } else if (response.startsWith("Error")) {
-                    console.error('Error updating rewards:', response);
-                    // Still show time-up popup with default values as fallback
-                    document.getElementById('xpEarned').textContent = '+10';
-                    document.getElementById('coinsEarned').textContent = '+10';
-                    leveledUp = false;
-                    document.getElementById('popupTimeUp').style.display = 'flex';
-                } else {
-                    console.error('Unexpected response:', response);
-                    // Fallback: show time-up popup with default values
-                    document.getElementById('xpEarned').textContent = '+10';
-                    document.getElementById('coinsEarned').textContent = '+10';
-                    leveledUp = false;
-                    document.getElementById('popupTimeUp').style.display = 'flex';
-                }
+            // Mark session as completed
+            PageMethods.MarkSessionAsCompleted(function (response) {
+                console.log("Session marked as completed:", response);
             }, function (error) {
-                console.error('WebMethod call failed:', error);
-                // Fallback: show time-up popup with default values
-                document.getElementById('xpEarned').textContent = '+10';
-                document.getElementById('coinsEarned').textContent = '+10';
-                leveledUp = false;
-                document.getElementById('popupTimeUp').style.display = 'flex';
+                console.error("Error marking session as completed:", error);
             });
         }
-
-        // Function to handle when user clicks "Thank you" in the time-up popup
         function hideStudySessionTimeUpPopup() {
-            console.log('Hiding time-up popup. Leveled up:', leveledUp, 'New level:', newLevel);
+            const minutesStudied = Math.floor(initialTime / 60);
+            PageMethods.UpdateStudySessionRewards(minutesStudied, function (response) {
+                console.log("Study session rewards updated:", response);
 
-            document.getElementById('popupTimeUp').style.display = 'none';
+                if (response.startsWith("LevelUp:")) {
+                    const parts = response.split(":");
+                    const newLevel = parts[1];
+                    const xpEarned = parts[2];
+                    const coinsEarned = parts[3];
 
-            // Check if we need to show level up popup
-            if (leveledUp) {
-                console.log('Showing level up popup for level:', newLevel);
-                showLevelUpPopup(newLevel);
-            } else {
-                console.log('No level up - redirecting to home page');
-                // If no level up, redirect to front page immediately
-                setTimeout(function () {
-                    window.location.href = 'Default.aspx';
-                }, 500);
-            }
+                    document.getElementById("popupTimeUp").style.display = "none";
+                    showLevelUpPopup(newLevel);
+                } else if (response.startsWith("Success:")) {
+                    document.getElementById("popupTimeUp").style.display = "none";
+                    window.location.href = "Default.aspx";
+                }
+                else {
+                    console.error("Error updating rewards:", error);
+                    document.getElementById("popupTimeUp").style.display = "none";
+                    window.location.href = "Default.aspx";
+                } 
+            }, function (error) {
+                console.error("Error updating study session rewards:", error);
+                document.getElementById("popupTimeUp").style.display = "none";
+                window.location.href = "Default.aspx";
+            });
         }
-
-        // ===== LEVEL UP POPUP FUNCTIONS =====
-
-        function showLevelUpPopup(level) {
-            console.log('Displaying level up popup for level:', level);
-            document.getElementById('newLevelSpan').innerText = level;
+        function showLevelUpPopup(newLevel) {
+            console.log('Showing level up popup for level:', newLevel);
+            document.getElementById('newLevelSpan').innerText = newLevel;
             document.getElementById('popupLevelUp').style.display = 'flex';
-            triggerConfetti();
+            triggerConfettiTimer();
         }
 
         function hideLevelUpPopup() {
-            console.log('Hiding level up popup and redirecting');
+            console.log('Hiding level up popup');
             document.getElementById('popupLevelUp').style.display = 'none';
             confetti.reset();
-
-            // Reset level up flags
-            leveledUp = false;
-            newLevel = 0;
-
-            // Redirect to front page after level up popup is closed
-            setTimeout(function () {
-                window.location.href = 'Default.aspx';
-            }, 500);
+            window.location.href = "Default.aspx";
         }
-
-        // ===== CONFETTI FUNCTIONS =====
-
+        // Confetti Functions
         function triggerConfetti() {
             console.log('Triggering confetti');
             // Major explosion
@@ -405,8 +362,9 @@
                 particleCount: 300,
                 spread: 100,
                 origin: { y: 0.6 },
-                colors: ['#FFD700', '#FFA500', '#FF8C00', '#FF6347', '#00FF7F', '#1E90FF']
+                colors: ['#F4CAE0', '#D7B9D5', '#ADA7C9', '#90A8C3', '#64A6BD', '#FFFFFF']
             });
+            // old colors: ['#FFD700', '#FFA500', '#FF8C00', '#FF6347', '#00FF7F', '#1E90FF']
 
             // Continuous falling confetti for 5 seconds
             const duration = 5000;
@@ -418,64 +376,210 @@
                     angle: 60,
                     spread: 55,
                     origin: { x: 0 },
-                    colors: ['#FFD700', '#FFA500', '#FF8C00']
+                    colors: ['#F4CAE0', '#D7B9D5', '#ADA7C9']
                 });
+                // old colors: ['#FFD700', '#FFA500', '#FF8C00']
                 confetti({
                     particleCount: 5,
                     angle: 120,
                     spread: 55,
                     origin: { x: 1 },
-                    colors: ['#1E90FF', '#00FF7F', '#FF6347']
+                    colors: ['#90A8C3', '#64A6BD', '#FFFFFF']
                 });
+                // old colors: ['#1E90FF', '#00FF7F', '#FF6347']
 
                 if (Date.now() < end) {
                     requestAnimationFrame(frame);
                 }
             }());
         }
-
-        function triggerEnhancedConfetti() {
-            console.log('Triggering enhanced confetti');
-            const end = Date.now() + 3000;
-            const colors = ['#FFD700', '#FFA500', '#FF8C00', '#FF6347', '#00FF7F', '#1E90FF', '#9370DB', '#FF69B4'];
-
-            (function frame() {
-                confetti({
-                    particleCount: 10,
-                    angle: 60,
-                    spread: 70,
-                    origin: { x: 0, y: 0.7 },
-                    colors: colors
-                });
-                confetti({
-                    particleCount: 10,
-                    angle: 120,
-                    spread: 70,
-                    origin: { x: 1, y: 0.7 },
-                    colors: colors
-                });
-                confetti({
-                    particleCount: 15,
-                    spread: 100,
-                    origin: { y: 0.6 },
-                    colors: colors
-                });
-
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
-            }());
-
-            // Big explosion in the center
-            setTimeout(() => {
-                confetti({
-                    particleCount: 200,
-                    spread: 150,
-                    origin: { y: 0.6 },
-                    colors: colors
-                });
-            }, 500);
+        function onStudySessionComplete() {
+            showStudySessionTimeUpPopup();
         }
+        // TAMMY ADDED - END
+
+
+
+        // ===== STUDY SESSION TIMER COMPLETION FUNCTIONS =====
+
+        // This function should be called when the study session timer completes
+        //function onStudySessionComplete(minutesStudied) {
+        //    console.log('Study session completed. Minutes studied:', minutesStudied);
+
+        //    // Call the WebMethod to update rewards and check for level up
+        //    PageMethods.UpdateStudySessionRewards(minutesStudied, function (response) {
+        //        console.log('UpdateStudySessionRewards response:', response);
+
+        //        if (response.startsWith("Success")) {
+        //            // Parse the response
+        //            // Format: "Success:XP_EARNED:COINS_EARNED:LEVELED_UP_FLAG:NEW_LEVEL"
+        //            var parts = response.split(':');
+        //            var xpEarned = parts[1];
+        //            var coinsEarned = parts[2];
+        //            var leveledUpFlag = parts[3] === "1";
+        //            var achievedLevel = parts[4];
+
+        //            console.log('Parsed response - XP:', xpEarned, 'Coins:', coinsEarned, 'Leveled up:', leveledUpFlag, 'New level:', achievedLevel);
+
+        //            // Update the time-up popup with earned amounts
+        //            document.getElementById('xpEarned').textContent = '+' + xpEarned;
+        //            document.getElementById('coinsEarned').textContent = '+' + coinsEarned;
+
+        //            // Store level up information for when user clicks "Thank you"
+        //            leveledUp = leveledUpFlag;
+        //            newLevel = achievedLevel;
+
+        //            // Show the time-up popup
+        //            document.getElementById('popupTimeUp').style.display = 'flex';
+
+        //        } else if (response.startsWith("Error")) {
+        //            console.error('Error updating rewards:', response);
+        //            // Still show time-up popup with default values as fallback
+        //            document.getElementById('xpEarned').textContent = '+10';
+        //            document.getElementById('coinsEarned').textContent = '+10';
+        //            leveledUp = false;
+        //            document.getElementById('popupTimeUp').style.display = 'flex';
+        //        } else {
+        //            console.error('Unexpected response:', response);
+        //            // Fallback: show time-up popup with default values
+        //            document.getElementById('xpEarned').textContent = '+10';
+        //            document.getElementById('coinsEarned').textContent = '+10';
+        //            leveledUp = false;
+        //            document.getElementById('popupTimeUp').style.display = 'flex';
+        //        }
+        //    }, function (error) {
+        //        console.error('WebMethod call failed:', error);
+        //        // Fallback: show time-up popup with default values
+        //        document.getElementById('xpEarned').textContent = '+10';
+        //        document.getElementById('coinsEarned').textContent = '+10';
+        //        leveledUp = false;
+        //        document.getElementById('popupTimeUp').style.display = 'flex';
+        //    });
+        //}
+
+        //// Function to handle when user clicks "Thank you" in the time-up popup
+        //function hideStudySessionTimeUpPopup() {
+        //    console.log('Hiding time-up popup. Leveled up:', leveledUp, 'New level:', newLevel);
+
+        //    document.getElementById('popupTimeUp').style.display = 'none';
+
+        //    // Check if we need to show level up popup
+        //    if (leveledUp) {
+        //        console.log('Showing level up popup for level:', newLevel);
+        //        showLevelUpPopup(newLevel);
+        //    } else {
+        //        console.log('No level up - redirecting to home page');
+        //        // If no level up, redirect to front page immediately
+        //        setTimeout(function () {
+        //            window.location.href = 'Default.aspx';
+        //        }, 500);
+        //    }
+        //}
+
+        //// ===== LEVEL UP POPUP FUNCTIONS =====
+
+        //function showLevelUpPopup(level) {
+        //    console.log('Displaying level up popup for level:', level);
+        //    document.getElementById('newLevelSpan').innerText = level;
+        //    document.getElementById('popupLevelUp').style.display = 'flex';
+        //    triggerConfetti();
+        //}
+
+        //function hideLevelUpPopup() {
+        //    console.log('Hiding level up popup and redirecting');
+        //    document.getElementById('popupLevelUp').style.display = 'none';
+        //    confetti.reset();
+
+        //    // Reset level up flags
+        //    leveledUp = false;
+        //    newLevel = 0;
+
+        //    // Redirect to front page after level up popup is closed
+        //    setTimeout(function () {
+        //        window.location.href = 'Default.aspx';
+        //    }, 500);
+        //}
+
+        //// ===== CONFETTI FUNCTIONS =====
+
+        //function triggerConfetti() {
+        //    console.log('Triggering confetti');
+        //    // Major explosion
+        //    confetti({
+        //        particleCount: 300,
+        //        spread: 100,
+        //        origin: { y: 0.6 },
+        //        colors: ['#FFD700', '#FFA500', '#FF8C00', '#FF6347', '#00FF7F', '#1E90FF']
+        //    });
+
+        //    // Continuous falling confetti for 5 seconds
+        //    const duration = 5000;
+        //    const end = Date.now() + duration;
+
+        //    (function frame() {
+        //        confetti({
+        //            particleCount: 5,
+        //            angle: 60,
+        //            spread: 55,
+        //            origin: { x: 0 },
+        //            colors: ['#FFD700', '#FFA500', '#FF8C00']
+        //        });
+        //        confetti({
+        //            particleCount: 5,
+        //            angle: 120,
+        //            spread: 55,
+        //            origin: { x: 1 },
+        //            colors: ['#1E90FF', '#00FF7F', '#FF6347']
+        //        });
+
+        //        if (Date.now() < end) {
+        //            requestAnimationFrame(frame);
+        //        }
+        //    }());
+        //}
+
+        //function triggerEnhancedConfetti() {
+        //    console.log('Triggering enhanced confetti');
+        //    const end = Date.now() + 3000;
+        //    const colors = ['#FFD700', '#FFA500', '#FF8C00', '#FF6347', '#00FF7F', '#1E90FF', '#9370DB', '#FF69B4'];
+
+        //    (function frame() {
+        //        confetti({
+        //            particleCount: 10,
+        //            angle: 60,
+        //            spread: 70,
+        //            origin: { x: 0, y: 0.7 },
+        //            colors: colors
+        //        });
+        //        confetti({
+        //            particleCount: 10,
+        //            angle: 120,
+        //            spread: 70,
+        //            origin: { x: 1, y: 0.7 },
+        //            colors: colors
+        //        });
+        //        confetti({
+        //            particleCount: 15,
+        //            spread: 100,
+        //            origin: { y: 0.6 },
+        //            colors: colors
+        //        });
+
+        //        if (Date.now() < end) {
+        //            requestAnimationFrame(frame);
+        //        }
+        //    }());
+
+        //    // Big explosion in the center
+        //    setTimeout(() => {
+        //        confetti({
+        //            particleCount: 200,
+        //            spread: 150,
+        //            origin: { y: 0.6 },
+        //            colors: colors
+        //        });
+        //    }, 500);
+        //}
 
         // ===== OTHER POPUP FUNCTIONS =====
 

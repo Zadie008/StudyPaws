@@ -110,7 +110,7 @@ public partial class View_study_session : System.Web.UI.Page
 
     [System.Web.Services.WebMethod]
     [System.Web.Script.Services.ScriptMethod]
-    public static string UpdateStudySessionRewards(int minutesStudied)
+    public static string UpdateStudySessionRewards(int minutesStudied) // TAMMY CHANGED
     {
         try
         {
@@ -126,24 +126,30 @@ public partial class View_study_session : System.Web.UI.Page
 
             string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
+            bool leveledUp = false; // TAMMY ADDED
+            int newLevel = 0; // TAMMY ADDED
+
             using (MySqlConnection con = new MySqlConnection(connectionString))
             {
                 con.Open();
 
-                // Get current XP first
-                string getCurrentXPQuery = "SELECT userXP FROM Users WHERE userID = @userID";
-                MySqlCommand getCurrentXPCmd = new MySqlCommand(getCurrentXPQuery, con);
-                getCurrentXPCmd.Parameters.AddWithValue("@userID", userID);
-                object currentXPObj = getCurrentXPCmd.ExecuteScalar();
-                int currentXP = (currentXPObj != null && currentXPObj != DBNull.Value) ? Convert.ToInt32(currentXPObj) : 0;
-                int newXP = currentXP + xpEarned;
+                // Get current XP first and level - TAMMY CHANGED
+                string getCurrentQuery = "SELECT u.userXP, COALESCE (cl.levelID, 1) as currentLevel FROM Users u LEFT JOIN CurrentLevel cl ON u.userID = cl.userID WHERE u.userID = @userID";
+                int currentXP = 0;
+                int currentLevel = 1;
+                using(MySqlCommand getCurrentCmd = new MySqlCommand(getCurrentQuery, con))
+                {
+                    getCurrentCmd.Parameters.AddWithValue("@userID", userID);
+                    using (MySqlDataReader reader = getCurrentCmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            currentXP = reader["userXP"] != DBNull.Value ? Convert.ToInt32(reader["userXP"]) : 0;
+                            currentLevel = reader["currentLevel"] != DBNull.Value ? Convert.ToInt32(reader["currentLevel"]) : 1;
+                        }
+                    }
+                }
 
-                // Get current level
-                string getCurrentLevelQuery = "SELECT levelID FROM CurrentLevel WHERE userID = @userID";
-                MySqlCommand getCurrentLevelCmd = new MySqlCommand(getCurrentLevelQuery, con);
-                getCurrentLevelCmd.Parameters.AddWithValue("@userID", userID);
-                object currentLevelObj = getCurrentLevelCmd.ExecuteScalar();
-                int currentLevel = (currentLevelObj != null && currentLevelObj != DBNull.Value) ? Convert.ToInt32(currentLevelObj) : 1;
 
                 // Update user XP
                 string updateXPQuery = "UPDATE Users SET userXP = userXP + @xpEarned WHERE userID = @userID";
@@ -152,25 +158,16 @@ public partial class View_study_session : System.Web.UI.Page
                 cmd.Parameters.AddWithValue("@userID", userID);
                 cmd.ExecuteNonQuery();
 
-                // Update user coins
-                string updateCoinsQuery = "UPDATE Users SET userCoinCount = userCoinCount + @coinsEarned WHERE userID = @userID";
-                MySqlCommand cmdCoins = new MySqlCommand(updateCoinsQuery, con);
-                cmdCoins.Parameters.AddWithValue("@coinsEarned", coinsEarned);
-                cmdCoins.Parameters.AddWithValue("@userID", userID);
-                cmdCoins.ExecuteNonQuery();
-
-                // Check for level up
+                // Check new level - TAMMY ADDED
                 string getNewLevelQuery = "SELECT MAX(levelNum) FROM Level WHERE xpAmount <= @newXP";
                 MySqlCommand getNewLevelCmd = new MySqlCommand(getNewLevelQuery, con);
-                getNewLevelCmd.Parameters.AddWithValue("@newXP", newXP);
+                getNewLevelCmd.Parameters.AddWithValue("@newXP", currentXP + xpEarned);
                 object newLevelObj = getNewLevelCmd.ExecuteScalar();
                 int newLevelNum = (newLevelObj != null && newLevelObj != DBNull.Value) ? Convert.ToInt32(newLevelObj) : 1;
-
-                bool leveledUp = false;
-                int achievedLevel = currentLevel;
-
                 if (newLevelNum > currentLevel)
                 {
+                    leveledUp = true;
+                    newLevel = newLevelNum;
                     // Update level
                     string updateLevelQuery = "UPDATE CurrentLevel SET levelID = @newLevelNum WHERE userID = @userID";
                     MySqlCommand updateLevelCmd = new MySqlCommand(updateLevelQuery, con);
@@ -178,12 +175,34 @@ public partial class View_study_session : System.Web.UI.Page
                     updateLevelCmd.Parameters.AddWithValue("@userID", userID);
                     updateLevelCmd.ExecuteNonQuery();
 
-                    leveledUp = true;
-                    achievedLevel = newLevelNum;
-                }
+                    if (newLevelNum >= 25)
+                    {
+                        AwardBadgeStatic(con, Convert.ToInt32(userID), 16, "Gold");
+                    }
+                    else if (newLevelNum >= 15)
+                    {
+                        AwardBadgeStatic(con, Convert.ToInt32(userID), 16, "Silver");
+                    }
+                    else if (newLevelNum >= 5)
+                    {
+                        AwardBadgeStatic(con, Convert.ToInt32(userID), 16, "Bronze");
+                    }
+                } // END TAMMY ADDED
+
+                // Update user coins
+                string updateCoinsQuery = "UPDATE Users SET userCoinCount = userCoinCount + @coinsEarned WHERE userID = @userID";
+                MySqlCommand cmdCoins = new MySqlCommand(updateCoinsQuery, con);
+                cmdCoins.Parameters.AddWithValue("@coinsEarned", coinsEarned);
+                cmdCoins.Parameters.AddWithValue("@userID", userID);
+                cmdCoins.ExecuteNonQuery();
+
+
 
                 // Return level up information in the response
-                return string.Format("Success:{0}:{1}:{2}:{3}", xpEarned, coinsEarned, leveledUp ? "1" : "0", achievedLevel);
+                //return string.Format("Success:{0}:{1}:{2}:{3}", xpEarned, coinsEarned, leveledUp ? "1" : "0", achievedLevel);
+
+                //TAMMY ADDED
+                return leveledUp ? "LevelUp:" + newLevel + ":" + xpEarned + ":" + coinsEarned : "Success:" + xpEarned + ":" + coinsEarned;
             }
         }
         catch (Exception ex)

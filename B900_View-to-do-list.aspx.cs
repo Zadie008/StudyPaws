@@ -467,6 +467,19 @@ public partial class Default2 : System.Web.UI.Page
                         updateLevelCmd.Parameters.AddWithValue("@userID", userID);
                         updateLevelCmd.ExecuteNonQuery();
 
+                        if (newLevelNum >= 25)
+                        {
+                            AwardBadgeStatic(con, Convert.ToInt32(userID), 16, "Gold");
+                        }
+                        else if (newLevelNum >= 15)
+                        {
+                            AwardBadgeStatic(con, Convert.ToInt32(userID), 16, "Silver");
+                        }
+                        else if (newLevelNum >= 5)
+                        {
+                            AwardBadgeStatic(con, Convert.ToInt32(userID), 16, "Bronze");
+                        }
+
                         // Store level up info in session
                         Session["ShowLevelUpPopup"] = true;
                         Session["CurrentLevel"] = newLevelNum;

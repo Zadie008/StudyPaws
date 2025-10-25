@@ -54,7 +54,17 @@ public partial class B500_B800_Tags : System.Web.UI.Page
         if (Page.IsValid)
         {
             String tagName = txtTagTitle.Text.Trim();
-            int tagColourNum = int.Parse(hfTagColourNum.Value);
+            int tagColourNum = 0;
+
+            if (!string.IsNullOrEmpty(hiddenSelectedTagColour.Value) && int.TryParse(hiddenSelectedTagColour.Value, out tagColourNum)){
+
+            }
+            else
+            {
+                validatorTagColour.IsValid = false;
+                validatorTagColour.ErrorMessage = "Please select a Tag Colour";
+                return;
+            }
             int userID = Convert.ToInt32(Session["userID"]);
             string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
             int newTagID = 0;
@@ -90,7 +100,8 @@ public partial class B500_B800_Tags : System.Web.UI.Page
     }
     protected void validatorTagColour_ServerValidate(object sender, ServerValidateEventArgs e)
     {
-        e.IsValid = !string.IsNullOrEmpty(hfTagColourNum.Value);
+        int temp;
+        e.IsValid = !string.IsNullOrEmpty(hiddenSelectedTagColour.Value) && int.TryParse(hiddenSelectedTagColour.Value, out temp) && temp>= 1 && temp <=5;
     }
     protected void btnBack_Click(object sender, EventArgs e)
     {

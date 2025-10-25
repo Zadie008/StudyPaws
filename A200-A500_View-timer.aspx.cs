@@ -77,7 +77,7 @@ public partial class A200_View_timer : System.Web.UI.Page
     //COMPLETED TIMER
     [System.Web.Services.WebMethod]
     [System.Web.Script.Services.ScriptMethod]
-    public static string UpdateUserXP(int minutesStudied)
+    public static string UpdateUserXP(int minutesStudied) // TAMMY CHANGED THIS
     {
         try
         {
@@ -93,9 +93,29 @@ public partial class A200_View_timer : System.Web.UI.Page
 
             string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
+            bool leveledUp = false; // TAMMY ADDED
+            int newLevel = 0; // TAMMY ADDED
+
             using (MySqlConnection con = new MySqlConnection(connectionString))
             {
                 con.Open();
+
+                // Get current XP and level first - TAMMY ADDED
+                string getCurrentQuery = "SELECT u.userXP, COALESCE (cl.levelID, 1) as currentLevel FROM Users u LEFT JOIN CurrentLevel cl ON u.userID = cl.userID WHERE u.userID = @userID";
+                int currentXP = 0;
+                int currentLevel = 1;
+                using (MySqlCommand getDataCmd = new MySqlCommand(getCurrentQuery, con))
+                {
+                    getDataCmd.Parameters.AddWithValue("@userID", userID);
+                    using (MySqlDataReader reader = getDataCmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            currentXP = reader["userXP"] != DBNull.Value ? Convert.ToInt32(reader["userXP"]) : 0;
+                            currentLevel = reader["currentLevel"] != DBNull.Value ? Convert.ToInt32(reader["currentLevel"]) : 1;
+                        }
+                    }
+                }// END TAMMY ADDED
 
                 // Update user XP
                 string updateXPQuery = "UPDATE Users SET userXP = userXP + @xpEarned WHERE userID = @userID";
@@ -103,6 +123,39 @@ public partial class A200_View_timer : System.Web.UI.Page
                 cmd.Parameters.AddWithValue("@xpEarned", xpEarned);
                 cmd.Parameters.AddWithValue("@userID", userID);
                 cmd.ExecuteNonQuery();
+
+
+                // Check new level - TAMMY ADDED
+                string getNewLevelQuery = "SELECT MAX(levelNum) FROM Level WHERE xpAmount <= @newXP";
+                MySqlCommand getNewLevelCmd = new MySqlCommand (getNewLevelQuery, con);
+                getNewLevelCmd.Parameters.AddWithValue("@newXP", currentXP + xpEarned);
+                object newLevelObj = getNewLevelCmd.ExecuteScalar();
+                int newLevelNum = (newLevelObj != null && newLevelObj != DBNull.Value) ? Convert.ToInt32(newLevelObj) : 1;
+                if (newLevelNum> currentLevel)
+                {
+                    leveledUp = true;
+                    newLevel = newLevelNum;
+                    // Update level
+                    string updateLevelQuery = "UPDATE CurrentLevel SET levelID = @newLevelNum WHERE userID = @userID";
+                    MySqlCommand updateLevelCmd = new MySqlCommand(updateLevelQuery, con);
+                    updateLevelCmd.Parameters.AddWithValue("@newLevelNum", newLevelNum);
+                    updateLevelCmd.Parameters.AddWithValue("@userID", userID);
+                    updateLevelCmd.ExecuteNonQuery();
+
+                    if (newLevelNum >= 25)
+                    {
+                        AwardBadgeStatic(con, Convert.ToInt32(userID), 16, "Gold");
+                    }
+                    else if (newLevelNum >= 15)
+                    {
+                        AwardBadgeStatic(con, Convert.ToInt32(userID), 16, "Silver");
+                    }
+                    else if (newLevelNum >= 5)
+                    {
+                        AwardBadgeStatic(con, Convert.ToInt32(userID), 16, "Bronze");
+                    }
+                } // END TAMMY ADDED
+
 
                 // Update user coins
                 string updateCoinsQuery = "UPDATE Users SET userCoinCount = userCoinCount + @coinsEarned WHERE userID = @userID";
@@ -140,7 +193,8 @@ public partial class A200_View_timer : System.Web.UI.Page
                 CheckCombinedCompletionBadges(con, userIDInt);
             }
 
-            return "Success: " + xpEarned + " XP and " + coinsEarned + " coins added";
+            //return "Success: " + xpEarned + " XP and " + coinsEarned + " coins added";
+            return leveledUp ? "LevelUp:" + newLevel + ":" + xpEarned + ":" + coinsEarned : "Success:" + xpEarned + ":" + coinsEarned; // TAMMY ADDED
         }
         catch (Exception ex)
         {
