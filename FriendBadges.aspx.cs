@@ -10,7 +10,8 @@ using System.Web.UI.WebControls;
 
 public partial class Default2 : System.Web.UI.Page
 {
-    protected void Page_Load(object sender, EventArgs e)
+   
+         protected void Page_Load(object sender, EventArgs e)
     {
         if (Request.IsAuthenticated)
         {
@@ -32,6 +33,7 @@ public partial class Default2 : System.Web.UI.Page
 
                 if (!string.IsNullOrEmpty(userID))
                 {
+                    Session["userID"] = userID;
                     int userXP = GetUserXP(cs, userID);
                     GetLevelInformation(cs, userID);
                     GetUserStats(cs, userID);
@@ -61,9 +63,8 @@ public partial class Default2 : System.Web.UI.Page
             }
             else
             {
-                lblPageTitle.Text = "Error. Loaded friends badges. Nobody was selected";
+                lblPageTitle.Text = "My Badges";
                 LoadBadges(false);
-                
             }
         }
     }
@@ -87,6 +88,7 @@ public partial class Default2 : System.Web.UI.Page
             return result != null ? result.ToString() : "Friend";
         }
     }
+
     private void LoadBadges(bool viewingFriend = false)
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -119,14 +121,25 @@ public partial class Default2 : System.Web.UI.Page
             {
                 while (reader.Read())
                 {
+                    string badgeType = reader["badgeType"] == DBNull.Value ? "none" : reader["badgeType"].ToString().ToLower();
+
+                    // Determine which description to show based on current achievement level
+                    string currentDescription = GetCurrentBadgeDescription(
+                        badgeType,
+                        reader["badgeDescBronze"].ToString(),
+                        reader["badgeDescSilver"].ToString(),
+                        reader["badgeDescGold"].ToString()
+                    );
+
                     BadgeIcon badge = new BadgeIcon
                     {
                         badgeName = reader["badgeName"].ToString(),
+                        badgeDescription = currentDescription,
                         badgeDescBronze = reader["badgeDescBronze"].ToString(),
                         badgeDescSilver = reader["badgeDescSilver"].ToString(),
                         badgeDescGold = reader["badgeDescGold"].ToString(),
                         badgeIconNum = GetBadgeImagePath(Convert.ToInt32(reader["badgeIconNum"])),
-                        badgeType = reader["badgeType"] == DBNull.Value ? "none" : reader["badgeType"].ToString().ToLower()
+                        badgeType = badgeType
                     };
                     badgeList.Add(badge);
                 }
@@ -135,6 +148,23 @@ public partial class Default2 : System.Web.UI.Page
 
         rpPets.DataSource = badgeList;
         rpPets.DataBind();
+    }
+
+    private string GetCurrentBadgeDescription(string badgeType, string bronzeDesc, string silverDesc, string goldDesc)
+    {
+        switch (badgeType)
+        {
+            case "none":
+                return bronzeDesc; // Show bronze description if no achievement
+            case "bronze":
+                return silverDesc; // Show silver description if bronze achieved
+            case "silver":
+                return goldDesc;   // Show gold description if silver achieved
+            case "gold":
+                return goldDesc;   // Show gold description if gold achieved
+            default:
+                return bronzeDesc;
+        }
     }
 
     private string GetBadgeImagePath(int badgeImageID)
@@ -164,15 +194,18 @@ public partial class Default2 : System.Web.UI.Page
             default: return "~/Images/Badges/1_Busy-Bee.png";
         }
     }
+
     public class BadgeIcon
     {
         public string badgeName { get; set; }
+        public string badgeDescription { get; set; } // Single description based on current level
         public string badgeDescBronze { get; set; }
         public string badgeDescSilver { get; set; }
         public string badgeDescGold { get; set; }
         public string badgeIconNum { get; set; }
         public string badgeType { get; set; }
     }
+
     protected string GetStarHtml(string badgeType)
     {
         int stars = 0;
@@ -191,6 +224,10 @@ public partial class Default2 : System.Web.UI.Page
 
         return html;
     }
+
+    // ... (Keep all your existing methods like GetUserID, GetUserXP, GetLevelInformation, etc.)
+    // These methods remain the same as in your original code
+
     private string GetUserID(string username, string connectionString)
     {
         string query = "SELECT userID FROM Users WHERE username = @username";
