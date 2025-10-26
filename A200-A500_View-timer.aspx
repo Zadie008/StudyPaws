@@ -171,19 +171,79 @@
         </div>
 
         <!-- Level Up Popup with Confetti -->
-<div id="popupLevelUp" class="simple-popup" style="display: none;">
-    <div class="popup-pink-box">
-        <h2>🎉 Level Up! 🎉</h2>
-        <p>Congratulations! You've reached Level <span id="newLevelSpan"></span>!</p>
-        <img src="Images/Notification%20Happy.png" />
-        <br />
-        <div class="buttonSection">
-            <asp:Button ID="btnYayLevelUp" CssClass="popup-button" runat="server" Text="Awesome!" OnClientClick="hideLevelUpPopup(); return false;" />
+        <div id="popupLevelUp" class="simple-popup" style="display: none;">
+            <div class="popup-pink-box">
+                <h2>🎉 Level Up! 🎉</h2>
+                <p>Congratulations! You've reached Level <span id="newLevelSpan"></span>!</p>
+                <img src="Images/Notification%20Happy.png" />
+                <br />
+                <div class="buttonSection">
+                    <asp:Button ID="btnYayLevelUp" CssClass="popup-button" runat="server" Text="Awesome!" OnClientClick="hideLevelUpPopup(); return false;" />
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+        <script type="text/javascript">
+            // Level Up Popup Functions
+            function showLevelUpPopup(newLevel) {
+                console.log('Showing level up popup for level:', newLevel);
+                document.getElementById('newLevelSpan').innerText = newLevel;
+                document.getElementById('popupLevelUp').style.display = 'flex';
+                triggerConfetti();
+            }
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+            function hideLevelUpPopup() {
+                console.log('Hiding level up popup');
+                document.getElementById('popupLevelUp').style.display = 'none';
+                confetti.reset();
+            }
+
+            // Confetti Functions
+            function triggerConfetti() {
+                console.log('Triggering confetti');
+                // Major explosion
+                confetti({
+                    particleCount: 300,
+                    spread: 100,
+                    origin: { y: 0.6 },
+                    colors: ['#F4CAE0', '#D7B9D5', '#ADA7C9', '#90A8C3', '#64A6BD', '#FFFFFF']
+                });
+
+                // Continuous falling confetti for 5 seconds
+                const duration = 5000;
+                const end = Date.now() + duration;
+
+                (function frame() {
+                    confetti({
+                        particleCount: 5,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0 },
+                        colors: ['#F4CAE0', '#D7B9D5', '#ADA7C9']
+                    });
+                    confetti({
+                        particleCount: 5,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 1 },
+                        colors: ['#90A8C3', '#64A6BD', '#FFFFFF']
+                    });
+
+                    if (Date.now() < end) {
+                        requestAnimationFrame(frame);
+                    }
+                }());
+            }
+
+            // Check for level up on page load
+            window.onload = function() {
+                // Check if we need to show level up popup from session
+                <% if (Session["ShowLevelUpPopup"] != null && (bool)Session["ShowLevelUpPopup"]) { %>
+                    showLevelUpPopup(<%= Session["CurrentLevel"] %>);
+                    <% Session["ShowLevelUpPopup"] = false; %>
+                <% } %>
+            };
+        </script>
     </div>
 
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" />

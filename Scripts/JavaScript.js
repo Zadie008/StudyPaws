@@ -506,7 +506,7 @@ function showLevelUpPopup(newLevel) {
     console.log('Showing level up popup for level:', newLevel);
     document.getElementById('newLevelSpan').innerText = newLevel;
     document.getElementById('popupLevelUp').style.display = 'flex';
-    triggerConfettiTimer();
+    triggerConfetti();
 }
 
 //TAMMY ADDED
