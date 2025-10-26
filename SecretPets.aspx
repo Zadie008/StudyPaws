@@ -304,7 +304,6 @@
         </script>
     </div>
 
-    <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" />
     <audio id="equipSound" src="Audio/soundEffectPop_1.mp3" preload="auto"></audio>
 </asp:Content>
 
