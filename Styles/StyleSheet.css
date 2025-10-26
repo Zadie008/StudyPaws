@@ -5721,6 +5721,10 @@ table {
         padding: 3% 0 0% 0;
     }
 
+    #createSession2MainContent .createTimer2MainContent .titleTagSection .rightSection table td {
+        padding: 2% 0 1% 0;
+    }
+
     .createTimer2MainContent .titleTagSection .rightSection table td .validationError {
         white-space: nowrap;
         overflow: hidden;
@@ -5729,7 +5733,6 @@ table {
 
     .createTimer2MainContent .validationError {
         line-height: 1.2;
-
     }
 
     /* CREATE TIMER PAGE 3 */

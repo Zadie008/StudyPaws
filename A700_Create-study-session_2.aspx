@@ -92,131 +92,133 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="mainContentPlaceHolder" Runat="Server">
-    <div class="createTimer2MainContent">
-        <div class="titleTagSection">
-            <div class="leftSection">
+    <div id="createSession2MainContent">
+        <div class="createTimer2MainContent">
+            <div class="titleTagSection">
+                <div class="leftSection">
+                </div>
+                <div class="middleSection">
+                    <table>
+                        <tr>
+                            <td><asp:Label ID="lblTitle" class="label" runat="server" Text="Title"></asp:Label></td>
+                            <td><asp:TextBox ID="txtTitle" class="textbox" runat="server"></asp:TextBox></td>
+                        </tr>
+                        <tr>
+                            <td><asp:Label ID="lblTag" class="label" runat="server" Text="Tag"></asp:Label></td>
+                            <td>
+                                <asp:DropDownList ID="dropdownTag" ClientIDMode="Static" class="dropDownList" runat="server" BackColor="#446791">
+                                <asp:ListItem></asp:ListItem>
+                                <asp:ListItem>Studying</asp:ListItem>
+                                <asp:ListItem>Assignments</asp:ListItem>
+                                <asp:ListItem>Reading</asp:ListItem>
+                                <asp:ListItem>Break</asp:ListItem>
+                                </asp:DropDownList>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="rightSection">
+                    <table>
+                        <tr>
+                            <td><asp:RequiredFieldValidator ID="errorTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title for your Study session" EnableClientScript="true" ControlToValidate="txtTitle"></asp:RequiredFieldValidator></td>
+                        </tr>
+                        <tr>
+                            <td><asp:RequiredFieldValidator ID="errorDropDown" class="validationError" runat="server" ErrorMessage="Please select a Tag for your Study session" EnableClientScript="true" ControlToValidate="dropdownTag"></asp:RequiredFieldValidator></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-            <div class="middleSection">
-                <table>
-                    <tr>
-                        <td><asp:Label ID="lblTitle" class="label" runat="server" Text="Title"></asp:Label></td>
-                        <td><asp:TextBox ID="txtTitle" class="textbox" runat="server"></asp:TextBox></td>
-                    </tr>
-                    <tr>
-                        <td><asp:Label ID="lblTag" class="label" runat="server" Text="Tag"></asp:Label></td>
-                        <td>
-                            <asp:DropDownList ID="dropdownTag" ClientIDMode="Static" class="dropDownList" runat="server" BackColor="#446791">
-                            <asp:ListItem></asp:ListItem>
-                            <asp:ListItem>Studying</asp:ListItem>
-                            <asp:ListItem>Assignments</asp:ListItem>
-                            <asp:ListItem>Reading</asp:ListItem>
-                            <asp:ListItem>Break</asp:ListItem>
-                            </asp:DropDownList>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="rightSection">
-                <table>
-                    <tr>
-                        <td><asp:RequiredFieldValidator ID="errorTitle" class="validationError" runat="server" ErrorMessage="Please enter a Title for your Study session" EnableClientScript="true" ControlToValidate="txtTitle"></asp:RequiredFieldValidator></td>
-                    </tr>
-                    <tr>
-                        <td><asp:RequiredFieldValidator ID="errorDropDown" class="validationError" runat="server" ErrorMessage="Please select a Tag for your Study session" EnableClientScript="true" ControlToValidate="dropdownTag"></asp:RequiredFieldValidator></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <div class="buttonSection">
-            <div class="leftSection">
-            </div>
-            <div class="middleSection">
-                <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="False" />
-                <asp:Button ID="btnContinue" class="button" runat="server" Text="Continue" OnClick="btnContinue_Click" />
-            </div>
-            <div class="rightSection">
-                <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past sessions" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
-            </div>
-        </div>
-
-            <!--does not have notification-->
-            <div id="popupNoNotifications" class="simple-popup" style="display: none;">
-                <div class="popup-blue-box">
-                    <p>You do not have any notifications at the moment!</p>
-                    <img src="Images/Notification%20Sad%20Hamster.png" />
-                    <br />
-                    <div class="buttonSection">
-                        <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideNotificationPopup(); return false;" />
-                    </div>
+            <div class="buttonSection">
+                <div class="leftSection">
+                </div>
+                <div class="middleSection">
+                    <asp:Button ID="btnBack" class="button" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="False" />
+                    <asp:Button ID="btnContinue" class="button" runat="server" Text="Continue" OnClick="btnContinue_Click" />
+                </div>
+                <div class="rightSection">
+                    <asp:Button ID="btnViewPastTimers" class="button" runat="server" Text="View past sessions" Visible="False" /> <!--invisible but for correct spacing of other buttons-->
                 </div>
             </div>
 
-            <!--has notifications-->
-            <div id="popupHasNotifications" class="simple-popup" style="display: none;">
-                <div class="popup-pink-box">
-                    <asp:HiddenField ID="hiddenSessionID" runat="server" />
-                    <asp:Literal ID="litNotificationText" runat="server" />
-                    <img src="Images/Notification%20Happy.png" />
-                    <br />
-                    <div class="buttonSection">
-                        <asp:Button ID="btnYes" CssClass="popup-button-best-pink" runat="server" Text="Accept!" OnClick="btnYes_Click" />
-                        <asp:Button ID="btnNo" CssClass="popup-button" runat="server" Text="Decline!" OnClick="btnNo_Click" />
+                <!--does not have notification-->
+                <div id="popupNoNotifications" class="simple-popup" style="display: none;">
+                    <div class="popup-blue-box">
+                        <p>You do not have any notifications at the moment!</p>
+                        <img src="Images/Notification%20Sad%20Hamster.png" />
+                        <br />
+                        <div class="buttonSection">
+                            <asp:Button ID="btnOkay" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideNotificationPopup(); return false;" />
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="popupCalendar" class="simple-popup" style="display: none;">
-                <div class="popup-pink-box">
-                    <asp:HiddenField ID="hiddenShowCalendar" runat="server" />
-                    <p>Study Session has been added to your calendar!</p>
-                    <br />
-                    <br />
-                    <img src="Images/Notification%20Happy.png" />
-                    <br />
-                    <div class="buttonSection">
-                        <asp:Button ID="btnCalendar" CssClass="popup-button-best-pink" runat="server" Text="Calendar, GO!" OnClick="btnCalendar_Click" />
-                        <asp:Button ID="btnOk" CssClass="popup-button" runat="server" Text="Okay, thanks!" OnClick="btnOk_Click" />
+                <!--has notifications-->
+                <div id="popupHasNotifications" class="simple-popup" style="display: none;">
+                    <div class="popup-pink-box">
+                        <asp:HiddenField ID="hiddenSessionID" runat="server" />
+                        <asp:Literal ID="litNotificationText" runat="server" />
+                        <img src="Images/Notification%20Happy.png" />
+                        <br />
+                        <div class="buttonSection">
+                            <asp:Button ID="btnYes" CssClass="popup-button-best-pink" runat="server" Text="Accept!" OnClick="btnYes_Click" />
+                            <asp:Button ID="btnNo" CssClass="popup-button" runat="server" Text="Decline!" OnClick="btnNo_Click" />
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="popupConfirmDecline" class="simple-popup" style="display: none;">
-                <div class="popup-blue-box">
-                    <asp:HiddenField ID="hiddenShowConfirmation" runat="server" />
-                    <p>Are you sure you want to decline the Study Session invitation?</p>
-                    <img src="Images/Notification%20Sad%20Hamster.png" />
-                    <br />
-                    <div class="buttonSection">
-                        <asp:Button ID="btnSure" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnSure_Click" />
-                        <asp:Button ID="btnNotSure" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnNotSure_Click" />
+                <div id="popupCalendar" class="simple-popup" style="display: none;">
+                    <div class="popup-pink-box">
+                        <asp:HiddenField ID="hiddenShowCalendar" runat="server" />
+                        <p>Study Session has been added to your calendar!</p>
+                        <br />
+                        <br />
+                        <img src="Images/Notification%20Happy.png" />
+                        <br />
+                        <div class="buttonSection">
+                            <asp:Button ID="btnCalendar" CssClass="popup-button-best-pink" runat="server" Text="Calendar, GO!" OnClick="btnCalendar_Click" />
+                            <asp:Button ID="btnOk" CssClass="popup-button" runat="server" Text="Okay, thanks!" OnClick="btnOk_Click" />
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="popupIsDeclined" class="simple-popup" style="display: none;">
-                <div class="popup-blue-box">
-                    <asp:HiddenField ID="hiddenShowDeclineConfirmed" runat="server" />
-                    <p>Study Session has been declined!</p>
-                    <img src="Images/Notification%20Sad%20Hamster.png" />
-                    <br />
-                    <div class="buttonSection">
-                        <asp:Button ID="btnOkayDeclined" CssClass="popup-button" runat="server" Text="Okay!" OnClick="btnOkayDeclined_Click" />
+                <div id="popupConfirmDecline" class="simple-popup" style="display: none;">
+                    <div class="popup-blue-box">
+                        <asp:HiddenField ID="hiddenShowConfirmation" runat="server" />
+                        <p>Are you sure you want to decline the Study Session invitation?</p>
+                        <img src="Images/Notification%20Sad%20Hamster.png" />
+                        <br />
+                        <div class="buttonSection">
+                            <asp:Button ID="btnSure" CssClass="popup-button" runat="server" Text="Yes, I'm sure!" OnClick="btnSure_Click" />
+                            <asp:Button ID="btnNotSure" CssClass="popup-button-best-blue" runat="server" Text="No, not sure!" OnClick="btnNotSure_Click" />
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- study session has started (popup stays for 1 minute) -->
-            <div id="popup" class="simple-popup" style="display: none;">
-                <div class="popup-pink-box">
-                    <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
-                    <p style="font-size: 2.3em;">Study Session has started!</p>
-                    <img style="margin-bottom: -2em;" src="Images/Notification%20Happy.png" />
-                    <div class="buttonSection">
-                        <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
+                <div id="popupIsDeclined" class="simple-popup" style="display: none;">
+                    <div class="popup-blue-box">
+                        <asp:HiddenField ID="hiddenShowDeclineConfirmed" runat="server" />
+                        <p>Study Session has been declined!</p>
+                        <img src="Images/Notification%20Sad%20Hamster.png" />
+                        <br />
+                        <div class="buttonSection">
+                            <asp:Button ID="btnOkayDeclined" CssClass="popup-button" runat="server" Text="Okay!" OnClick="btnOkayDeclined_Click" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- study session has started (popup stays for 1 minute) -->
+                <div id="popup" class="simple-popup" style="display: none;">
+                    <div class="popup-pink-box">
+                        <asp:HiddenField ID="hiddenJoinSessionID" runat="server" />
+                        <p style="font-size: 2.3em;">Study Session has started!</p>
+                        <img style="margin-bottom: -2em;" src="Images/Notification%20Happy.png" />
+                        <div class="buttonSection">
+                            <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+    </div>
 </asp:Content>
 
 <asp:Content ID="Content5" ContentPlaceHolderID="footerContentPlaceHolder" Runat="Server">
