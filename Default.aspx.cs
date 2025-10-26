@@ -417,7 +417,9 @@ public partial class _Default : System.Web.UI.Page
     {
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         List<SessionInvite> pendingInvites = new List<SessionInvite>();
-        string query = "SELECT StudySession.sessionID, StudySession.sessionTitle, StudySession.sessionTag, StudySession.sessionStart, StudySession.sessionEnd, Users.username FROM (StudySessionParticipants INNER JOIN StudySession ON StudySessionParticipants.sessionID = StudySession.sessionID) INNER JOIN Users ON StudySession.leaderID = Users.userID WHERE StudySessionParticipants.userID = @userID AND StudySessionParticipants.accepted = false ORDER BY StudySession.sessionID ASC";
+
+        // nly select sessions that haven't started yet
+        string query = @"SELECT StudySession.sessionID, StudySession.sessionTitle, StudySession.sessionTag, StudySession.sessionStart, StudySession.sessionEnd, Users.username FROM (StudySessionParticipants INNER JOIN StudySession ON StudySessionParticipants.sessionID = StudySession.sessionID) INNER JOIN Users ON StudySession.leaderID = Users.userID WHERE StudySessionParticipants.userID = @userID AND StudySessionParticipants.accepted = false AND StudySession.sessionStart > NOW() ORDER BY StudySession.sessionStart ASC";  // order by start time
 
         using (MySqlConnection conn = new MySqlConnection(cs))
         using (MySqlCommand cmd = new MySqlCommand(query, conn))
@@ -475,15 +477,6 @@ public partial class _Default : System.Web.UI.Page
     {
         int sessionID = int.Parse(hiddenSessionID.Value);
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        string updateQuery = "UPDATE StudySessionParticipants SET accepted = true WHERE sessionID = @sessionID AND userID = @userID";
-        using (MySqlConnection conn = new MySqlConnection(cs))
-        using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn))
-        {
-            cmd.Parameters.AddWithValue("@sessionID", sessionID);
-            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
-            conn.Open();
-            cmd.ExecuteNonQuery();
-        }
 
         List<SessionInvite> invites = Session["PendingInvites"] as List<SessionInvite>;
         SessionInvite invite = null;
@@ -500,9 +493,12 @@ public partial class _Default : System.Web.UI.Page
             }
         }
 
+        int newEventID = 0;
+
         if (invite != null)
         {
-            string insertQuery = "INSERT INTO CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (@eventDesc, @eventDate, @tagID, @userID)";
+            // insert into calendarevent table
+            string insertQuery = "INSERT INTO CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (@eventDesc, @eventDate, @tagID, @userID); SELECT LAST_INSERT_ID();";
             using (MySqlConnection conn = new MySqlConnection(cs))
             using (MySqlCommand cmd2 = new MySqlCommand(insertQuery, conn))
             {
@@ -517,8 +513,20 @@ public partial class _Default : System.Web.UI.Page
                 cmd2.Parameters.AddWithValue("@userID", userID);
 
                 conn.Open();
-                cmd2.ExecuteNonQuery();
+                newEventID = Convert.ToInt32(cmd2.ExecuteScalar());
             }
+        }
+
+        // insert into studysessionparticipants table
+        string updateQuery = "UPDATE StudySessionParticipants SET accepted = true, eventID = @eventID WHERE sessionID = @sessionID AND userID = @userID";
+        using (MySqlConnection conn = new MySqlConnection(cs))
+        using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn))
+        {
+            cmd.Parameters.AddWithValue("@eventID", newEventID);
+            cmd.Parameters.AddWithValue("@sessionID", sessionID);
+            cmd.Parameters.AddWithValue("@userID", Session["userID"]);
+            conn.Open();
+            cmd.ExecuteNonQuery();
         }
 
         hiddenShowCalendar.Value = "true";

@@ -135,35 +135,21 @@ public partial class DeleteStudySession : System.Web.UI.Page
 
         string cs = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
-        // First, get the sessionID using the event description or other matching criteria
-        int? sessionID = null;
-        using (MySqlConnection conn = new MySqlConnection(cs))
+        if (!string.IsNullOrEmpty(userID))
         {
-            conn.Open();
-
-            // Get the event description to match with study session title
-            string eventDesc = "";
-            string getEventSql = "SELECT eventDesc FROM CalendarEvent WHERE eventID = @eventID";
-            MySqlCommand getEventCmd = new MySqlCommand(getEventSql, conn);
-            getEventCmd.Parameters.AddWithValue("@eventID", eventID);
-            object eventDescResult = getEventCmd.ExecuteScalar();
-            if (eventDescResult != null)
+            // delete from studysessionparticipants table
+            using (MySqlConnection conn = new MySqlConnection(cs))
             {
-                eventDesc = eventDescResult.ToString();
-
-                // Now find the study session with matching title
-                string findSessionSql = "SELECT sessionID FROM StudySession WHERE sessionTitle = @sessionTitle";
-                MySqlCommand findSessionCmd = new MySqlCommand(findSessionSql, conn);
-                findSessionCmd.Parameters.AddWithValue("@sessionTitle", eventDesc);
-                object sessionResult = findSessionCmd.ExecuteScalar();
-                if (sessionResult != null)
-                {
-                    sessionID = Convert.ToInt32(sessionResult);
-                }
+                conn.Open();
+                string sql = "DELETE FROM StudySessionParticipants WHERE eventID=@eventID AND userID=@userID";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@eventID", eventID);
+                cmd.Parameters.AddWithValue("@userID", userID);
+                cmd.ExecuteNonQuery();
             }
         }
 
-        // Delete from calendar event
+        // delete from calendarevent table
         using (MySqlConnection conn = new MySqlConnection(cs))
         {
             conn.Open();
@@ -171,20 +157,6 @@ public partial class DeleteStudySession : System.Web.UI.Page
             MySqlCommand cmd = new MySqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@eventID", eventID);
             cmd.ExecuteNonQuery();
-        }
-
-        // Delete from study session participants for THIS USER
-        if (sessionID.HasValue && !string.IsNullOrEmpty(userID))
-        {
-            using (MySqlConnection conn = new MySqlConnection(cs))
-            {
-                conn.Open();
-                string sql = "DELETE FROM StudySessionParticipants WHERE sessionID=@sessionID AND userID=@userID";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@sessionID", sessionID.Value);
-                cmd.Parameters.AddWithValue("@userID", userID);
-                cmd.ExecuteNonQuery();
-            }
         }
 
         string from = Request.QueryString["from"];

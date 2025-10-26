@@ -75,7 +75,6 @@ public partial class Default2 : System.Web.UI.Page
                 return;
             }
 
-            // Client-side date validation will prevent the postback if date is invalid
             DateTime sessionDate;
             if (!DateTime.TryParse(txtFilterDate.Text, out sessionDate))
             {
@@ -117,12 +116,11 @@ public partial class Default2 : System.Web.UI.Page
 
                 if (endHours < startHours || (endHours == startHours && endMinutes < startMinutes))
                 {
-                    // Session spans across midnight - end time is next day
+                    // session that spans across multiple days
                     sessionEnd = sessionDate.AddDays(1).AddHours(endHours).AddMinutes(endMinutes);
                 }
                 else
                 {
-                    // Normal session within the same day
                     sessionEnd = sessionDate.AddHours(endHours).AddMinutes(endMinutes);
                 }
 
@@ -171,18 +169,32 @@ public partial class Default2 : System.Web.UI.Page
                                 Session["sessionDuration"] = totalSeconds;
                             }
 
-                            // 3. insert the session creator as participant
-                            string creatorCommand = "INSERT INTO StudySessionParticipants (sessionID, userID, accepted) VALUES (@sessionId, @userId, @accepted)";
+                            // 3. insert into calendar event table and get the eventID (for the session creator)
+                            int newEventID;
+                            string eventCommand = "INSERT INTO CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (@desc, @eventDate, @tagID, @userID); SELECT LAST_INSERT_ID();";
+                            using (MySqlCommand cmdEvent = new MySqlCommand(eventCommand, con, transaction))
+                            {
+                                cmdEvent.Parameters.AddWithValue("@desc", Session["sessionTitle"]);
+                                cmdEvent.Parameters.AddWithValue("@eventDate", sessionDate);
+                                cmdEvent.Parameters.AddWithValue("@tagID", 1);
+                                cmdEvent.Parameters.AddWithValue("@userID", Convert.ToInt32(Session["userID"]));
+
+                                newEventID = Convert.ToInt32(cmdEvent.ExecuteScalar());
+                            }
+
+                            // 4. insert the session creator as participant with eventID
+                            string creatorCommand = "INSERT INTO StudySessionParticipants (sessionID, userID, accepted, eventID) VALUES (@sessionId, @userId, @accepted, @eventID)";
 
                             using (MySqlCommand cmdCreator = new MySqlCommand(creatorCommand, con, transaction))
                             {
                                 cmdCreator.Parameters.AddWithValue("@sessionId", newSessionID);
                                 cmdCreator.Parameters.AddWithValue("@userId", Convert.ToInt32(Session["userID"]));
                                 cmdCreator.Parameters.AddWithValue("@accepted", true); // accepted by default
+                                cmdCreator.Parameters.AddWithValue("@eventID", newEventID);
                                 cmdCreator.ExecuteNonQuery();
                             }
 
-                            // 4. insert all invited friends as participants
+                            // 5. insert all invited friends as participants without eventID
                             if (invitedFriends.Count > 0)
                             {
                                 // get userIDs for all invited usernames
@@ -205,7 +217,7 @@ public partial class Default2 : System.Web.UI.Page
                                     }
                                 }
 
-                                // insert all participants
+                                // insert all participants without eventID
                                 string friendCommand = "INSERT INTO StudySessionParticipants (sessionID, userID, accepted) VALUES (@sessionId, @userId, @accepted)";
 
                                 foreach (string friendUsername in invitedFriends)
@@ -222,18 +234,6 @@ public partial class Default2 : System.Web.UI.Page
                                         }
                                     }
                                 }
-                            }
-
-                            //5. insert into calendar event table
-                            string eventCommand = "INSERT into CalendarEvent (eventDesc, eventDate, tagID, userID) VALUES (@desc, @eventDate, @tagID, @userID)";
-                            using (MySqlCommand cmdEvent = new MySqlCommand(eventCommand, con, transaction))
-                            {
-                                cmdEvent.Parameters.AddWithValue("@desc", Session["sessionTitle"]);
-                                cmdEvent.Parameters.AddWithValue("@eventDate", sessionDate);
-                                cmdEvent.Parameters.AddWithValue("@tagID", 1);
-                                cmdEvent.Parameters.AddWithValue("@userID", Convert.ToInt32(Session["userID"]));
-
-                                cmdEvent.ExecuteNonQuery();
                             }
 
                             transaction.Commit();
