@@ -47,7 +47,10 @@ public partial class Default2 : System.Web.UI.Page
                 {
                     txtUsername.Text = reader["username"].ToString();
                     txtEmail.Text = reader["email"].ToString();
-                    txtPassword.Attributes["value"] = "********";
+                    // Store the actual password for the eye icon functionality
+                    string actualPassword = reader["password"].ToString();
+                    txtPassword.Attributes["data-actual-password"] = actualPassword;
+                    txtPassword.Attributes["value"] = "********"; // Show masked by default
 
                     originalUsername = reader["username"].ToString();
                     originalPass = reader["password"].ToString();
