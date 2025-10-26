@@ -273,7 +273,38 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            // JOIN STUDY SESSION POPUP
+            function showJoinPopup() {
+                document.getElementById("popup").style.display = "flex";
+
+                // Auto-refresh after 1 minute only if popup is still visible
+                setTimeout(function () {
+                    var popup = document.getElementById("popup");
+                    if (popup && popup.style.display === "flex") {
+                        location.reload();
+                    }
+                }, 60000); // 1 minute
+            }
+
+            function hideJoinPopup() {
+                document.getElementById("popup").style.display = "none";
+            }
+
+            // Auto-show join popup when page loads if there's a session to join
+            window.addEventListener('load', function () {
+                var joinSessionID = document.getElementById("mainContentPlaceHolder_hiddenJoinSessionID");
+                if (joinSessionID && joinSessionID.value) {
+                    setTimeout(function () {
+                        showJoinPopup();
+                    }, 1000);
+                }
+            });
+        </script>
     </div>
+
+    <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" />
     <audio id="equipSound" src="Audio/soundEffectPop_1.mp3" preload="auto"></audio>
 </asp:Content>
 
