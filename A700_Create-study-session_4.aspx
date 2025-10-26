@@ -142,16 +142,6 @@
                 </div>
             </div>
 
-        <div id="popupSuccess" class="simple-popup" style="display: none;">
-            <div class="popup-pink-box">
-                <p>Study Session scheduled!</p>
-                <img src="Images/Notification%20Happy.png" />
-                <div class="buttonSection">
-                    <asp:Button ID="btnSuccess" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideSuccessPopup(); return false;" />
-                </div>
-            </div>
-        </div>
-
         <!--does not have notification-->
         <div id="popupNoNotifications" class="simple-popup" style="display: none;">
             <div class="popup-blue-box">
@@ -227,6 +217,16 @@
                 <div class="buttonSection">
                     <asp:Button ID="btnJoin" CssClass="popup-button" runat="server" Text="Join!" OnClick="btnJoin_Click" />
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="popupSuccess" class="simple-popup" style="display: none;">
+        <div class="popup-pink-box">
+            <p>Study Session scheduled!</p>
+            <img src="Images/Notification%20Happy.png" />
+            <div class="buttonSection">
+                <asp:Button ID="btnSuccess" CssClass="popup-button" runat="server" Text="Okay!" OnClientClick="hideSuccessPopup(); return false;" />
             </div>
         </div>
     </div>
